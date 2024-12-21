@@ -1,5 +1,6 @@
 import { addVectorScaled, drawSprite, drawTexture, getDelta, resetTransform, scaleTransform, translateTransform, uuid, vec, Vector } from "ridder";
-import { addEntityToScene, Scene } from "scene.js";
+import { addEntity, Scene } from "scene.js";
+import { getState } from "states.js";
 import { Type } from "type.js";
 
 export type Entity = {
@@ -7,6 +8,8 @@ export type Entity = {
   type: Type;
   pos: Vector;
   vel: Vector;
+  state: string;
+  nextState: string;
   textureId: string;
   spriteId: string;
   pivot: Vector;
@@ -19,6 +22,8 @@ export function newEntity(setup?: (e: Entity) => Scene): Entity {
     type: Type.NONE,
     pos: vec(),
     vel: vec(),
+    state: "",
+    nextState: "",
     textureId: "",
     spriteId: "",
     pivot: vec(),
@@ -27,13 +32,38 @@ export function newEntity(setup?: (e: Entity) => Scene): Entity {
 
   if (setup) {
     const scene = setup(e);
-    addEntityToScene(scene, e);
+    addEntity(scene, e);
   }
 
   return e;
 }
 
-export function updateEntity(e: Entity) {
+export function updateEntityState(e: Entity, scene: Scene) {
+  if (e.state !== e.nextState) {
+    const currentState = getState(e.type, e.state);
+    const nextState = getState(e.type, e.nextState);
+
+    console.log(e.type, "exit", e.state);
+    if (currentState && currentState.exit) {
+      currentState.exit(e, scene);
+    }
+
+    e.state = e.nextState;
+
+    console.log(e.type, "enter", e.nextState);
+    if (nextState && nextState.enter) {
+      nextState.enter(e, scene);
+    }
+  }
+
+  const state = getState(e.type, e.state);
+
+  if (state && state.update) {
+    state.update(e, scene);
+  }
+}
+
+export function updateEntityPhysics(e: Entity) {
   addVectorScaled(e.pos, e.vel, getDelta());
 }
 

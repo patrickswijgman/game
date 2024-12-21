@@ -1,5 +1,5 @@
 import { Entity } from "entity.js";
-import { addSceneToGame } from "game.js";
+import { addScene } from "game.js";
 import { remove } from "ridder";
 
 export type Scene = {
@@ -21,13 +21,13 @@ export function newScene(setup?: (scene: Scene) => string): Scene {
 
   if (setup) {
     const id = setup(scene);
-    addSceneToGame(id, scene);
+    addScene(id, scene);
   }
 
   return scene;
 }
 
-export function addEntityToScene(scene: Scene, e: Entity) {
+export function addEntity(scene: Scene, e: Entity) {
   scene.entities[e.id] = e;
   scene.active.push(e.id);
   scene.visible.push(e.id);
@@ -53,7 +53,7 @@ export function cleanupDestroyedEntities(scene: Scene) {
   }
 }
 
-export function depthSortEntities(scene: Scene) {
+export function sortEntitiesOnDepth(scene: Scene) {
   scene.visible.sort((idA, idB) => {
     const a = scene.entities[idA];
     const b = scene.entities[idB];

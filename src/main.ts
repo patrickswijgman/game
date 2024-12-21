@@ -1,10 +1,11 @@
 import { loadAssets } from "assets.js";
 import { renderDebugInfo } from "debug.js";
-import { renderEntity, updateEntity } from "entity.js";
+import { renderEntity, updateEntityPhysics, updateEntityState } from "entity.js";
 import { getCurrentScene, switchScene } from "game.js";
-import { newPlayer, updatePlayer } from "player.js";
+import { getPlayerStates, newPlayer } from "player.js";
 import { run } from "ridder";
-import { cleanupDestroyedEntities, depthSortEntities, getEntity, newScene } from "scene.js";
+import { cleanupDestroyedEntities, sortEntitiesOnDepth, getEntity, newScene } from "scene.js";
+import { addStates, getState } from "states.js";
 import { Type } from "type.js";
 
 run({
@@ -19,6 +20,8 @@ run({
       return "main";
     });
 
+    addStates(Type.PLAYER, getPlayerStates());
+
     switchScene("main");
   },
 
@@ -29,21 +32,15 @@ run({
 
     for (const id of scene.active) {
       const e = getEntity(scene, id);
-
-      switch (e.type) {
-        case Type.PLAYER:
-          updatePlayer(scene, e);
-          break;
-      }
-
-      updateEntity(e);
+      updateEntityState(e, scene);
+      updateEntityPhysics(e);
     }
   },
 
   render: () => {
     const scene = getCurrentScene();
 
-    depthSortEntities(scene);
+    sortEntitiesOnDepth(scene);
 
     for (const id of scene.visible) {
       const e = getEntity(scene, id);

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["ESNext"],
+    "lib": ["ESNext", "DOM"],
     "noEmit": true,
     "skipLibCheck": true,
     "baseUrl": "src"

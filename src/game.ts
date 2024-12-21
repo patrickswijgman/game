@@ -10,12 +10,16 @@ const game: Game = {
   scene: "",
 };
 
-export function addSceneToGame(id: string, scene: Scene) {
+export function addScene(id: string, scene: Scene) {
   game.scenes[id] = scene;
 }
 
 export function switchScene(id: string) {
   game.scene = id;
+}
+
+export function getScene(id: string) {
+  return game.scenes[id];
 }
 
 export function getCurrentScene() {
