@@ -5,12 +5,15 @@
   "type": "module",
   "description": "",
   "scripts": {
+    "prepare": "husky",
     "start": "vite",
-    "build": "vite build --base=./"
+    "build": "vite build --base=./",
+    "compile": "tsc"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "husky": "^9.1.7",
     "typescript": "^5.5.4",
     "vite": "^5.4.0",
     "vite-tsconfig-paths": "^5.1.4"
