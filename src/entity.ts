@@ -15,8 +15,8 @@ export type Entity = {
   isFlipped: boolean;
 };
 
-export function newEntity(setup?: (e: Entity) => Scene): Entity {
-  const e: Entity = {
+export function newEntity(): Entity {
+  return {
     id: uuid(),
     type: Type.NONE,
     pos: vec(),
@@ -27,13 +27,6 @@ export function newEntity(setup?: (e: Entity) => Scene): Entity {
     pivot: vec(),
     isFlipped: false,
   };
-
-  if (setup) {
-    const scene = setup(e);
-    addEntity(scene, e);
-  }
-
-  return e;
 }
 
 export function updateEntityState(e: Entity, scene: Scene) {

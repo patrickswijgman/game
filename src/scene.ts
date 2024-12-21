@@ -1,4 +1,4 @@
-import { Entity } from "entity.js";
+import { Entity, newEntity } from "entity.js";
 import { addScene } from "game.js";
 import { remove } from "ridder";
 
@@ -10,27 +10,26 @@ export type Scene = {
   playerId: string;
 };
 
-export function newScene(setup?: (scene: Scene) => string): Scene {
-  const scene: Scene = {
+export function newScene(): Scene {
+  return {
     entities: {},
     active: [],
     visible: [],
     destroyed: [],
     playerId: "",
   };
-
-  if (setup) {
-    const id = setup(scene);
-    addScene(id, scene);
-  }
-
-  return scene;
 }
 
-export function addEntity(scene: Scene, e: Entity) {
+export function addEntity(scene: Scene, setup?: (e: Entity) => void) {
+  const e = newEntity();
+
   scene.entities[e.id] = e;
   scene.active.push(e.id);
   scene.visible.push(e.id);
+
+  if (setup) {
+    setup(e);
+  }
 }
 
 export function destroyEntity(scene: Scene, e: Entity) {

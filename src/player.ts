@@ -1,11 +1,11 @@
-import { Entity, newEntity } from "entity.js";
+import { Entity } from "entity.js";
 import { getVectorLength, InputCode, isInputDown, normalizeVector, resetVector, scaleVector } from "ridder";
-import { Scene } from "scene.js";
+import { addEntity, Scene } from "scene.js";
 import { StateMachine } from "state-machine.js";
 import { Type } from "type.js";
 
-export function newPlayer(scene: Scene) {
-  return newEntity((e) => {
+export function addPlayer(scene: Scene) {
+  return addEntity(scene, (e) => {
     e.type = Type.PLAYER;
     e.pos.x = 50;
     e.pos.y = 50;
@@ -13,7 +13,6 @@ export function newPlayer(scene: Scene) {
     e.pivot.y = 16;
     e.spriteId = "player";
     scene.playerId = e.id;
-    return scene;
   });
 }
 

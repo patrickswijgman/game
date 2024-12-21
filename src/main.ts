@@ -1,8 +1,8 @@
 import { loadAssets } from "assets.js";
 import { renderDebugInfo } from "debug.js";
 import { renderEntity, updateEntityPhysics, updateEntityState } from "entity.js";
-import { getCurrentScene, switchScene } from "game.js";
-import { getPlayerStateMachine, newPlayer } from "player.js";
+import { addScene, getCurrentScene, switchScene } from "game.js";
+import { getPlayerStateMachine, addPlayer } from "player.js";
 import { run } from "ridder";
 import { cleanupDestroyedEntities, sortEntitiesOnDepth, getEntity, newScene } from "scene.js";
 import { addStateMachine } from "state-machine.js";
@@ -15,9 +15,8 @@ run({
   setup: async () => {
     await loadAssets();
 
-    newScene((scene) => {
-      newPlayer(scene);
-      return "main";
+    addScene("main", (scene) => {
+      addPlayer(scene);
     });
 
     addStateMachine(Type.PLAYER, getPlayerStateMachine());

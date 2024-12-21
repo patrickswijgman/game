@@ -1,4 +1,4 @@
-import { Scene } from "scene.js";
+import { newScene, Scene } from "scene.js";
 
 export type Game = {
   scenes: Record<string, Scene>;
@@ -10,8 +10,14 @@ const game: Game = {
   scene: "",
 };
 
-export function addScene(id: string, scene: Scene) {
+export function addScene(id: string, setup?: (scene: Scene) => void) {
+  const scene = newScene();
+
   game.scenes[id] = scene;
+
+  if (setup) {
+    setup(scene);
+  }
 }
 
 export function switchScene(id: string) {
