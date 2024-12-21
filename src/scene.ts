@@ -41,6 +41,10 @@ export function getEntity(scene: Scene, id: string) {
   return scene.entities[id];
 }
 
+export function getPlayer(scene: Scene) {
+  return scene.entities[scene.playerId];
+}
+
 export function cleanupDestroyedEntities(scene: Scene) {
   if (scene.destroyed.length) {
     for (const id of scene.destroyed) {

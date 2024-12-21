@@ -2,10 +2,10 @@ import { loadAssets } from "assets.js";
 import { renderDebugInfo } from "debug.js";
 import { renderEntity, updateEntityPhysics, updateEntityState } from "entity.js";
 import { getCurrentScene, switchScene } from "game.js";
-import { getPlayerStates, newPlayer } from "player.js";
+import { getPlayerStateMachine, newPlayer } from "player.js";
 import { run } from "ridder";
 import { cleanupDestroyedEntities, sortEntitiesOnDepth, getEntity, newScene } from "scene.js";
-import { addStates, getState } from "states.js";
+import { addStateMachine } from "state-machine.js";
 import { Type } from "type.js";
 
 run({
@@ -20,7 +20,7 @@ run({
       return "main";
     });
 
-    addStates(Type.PLAYER, getPlayerStates());
+    addStateMachine(Type.PLAYER, getPlayerStateMachine());
 
     switchScene("main");
   },
@@ -52,6 +52,6 @@ run({
       }
     }
 
-    renderDebugInfo();
+    renderDebugInfo(scene);
   },
 });

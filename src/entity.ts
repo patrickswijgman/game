@@ -1,6 +1,6 @@
-import { addVectorScaled, drawSprite, drawTexture, getDelta, resetTransform, scaleTransform, translateTransform, uuid, vec, Vector } from "ridder";
+import { addVectorScaled, drawSprite, drawTexture, getDelta, resetTransform, resetVector, scaleTransform, translateTransform, uuid, vec, Vector } from "ridder";
 import { addEntity, Scene } from "scene.js";
-import { getState } from "states.js";
+import { getState, getStateMachine } from "state-machine.js";
 import { Type } from "type.js";
 
 export type Entity = {
@@ -8,8 +8,7 @@ export type Entity = {
   type: Type;
   pos: Vector;
   vel: Vector;
-  state: string;
-  nextState: string;
+  stateId: string;
   textureId: string;
   spriteId: string;
   pivot: Vector;
@@ -22,8 +21,7 @@ export function newEntity(setup?: (e: Entity) => Scene): Entity {
     type: Type.NONE,
     pos: vec(),
     vel: vec(),
-    state: "",
-    nextState: "",
+    stateId: "",
     textureId: "",
     spriteId: "",
     pivot: vec(),
@@ -39,24 +37,29 @@ export function newEntity(setup?: (e: Entity) => Scene): Entity {
 }
 
 export function updateEntityState(e: Entity, scene: Scene) {
-  if (e.state !== e.nextState) {
-    const currentState = getState(e.type, e.state);
-    const nextState = getState(e.type, e.nextState);
+  const stateMachine = getStateMachine(e.type);
 
-    console.log(e.type, "exit", e.state);
+  if (!stateMachine) return;
+
+  const stateId = stateMachine.decide(e, scene);
+
+  if (e.stateId !== stateId) {
+    const currentState = getState(e.type, e.stateId);
+    const nextState = getState(e.type, stateId);
+
     if (currentState && currentState.exit) {
       currentState.exit(e, scene);
     }
 
-    e.state = e.nextState;
+    e.stateId = stateId;
+    resetEntity(e);
 
-    console.log(e.type, "enter", e.nextState);
     if (nextState && nextState.enter) {
       nextState.enter(e, scene);
     }
   }
 
-  const state = getState(e.type, e.state);
+  const state = getState(e.type, e.stateId);
 
   if (state && state.update) {
     state.update(e, scene);
@@ -82,4 +85,8 @@ export function renderEntity(e: Entity) {
   if (e.spriteId) {
     drawSprite(e.spriteId, -e.pivot.x, -e.pivot.y);
   }
+}
+
+export function resetEntity(e: Entity) {
+  resetVector(e.vel);
 }

@@ -1,7 +1,7 @@
 import { Entity, newEntity } from "entity.js";
-import { InputCode, isInputDown, normalizeVector, resetVector, scaleVector } from "ridder";
+import { getVectorLength, InputCode, isInputDown, normalizeVector, resetVector, scaleVector } from "ridder";
 import { Scene } from "scene.js";
-import { StateRecord } from "states.js";
+import { StateMachine } from "state-machine.js";
 import { Type } from "type.js";
 
 export function newPlayer(scene: Scene) {
@@ -12,16 +12,31 @@ export function newPlayer(scene: Scene) {
     e.pivot.x = 8;
     e.pivot.y = 16;
     e.spriteId = "player";
-    e.nextState = "idle";
     scene.playerId = e.id;
     return scene;
   });
 }
 
-export function getPlayerStates(): StateRecord {
+export function getPlayerStateMachine(): StateMachine {
   return {
-    idle: {
-      update: move,
+    decide: (e: Entity, scene: Scene) => {
+      if (getVectorLength(e.vel)) {
+        return "walk";
+      }
+
+      return "idle";
+    },
+    states: {
+      idle: {
+        update: (e) => {
+          move(e);
+        },
+      },
+      walk: {
+        update: (e) => {
+          move(e);
+        },
+      },
     },
   };
 }
