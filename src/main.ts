@@ -4,7 +4,7 @@ import { renderDebugInfo } from "debug.js";
 import { addPlayerStateMachine } from "entities/player.js";
 import { renderEntity, updateEntityPhysics, updateEntityStateMachine } from "entity.js";
 import { getCurrentScene, switchScene } from "game.js";
-import { InputCode, isInputPressed, run, setBackgroundColor, setCameraBounds, setCameraSmoothing, updateCamera } from "ridder";
+import { InputCode, isInputPressed, run, setBackgroundColor, setCameraBounds, setCameraSmoothing, setFont, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
 import { addMainScene } from "scenes/main.js";
 
@@ -19,6 +19,7 @@ run({
 
     addMainScene();
 
+    setFont("default");
     setBackgroundColor("steelblue");
     setCameraSmoothing(0.05);
 
