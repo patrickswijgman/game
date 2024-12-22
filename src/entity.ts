@@ -1,6 +1,6 @@
-import { addVectorScaled, drawSprite, drawTexture, getDelta, resetTransform, resetVector, scaleTransform, translateTransform, uuid, vec, Vector } from "ridder";
+import { addVectorScaled, applyCameraTransform, drawSprite, drawTexture, getDelta, resetTransform, resetVector, scaleTransform, translateTransform, uuid, vec, Vector } from "ridder";
 import { addEntity, Scene } from "scene.js";
-import { getState, getStateMachine } from "state-machine.js";
+import { getState, getStateMachine } from "states.js";
 import { Type } from "type.js";
 
 export type Entity = {
@@ -29,7 +29,7 @@ export function newEntity(): Entity {
   };
 }
 
-export function updateEntityState(e: Entity, scene: Scene) {
+export function updateEntityStateMachine(e: Entity, scene: Scene) {
   const stateMachine = getStateMachine(e.type);
 
   if (!stateMachine) return;
@@ -66,6 +66,7 @@ export function updateEntityPhysics(e: Entity) {
 export function renderEntity(e: Entity) {
   resetTransform();
   translateTransform(e.pos.x, e.pos.y);
+  applyCameraTransform();
 
   if (e.isFlipped) {
     scaleTransform(-1, 1);

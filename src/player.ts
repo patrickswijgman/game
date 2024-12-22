@@ -1,18 +1,21 @@
 import { Entity } from "entity.js";
-import { getVectorLength, InputCode, isInputDown, normalizeVector, resetVector, scaleVector } from "ridder";
+import { getMousePosition, getVectorLength, getWidth, InputCode, isInputDown, normalizeVector, resetVector, scaleVector, setCameraPosition } from "ridder";
 import { addEntity, Scene } from "scene.js";
-import { StateMachine } from "state-machine.js";
+import { StateMachine } from "states.js";
 import { Type } from "type.js";
 
-export function addPlayer(scene: Scene) {
+export function addPlayer(scene: Scene, x: number, y: number) {
   return addEntity(scene, (e) => {
     e.type = Type.PLAYER;
-    e.pos.x = 50;
-    e.pos.y = 50;
+    e.pos.x = x;
+    e.pos.y = y;
     e.pivot.x = 8;
     e.pivot.y = 16;
     e.spriteId = "player";
+
     scene.playerId = e.id;
+
+    setCameraPosition(x, y);
   });
 }
 
@@ -51,13 +54,15 @@ export function move(e: Entity) {
   }
   if (isInputDown(InputCode.KEY_A)) {
     e.vel.x -= 1;
-    e.isFlipped = true;
   }
   if (isInputDown(InputCode.KEY_D)) {
     e.vel.x += 1;
-    e.isFlipped = false;
   }
 
   normalizeVector(e.vel);
   scaleVector(e.vel, 1.5);
+
+  const mouse = getMousePosition(true);
+
+  e.isFlipped = mouse.x < e.pos.x;
 }

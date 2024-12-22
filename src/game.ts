@@ -18,6 +18,8 @@ export function addScene(id: string, setup?: (scene: Scene) => void) {
   if (setup) {
     setup(scene);
   }
+
+  return scene;
 }
 
 export function switchScene(id: string) {
