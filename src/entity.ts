@@ -1,5 +1,6 @@
+import { Equipment, newEquipment } from "equipment.js";
 import { addVectorScaled, applyCameraTransform, drawSprite, drawTexture, getDelta, resetTransform, resetVector, scaleTransform, setAlpha, translateTransform, uuid, vec, Vector } from "ridder";
-import { addEntity, Scene } from "scene.js";
+import { Scene } from "scene.js";
 import { getState, getStateMachine } from "states.js";
 import { newStats, Stats } from "stats.js";
 import { Type } from "type.js";
@@ -16,6 +17,7 @@ export type Entity = {
   stateId: string;
 
   stats: Stats;
+  equipment: Equipment;
 
   textureId: string;
   spriteId: string;
@@ -40,6 +42,7 @@ export function newEntity(): Entity {
     stateId: "",
 
     stats: newStats(),
+    equipment: newEquipment(),
 
     textureId: "",
     spriteId: "",

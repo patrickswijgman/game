@@ -1,12 +1,13 @@
 import { loadAssets } from "assets.js";
 import { HEIGHT, WIDTH } from "consts.js";
 import { renderDebugInfo } from "debug.js";
-import { addPlayerStateMachine } from "entities/player.js";
 import { renderEntity, updateEntityPhysics, updateEntityStateMachine } from "entity.js";
 import { getCurrentScene, switchScene } from "game.js";
+import { addItems } from "items.js";
 import { InputCode, isInputPressed, run, setBackgroundColor, setCameraBounds, setCameraSmoothing, setFont, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
 import { addMainScene } from "scenes/main.js";
+import { addStateMachines } from "states.js";
 
 run({
   width: WIDTH,
@@ -15,7 +16,8 @@ run({
   setup: async () => {
     await loadAssets();
 
-    addPlayerStateMachine();
+    addStateMachines();
+    addItems();
 
     addMainScene();
 

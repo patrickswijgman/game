@@ -1,6 +1,6 @@
 import { clamp } from "ridder";
 
-export type Stats = {
+type StatsBase = {
   health: number;
   healthMax: number;
 
@@ -9,9 +9,17 @@ export type Stats = {
   staminaRegen: number;
 
   damage: number;
-  damageScaling: number;
+  damageScalingFactor: number;
+
+  strength: number;
+  dexterity: number;
+  intelligence: number;
 
   movementSpeed: number;
+};
+
+export type Stats = StatsBase & {
+  damageScalingStat: keyof StatsBase;
 };
 
 export function newStats(stats: Partial<Stats> = {}): Stats {
@@ -24,7 +32,12 @@ export function newStats(stats: Partial<Stats> = {}): Stats {
     staminaRegen: 0,
 
     damage: 0,
-    damageScaling: 0,
+    damageScalingStat: "strength",
+    damageScalingFactor: 0,
+
+    strength: 0,
+    dexterity: 0,
+    intelligence: 0,
 
     movementSpeed: 0,
 
@@ -39,6 +52,10 @@ export function updateStats(stats: Stats) {
 
 export function addStats(a: Stats, b: Stats) {
   for (const key in b) {
-    a[key] += b[key];
+    const value = b[key];
+
+    if (typeof value === "number") {
+      a[key] += value;
+    }
   }
 }

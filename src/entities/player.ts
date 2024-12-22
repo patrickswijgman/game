@@ -1,7 +1,8 @@
 import { Entity } from "entity.js";
+import { getPlayerEquipment, getPlayerStats } from "game.js";
 import { getMousePosition, getVectorLength, InputCode, isInputDown, normalizeVector, resetVector, scaleVector, setCameraPosition } from "ridder";
 import { addEntity, Scene } from "scene.js";
-import { addStateMachine, StateMachine } from "states.js";
+import { StateMachine } from "states.js";
 import { Type } from "type.js";
 
 export function addPlayer(scene: Scene, x: number, y: number) {
@@ -19,11 +20,8 @@ export function addPlayer(scene: Scene, x: number, y: number) {
     e.shadowOffset.x = 0;
     e.shadowOffset.y = 2;
 
-    e.stats.health = 1;
-    e.stats.healthMax = 1;
-    e.stats.damage = 1;
-    e.stats.damageScaling = 1;
-    e.stats.movementSpeed = 1.5;
+    e.stats = getPlayerStats();
+    e.equipment = getPlayerEquipment();
 
     scene.playerId = e.id;
 
@@ -36,8 +34,8 @@ const enum State {
   WALK = "walk",
 }
 
-export function addPlayerStateMachine() {
-  addStateMachine("player", {
+export function getPlayerStateMachine(): StateMachine {
+  return {
     decide: (e: Entity) => {
       if (getVectorLength(e.vel)) {
         return State.WALK;
@@ -57,7 +55,7 @@ export function addPlayerStateMachine() {
         },
       },
     },
-  });
+  };
 }
 
 export function move(e: Entity) {

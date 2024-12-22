@@ -1,3 +1,4 @@
+import { getPlayerStateMachine } from "entities/player.js";
 import { Entity } from "entity.js";
 import { Scene } from "scene.js";
 
@@ -14,8 +15,8 @@ export type StateMachine = {
 
 const stateMachines: Record<string, StateMachine> = {};
 
-export function addStateMachine(id: string, stateMachine: StateMachine) {
-  stateMachines[id] = stateMachine;
+export function addStateMachines() {
+  stateMachines["player"] = getPlayerStateMachine();
 }
 
 export function getStateMachine(id: string) {

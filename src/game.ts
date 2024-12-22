@@ -1,13 +1,23 @@
+import { Equipment, newEquipment } from "equipment.js";
 import { newScene, Scene } from "scene.js";
+import { newStats, Stats } from "stats.js";
 
 export type Game = {
   scenes: Record<string, Scene>;
-  scene: string;
+  sceneId: string;
+  playerStats: Stats;
+  playerEquipment: Equipment;
 };
 
 const game: Game = {
   scenes: {},
-  scene: "",
+  sceneId: "",
+  playerStats: newStats({
+    health: 1,
+    healthMax: 1,
+    movementSpeed: 1.5,
+  }),
+  playerEquipment: newEquipment(),
 };
 
 export function addScene(id: string, setup?: (scene: Scene) => void) {
@@ -23,7 +33,7 @@ export function addScene(id: string, setup?: (scene: Scene) => void) {
 }
 
 export function switchScene(id: string) {
-  game.scene = id;
+  game.sceneId = id;
 }
 
 export function getScene(id: string) {
@@ -31,5 +41,13 @@ export function getScene(id: string) {
 }
 
 export function getCurrentScene() {
-  return game.scenes[game.scene];
+  return game.scenes[game.sceneId];
+}
+
+export function getPlayerStats() {
+  return game.playerStats;
+}
+
+export function getPlayerEquipment() {
+  return game.playerEquipment;
 }
