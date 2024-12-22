@@ -12,6 +12,7 @@ export type Entity = {
   pos: Vector;
   vel: Vector;
 
+  stateMachineId: string;
   stateId: string;
 
   stats: Stats;
@@ -35,6 +36,7 @@ export function newEntity(): Entity {
     pos: vec(),
     vel: vec(),
 
+    stateMachineId: "",
     stateId: "",
 
     stats: newStats(),
@@ -51,15 +53,15 @@ export function newEntity(): Entity {
 }
 
 export function updateEntityStateMachine(e: Entity, scene: Scene) {
-  const stateMachine = getStateMachine(e.type);
+  const stateMachine = getStateMachine(e.stateMachineId);
 
   if (!stateMachine) return;
 
   const nextStateId = stateMachine.decide(e, scene);
 
   if (e.stateId !== nextStateId) {
-    const currentState = getState(e.type, e.stateId);
-    const nextState = getState(e.type, nextStateId);
+    const currentState = getState(e.stateMachineId, e.stateId);
+    const nextState = getState(e.stateMachineId, nextStateId);
 
     if (currentState && currentState.exit) {
       currentState.exit(e, scene);

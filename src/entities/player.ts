@@ -9,6 +9,9 @@ export function addPlayer(scene: Scene, x: number, y: number) {
     e.type = Type.PLAYER;
     e.pos.x = x;
     e.pos.y = y;
+
+    e.stateMachineId = "player";
+
     e.pivot.x = 8;
     e.pivot.y = 15;
     e.spriteId = "player";
@@ -34,7 +37,7 @@ const enum State {
 }
 
 export function addPlayerStateMachine() {
-  addStateMachine(Type.PLAYER, {
+  addStateMachine("player", {
     decide: (e: Entity) => {
       if (getVectorLength(e.vel)) {
         return State.WALK;
