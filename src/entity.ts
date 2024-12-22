@@ -1,4 +1,4 @@
-import { addVectorScaled, applyCameraTransform, drawSprite, drawTexture, getDelta, resetTransform, resetVector, scaleTransform, translateTransform, uuid, vec, Vector } from "ridder";
+import { addVectorScaled, applyCameraTransform, drawSprite, drawTexture, getDelta, resetTransform, resetVector, scaleTransform, setAlpha, translateTransform, uuid, vec, Vector } from "ridder";
 import { addEntity, Scene } from "scene.js";
 import { getState, getStateMachine } from "states.js";
 import { newStats, Stats } from "stats.js";
@@ -20,6 +20,9 @@ export type Entity = {
   spriteId: string;
   pivot: Vector;
 
+  shadowId: string;
+  shadowOffset: Vector;
+
   isFlipped: boolean;
 };
 
@@ -39,6 +42,9 @@ export function newEntity(): Entity {
     textureId: "",
     spriteId: "",
     pivot: vec(),
+
+    shadowId: "",
+    shadowOffset: vec(),
 
     isFlipped: false,
   };
@@ -89,6 +95,12 @@ export function renderEntity(e: Entity) {
 
   if (e.textureId) {
     drawTexture(e.textureId, -e.pivot.x, -e.pivot.y);
+  }
+
+  if (e.shadowId) {
+    setAlpha(0.4);
+    drawSprite(e.shadowId, -e.pivot.x + e.shadowOffset.x, -e.pivot.y + e.shadowOffset.y);
+    setAlpha(1);
   }
 
   if (e.spriteId) {

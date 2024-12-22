@@ -1,7 +1,7 @@
 import { Entity } from "entity.js";
-import { getMousePosition, getVectorLength, getWidth, InputCode, isInputDown, normalizeVector, resetVector, scaleVector, setCameraPosition } from "ridder";
+import { getMousePosition, getVectorLength, InputCode, isInputDown, normalizeVector, resetVector, scaleVector, setCameraPosition } from "ridder";
 import { addEntity, Scene } from "scene.js";
-import { StateMachine } from "states.js";
+import { addStateMachine, StateMachine } from "states.js";
 import { Type } from "type.js";
 
 export function addPlayer(scene: Scene, x: number, y: number) {
@@ -10,8 +10,11 @@ export function addPlayer(scene: Scene, x: number, y: number) {
     e.pos.x = x;
     e.pos.y = y;
     e.pivot.x = 8;
-    e.pivot.y = 16;
+    e.pivot.y = 15;
     e.spriteId = "player";
+    e.shadowId = "player_shadow";
+    e.shadowOffset.x = 0;
+    e.shadowOffset.y = 2;
 
     e.stats.health = 1;
     e.stats.healthMax = 1;
@@ -30,8 +33,8 @@ const enum State {
   WALK = "walk",
 }
 
-export function getPlayerStateMachine(): StateMachine {
-  return {
+export function addPlayerStateMachine() {
+  addStateMachine(Type.PLAYER, {
     decide: (e: Entity) => {
       if (getVectorLength(e.vel)) {
         return State.WALK;
@@ -51,7 +54,7 @@ export function getPlayerStateMachine(): StateMachine {
         },
       },
     },
-  };
+  });
 }
 
 export function move(e: Entity) {
