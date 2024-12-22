@@ -13,28 +13,39 @@ export function addPlayer(scene: Scene, x: number, y: number) {
     e.pivot.y = 16;
     e.spriteId = "player";
 
+    e.stats.health = 1;
+    e.stats.healthMax = 1;
+    e.stats.damage = 1;
+    e.stats.damageScaling = 1;
+    e.stats.movementSpeed = 1.5;
+
     scene.playerId = e.id;
 
     setCameraPosition(x, y);
   });
 }
 
+const enum State {
+  IDLE = "idle",
+  WALK = "walk",
+}
+
 export function getPlayerStateMachine(): StateMachine {
   return {
-    decide: (e: Entity, scene: Scene) => {
+    decide: (e: Entity) => {
       if (getVectorLength(e.vel)) {
-        return "walk";
+        return State.WALK;
       }
 
-      return "idle";
+      return State.IDLE;
     },
     states: {
-      idle: {
+      [State.IDLE]: {
         update: (e) => {
           move(e);
         },
       },
-      walk: {
+      [State.WALK]: {
         update: (e) => {
           move(e);
         },
@@ -60,7 +71,7 @@ export function move(e: Entity) {
   }
 
   normalizeVector(e.vel);
-  scaleVector(e.vel, 1.5);
+  scaleVector(e.vel, e.stats.movementSpeed);
 
   const mouse = getMousePosition(true);
 
