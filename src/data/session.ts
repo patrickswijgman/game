@@ -1,12 +1,12 @@
 import { newStats, Stats } from "data/stats.js";
 
-export type Run = {
+export type Session = {
   stats: Stats;
   weaponId: string;
   armorId: string;
 };
 
-export function newRun(): Run {
+export function newSession(): Session {
   return {
     stats: newStats({
       movementSpeed: 1.5,

@@ -1,19 +1,19 @@
-import { newRun, Run } from "data/run.js";
 import { Scene } from "data/scene.js";
+import { newSession, Session } from "data/session.js";
 import { setCameraBounds } from "ridder";
 
 export type Game = {
   scenes: Record<string, Scene>;
   sceneId: string;
   sceneNextId: string;
-  run: Run;
+  session: Session;
 };
 
 const game: Game = {
   scenes: {},
   sceneId: "",
   sceneNextId: "",
-  run: newRun(),
+  session: newSession(),
 };
 
 export function addScene(id: string, scene: Scene) {
@@ -42,6 +42,6 @@ export function getCurrentScene() {
   return game.scenes[game.sceneId];
 }
 
-export function getCurrentRun() {
-  return game.run;
+export function getSession() {
+  return game.session;
 }
