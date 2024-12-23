@@ -1,4 +1,4 @@
-import { Stats, addStats, newStats, updateStats } from "stats.js";
+import { Stats, addStats, newStats, updateStats } from "data/stats.js";
 
 export function doDamage(self: Stats, target: Stats, weapon: Stats) {
   const totalStats = newStats(self);

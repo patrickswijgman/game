@@ -1,5 +1,5 @@
-import { Entity } from "entity.js";
-import { Scene } from "scene.js";
+import { Entity } from "data/entity.js";
+import { Scene } from "data/scene.js";
 
 export type State = {
   enter?: (e: Entity, scene: Scene) => void;

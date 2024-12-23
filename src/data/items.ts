@@ -1,7 +1,7 @@
-import { newStats, Stats } from "stats.js";
+import { newStats, Stats } from "data/stats.js";
 
 export const enum ItemType {
-  NONE = "none",
+  NONE = "",
   WEAPON = "weapon",
   ARMOR = "armor",
 }
@@ -16,14 +16,13 @@ export type Item = {
 
 const items: Record<string, Item> = {};
 
-export function newItem(options: Partial<Item> = {}, stats: Partial<Stats> = {}): Item {
+export function newItem(): Item {
   return {
     type: ItemType.NONE,
     name: "",
     description: "",
     spriteId: "",
-    stats: newStats(stats),
-    ...options,
+    stats: newStats(),
   };
 }
 

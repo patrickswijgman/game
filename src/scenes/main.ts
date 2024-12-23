@@ -1,6 +1,6 @@
+import { addEntity, newScene } from "data/scene.js";
 import { newPlayer } from "entities/player.js";
 import { setCameraPosition } from "ridder";
-import { addEntity, newScene } from "scene.js";
 
 export function newMainScene() {
   const scene = newScene();
@@ -11,7 +11,7 @@ export function newMainScene() {
   scene.bounds.w = w;
   scene.bounds.h = h;
 
-  const player = newPlayer(scene, w / 2, h / 2);
+  const player = newPlayer(w / 2, h / 2);
 
   addEntity(scene, player);
 

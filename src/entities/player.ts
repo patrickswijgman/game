@@ -1,10 +1,9 @@
-import { Entity, newEntity } from "entity.js";
-import { getPlayerStats } from "game.js";
+import { Entity, newEntity } from "data/entity.js";
+import { getPlayerStats } from "data/game.js";
+import { StateMachine } from "data/states.js";
 import { getMousePosition, getVectorLength, InputCode, isInputDown, normalizeVector, resetVector, scaleVector } from "ridder";
-import { Scene } from "scene.js";
-import { StateMachine } from "states.js";
 
-export function newPlayer(scene: Scene, x: number, y: number) {
+export function newPlayer(x: number, y: number) {
   const e = newEntity();
 
   e.pos.x = x;

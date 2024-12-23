@@ -1,4 +1,4 @@
-import { Entity } from "entity.js";
+import { Entity } from "data/entity.js";
 import { rect, Rectangle, remove } from "ridder";
 
 export type Scene = {

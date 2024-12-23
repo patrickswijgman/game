@@ -1,14 +1,14 @@
 import { HEIGHT, WIDTH } from "consts.js";
+import { renderEntity, updateEntityPhysics, updateEntityStateMachine } from "data/entity.js";
+import { addScene, getCurrentScene, switchScene } from "data/game.js";
+import { addItem } from "data/items.js";
+import { cleanupDestroyedEntities, getEntity, getPlayer, sortEntitiesOnDepth } from "data/scene.js";
+import { addStateMachine } from "data/states.js";
 import { renderDebugInfo } from "debug.js";
 import { newPlayerStateMachine } from "entities/player.js";
-import { renderEntity, updateEntityPhysics, updateEntityStateMachine } from "entity.js";
-import { addScene, getCurrentScene, switchScene } from "game.js";
-import { addItem } from "items.js";
 import { newLongswordItem } from "items/longsword.js";
 import { InputCode, isInputPressed, loadFont, loadSprite, loadTexture, run, setBackgroundColor, setCameraBounds, setCameraSmoothing, setFont, updateCamera } from "ridder";
-import { cleanupDestroyedEntities, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
 import { newMainScene } from "scenes/main.js";
-import { addStateMachine } from "states.js";
 
 run({
   width: WIDTH,

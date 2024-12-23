@@ -1,5 +1,5 @@
-import { Scene } from "scene.js";
-import { newStats, Stats } from "stats.js";
+import { Scene } from "data/scene.js";
+import { newStats, Stats } from "data/stats.js";
 
 export type Game = {
   scenes: Record<string, Scene>;
@@ -12,7 +12,9 @@ export type Game = {
 const game: Game = {
   scenes: {},
   sceneId: "",
-  playerStats: newStats(),
+  playerStats: newStats({
+    movementSpeed: 1.5,
+  }),
   playerWeaponId: "",
   playerArmorId: "",
 };
