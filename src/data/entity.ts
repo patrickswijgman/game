@@ -1,89 +1,61 @@
-import { Scene } from "data/scene.js";
-import { getState } from "data/states.js";
+import { addEntity, Scene } from "data/scene.js";
 import { newStats, Stats } from "data/stats.js";
-import { addVectorScaled, applyCameraTransform, drawSprite, drawTexture, getDelta, polygon, Polygon, resetTransform, rotateTransform, scaleTransform, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
+import { addVectorScaled, applyCameraTransform, drawSprite, drawTexture, getDelta, polygon, Polygon, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
 
 export type Entity = {
   id: string;
-
+  type: string;
   pos: Vector;
   vel: Vector;
-
   stateId: string;
   stateNextId: string;
   stateTimer: Timer;
-
   stats: Stats;
-
   hitbox: Polygon;
-
   textureId: string;
   spriteId: string;
   pivot: Vector;
   angle: number;
-
   shadowId: string;
   shadowOffset: Vector;
-
   actionId: string;
-
-  isPlayer: boolean;
   isFlipped: boolean;
 };
 
-export function newEntity(options: Partial<Entity> = {}): Entity {
-  return {
+export function newEntity(scene: Scene, x: number, y: number): Entity {
+  return addEntity(scene, {
     id: uuid(),
-
-    pos: vec(),
+    type: "",
+    pos: vec(x, y),
     vel: vec(),
-
     stateId: "",
     stateTimer: timer(),
     stateNextId: "",
-
     stats: newStats(),
-
     hitbox: polygon(),
-
     textureId: "",
     spriteId: "",
     pivot: vec(),
     angle: 0,
-
     shadowId: "",
     shadowOffset: vec(),
-
     actionId: "",
-
-    isPlayer: false,
     isFlipped: false,
-
-    ...options,
-  };
+  });
 }
 
-export function updateState(e: Entity, scene: Scene) {
+type StateLifecycleHook = (e: Entity, scene: Scene, state: string) => void;
+
+export function updateState(e: Entity, scene: Scene, onEnter: StateLifecycleHook, onUpdate: StateLifecycleHook, onExit: StateLifecycleHook) {
   if (e.stateId !== e.stateNextId) {
-    const currentState = getState(e.stateId);
-    const nextState = getState(e.stateNextId);
-
-    if (currentState && currentState.exit) {
-      currentState.exit(e, scene, currentState);
-    }
-
+    onExit(e, scene, e.stateId);
     e.stateId = e.stateNextId;
-
-    if (nextState && nextState.enter) {
-      nextState.enter(e, scene, nextState);
-    }
+    resetTimer(e.stateTimer);
+    resetVector(e.vel);
+    onEnter(e, scene, e.stateId);
   }
 
-  const state = getState(e.stateId);
-
-  if (state && state.update) {
-    state.update(e, scene, state);
-  }
+  onUpdate(e, scene, e.stateId);
 }
 
 export function updatePhysics(e: Entity) {
@@ -124,8 +96,4 @@ export function renderShadow(e: Entity) {
 
     drawSprite(e.shadowId, -e.pivot.x + e.shadowOffset.x, -e.pivot.y + e.shadowOffset.y);
   }
-}
-
-export function switchState(e: Entity, state: string) {
-  e.stateNextId = state;
 }

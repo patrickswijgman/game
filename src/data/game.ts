@@ -18,6 +18,7 @@ const game: Game = {
 
 export function addScene(id: string, scene: Scene) {
   game.scenes[id] = scene;
+  return scene;
 }
 
 export function switchScene(id: string) {

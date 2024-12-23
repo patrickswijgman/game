@@ -1,45 +1,32 @@
 import { newStats, Stats } from "data/stats.js";
 import { vec, Vector } from "ridder";
 
-export const enum ItemType {
-  NONE = "",
-  WEAPON = "weapon",
-  ARMOR = "armor",
-}
-
 export type Item = {
-  type: ItemType;
   name: string;
   description: string;
-
   spriteId: string;
   pivot: Vector;
-
-  actionId: string;
   stats: Stats;
+  actionId: string;
 };
 
-const items: Record<string, Item> = {};
-
-export function newItem(options: Partial<Item> = {}): Item {
-  return {
-    type: ItemType.NONE,
-    name: "",
-    description: "",
-
-    spriteId: "",
-    pivot: vec(),
-
-    actionId: "",
-    stats: newStats(),
-
-    ...options,
-  };
-}
-
-export function addItem(id: string, item: Item) {
-  items[id] = item;
-}
+const items: Record<string, Item> = {
+  longsword: {
+    name: "Longsword",
+    description: "A sword of the long variety.",
+    spriteId: "item_longsword",
+    pivot: vec(15.5, 15.5),
+    stats: newStats({
+      damage: 10,
+      damageScalingStat: "strength",
+      damageScalingFactor: 0.25,
+      windupDuration: 500,
+      releaseDuration: 200,
+      recoveryDuration: 300,
+    }),
+    actionId: "melee_attack",
+  },
+};
 
 export function getItem(id: string) {
   return items[id];

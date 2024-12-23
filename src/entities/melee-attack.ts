@@ -1,18 +1,49 @@
-import { newEntity, switchState } from "data/entity.js";
-import { Item } from "data/items.js";
-import { addEntity, Scene } from "data/scene.js";
-import { vec } from "ridder";
+import { Entity, newEntity, updateState } from "data/entity.js";
+import { getItem } from "data/items.js";
+import { destroyEntity, Scene } from "data/scene.js";
+import { tickTimer } from "ridder";
 
-export function addMeleeAttack(scene: Scene, x: number, y: number, weapon: Item) {
-  const e = newEntity({
-    pos: vec(x, y),
-    spriteId: weapon.spriteId,
-    pivot: weapon.pivot,
-    stats: weapon.stats,
-  });
-
-  switchState(e, "melee_attack_windup");
-  addEntity(scene, e);
-
+export function newMeleeAttack(scene: Scene, x: number, y: number, weaponId: string) {
+  const weapon = getItem(weaponId);
+  const e = newEntity(scene, x, y);
+  e.type = "melee_attack";
+  e.spriteId = weapon.spriteId;
+  e.pivot = weapon.pivot;
+  e.stats = weapon.stats;
+  e.stateNextId = "windup";
   return e;
 }
+
+export function updateMeleeAttack(e: Entity, scene: Scene) {
+  updateState(e, scene, onStateEnter, onStateUpdate, onStateExit);
+}
+
+function onStateEnter() {}
+
+function onStateUpdate(e: Entity, scene: Scene, state: string) {
+  switch (state) {
+    case "windup":
+      {
+        if (tickTimer(e.stateTimer, e.stats.windupDuration)) {
+          e.stateNextId = "release";
+        }
+      }
+      break;
+    case "release":
+      {
+        if (tickTimer(e.stateTimer, e.stats.releaseDuration)) {
+          e.stateNextId = "recovery";
+        }
+      }
+      break;
+    case "recovery":
+      {
+        if (tickTimer(e.stateTimer, e.stats.recoveryDuration)) {
+          destroyEntity(scene, e);
+        }
+      }
+      break;
+  }
+}
+
+function onStateExit() {}

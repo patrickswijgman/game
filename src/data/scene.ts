@@ -1,4 +1,5 @@
 import { Entity } from "data/entity.js";
+import { addScene } from "data/game.js";
 import { rect, Rectangle, remove } from "ridder";
 
 export type Scene = {
@@ -10,29 +11,15 @@ export type Scene = {
   bounds: Rectangle;
 };
 
-export function newScene(): Scene {
-  return {
+export function newScene(id: string): Scene {
+  return addScene(id, {
     entities: {},
     active: [],
     visible: [],
     destroyed: [],
     playerId: "",
     bounds: rect(),
-  };
-}
-
-export function addEntity(scene: Scene, e: Entity) {
-  scene.entities[e.id] = e;
-  scene.active.push(e.id);
-  scene.visible.push(e.id);
-
-  if (e.isPlayer) {
-    scene.playerId = e.id;
-  }
-}
-
-export function destroyEntity(scene: Scene, e: Entity) {
-  scene.destroyed.push(e.id);
+  });
 }
 
 export function cleanupDestroyedEntities(scene: Scene) {
@@ -53,6 +40,17 @@ export function sortEntitiesOnDepth(scene: Scene) {
     const b = scene.entities[idB];
     return a.pos.y - b.pos.y;
   });
+}
+
+export function addEntity(scene: Scene, e: Entity) {
+  scene.entities[e.id] = e;
+  scene.active.push(e.id);
+  scene.visible.push(e.id);
+  return e;
+}
+
+export function destroyEntity(scene: Scene, e: Entity) {
+  scene.destroyed.push(e.id);
 }
 
 export function getEntity(scene: Scene, id: string) {

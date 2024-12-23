@@ -8,10 +8,9 @@ export function doDamage(self: Entity, target: Entity) {
 
   let bonus = 0;
 
-  if (self.isPlayer) {
+  if (self.type === "player") {
     const run = getCurrentRun();
     const weapon = getItem(run.weaponId);
-
     addStats(totalStats, weapon.stats);
     bonus += getScalingValue(totalStats, weapon.stats);
   }

@@ -3,19 +3,14 @@ import { clamp } from "ridder";
 type StatsBase = {
   health: number;
   healthMax: number;
-
   stamina: number;
   staminaMax: number;
   staminaRegen: number;
-
   damage: number;
-
   strength: number;
   dexterity: number;
   intelligence: number;
-
   movementSpeed: number;
-
   windupDuration: number;
   releaseDuration: number;
   recoveryDuration: number;
@@ -32,25 +27,19 @@ export function newStats(options: Partial<Stats> = {}): Stats {
   return {
     health: 0,
     healthMax: 0,
-
     stamina: 0,
     staminaMax: 0,
     staminaRegen: 0,
-
     damage: 0,
     damageScalingStat: "",
     damageScalingFactor: 0,
-
     strength: 0,
     dexterity: 0,
     intelligence: 0,
-
     movementSpeed: 0,
-
     windupDuration: 0,
     releaseDuration: 0,
     recoveryDuration: 0,
-
     ...options,
   };
 }
