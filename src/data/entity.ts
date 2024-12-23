@@ -1,5 +1,5 @@
 import { Scene } from "data/scene.js";
-import { getState, getStateMachine } from "data/states.js";
+import { getState } from "data/states.js";
 import { newStats, Stats } from "data/stats.js";
 import { addVectorScaled, applyCameraTransform, drawSprite, drawTexture, getDelta, resetTransform, resetVector, scaleTransform, translateTransform, uuid, vec, Vector } from "ridder";
 
@@ -9,8 +9,8 @@ export type Entity = {
   pos: Vector;
   vel: Vector;
 
-  stateMachineId: string;
   stateId: string;
+  nextStateId: string;
 
   stats: Stats;
 
@@ -25,15 +25,15 @@ export type Entity = {
   isFlipped: boolean;
 };
 
-export function newEntity(): Entity {
+export function newEntity(x = 0, y = 0): Entity {
   return {
     id: uuid(),
 
-    pos: vec(),
+    pos: vec(x, y),
     vel: vec(),
 
-    stateMachineId: "",
     stateId: "",
+    nextStateId: "",
 
     stats: newStats(),
 
@@ -49,33 +49,27 @@ export function newEntity(): Entity {
   };
 }
 
-export function updateStateMachine(e: Entity, scene: Scene) {
-  const stateMachine = getStateMachine(e.stateMachineId);
+export function updateState(e: Entity, scene: Scene) {
+  if (e.stateId !== e.nextStateId) {
+    const currentState = getState(e.stateId);
+    const nextState = getState(e.nextStateId);
 
-  if (stateMachine) {
-    const nextStateId = stateMachine.decide(e, scene);
-
-    if (e.stateId !== nextStateId) {
-      const currentState = getState(e.stateMachineId, e.stateId);
-      const nextState = getState(e.stateMachineId, nextStateId);
-
-      if (currentState && currentState.exit) {
-        currentState.exit(e, scene);
-      }
-
-      e.stateId = nextStateId;
-      resetEntity(e);
-
-      if (nextState && nextState.enter) {
-        nextState.enter(e, scene);
-      }
+    if (currentState && currentState.exit) {
+      currentState.exit(e, scene);
     }
 
-    const state = getState(e.stateMachineId, e.stateId);
+    e.stateId = e.nextStateId;
+    resetEntity(e);
 
-    if (state && state.update) {
-      state.update(e, scene);
+    if (nextState && nextState.enter) {
+      nextState.enter(e, scene);
     }
+  }
+
+  const state = getState(e.stateId);
+
+  if (state && state.update) {
+    state.update(e, scene);
   }
 }
 

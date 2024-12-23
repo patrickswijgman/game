@@ -11,18 +11,21 @@ export type Item = {
   name: string;
   description: string;
   spriteId: string;
+  actionId: string;
   stats: Stats;
 };
 
 const items: Record<string, Item> = {};
 
-export function newItem(): Item {
+export function newItem(item: Partial<Item> = {}, stats: Partial<Stats> = {}): Item {
   return {
     type: ItemType.NONE,
     name: "",
     description: "",
     spriteId: "",
-    stats: newStats(),
+    actionId: "",
+    stats: newStats(stats),
+    ...item,
   };
 }
 

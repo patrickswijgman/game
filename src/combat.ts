@@ -1,18 +1,24 @@
-import { Stats, addStats, newStats, updateStats } from "data/stats.js";
+import { Entity } from "data/entity.js";
+import { getCurrentRun } from "data/game.js";
+import { getItem } from "data/items.js";
+import { addStats, getScalingValue, newStats, updateStats } from "data/stats.js";
 
-export function doDamage(self: Stats, target: Stats, weapon: Stats) {
-  const totalStats = newStats(self);
-  addStats(totalStats, weapon);
+export function doDamage(self: Entity, target: Entity) {
+  const totalStats = newStats(self.stats);
 
   let bonus = 0;
 
-  if (weapon.damageScalingStat) {
-    bonus += Math.ceil(self[weapon.damageScalingStat] * weapon.damageScalingFactor);
+  if (self.isPlayer) {
+    const run = getCurrentRun();
+    const weapon = getItem(run.weaponId);
+
+    addStats(totalStats, weapon.stats);
+    bonus += getScalingValue(totalStats, weapon.stats);
   }
 
   const damage = totalStats.damage + bonus;
 
-  target.health -= damage;
+  target.stats.health -= damage;
 
-  updateStats(target);
+  updateStats(target.stats);
 }

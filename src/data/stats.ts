@@ -18,7 +18,7 @@ type StatsBase = {
 };
 
 type StatsScaling = {
-  damageScalingStat: keyof StatsBase | "";
+  damageScalingStat: keyof StatsBase | None;
   damageScalingFactor: number;
 };
 
@@ -60,4 +60,12 @@ export function addStats(a: Stats, b: Stats) {
       a[key] += value;
     }
   }
+}
+
+export function getScalingValue(stats: Stats, scaling: Stats) {
+  if (scaling.damageScalingStat) {
+    return Math.ceil(stats[scaling.damageScalingStat] * scaling.damageScalingFactor);
+  }
+
+  return 0;
 }
