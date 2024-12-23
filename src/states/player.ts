@@ -1,16 +1,27 @@
 import { Entity } from "data/entity.js";
-import { newState } from "data/states.js";
+import { addState, newState } from "data/states.js";
 import { getMousePosition, InputCode, isInputDown, normalizeVector, resetVector, scaleVector } from "ridder";
 
-export function newPlayerIdleState() {
-  return newState({
-    update: (e) => {
-      move(e);
-    },
-  });
+export function loadPlayerStates() {
+  addState(
+    "player_idle",
+    newState({
+      update: (e) => {
+        move(e);
+        look(e);
+      },
+    }),
+  );
+
+  addState(
+    "player_action",
+    newState({
+      update: (e) => {},
+    }),
+  );
 }
 
-export function move(e: Entity) {
+function move(e: Entity) {
   resetVector(e.vel);
 
   if (isInputDown(InputCode.KEY_W)) {
@@ -29,7 +40,12 @@ export function move(e: Entity) {
   normalizeVector(e.vel);
   scaleVector(e.vel, e.stats.movementSpeed);
 
-  const mouse = getMousePosition(true);
+  if (isInputDown(InputCode.MOUSE_LEFT)) {
+    e.nextStateId = "player_action";
+  }
+}
 
+function look(e: Entity) {
+  const mouse = getMousePosition(true);
   e.isFlipped = mouse.x < e.pos.x;
 }

@@ -1,8 +1,9 @@
+import { addScene } from "data/game.js";
 import { addEntity, newScene } from "data/scene.js";
 import { newPlayer } from "entities/player.js";
 import { setCameraPosition } from "ridder";
 
-export function newMainScene() {
+export function loadMainScene() {
   const scene = newScene();
 
   const w = 1000;
@@ -17,5 +18,5 @@ export function newMainScene() {
 
   setCameraPosition(player.pos.x, player.pos.y);
 
-  return scene;
+  addScene("main", scene);
 }

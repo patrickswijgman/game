@@ -1,5 +1,5 @@
-import { newState } from "data/states.js";
+import { addState, newState } from "data/states.js";
 
-export function newStunnedState() {
-  return newState();
+export function loadStunnedState() {
+  addState("stunned", newState());
 }

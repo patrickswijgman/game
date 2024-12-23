@@ -1,15 +1,14 @@
+import { loadAssets } from "assets.js";
 import { HEIGHT, WIDTH } from "consts.js";
 import { renderEntity, renderShadow, updatePhysics, updateState } from "data/entity.js";
-import { addScene, getCurrentScene, switchScene } from "data/game.js";
-import { addItem } from "data/items.js";
+import { getCurrentScene, switchScene } from "data/game.js";
 import { cleanupDestroyedEntities, getEntity, getPlayer, sortEntitiesOnDepth } from "data/scene.js";
-import { addState } from "data/states.js";
 import { renderDebugInfo } from "debug.js";
-import { newLongswordItem } from "items/longsword.js";
-import { InputCode, isInputPressed, loadFont, loadSprite, loadTexture, run, setAlpha, setBackgroundColor, setCameraBounds, setCameraSmoothing, setFont, updateCamera } from "ridder";
-import { newMainScene } from "scenes/main.js";
-import { newPlayerIdleState } from "states/player.js";
-import { newStunnedState } from "states/stunned.js";
+import { loadLongswordItem } from "items/longsword.js";
+import { InputCode, isInputPressed, run, setAlpha, setBackgroundColor, setCameraBounds, setCameraSmoothing, setFont, updateCamera } from "ridder";
+import { loadMainScene } from "scenes/main.js";
+import { loadPlayerStates } from "states/player.js";
+import { loadStunnedState } from "states/stunned.js";
 
 run({
   width: WIDTH,
@@ -17,20 +16,17 @@ run({
 
   setup: async () => {
     // ASSETS
-    await loadTexture("atlas", "textures/atlas.png");
-    loadSprite("player", "atlas", 0, 0, 16, 16);
-    loadSprite("player_shadow", "atlas", 0, 16, 16, 16);
-    await loadFont("default", "fonts/pixelmix.ttf", "pixelmix", 8);
+    await loadAssets();
 
     // STATES
-    addState("stunned", newStunnedState());
-    addState("player_idle", newPlayerIdleState());
+    loadStunnedState();
+    loadPlayerStates();
 
     // ITEMS
-    addItem("longsword", newLongswordItem());
+    loadLongswordItem();
 
     // SCENES
-    addScene("main", newMainScene());
+    loadMainScene();
 
     // RENDER
     setFont("default");
