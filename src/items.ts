@@ -1,56 +1,36 @@
 import { newStats, Stats } from "stats.js";
 
-export const enum Item {
-  NONE = "",
-  LONGSWORD = "longsword",
-}
-
-export const enum Slot {
-  NONE = "",
+export const enum ItemType {
+  NONE = "none",
   WEAPON = "weapon",
   ARMOR = "armor",
 }
 
-export type ItemData = {
+export type Item = {
+  type: ItemType;
   name: string;
   description: string;
   spriteId: string;
   stats: Stats;
-  slot: Slot;
 };
 
-const items: Record<string, ItemData> = {};
+const items: Record<string, Item> = {};
 
-export function addItems() {
-  addItem(Item.LONGSWORD, (item) => {
-    item.name = "Longsword";
-    item.slot = Slot.WEAPON;
-    item.stats.damage = 10;
-    item.stats.damageScalingStat = "strength";
-    item.stats.damageScalingFactor = 0.2;
-  });
-}
-
-function newItem(): ItemData {
+export function newItem(options: Partial<Item> = {}, stats: Partial<Stats> = {}): Item {
   return {
+    type: ItemType.NONE,
     name: "",
     description: "",
     spriteId: "",
-    stats: newStats(),
-    slot: Slot.NONE,
+    stats: newStats(stats),
+    ...options,
   };
 }
 
-function addItem(id: string, setup: (item: ItemData) => void): ItemData {
-  const item = newItem();
-
+export function addItem(id: string, item: Item) {
   items[id] = item;
-
-  setup(item);
-
-  return item;
 }
 
-export function getItem(id: Item) {
+export function getItem(id: string) {
   return items[id];
 }

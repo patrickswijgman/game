@@ -1,4 +1,4 @@
-import { Entity, newEntity } from "entity.js";
+import { Entity } from "entity.js";
 import { rect, Rectangle, remove } from "ridder";
 
 export type Scene = {
@@ -21,18 +21,14 @@ export function newScene(): Scene {
   };
 }
 
-export function addEntity(scene: Scene, setup?: (e: Entity) => void) {
-  const e = newEntity();
-
+export function addEntity(scene: Scene, e: Entity) {
   scene.entities[e.id] = e;
   scene.active.push(e.id);
   scene.visible.push(e.id);
 
-  if (setup) {
-    setup(e);
+  if (e.isPlayer) {
+    scene.playerId = e.id;
   }
-
-  return e;
 }
 
 export function destroyEntity(scene: Scene, e: Entity) {

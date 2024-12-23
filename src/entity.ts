@@ -1,14 +1,10 @@
-import { Equipment, newEquipment } from "equipment.js";
 import { addVectorScaled, applyCameraTransform, drawSprite, drawTexture, getDelta, resetTransform, resetVector, scaleTransform, setAlpha, translateTransform, uuid, vec, Vector } from "ridder";
 import { Scene } from "scene.js";
 import { getState, getStateMachine } from "states.js";
 import { newStats, Stats } from "stats.js";
-import { Type } from "type.js";
 
 export type Entity = {
   id: string;
-
-  type: Type;
 
   pos: Vector;
   vel: Vector;
@@ -17,7 +13,6 @@ export type Entity = {
   stateId: string;
 
   stats: Stats;
-  equipment: Equipment;
 
   textureId: string;
   spriteId: string;
@@ -26,14 +21,13 @@ export type Entity = {
   shadowId: string;
   shadowOffset: Vector;
 
+  isPlayer: boolean;
   isFlipped: boolean;
 };
 
 export function newEntity(): Entity {
   return {
     id: uuid(),
-
-    type: Type.NONE,
 
     pos: vec(),
     vel: vec(),
@@ -42,7 +36,6 @@ export function newEntity(): Entity {
     stateId: "",
 
     stats: newStats(),
-    equipment: newEquipment(),
 
     textureId: "",
     spriteId: "",
@@ -51,6 +44,7 @@ export function newEntity(): Entity {
     shadowId: "",
     shadowOffset: vec(),
 
+    isPlayer: false,
     isFlipped: false,
   };
 }
@@ -58,30 +52,30 @@ export function newEntity(): Entity {
 export function updateEntityStateMachine(e: Entity, scene: Scene) {
   const stateMachine = getStateMachine(e.stateMachineId);
 
-  if (!stateMachine) return;
+  if (stateMachine) {
+    const nextStateId = stateMachine.decide(e, scene);
 
-  const nextStateId = stateMachine.decide(e, scene);
+    if (e.stateId !== nextStateId) {
+      const currentState = getState(e.stateMachineId, e.stateId);
+      const nextState = getState(e.stateMachineId, nextStateId);
 
-  if (e.stateId !== nextStateId) {
-    const currentState = getState(e.stateMachineId, e.stateId);
-    const nextState = getState(e.stateMachineId, nextStateId);
+      if (currentState && currentState.exit) {
+        currentState.exit(e, scene);
+      }
 
-    if (currentState && currentState.exit) {
-      currentState.exit(e, scene);
+      e.stateId = nextStateId;
+      resetEntity(e);
+
+      if (nextState && nextState.enter) {
+        nextState.enter(e, scene);
+      }
     }
 
-    e.stateId = nextStateId;
-    resetEntity(e);
+    const state = getState(e.stateMachineId, e.stateId);
 
-    if (nextState && nextState.enter) {
-      nextState.enter(e, scene);
+    if (state && state.update) {
+      state.update(e, scene);
     }
-  }
-
-  const state = getState(e.type, e.stateId);
-
-  if (state && state.update) {
-    state.update(e, scene);
   }
 }
 

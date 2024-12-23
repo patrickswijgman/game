@@ -1,55 +1,47 @@
-import { Entity } from "entity.js";
-import { getPlayerEquipment, getPlayerStats } from "game.js";
-import { getMousePosition, getVectorLength, InputCode, isInputDown, normalizeVector, resetVector, scaleVector, setCameraPosition } from "ridder";
-import { addEntity, Scene } from "scene.js";
+import { Entity, newEntity } from "entity.js";
+import { getPlayerStats } from "game.js";
+import { getMousePosition, getVectorLength, InputCode, isInputDown, normalizeVector, resetVector, scaleVector } from "ridder";
+import { Scene } from "scene.js";
 import { StateMachine } from "states.js";
-import { Type } from "type.js";
 
-export function addPlayer(scene: Scene, x: number, y: number) {
-  return addEntity(scene, (e) => {
-    e.type = Type.PLAYER;
-    e.pos.x = x;
-    e.pos.y = y;
+export function newPlayer(scene: Scene, x: number, y: number) {
+  const e = newEntity();
 
-    e.stateMachineId = "player";
+  e.pos.x = x;
+  e.pos.y = y;
 
-    e.pivot.x = 8;
-    e.pivot.y = 15;
-    e.spriteId = "player";
-    e.shadowId = "player_shadow";
-    e.shadowOffset.x = 0;
-    e.shadowOffset.y = 2;
+  e.stateMachineId = "player";
 
-    e.stats = getPlayerStats();
-    e.equipment = getPlayerEquipment();
+  e.pivot.x = 8;
+  e.pivot.y = 15;
+  e.spriteId = "player";
+  e.shadowId = "player_shadow";
+  e.shadowOffset.x = 0;
+  e.shadowOffset.y = 2;
 
-    scene.playerId = e.id;
+  e.stats = getPlayerStats();
 
-    setCameraPosition(x, y);
-  });
+  e.isPlayer = true;
+
+  return e;
 }
 
-const enum State {
-  IDLE = "idle",
-  WALK = "walk",
-}
-
-export function getPlayerStateMachine(): StateMachine {
+export function newPlayerStateMachine(): StateMachine {
   return {
     decide: (e: Entity) => {
       if (getVectorLength(e.vel)) {
-        return State.WALK;
+        return "walk";
       }
 
-      return State.IDLE;
+      return "idle";
     },
     states: {
-      [State.IDLE]: {
+      idle: {
         update: (e) => {
           move(e);
         },
       },
-      [State.WALK]: {
+      walk: {
         update: (e) => {
           move(e);
         },
