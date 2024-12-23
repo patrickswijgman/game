@@ -1,7 +1,7 @@
 import { Scene } from "data/scene.js";
 import { getState } from "data/states.js";
 import { newStats, Stats } from "data/stats.js";
-import { addVectorScaled, applyCameraTransform, drawSprite, drawTexture, getDelta, resetTransform, scaleTransform, translateTransform, uuid, vec, Vector } from "ridder";
+import { addVectorScaled, applyCameraTransform, drawSprite, drawTexture, getDelta, polygon, Polygon, resetTransform, rotateTransform, scaleTransform, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
 
 export type Entity = {
   id: string;
@@ -10,65 +10,79 @@ export type Entity = {
   vel: Vector;
 
   stateId: string;
-  nextStateId: string;
+  stateNextId: string;
+  stateTimer: Timer;
 
   stats: Stats;
+
+  hitbox: Polygon;
 
   textureId: string;
   spriteId: string;
   pivot: Vector;
+  angle: number;
 
   shadowId: string;
   shadowOffset: Vector;
+
+  actionId: string;
 
   isPlayer: boolean;
   isFlipped: boolean;
 };
 
-export function newEntity(x = 0, y = 0): Entity {
+export function newEntity(options: Partial<Entity> = {}): Entity {
   return {
     id: uuid(),
 
-    pos: vec(x, y),
+    pos: vec(),
     vel: vec(),
 
     stateId: "",
-    nextStateId: "",
+    stateTimer: timer(),
+    stateNextId: "",
 
     stats: newStats(),
+
+    hitbox: polygon(),
 
     textureId: "",
     spriteId: "",
     pivot: vec(),
+    angle: 0,
 
     shadowId: "",
     shadowOffset: vec(),
 
+    actionId: "",
+
     isPlayer: false,
     isFlipped: false,
+
+    ...options,
   };
 }
 
 export function updateState(e: Entity, scene: Scene) {
-  if (e.stateId !== e.nextStateId) {
+  if (e.stateId !== e.stateNextId) {
     const currentState = getState(e.stateId);
-    const nextState = getState(e.nextStateId);
+    const nextState = getState(e.stateNextId);
 
     if (currentState && currentState.exit) {
-      currentState.exit(e, scene);
+      currentState.exit(e, scene, currentState);
     }
 
-    e.stateId = e.nextStateId;
+    e.stateId = e.stateNextId;
 
     if (nextState && nextState.enter) {
-      nextState.enter(e, scene);
+      nextState.enter(e, scene, nextState);
     }
   }
 
   const state = getState(e.stateId);
 
   if (state && state.update) {
-    state.update(e, scene);
+    state.update(e, scene, state);
   }
 }
 
@@ -80,6 +94,10 @@ export function renderEntity(e: Entity) {
   resetTransform();
   translateTransform(e.pos.x, e.pos.y);
   applyCameraTransform();
+
+  if (e.angle) {
+    rotateTransform(e.angle);
+  }
 
   if (e.isFlipped) {
     scaleTransform(-1, 1);
@@ -109,5 +127,5 @@ export function renderShadow(e: Entity) {
 }
 
 export function switchState(e: Entity, state: string) {
-  e.nextStateId = state;
+  e.stateNextId = state;
 }

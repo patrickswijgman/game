@@ -1,24 +1,23 @@
 import { newEntity, switchState } from "data/entity.js";
 import { getCurrentRun } from "data/game.js";
 import { addEntity, Scene } from "data/scene.js";
+import { vec } from "ridder";
 
 export function addPlayer(scene: Scene, x: number, y: number) {
-  const e = newEntity(x, y);
   const run = getCurrentRun();
 
-  e.pivot.x = 8;
-  e.pivot.y = 15;
-  e.spriteId = "player";
-  e.shadowId = "player_shadow";
-  e.shadowOffset.x = 0;
-  e.shadowOffset.y = 2;
+  const e = newEntity({
+    pos: vec(x, y),
+    spriteId: "player",
+    shadowId: "player_shadow",
+    shadowOffset: vec(0, 2),
+    pivot: vec(8, 15),
+    stats: run.stats,
+    isPlayer: true,
+  });
 
-  e.stats = run.stats;
-
-  e.isPlayer = true;
-
-  addEntity(scene, e);
   switchState(e, "player_idle");
+  addEntity(scene, e);
 
   return e;
 }

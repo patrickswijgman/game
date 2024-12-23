@@ -1,4 +1,5 @@
 import { newStats, Stats } from "data/stats.js";
+import { vec, Vector } from "ridder";
 
 export const enum ItemType {
   NONE = "",
@@ -10,22 +11,29 @@ export type Item = {
   type: ItemType;
   name: string;
   description: string;
+
   spriteId: string;
+  pivot: Vector;
+
   actionId: string;
   stats: Stats;
 };
 
 const items: Record<string, Item> = {};
 
-export function newItem(item: Partial<Item> = {}, stats: Partial<Stats> = {}): Item {
+export function newItem(options: Partial<Item> = {}): Item {
   return {
     type: ItemType.NONE,
     name: "",
     description: "",
+
     spriteId: "",
+    pivot: vec(),
+
     actionId: "",
-    stats: newStats(stats),
-    ...item,
+    stats: newStats(),
+
+    ...options,
   };
 }
 

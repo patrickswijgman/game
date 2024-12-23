@@ -11,7 +11,7 @@ export function newRun(): Run {
     stats: newStats({
       movementSpeed: 1.5,
     }),
-    weaponId: "",
+    weaponId: "longsword",
     armorId: "",
   };
 }

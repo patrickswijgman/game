@@ -15,6 +15,10 @@ type StatsBase = {
   intelligence: number;
 
   movementSpeed: number;
+
+  windupDuration: number;
+  releaseDuration: number;
+  recoveryDuration: number;
 };
 
 type StatsScaling = {
@@ -24,7 +28,7 @@ type StatsScaling = {
 
 export type Stats = StatsBase & StatsScaling;
 
-export function newStats(stats: Partial<Stats> = {}): Stats {
+export function newStats(options: Partial<Stats> = {}): Stats {
   return {
     health: 0,
     healthMax: 0,
@@ -43,7 +47,11 @@ export function newStats(stats: Partial<Stats> = {}): Stats {
 
     movementSpeed: 0,
 
-    ...stats,
+    windupDuration: 0,
+    releaseDuration: 0,
+    recoveryDuration: 0,
+
+    ...options,
   };
 }
 

@@ -1,20 +1,17 @@
 import { Entity } from "data/entity.js";
 import { Scene } from "data/scene.js";
-import { timer, Timer } from "ridder";
 
 export type State = {
-  timer: Timer;
-  enter?: (e: Entity, scene: Scene) => void;
-  update?: (e: Entity, scene: Scene) => void;
-  exit?: (e: Entity, scene: Scene) => void;
+  enter?: (e: Entity, scene: Scene, state: State) => void;
+  update?: (e: Entity, scene: Scene, state: State) => void;
+  exit?: (e: Entity, scene: Scene, state: State) => void;
 };
 
 const states: Record<string, State> = {};
 
-export function newState(state: Partial<State> = {}): State {
+export function newState(options: Partial<State> = {}): State {
   return {
-    timer: timer(),
-    ...state,
+    ...options,
   };
 }
 

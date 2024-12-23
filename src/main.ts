@@ -1,3 +1,4 @@
+import { loadMeleeAttackAction } from "actions/melee-attack.js";
 import { loadAssets } from "assets.js";
 import { HEIGHT, WIDTH } from "consts.js";
 import { renderEntity, renderShadow, updatePhysics, updateState } from "data/entity.js";
@@ -7,6 +8,7 @@ import { renderDebugInfo } from "debug.js";
 import { loadLongswordItem } from "items/longsword.js";
 import { InputCode, isInputPressed, run, setAlpha, setBackgroundColor, setCameraSmoothing, setFont, updateCamera } from "ridder";
 import { loadMainScene } from "scenes/main.js";
+import { loadMeleeAttackActionStates } from "states/melee-attack.js";
 import { loadPlayerStates } from "states/player.js";
 import { loadStunnedState } from "states/stunned.js";
 
@@ -18,9 +20,13 @@ run({
     // ASSETS
     await loadAssets();
 
+    // ACTIONS
+    loadMeleeAttackAction();
+
     // STATES
     loadStunnedState();
     loadPlayerStates();
+    loadMeleeAttackActionStates();
 
     // ITEMS
     loadLongswordItem();
