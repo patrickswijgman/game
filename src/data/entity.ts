@@ -1,7 +1,7 @@
 import { Scene } from "data/scene.js";
 import { getState, getStateMachine } from "data/states.js";
 import { newStats, Stats } from "data/stats.js";
-import { addVectorScaled, applyCameraTransform, drawSprite, drawTexture, getDelta, resetTransform, resetVector, scaleTransform, setAlpha, translateTransform, uuid, vec, Vector } from "ridder";
+import { addVectorScaled, applyCameraTransform, drawSprite, drawTexture, getDelta, resetTransform, resetVector, scaleTransform, translateTransform, uuid, vec, Vector } from "ridder";
 
 export type Entity = {
   id: string;
@@ -49,7 +49,7 @@ export function newEntity(): Entity {
   };
 }
 
-export function updateEntityStateMachine(e: Entity, scene: Scene) {
+export function updateStateMachine(e: Entity, scene: Scene) {
   const stateMachine = getStateMachine(e.stateMachineId);
 
   if (stateMachine) {
@@ -79,7 +79,7 @@ export function updateEntityStateMachine(e: Entity, scene: Scene) {
   }
 }
 
-export function updateEntityPhysics(e: Entity) {
+export function updatePhysics(e: Entity) {
   addVectorScaled(e.pos, e.vel, getDelta());
 }
 
@@ -96,14 +96,22 @@ export function renderEntity(e: Entity) {
     drawTexture(e.textureId, -e.pivot.x, -e.pivot.y);
   }
 
-  if (e.shadowId) {
-    setAlpha(0.4);
-    drawSprite(e.shadowId, -e.pivot.x + e.shadowOffset.x, -e.pivot.y + e.shadowOffset.y);
-    setAlpha(1);
-  }
-
   if (e.spriteId) {
     drawSprite(e.spriteId, -e.pivot.x, -e.pivot.y);
+  }
+}
+
+export function renderShadow(e: Entity) {
+  if (e.shadowId) {
+    resetTransform();
+    translateTransform(e.pos.x, e.pos.y);
+    applyCameraTransform();
+
+    if (e.isFlipped) {
+      scaleTransform(-1, 1);
+    }
+
+    drawSprite(e.shadowId, -e.pivot.x + e.shadowOffset.x, -e.pivot.y + e.shadowOffset.y);
   }
 }
 

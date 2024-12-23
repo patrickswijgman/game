@@ -1,5 +1,5 @@
 import { HEIGHT, WIDTH } from "consts.js";
-import { renderEntity, updateEntityPhysics, updateEntityStateMachine } from "data/entity.js";
+import { renderEntity, renderShadow, updatePhysics, updateStateMachine } from "data/entity.js";
 import { addScene, getCurrentScene, switchScene } from "data/game.js";
 import { addItem } from "data/items.js";
 import { cleanupDestroyedEntities, getEntity, getPlayer, sortEntitiesOnDepth } from "data/scene.js";
@@ -7,7 +7,7 @@ import { addStateMachine } from "data/states.js";
 import { renderDebugInfo } from "debug.js";
 import { newPlayerStateMachine } from "entities/player.js";
 import { newLongswordItem } from "items/longsword.js";
-import { InputCode, isInputPressed, loadFont, loadSprite, loadTexture, run, setBackgroundColor, setCameraBounds, setCameraSmoothing, setFont, updateCamera } from "ridder";
+import { InputCode, isInputPressed, loadFont, loadSprite, loadTexture, run, setAlpha, setBackgroundColor, setCameraBounds, setCameraSmoothing, setFont, updateCamera } from "ridder";
 import { newMainScene } from "scenes/main.js";
 
 run({
@@ -15,18 +15,22 @@ run({
   height: HEIGHT,
 
   setup: async () => {
+    // ASSETS
     await loadTexture("atlas", "textures/atlas.png");
     loadSprite("player", "atlas", 0, 0, 16, 16);
     loadSprite("player_shadow", "atlas", 0, 16, 16, 16);
-
     await loadFont("default", "fonts/pixelmix.ttf", "pixelmix", 8);
 
+    // STATE MACHINES
     addStateMachine("player", newPlayerStateMachine());
 
+    // ITEMS
     addItem("longsword", newLongswordItem());
 
+    // SCENES
     addScene("main", newMainScene());
 
+    // RENDER
     setFont("default");
     setBackgroundColor("steelblue");
     setCameraSmoothing(0.05);
@@ -48,8 +52,8 @@ run({
 
     for (const id of scene.active) {
       const e = getEntity(scene, id);
-      updateEntityStateMachine(e, scene);
-      updateEntityPhysics(e);
+      updateStateMachine(e, scene);
+      updatePhysics(e);
     }
 
     const player = getPlayer(scene);
@@ -63,6 +67,13 @@ run({
     const scene = getCurrentScene();
 
     sortEntitiesOnDepth(scene);
+
+    setAlpha(0.4);
+    for (const id of scene.visible) {
+      const e = getEntity(scene, id);
+      renderShadow(e);
+    }
+    setAlpha(1);
 
     for (const id of scene.visible) {
       const e = getEntity(scene, id);

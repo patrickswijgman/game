@@ -1,10 +1,11 @@
 import { Entity, newEntity } from "data/entity.js";
-import { getPlayerStats } from "data/game.js";
+import { getCurrentRun } from "data/game.js";
 import { StateMachine } from "data/states.js";
 import { getMousePosition, getVectorLength, InputCode, isInputDown, normalizeVector, resetVector, scaleVector } from "ridder";
 
 export function newPlayer(x: number, y: number) {
   const e = newEntity();
+  const run = getCurrentRun();
 
   e.pos.x = x;
   e.pos.y = y;
@@ -18,7 +19,7 @@ export function newPlayer(x: number, y: number) {
   e.shadowOffset.x = 0;
   e.shadowOffset.y = 2;
 
-  e.stats = getPlayerStats();
+  e.stats = run.stats;
 
   e.isPlayer = true;
 

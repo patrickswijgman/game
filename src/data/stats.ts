@@ -9,7 +9,6 @@ type StatsBase = {
   staminaRegen: number;
 
   damage: number;
-  damageScalingFactor: number;
 
   strength: number;
   dexterity: number;
@@ -18,9 +17,12 @@ type StatsBase = {
   movementSpeed: number;
 };
 
-export type Stats = StatsBase & {
-  damageScalingStat: keyof StatsBase;
+type StatsScaling = {
+  damageScalingStat: keyof StatsBase | "";
+  damageScalingFactor: number;
 };
+
+export type Stats = StatsBase & StatsScaling;
 
 export function newStats(stats: Partial<Stats> = {}): Stats {
   return {
@@ -32,7 +34,7 @@ export function newStats(stats: Partial<Stats> = {}): Stats {
     staminaRegen: 0,
 
     damage: 0,
-    damageScalingStat: "strength",
+    damageScalingStat: "",
     damageScalingFactor: 0,
 
     strength: 0,
