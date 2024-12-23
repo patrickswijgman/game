@@ -10,6 +10,9 @@ export function loadPlayerStates() {
         move(e);
         look(e);
       },
+      exit: (e) => {
+        resetVector(e.vel);
+      },
     }),
   );
 

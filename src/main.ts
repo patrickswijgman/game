@@ -1,8 +1,8 @@
 import { loadAssets } from "assets.js";
 import { HEIGHT, WIDTH } from "consts.js";
 import { renderEntity, renderShadow, updatePhysics, updateState } from "data/entity.js";
-import { getCurrentScene, switchScene, updateScene } from "data/game.js";
-import { cleanupDestroyedEntities, getEntity, getPlayer, sortEntitiesOnDepth } from "data/scene.js";
+import { getCurrentScene, switchCurrentScene, switchScene } from "data/game.js";
+import { cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth } from "data/scene.js";
 import { renderDebugInfo } from "debug.js";
 import { loadLongswordItem } from "items/longsword.js";
 import { InputCode, isInputPressed, run, setAlpha, setBackgroundColor, setCameraSmoothing, setFont, updateCamera } from "ridder";
@@ -42,7 +42,7 @@ run({
       return;
     }
 
-    updateScene();
+    switchCurrentScene();
 
     const scene = getCurrentScene();
 
@@ -52,12 +52,10 @@ run({
       const e = getEntity(scene, id);
       updateState(e, scene);
       updatePhysics(e);
-    }
 
-    const player = getPlayer(scene);
-
-    if (player) {
-      updateCamera(player.pos.x, player.pos.y);
+      if (e.isPlayer) {
+        updateCamera(e.pos.x, e.pos.y);
+      }
     }
   },
 

@@ -24,7 +24,7 @@ export function switchScene(id: string) {
   game.nextSceneId = id;
 }
 
-export function updateScene() {
+export function switchCurrentScene() {
   if (game.sceneId !== game.nextSceneId) {
     game.sceneId = game.nextSceneId;
 

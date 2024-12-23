@@ -1,7 +1,7 @@
 import { Scene } from "data/scene.js";
 import { getState } from "data/states.js";
 import { newStats, Stats } from "data/stats.js";
-import { addVectorScaled, applyCameraTransform, drawSprite, drawTexture, getDelta, resetTransform, resetVector, scaleTransform, translateTransform, uuid, vec, Vector } from "ridder";
+import { addVectorScaled, applyCameraTransform, drawSprite, drawTexture, getDelta, resetTransform, scaleTransform, translateTransform, uuid, vec, Vector } from "ridder";
 
 export type Entity = {
   id: string;
@@ -59,7 +59,6 @@ export function updateState(e: Entity, scene: Scene) {
     }
 
     e.stateId = e.nextStateId;
-    resetEntity(e);
 
     if (nextState && nextState.enter) {
       nextState.enter(e, scene);
@@ -109,6 +108,6 @@ export function renderShadow(e: Entity) {
   }
 }
 
-export function resetEntity(e: Entity) {
-  resetVector(e.vel);
+export function switchState(e: Entity, state: string) {
+  e.nextStateId = state;
 }

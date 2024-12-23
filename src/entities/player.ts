@@ -1,11 +1,10 @@
-import { newEntity } from "data/entity.js";
+import { newEntity, switchState } from "data/entity.js";
 import { getCurrentRun } from "data/game.js";
+import { addEntity, Scene } from "data/scene.js";
 
-export function newPlayer(x: number, y: number) {
+export function addPlayer(scene: Scene, x: number, y: number) {
   const e = newEntity(x, y);
   const run = getCurrentRun();
-
-  e.nextStateId = "player_idle";
 
   e.pivot.x = 8;
   e.pivot.y = 15;
@@ -17,6 +16,9 @@ export function newPlayer(x: number, y: number) {
   e.stats = run.stats;
 
   e.isPlayer = true;
+
+  addEntity(scene, e);
+  switchState(e, "player_idle");
 
   return e;
 }

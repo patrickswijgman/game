@@ -2,7 +2,7 @@ export type Action = {
   name: string;
   description: string;
   enter?: () => void;
-  update?: () => void;
+  update?: () => boolean;
   exit?: () => void;
 };
 
