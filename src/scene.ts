@@ -1,5 +1,5 @@
-import { Entity } from "data/entity.js";
-import { addScene } from "data/game.js";
+import { Entity } from "entity.js";
+import { addScene } from "game.js";
 import { rect, Rectangle, remove } from "ridder";
 
 export type Scene = {

@@ -1,7 +1,7 @@
-import { Entity } from "data/entity.js";
-import { getSession } from "data/game.js";
-import { getItem } from "data/items.js";
-import { addStats, getScalingValue, newStats, updateStats } from "data/stats.js";
+import { Entity } from "entity.js";
+import { getSession } from "game.js";
+import { getItem } from "items.js";
+import { addStats, getScalingValue, newStats, updateStats } from "stats.js";
 
 export function doDamage(self: Entity, target: Entity) {
   const totalStats = newStats(self.stats);

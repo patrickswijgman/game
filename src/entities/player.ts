@@ -1,9 +1,9 @@
-import { Entity, newEntity, updateState } from "data/entity.js";
-import { getSession } from "data/game.js";
-import { getItem } from "data/items.js";
-import { Scene } from "data/scene.js";
 import { newMeleeAttack } from "entities/melee-attack.js";
+import { Entity, newEntity, updateState } from "entity.js";
+import { getSession } from "game.js";
+import { getItem } from "items.js";
 import { getMousePosition, getVectorLength, InputCode, isInputDown, isInputPressed, normalizeVector, resetVector, scaleVector, tickTimer, tween } from "ridder";
+import { Scene } from "scene.js";
 
 export function newPlayer(scene: Scene, x: number, y: number) {
   const session = getSession();

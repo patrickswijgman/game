@@ -1,5 +1,5 @@
-import { newStats, Stats } from "data/stats.js";
 import { vec, Vector } from "ridder";
+import { newStats, Stats } from "stats.js";
 
 export type Item = {
   name: string;

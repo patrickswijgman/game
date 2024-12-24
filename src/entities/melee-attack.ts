@@ -1,7 +1,7 @@
-import { Entity, newEntity, updateState } from "data/entity.js";
-import { getItem } from "data/items.js";
-import { destroyEntity, Scene } from "data/scene.js";
+import { Entity, newEntity, updateState } from "entity.js";
+import { getItem } from "items.js";
 import { tickTimer } from "ridder";
+import { destroyEntity, Scene } from "scene.js";
 
 export function newMeleeAttack(scene: Scene, x: number, y: number, weaponId: string) {
   const weapon = getItem(weaponId);

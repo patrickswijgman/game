@@ -1,6 +1,6 @@
-import { newScene } from "data/scene.js";
 import { newPlayer } from "entities/player.js";
 import { setCameraPosition } from "ridder";
+import { newScene } from "scene.js";
 
 export function loadMainScene() {
   const scene = newScene("main");

@@ -1,12 +1,12 @@
 import { loadAssets } from "assets.js";
 import { HEIGHT, WIDTH } from "consts.js";
-import { renderEntity, renderShadow, updatePhysics } from "data/entity.js";
-import { getCurrentScene, switchCurrentScene, switchScene } from "data/game.js";
-import { cleanupDestroyedEntities, getEntity, getPlayer, sortEntitiesOnDepth } from "data/scene.js";
 import { renderDebugInfo } from "debug.js";
 import { updateMeleeAttack } from "entities/melee-attack.js";
 import { updatePlayer } from "entities/player.js";
+import { renderEntity, renderShadow, updatePhysics } from "entity.js";
+import { getCurrentScene, switchCurrentScene, switchScene } from "game.js";
 import { InputCode, isInputPressed, run, setAlpha, setBackgroundColor, setCameraSmoothing, setFont, updateCamera } from "ridder";
+import { cleanupDestroyedEntities, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
 import { loadMainScene } from "scenes/main.js";
 
 run({

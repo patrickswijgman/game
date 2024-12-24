@@ -1,6 +1,6 @@
-import { Scene } from "data/scene.js";
-import { newSession, Session } from "data/session.js";
 import { setCameraBounds } from "ridder";
+import { Scene } from "scene.js";
+import { newSession, Session } from "session.js";
 
 export type Game = {
   scenes: Record<string, Scene>;

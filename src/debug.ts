@@ -1,6 +1,6 @@
 import { LINE_HEIGHT } from "consts.js";
-import { getPlayer, Scene } from "data/scene.js";
 import { drawText, getFramePerSecond, resetTransform, translateTransform } from "ridder";
+import { getPlayer, Scene } from "scene.js";
 
 export function renderDebugInfo(scene: Scene) {
   resetTransform();

@@ -1,7 +1,7 @@
-import { addEntity, Scene } from "data/scene.js";
-import { newStats, Stats } from "data/stats.js";
 import { setVector } from "engine/vector.js";
 import { addVectorScaled, applyCameraTransform, drawSprite, drawTexture, getDelta, polygon, Polygon, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
+import { addEntity, Scene } from "scene.js";
+import { newStats, Stats } from "stats.js";
 
 export type Entity = {
   id: string;

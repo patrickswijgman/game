@@ -1,4 +1,4 @@
-import { newStats, Stats } from "data/stats.js";
+import { newStats, Stats } from "stats.js";
 
 export type Session = {
   stats: Stats;
