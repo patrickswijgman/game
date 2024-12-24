@@ -5,7 +5,7 @@ import { updateMeleeAttack } from "entities/actions/melee-attack.js";
 import { updatePlayer } from "entities/player.js";
 import { renderEntity, renderShadow, updateHitbox, updatePhysics } from "entity.js";
 import { getCurrentScene, switchScene, transitionToNextScene } from "game.js";
-import { InputCode, isInputPressed, resetTransform, run, setAlpha, setBackgroundColor, setCameraSmoothing, setFont, updateCamera } from "ridder";
+import { applyCameraTransform, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setBackgroundColor, setCameraSmoothing, setFont, translateTransform, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
 import { loadMainScene } from "scenes/main.js";
 import { drawBar } from "ui/bar.js";
@@ -79,6 +79,14 @@ run({
     for (const id of scene.visible) {
       const e = getEntity(scene, id);
       renderEntity(e);
+
+      if (e.isEnemy && e.stats.health < e.stats.healthMax) {
+        resetTransform();
+        applyCameraTransform();
+        translateTransform(e.pos.x, e.pos.y - e.height);
+        scaleTransform(0.5, 0.5);
+        drawBar(-15, 0, e.stats.health, e.stats.healthMax, COLOR_HEALTH, 30, 8);
+      }
     }
 
     const player = getPlayer(scene);

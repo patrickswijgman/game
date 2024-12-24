@@ -1,6 +1,6 @@
 import { onAction } from "actions.js";
 import { setVector } from "engine/vector.js";
-import { addVectorScaled, applyCameraTransform, drawSprite, drawTexture, getDelta, isPolygonValid, polygon, Polygon, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
+import { addVectorScaled, applyCameraTransform, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, TextAlign, TextBaseline, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
 import { addEntity, Scene } from "scene.js";
 import { newStats, Stats } from "stats.js";
 
@@ -21,9 +21,16 @@ export type Entity = {
   textureId: string;
   spriteId: string;
   pivot: Vector;
+  scale: Vector;
   angle: number;
   shadowId: string;
   shadowOffset: Vector;
+  text: string;
+  textAlign: TextAlign;
+  textBaseline: TextBaseline;
+  textColor: string;
+  width: number;
+  height: number;
   tweenPos: Vector;
   tweenScale: Vector;
   tweenAngle: number;
@@ -31,7 +38,10 @@ export type Entity = {
   parentId: string;
   actionId: string;
   weaponId: string;
+  blacklist: Array<string>;
+  isEnemy: boolean;
   isFlipped: boolean;
+  isDestroyed: boolean;
 };
 
 export function newEntity(scene: Scene, x: number, y: number): Entity {
@@ -52,9 +62,16 @@ export function newEntity(scene: Scene, x: number, y: number): Entity {
     textureId: "",
     spriteId: "",
     pivot: vec(),
+    scale: vec(1, 1),
     angle: 0,
     shadowId: "",
     shadowOffset: vec(),
+    text: "",
+    textAlign: "left",
+    textBaseline: "top",
+    textColor: "white",
+    width: 0,
+    height: 0,
     tweenPos: vec(),
     tweenScale: vec(1, 1),
     tweenAngle: 0,
@@ -62,7 +79,10 @@ export function newEntity(scene: Scene, x: number, y: number): Entity {
     parentId: "",
     actionId: "",
     weaponId: "",
+    blacklist: [],
+    isEnemy: false,
     isFlipped: false,
+    isDestroyed: false,
   });
 }
 
@@ -114,9 +134,11 @@ export function renderEntity(e: Entity) {
   resetTransform();
   applyCameraTransform();
   translateTransform(e.pos.x, e.pos.y);
+  scaleTransform(e.scale.x, e.scale.y);
+  rotateTransform(e.angle);
+
   translateTransform(e.tweenPos.x, e.tweenPos.y);
   scaleTransform(e.tweenScale.x, e.tweenScale.y);
-  rotateTransform(e.angle);
   rotateTransform(e.tweenAngle);
 
   if (e.isFlipped) {
@@ -129,6 +151,10 @@ export function renderEntity(e: Entity) {
 
   if (e.spriteId) {
     drawSprite(e.spriteId, -e.pivot.x, -e.pivot.y);
+  }
+
+  if (e.text) {
+    drawText(e.text, -e.pivot.x, -e.pivot.y, e.textColor, e.textAlign, e.textBaseline);
   }
 }
 

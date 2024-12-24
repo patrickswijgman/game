@@ -50,6 +50,7 @@ export function addEntity(scene: Scene, e: Entity) {
 }
 
 export function destroyEntity(scene: Scene, e: Entity) {
+  e.isDestroyed = true;
   scene.destroyed.push(e.id);
 }
 
