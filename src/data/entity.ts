@@ -1,5 +1,6 @@
 import { addEntity, Scene } from "data/scene.js";
 import { newStats, Stats } from "data/stats.js";
+import { setVector } from "engine/vector.js";
 import { addVectorScaled, applyCameraTransform, drawSprite, drawTexture, getDelta, polygon, Polygon, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
 
 export type Entity = {
@@ -18,6 +19,10 @@ export type Entity = {
   angle: number;
   shadowId: string;
   shadowOffset: Vector;
+  tweenPos: Vector;
+  tweenScale: Vector;
+  tweenAngle: number;
+  tweenTimer: Timer;
   actionId: string;
   isFlipped: boolean;
 };
@@ -39,23 +44,38 @@ export function newEntity(scene: Scene, x: number, y: number): Entity {
     angle: 0,
     shadowId: "",
     shadowOffset: vec(),
+    tweenPos: vec(),
+    tweenScale: vec(1, 1),
+    tweenAngle: 0,
+    tweenTimer: timer(),
     actionId: "",
     isFlipped: false,
   });
 }
 
-type StateLifecycleHook = (e: Entity, scene: Scene, state: string) => void;
+type StateLifecycleHook = (e: Entity, scene: Scene, state: string) => string | void;
 
 export function updateState(e: Entity, scene: Scene, onEnter: StateLifecycleHook, onUpdate: StateLifecycleHook, onExit: StateLifecycleHook) {
   if (e.stateId !== e.stateNextId) {
     onExit(e, scene, e.stateId);
+
     e.stateId = e.stateNextId;
+
     resetTimer(e.stateTimer);
     resetVector(e.vel);
+    resetTimer(e.tweenTimer);
+    resetVector(e.tweenPos);
+    setVector(e.tweenScale, 1, 1);
+    e.tweenAngle = 0;
+
     onEnter(e, scene, e.stateId);
   }
 
-  onUpdate(e, scene, e.stateId);
+  const nextStateId = onUpdate(e, scene, e.stateId);
+
+  if (nextStateId) {
+    e.stateNextId = nextStateId;
+  }
 }
 
 export function updatePhysics(e: Entity) {
@@ -64,12 +84,12 @@ export function updatePhysics(e: Entity) {
 
 export function renderEntity(e: Entity) {
   resetTransform();
-  translateTransform(e.pos.x, e.pos.y);
   applyCameraTransform();
-
-  if (e.angle) {
-    rotateTransform(e.angle);
-  }
+  translateTransform(e.pos.x, e.pos.y);
+  translateTransform(e.tweenPos.x, e.tweenPos.y);
+  scaleTransform(e.tweenScale.x, e.tweenScale.y);
+  rotateTransform(e.angle);
+  rotateTransform(e.tweenAngle);
 
   if (e.isFlipped) {
     scaleTransform(-1, 1);
