@@ -1,8 +1,20 @@
 import { LINE_HEIGHT } from "consts.js";
-import { drawText, getFramePerSecond, resetTransform, translateTransform } from "ridder";
-import { getPlayer, Scene } from "scene.js";
+import { applyCameraTransform, drawPolygonInstance, drawText, getFramePerSecond, isPolygonValid, resetTransform, translateTransform } from "ridder";
+import { getEntity, getPlayer, Scene } from "scene.js";
 
 export function renderDebugInfo(scene: Scene) {
+  return;
+
+  resetTransform();
+  applyCameraTransform();
+  for (const id of scene.active) {
+    const e = getEntity(scene, id);
+
+    if (isPolygonValid(e.hitbox)) {
+      drawPolygonInstance(e.hitbox, "yellow", false);
+    }
+  }
+
   resetTransform();
 
   translateTransform(2, 2);
@@ -12,10 +24,4 @@ export function renderDebugInfo(scene: Scene) {
 
   translateTransform(0, LINE_HEIGHT);
   drawText(player.stateId, 0, 0, "lime");
-  translateTransform(0, LINE_HEIGHT);
-  drawText(`HP: ${player.stats.health}`, 0, 0, "lime");
-  translateTransform(0, LINE_HEIGHT);
-  drawText(`SP: ${player.stats.stamina}`, 0, 0, "lime");
-  translateTransform(0, LINE_HEIGHT);
-  drawText(`MP: ${player.stats.mana}`, 0, 0, "lime");
 }

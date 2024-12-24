@@ -1,4 +1,4 @@
-import { vec, Vector } from "ridder";
+import { Polygon, polygonFromRect, rect, vec, Vector } from "ridder";
 import { newStats, Stats } from "stats.js";
 
 export type Item = {
@@ -7,6 +7,7 @@ export type Item = {
   spriteId: string;
   pivot: Vector;
   stats: Stats;
+  hitbox: Polygon;
   actionId: string;
 };
 
@@ -15,16 +16,17 @@ const items: Record<string, Item> = {
     name: "Longsword",
     description: "A sword of the long variety.",
     spriteId: "item_longsword",
-    pivot: vec(15.5, 15.5),
+    pivot: vec(15.5, 30),
     stats: newStats({
       damage: 10,
       damageScalingStat: "strength",
       damageScalingFactor: 0.25,
-      staminaCost: 10,
-      windupDuration: 500,
+      staminaCost: 25,
+      windupDuration: 300,
       releaseDuration: 200,
-      recoveryDuration: 300,
+      recoveryDuration: 200,
     }),
+    hitbox: polygonFromRect(0, 0, rect(0, -2, 24, 4)),
     actionId: "melee_attack",
   },
 };

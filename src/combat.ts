@@ -1,5 +1,6 @@
 import { Entity } from "entity.js";
 import { getItem } from "items.js";
+import { getDelta } from "ridder";
 import { addStats, getScalingValue, newStats, updateStats } from "stats.js";
 
 export function doDamage(self: Entity, target: Entity) {
@@ -18,4 +19,9 @@ export function doDamage(self: Entity, target: Entity) {
   target.stats.health -= damage;
 
   updateStats(target.stats);
+}
+
+export function generateStamina(e: Entity) {
+  e.stats.stamina += e.stats.staminaRegen * getDelta();
+  updateStats(e.stats);
 }

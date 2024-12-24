@@ -19,6 +19,8 @@ type StatsBase = {
   windupDuration: number;
   releaseDuration: number;
   recoveryDuration: number;
+  cooldown: number;
+  cooldownReduction: number;
 };
 
 type StatsScaling = {
@@ -50,6 +52,8 @@ export function newStats(stats: Partial<Stats> = {}): Stats {
     windupDuration: 0,
     releaseDuration: 0,
     recoveryDuration: 0,
+    cooldown: 0,
+    cooldownReduction: 0,
     ...stats,
   };
 }
@@ -63,7 +67,6 @@ export function updateStats(stats: Stats) {
 export function addStats(a: Stats, b: Stats) {
   for (const key in b) {
     const value = b[key];
-
     if (typeof value === "number") {
       a[key] += value;
     }

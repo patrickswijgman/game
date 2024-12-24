@@ -1,16 +1,20 @@
 import { onAction } from "actions.js";
 import { setVector } from "engine/vector.js";
-import { addVectorScaled, applyCameraTransform, drawSprite, drawTexture, getDelta, polygon, Polygon, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
+import { addVectorScaled, applyCameraTransform, drawSprite, drawTexture, getDelta, isPolygonValid, polygon, Polygon, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
 import { addEntity, Scene } from "scene.js";
 import { newStats, Stats } from "stats.js";
 
 export type Entity = {
   id: string;
   type: string;
+  start: Vector;
   pos: Vector;
   vel: Vector;
+  target: Vector;
+  centerOffset: Vector;
   stateId: string;
   stateNextId: string;
+  stateIdleId: string;
   stateTimer: Timer;
   stats: Stats;
   hitbox: Polygon;
@@ -24,6 +28,7 @@ export type Entity = {
   tweenScale: Vector;
   tweenAngle: number;
   tweenTimer: Timer;
+  parentId: string;
   actionId: string;
   weaponId: string;
   isFlipped: boolean;
@@ -33,11 +38,15 @@ export function newEntity(scene: Scene, x: number, y: number): Entity {
   return addEntity(scene, {
     id: uuid(),
     type: "",
+    start: vec(x, y),
     pos: vec(x, y),
     vel: vec(),
+    target: vec(),
+    centerOffset: vec(),
     stateId: "",
     stateTimer: timer(),
     stateNextId: "",
+    stateIdleId: "",
     stats: newStats(),
     hitbox: polygon(),
     textureId: "",
@@ -50,6 +59,7 @@ export function newEntity(scene: Scene, x: number, y: number): Entity {
     tweenScale: vec(1, 1),
     tweenAngle: 0,
     tweenTimer: timer(),
+    parentId: "",
     actionId: "",
     weaponId: "",
     isFlipped: false,
@@ -91,6 +101,13 @@ export function updateState(e: Entity, scene: Scene, onEnter: StateLifecycleHook
 
 export function updatePhysics(e: Entity) {
   addVectorScaled(e.pos, e.vel, getDelta());
+}
+
+export function updateHitbox(e: Entity) {
+  if (isPolygonValid(e.hitbox)) {
+    e.hitbox.x = e.pos.x;
+    e.hitbox.y = e.pos.y;
+  }
 }
 
 export function renderEntity(e: Entity) {

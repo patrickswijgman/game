@@ -1,8 +1,9 @@
 import { isActionValid, spendAction } from "actions.js";
+import { generateStamina } from "combat.js";
 import { Entity, newEntity, updateState } from "entity.js";
 import { getSession } from "game.js";
 import { getItem } from "items.js";
-import { getMousePosition, getVectorLength, InputCode, isInputDown, isInputPressed, normalizeVector, resetVector, scaleVector, tickTimer, tween } from "ridder";
+import { getMousePosition, getVectorLength, InputCode, isInputDown, normalizeVector, polygonFromRect, rect, resetVector, scaleVector, tickTimer, tween } from "ridder";
 import { Scene } from "scene.js";
 
 export function newPlayer(scene: Scene, x: number, y: number) {
@@ -15,8 +16,12 @@ export function newPlayer(scene: Scene, x: number, y: number) {
   e.shadowId = "player_shadow";
   e.shadowOffset.x = 0;
   e.shadowOffset.y = 2;
+  e.centerOffset.x = 0;
+  e.centerOffset.y = -4;
+  e.hitbox = polygonFromRect(x, y, rect(-4, -10, 8, 10));
   e.stats = session.stats;
   e.weaponId = session.weaponId;
+  e.stateIdleId = "idle";
   e.stateNextId = "idle";
   scene.playerId = e.id;
   return e;
@@ -45,6 +50,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
         e.tweenScale.y = tween(1, 1.2, 2000, "easeInOutSine", e.tweenTimer.elapsed);
 
         look(e);
+        generateStamina(e);
       }
       break;
 
@@ -62,6 +68,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
         e.tweenPos.y = tween(0, -2, 100, "easeInOutSine", e.tweenTimer.elapsed);
 
         look(e);
+        generateStamina(e);
       }
       break;
   }
@@ -97,7 +104,7 @@ function look(e: Entity) {
 }
 
 function doAction(e: Entity) {
-  if (isInputPressed(InputCode.MOUSE_LEFT)) {
+  if (isInputDown(InputCode.MOUSE_LEFT)) {
     const weapon = getItem(e.weaponId);
 
     if (isActionValid(e.stats, weapon.stats)) {

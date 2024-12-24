@@ -1,13 +1,14 @@
 import { loadAssets } from "assets.js";
-import { HEIGHT, WIDTH } from "consts.js";
+import { COLOR_HEALTH, COLOR_MANA, COLOR_STAMINA, HEIGHT, WIDTH } from "consts.js";
 import { renderDebugInfo } from "debug.js";
-import { updateMeleeAttack } from "entities/melee-attack.js";
+import { updateMeleeAttack } from "entities/actions/melee-attack.js";
 import { updatePlayer } from "entities/player.js";
-import { renderEntity, renderShadow, updatePhysics } from "entity.js";
+import { renderEntity, renderShadow, updateHitbox, updatePhysics } from "entity.js";
 import { getCurrentScene, switchScene, transitionToNextScene } from "game.js";
-import { InputCode, isInputPressed, run, setAlpha, setBackgroundColor, setCameraSmoothing, setFont, updateCamera } from "ridder";
+import { InputCode, isInputPressed, resetTransform, run, setAlpha, setBackgroundColor, setCameraSmoothing, setFont, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
 import { loadMainScene } from "scenes/main.js";
+import { drawBar } from "ui/bar.js";
 
 run({
   width: WIDTH,
@@ -54,10 +55,10 @@ run({
       }
 
       updatePhysics(e);
+      updateHitbox(e);
     }
 
     const player = getPlayer(scene);
-
     if (player) {
       updateCamera(player.pos.x, player.pos.y);
     }
@@ -78,6 +79,14 @@ run({
     for (const id of scene.visible) {
       const e = getEntity(scene, id);
       renderEntity(e);
+    }
+
+    const player = getPlayer(scene);
+    if (player) {
+      resetTransform();
+      drawBar(10, 10, player.stats.health, player.stats.healthMax, COLOR_HEALTH, player.stats.healthMax, 10);
+      drawBar(10, 25, player.stats.stamina, player.stats.staminaMax, COLOR_STAMINA, player.stats.staminaMax, 10);
+      drawBar(10, 40, player.stats.mana, player.stats.manaMax, COLOR_MANA, player.stats.manaMax, 10);
     }
 
     renderDebugInfo(scene);
