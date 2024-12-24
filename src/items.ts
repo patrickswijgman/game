@@ -20,6 +20,7 @@ const items: Record<string, Item> = {
       damage: 10,
       damageScalingStat: "strength",
       damageScalingFactor: 0.25,
+      staminaCost: 10,
       windupDuration: 500,
       releaseDuration: 200,
       recoveryDuration: 300,

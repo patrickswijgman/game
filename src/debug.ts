@@ -8,7 +8,14 @@ export function renderDebugInfo(scene: Scene) {
   translateTransform(2, 2);
   drawText(getFramePerSecond().toString(), 0, 0, "lime");
 
-  translateTransform(0, LINE_HEIGHT);
   const player = getPlayer(scene);
+
+  translateTransform(0, LINE_HEIGHT);
   drawText(player.stateId, 0, 0, "lime");
+  translateTransform(0, LINE_HEIGHT);
+  drawText(`HP: ${player.stats.health}`, 0, 0, "lime");
+  translateTransform(0, LINE_HEIGHT);
+  drawText(`SP: ${player.stats.stamina}`, 0, 0, "lime");
+  translateTransform(0, LINE_HEIGHT);
+  drawText(`MP: ${player.stats.mana}`, 0, 0, "lime");
 }

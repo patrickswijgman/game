@@ -1,4 +1,4 @@
-import { newMeleeAttack } from "entities/melee-attack.js";
+import { isActionValid, spendAction } from "actions.js";
 import { Entity, newEntity, updateState } from "entity.js";
 import { getSession } from "game.js";
 import { getItem } from "items.js";
@@ -10,12 +10,13 @@ export function newPlayer(scene: Scene, x: number, y: number) {
   const e = newEntity(scene, x, y);
   e.type = "player";
   e.spriteId = "player";
+  e.pivot.x = 8;
+  e.pivot.y = 15;
   e.shadowId = "player_shadow";
   e.shadowOffset.x = 0;
   e.shadowOffset.y = 2;
-  e.pivot.x = 8;
-  e.pivot.y = 15;
   e.stats = session.stats;
+  e.weaponId = session.weaponId;
   e.stateNextId = "idle";
   scene.playerId = e.id;
   return e;
@@ -25,22 +26,7 @@ export function updatePlayer(e: Entity, scene: Scene) {
   updateState(e, scene, onStateEnter, onStateUpdate, onStateExit);
 }
 
-function onStateEnter(e: Entity, scene: Scene, state: string) {
-  switch (state) {
-    case "action":
-      {
-        switch (e.actionId) {
-          case "melee_attack":
-            {
-              const session = getSession();
-              newMeleeAttack(scene, e.pos.x, e.pos.y, session.weaponId);
-            }
-            break;
-        }
-      }
-      break;
-  }
-}
+function onStateEnter() {}
 
 function onStateUpdate(e: Entity, scene: Scene, state: string) {
   switch (state) {
@@ -112,10 +98,13 @@ function look(e: Entity) {
 
 function doAction(e: Entity) {
   if (isInputPressed(InputCode.MOUSE_LEFT)) {
-    const session = getSession();
-    const weapon = getItem(session.weaponId);
-    e.actionId = weapon.actionId;
-    return true;
+    const weapon = getItem(e.weaponId);
+
+    if (isActionValid(e.stats, weapon.stats)) {
+      e.actionId = weapon.actionId;
+      spendAction(e.stats, weapon.stats);
+      return true;
+    }
   }
 
   return false;

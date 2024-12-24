@@ -9,6 +9,8 @@ export type Session = {
 export function newSession(): Session {
   return {
     stats: newStats({
+      stamina: 100,
+      staminaMax: 100,
       movementSpeed: 1.5,
     }),
     weaponId: "longsword",

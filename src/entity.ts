@@ -1,3 +1,4 @@
+import { onAction } from "actions.js";
 import { setVector } from "engine/vector.js";
 import { addVectorScaled, applyCameraTransform, drawSprite, drawTexture, getDelta, polygon, Polygon, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
 import { addEntity, Scene } from "scene.js";
@@ -24,6 +25,7 @@ export type Entity = {
   tweenAngle: number;
   tweenTimer: Timer;
   actionId: string;
+  weaponId: string;
   isFlipped: boolean;
 };
 
@@ -49,6 +51,7 @@ export function newEntity(scene: Scene, x: number, y: number): Entity {
     tweenAngle: 0,
     tweenTimer: timer(),
     actionId: "",
+    weaponId: "",
     isFlipped: false,
   });
 }
@@ -68,7 +71,15 @@ export function updateState(e: Entity, scene: Scene, onEnter: StateLifecycleHook
     setVector(e.tweenScale, 1, 1);
     e.tweenAngle = 0;
 
-    onEnter(e, scene, e.stateId);
+    switch (e.stateId) {
+      case "action":
+        onAction(e, scene);
+        break;
+
+      default:
+        onEnter(e, scene, e.stateId);
+        break;
+    }
   }
 
   const nextStateId = onUpdate(e, scene, e.stateId);

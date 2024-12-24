@@ -4,9 +4,9 @@ import { renderDebugInfo } from "debug.js";
 import { updateMeleeAttack } from "entities/melee-attack.js";
 import { updatePlayer } from "entities/player.js";
 import { renderEntity, renderShadow, updatePhysics } from "entity.js";
-import { getCurrentScene, switchCurrentScene, switchScene } from "game.js";
+import { getCurrentScene, switchScene, transitionToNextScene } from "game.js";
 import { InputCode, isInputPressed, run, setAlpha, setBackgroundColor, setCameraSmoothing, setFont, updateCamera } from "ridder";
-import { cleanupDestroyedEntities, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
+import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
 import { loadMainScene } from "scenes/main.js";
 
 run({
@@ -19,7 +19,7 @@ run({
     loadMainScene();
 
     setFont("default");
-    setBackgroundColor("steelblue");
+    setBackgroundColor("slategray");
     setCameraSmoothing(0.05);
 
     switchScene("main");
@@ -28,10 +28,9 @@ run({
   update: () => {
     if (isInputPressed(InputCode.KEY_R)) {
       document.location.reload();
-      return;
     }
 
-    switchCurrentScene();
+    transitionToNextScene();
 
     const scene = getCurrentScene();
 
@@ -39,6 +38,11 @@ run({
 
     for (const id of scene.active) {
       const e = getEntity(scene, id);
+
+      if (e.stats.health <= 0) {
+        destroyEntity(scene, e);
+        return;
+      }
 
       switch (e.type) {
         case "player":
