@@ -1,5 +1,5 @@
 import { onAction } from "actions.js";
-import { addVectorScaled, applyCameraTransform, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setPolygonAngle, setVector, TextAlign, TextBaseline, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
+import { addVectorScaled, applyCameraTransform, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setPolygonAngle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
 import { addEntity, Scene } from "scene.js";
 import { newStats, Stats } from "stats.js";
 
@@ -30,6 +30,7 @@ export type Entity = {
   textColor: string;
   width: number;
   height: number;
+  flashTimer: Timer;
   tweenPos: Vector;
   tweenScale: Vector;
   tweenAngle: number;
@@ -41,6 +42,7 @@ export type Entity = {
   isPlayer: boolean;
   isEnemy: boolean;
   isFlipped: boolean;
+  isFlashing: boolean;
   isDestroyed: boolean;
 };
 
@@ -72,6 +74,7 @@ export function newEntity(scene: Scene, x: number, y: number): Entity {
     textColor: "white",
     width: 0,
     height: 0,
+    flashTimer: timer(),
     tweenPos: vec(),
     tweenScale: vec(1, 1),
     tweenAngle: 0,
@@ -83,6 +86,7 @@ export function newEntity(scene: Scene, x: number, y: number): Entity {
     isPlayer: false,
     isEnemy: false,
     isFlipped: false,
+    isFlashing: false,
     isDestroyed: false,
   });
 }
@@ -128,6 +132,13 @@ export function updateHitbox(e: Entity) {
   }
 }
 
+export function updateFlash(e: Entity) {
+  if (e.isFlashing && tickTimer(e.flashTimer, 100)) {
+    e.isFlashing = false;
+    resetTimer(e.flashTimer);
+  }
+}
+
 export function renderEntity(e: Entity) {
   resetTransform();
   applyCameraTransform();
@@ -148,7 +159,11 @@ export function renderEntity(e: Entity) {
   }
 
   if (e.spriteId) {
-    drawSprite(e.spriteId, -e.pivot.x, -e.pivot.y);
+    if (e.isFlashing) {
+      drawSprite(`${e.spriteId}_flash`, -e.pivot.x, -e.pivot.y);
+    } else {
+      drawSprite(e.spriteId, -e.pivot.x, -e.pivot.y);
+    }
   }
 
   if (e.text) {

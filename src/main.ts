@@ -3,7 +3,7 @@ import { COLOR_HEALTH, COLOR_MANA, COLOR_STAMINA, HEIGHT, WIDTH } from "consts.j
 import { renderDebugInfo } from "debug.js";
 import { updateMeleeAttack } from "entities/actions/melee-attack.js";
 import { updatePlayer } from "entities/player.js";
-import { renderEntity, renderShadow, updateHitbox, updatePhysics } from "entity.js";
+import { renderEntity, renderShadow, updateFlash, updateHitbox, updatePhysics } from "entity.js";
 import { getCurrentScene, switchScene, transitionToNextScene } from "game.js";
 import { applyCameraTransform, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setBackgroundColor, setCameraSmoothing, setFont, translateTransform, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
@@ -56,6 +56,7 @@ run({
 
       updatePhysics(e);
       updateHitbox(e);
+      updateFlash(e);
 
       if (e.isPlayer) {
         updateCamera(e.pos.x, e.pos.y);

@@ -17,6 +17,7 @@ export function doDamage(self: Entity, target: Entity) {
   const damage = totalStats.damage + bonusDamage;
 
   target.stats.health -= damage;
+  target.isFlashing = true;
 
   updateStats(target.stats);
 }
