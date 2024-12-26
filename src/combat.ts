@@ -1,9 +1,11 @@
+import { newCombatText } from "entities/combat/combat-text.js";
 import { Entity } from "entity.js";
 import { getItem } from "items.js";
 import { getDelta } from "ridder";
+import { Scene } from "scene.js";
 import { addStats, getScalingValue, newStats, updateStats } from "stats.js";
 
-export function doDamage(self: Entity, target: Entity) {
+export function doDamage(scene: Scene, self: Entity, target: Entity) {
   const totalStats = newStats(self.stats);
 
   let bonusDamage = 0;
@@ -18,6 +20,8 @@ export function doDamage(self: Entity, target: Entity) {
 
   target.stats.health -= damage;
   target.isFlashing = true;
+
+  newCombatText(scene, target.pos.x, target.pos.y - target.height - 10, damage.toString());
 
   updateStats(target.stats);
 }

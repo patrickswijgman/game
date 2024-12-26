@@ -10,6 +10,7 @@ export type Entity = {
   pos: Vector;
   vel: Vector;
   target: Vector;
+  direction: Vector;
   centerOffset: Vector;
   stateId: string;
   stateNextId: string;
@@ -28,9 +29,12 @@ export type Entity = {
   textAlign: TextAlign;
   textBaseline: TextBaseline;
   textColor: string;
+  textOutline: string;
   width: number;
   height: number;
   flashTimer: Timer;
+  lifetime: number;
+  lifeTimer: Timer;
   tweenPos: Vector;
   tweenScale: Vector;
   tweenAngle: number;
@@ -54,6 +58,7 @@ export function newEntity(scene: Scene, x: number, y: number): Entity {
     pos: vec(x, y),
     vel: vec(),
     target: vec(),
+    direction: vec(),
     centerOffset: vec(),
     stateId: "",
     stateTimer: timer(),
@@ -72,8 +77,11 @@ export function newEntity(scene: Scene, x: number, y: number): Entity {
     textAlign: "left",
     textBaseline: "top",
     textColor: "white",
+    textOutline: "",
     width: 0,
     height: 0,
+    lifetime: 0,
+    lifeTimer: timer(),
     flashTimer: timer(),
     tweenPos: vec(),
     tweenScale: vec(1, 1),
@@ -167,7 +175,13 @@ export function renderEntity(e: Entity) {
   }
 
   if (e.text) {
-    drawText(e.text, -e.pivot.x, -e.pivot.y, e.textColor, e.textAlign, e.textBaseline);
+    if (e.textOutline) {
+      drawText(e.text, 0, -1, e.textOutline, e.textAlign, e.textBaseline);
+      drawText(e.text, 1, 0, e.textOutline, e.textAlign, e.textBaseline);
+      drawText(e.text, 0, 1, e.textOutline, e.textAlign, e.textBaseline);
+      drawText(e.text, -1, 0, e.textOutline, e.textAlign, e.textBaseline);
+    }
+    drawText(e.text, 0, 0, e.textColor, e.textAlign, e.textBaseline);
   }
 }
 

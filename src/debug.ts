@@ -3,7 +3,7 @@ import { applyCameraTransform, drawPolygonInstance, drawText, getFramePerSecond,
 import { getEntity, getPlayer, Scene } from "scene.js";
 
 export function renderDebugInfo(scene: Scene) {
-  // return;
+  return;
 
   resetTransform();
   applyCameraTransform();

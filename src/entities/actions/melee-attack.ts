@@ -1,10 +1,9 @@
-import { destroyActionEntity } from "actions.js";
-import { doDamage } from "combat.js";
+import { destroyActionEntity, doDamageToTargets } from "actions.js";
 import { Entity, newEntity, updateState } from "entity.js";
 import { getItem } from "items.js";
-import { addVector, angleVector, copyPolygon, copyVector, doPolygonsIntersect, getAngle, getMousePosition, normalizeVector, tickTimer, tween } from "ridder";
+import { addVector, angleVector, copyPolygon, copyVector, getAngle, getMousePosition, normalizeVector, tickTimer, tween } from "ridder";
 import { EasingDictionary } from "ridder/lib/easings.js";
-import { getEntity, isEntityDestroyed, Scene } from "scene.js";
+import { isEntityDestroyed, Scene } from "scene.js";
 
 export function newMeleeAttack(scene: Scene, caster: Entity) {
   const weapon = getItem(caster.weaponId);
@@ -37,20 +36,6 @@ export function updateMeleeAttack(e: Entity, scene: Scene) {
 
   updateState(e, scene, onStateEnter, onStateUpdate, onStateExit);
   updatePosition(e);
-
-  for (const id of scene.active) {
-    if (id === e.id || id === e.parentId) {
-      continue;
-    }
-
-    const caster = getEntity(scene, e.parentId);
-    const target = getEntity(scene, id);
-
-    if (!isEntityDestroyed(scene, id) && !e.blacklist.includes(id) && doPolygonsIntersect(e.hitbox, target.hitbox)) {
-      doDamage(caster, target);
-      e.blacklist.push(target.id);
-    }
-  }
 }
 
 function updatePosition(e: Entity) {
@@ -74,6 +59,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
       break;
     case "release":
       {
+        doDamageToTargets(e, scene);
         if (swing(e, e.stats.releaseDuration, -120, 120, "linear")) {
           return "recovery";
         }

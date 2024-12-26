@@ -2,10 +2,11 @@ import { loadAssets } from "assets.js";
 import { COLOR_HEALTH, COLOR_MANA, COLOR_STAMINA, HEIGHT, WIDTH } from "consts.js";
 import { renderDebugInfo } from "debug.js";
 import { updateMeleeAttack } from "entities/actions/melee-attack.js";
+import { updateCombatText } from "entities/combat/combat-text.js";
 import { updatePlayer } from "entities/player.js";
 import { renderEntity, renderShadow, updateFlash, updateHitbox, updatePhysics } from "entity.js";
 import { getCurrentScene, switchScene, transitionToNextScene } from "game.js";
-import { applyCameraTransform, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setBackgroundColor, setCameraSmoothing, setFont, translateTransform, updateCamera } from "ridder";
+import { applyCameraTransform, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setBackgroundColor, setCameraSmoothing, setFont, tickTimer, translateTransform, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
 import { loadMainScene } from "scenes/main.js";
 import { drawBar } from "ui/bar.js";
@@ -45,12 +46,20 @@ run({
         continue;
       }
 
+      if (e.lifetime && tickTimer(e.lifeTimer, e.lifetime)) {
+        destroyEntity(scene, e);
+        continue;
+      }
+
       switch (e.type) {
         case "player":
           updatePlayer(e, scene);
           break;
         case "melee_attack":
           updateMeleeAttack(e, scene);
+          break;
+        case "combat_text":
+          updateCombatText(e);
           break;
       }
 

@@ -16,7 +16,7 @@ const items: Record<string, Item> = {
     name: "Longsword",
     description: "A sword of the long variety.",
     spriteId: "item_longsword",
-    pivot: vec(10, 15.5),
+    pivot: vec(5, 15.5),
     stats: newStats({
       damage: 10,
       damageScalingStat: "strength",
@@ -26,7 +26,7 @@ const items: Record<string, Item> = {
       releaseDuration: 200,
       recoveryDuration: 200,
     }),
-    hitbox: polygonFromRect(0, 0, rect(0, -2, 24, 4)),
+    hitbox: polygonFromRect(0, 0, rect(8, -2, 12, 4)),
     actionId: "melee_attack",
   },
 };

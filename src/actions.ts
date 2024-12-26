@@ -1,6 +1,8 @@
+import { doDamage } from "combat.js";
 import { newMeleeAttack } from "entities/actions/melee-attack.js";
 import { Entity } from "entity.js";
-import { destroyEntity, getEntity, Scene } from "scene.js";
+import { doPolygonsIntersect } from "ridder";
+import { destroyEntity, getEntity, isEntityDestroyed, Scene } from "scene.js";
 import { Stats, updateStats } from "stats.js";
 
 export function onAction(e: Entity, scene: Scene) {
@@ -8,6 +10,22 @@ export function onAction(e: Entity, scene: Scene) {
     case "melee_attack":
       newMeleeAttack(scene, e);
       break;
+  }
+}
+
+export function doDamageToTargets(e: Entity, scene: Scene) {
+  for (const id of scene.active) {
+    if (id === e.id || id === e.parentId) {
+      continue;
+    }
+
+    const caster = getEntity(scene, e.parentId);
+    const target = getEntity(scene, id);
+
+    if (!isEntityDestroyed(scene, id) && !e.blacklist.includes(id) && doPolygonsIntersect(e.hitbox, target.hitbox)) {
+      doDamage(scene, caster, target);
+      e.blacklist.push(target.id);
+    }
   }
 }
 
