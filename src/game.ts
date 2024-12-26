@@ -42,6 +42,10 @@ export function getCurrentScene() {
   return game.scenes[game.sceneId];
 }
 
+export function removeScene(scene: Scene) {
+  delete game.scenes[scene.id];
+}
+
 export function getSession() {
   return game.session;
 }

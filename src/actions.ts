@@ -2,7 +2,7 @@ import { doDamage } from "combat.js";
 import { newMeleeAttack } from "entities/actions/melee-attack.js";
 import { Entity } from "entity.js";
 import { doPolygonsIntersect } from "ridder";
-import { destroyEntity, getEntity, isEntityDestroyed, Scene } from "scene.js";
+import { destroyEntity, getEntity, Scene } from "scene.js";
 import { Stats, updateStats } from "stats.js";
 
 export function onAction(e: Entity, scene: Scene) {
@@ -22,7 +22,7 @@ export function doDamageToTargets(e: Entity, scene: Scene) {
     const caster = getEntity(scene, e.parentId);
     const target = getEntity(scene, id);
 
-    if (!isEntityDestroyed(scene, id) && !e.blacklist.includes(id) && doPolygonsIntersect(e.hitbox, target.hitbox)) {
+    if (!target.isDestroyed && !e.blacklist.includes(id) && doPolygonsIntersect(e.hitbox, target.hitbox)) {
       doDamage(scene, caster, target);
       e.blacklist.push(target.id);
     }

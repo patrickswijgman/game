@@ -3,7 +3,7 @@ import { Entity, newEntity, updateState } from "entity.js";
 import { getItem } from "items.js";
 import { addVector, angleVector, copyPolygon, copyVector, getAngle, getMousePosition, normalizeVector, tickTimer, tween } from "ridder";
 import { EasingDictionary } from "ridder/lib/easings.js";
-import { isEntityDestroyed, Scene } from "scene.js";
+import { getEntity, Scene } from "scene.js";
 
 export function newMeleeAttack(scene: Scene, caster: Entity) {
   const weapon = getItem(caster.weaponId);
@@ -29,7 +29,9 @@ export function newMeleeAttack(scene: Scene, caster: Entity) {
 }
 
 export function updateMeleeAttack(e: Entity, scene: Scene) {
-  if (isEntityDestroyed(scene, e.parentId)) {
+  const caster = getEntity(scene, e.parentId);
+
+  if (caster.isDestroyed) {
     destroyActionEntity(e, scene);
     return;
   }
