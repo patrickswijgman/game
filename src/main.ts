@@ -42,7 +42,7 @@ run({
 
       if (e.stats.health <= 0) {
         destroyEntity(scene, e);
-        return;
+        continue;
       }
 
       switch (e.type) {

@@ -1,6 +1,5 @@
 import { onAction } from "actions.js";
-import { setVector } from "engine/vector.js";
-import { addVectorScaled, applyCameraTransform, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, TextAlign, TextBaseline, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
+import { addVectorScaled, applyCameraTransform, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setVector, TextAlign, TextBaseline, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
 import { addEntity, Scene } from "scene.js";
 import { newStats, Stats } from "stats.js";
 
