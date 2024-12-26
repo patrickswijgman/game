@@ -1,7 +1,8 @@
 import { onAction } from "actions.js";
-import { addVectorScaled, applyCameraTransform, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setPolygonAngle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
+import { addVectorScaled, applyCameraTransform, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setPolygonAngle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
 import { addEntity, Scene } from "scene.js";
 import { newStats, Stats } from "stats.js";
+import { avoid } from "steering.js";
 
 export type Entity = {
   id: string;
@@ -9,6 +10,8 @@ export type Entity = {
   start: Vector;
   pos: Vector;
   vel: Vector;
+  ahead: Vector;
+  avoid: Vector;
   target: Vector;
   direction: Vector;
   centerOffset: Vector;
@@ -18,6 +21,8 @@ export type Entity = {
   stateTimer: Timer;
   stats: Stats;
   hitbox: Polygon;
+  body: Rectangle;
+  radius: number;
   textureId: string;
   spriteId: string;
   pivot: Vector;
@@ -57,6 +62,8 @@ export function newEntity(scene: Scene, x: number, y: number): Entity {
     start: vec(x, y),
     pos: vec(x, y),
     vel: vec(),
+    ahead: vec(),
+    avoid: vec(),
     target: vec(),
     direction: vec(),
     centerOffset: vec(),
@@ -66,6 +73,8 @@ export function newEntity(scene: Scene, x: number, y: number): Entity {
     stateIdleId: "",
     stats: newStats(),
     hitbox: polygon(),
+    body: rect(),
+    radius: 0,
     textureId: "",
     spriteId: "",
     pivot: vec(),
@@ -137,6 +146,12 @@ export function updateHitbox(e: Entity) {
     e.hitbox.x = e.pos.x;
     e.hitbox.y = e.pos.y;
     setPolygonAngle(e.hitbox, e.angle + e.tweenAngle);
+  }
+}
+
+export function updateAvoidance(e: Entity, scene: Scene) {
+  if (e.radius) {
+    avoid(e, scene);
   }
 }
 

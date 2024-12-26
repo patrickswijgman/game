@@ -4,9 +4,9 @@ import { renderDebugInfo } from "debug.js";
 import { updateMeleeAttack } from "entities/actions/melee-attack.js";
 import { updateCombatText } from "entities/combat/combat-text.js";
 import { updatePlayer } from "entities/player.js";
-import { renderEntity, renderShadow, updateFlash, updateHitbox, updatePhysics } from "entity.js";
+import { renderEntity, renderShadow, updateAvoidance, updateFlash, updateHitbox, updatePhysics } from "entity.js";
 import { getCurrentScene, switchScene, transitionToNextScene } from "game.js";
-import { applyCameraTransform, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setBackgroundColor, setCameraSmoothing, setFont, tickTimer, translateTransform, updateCamera } from "ridder";
+import { applyCameraTransform, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setBackgroundColor, setCameraShakeReduction, setCameraSmoothing, setFont, tickTimer, translateTransform, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
 import { loadMainScene } from "scenes/main.js";
 import { drawBar } from "ui/bar.js";
@@ -23,6 +23,7 @@ run({
     setFont("default");
     setBackgroundColor("slategray");
     setCameraSmoothing(0.05);
+    setCameraShakeReduction(0.01);
 
     switchScene("main");
   },
@@ -63,6 +64,7 @@ run({
           break;
       }
 
+      updateAvoidance(e, scene);
       updatePhysics(e);
       updateHitbox(e);
       updateFlash(e);

@@ -19,6 +19,7 @@ export function newPlayer(scene: Scene, x: number, y: number) {
   e.centerOffset.x = 0;
   e.centerOffset.y = -4;
   e.hitbox = polygonFromRect(x, y, rect(-4, -10, 8, 10));
+  e.radius = 8;
   e.stats = session.stats;
   e.weaponId = session.weaponId;
   e.stateIdleId = "idle";

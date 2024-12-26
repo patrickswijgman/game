@@ -14,8 +14,10 @@ export function loadMainScene() {
 
   const player = newPlayer(scene, w / 2, h / 2);
 
-  repeat(100, (x) => {
-    newDummy(scene, player.pos.x - 50 + x, player.pos.y - 50);
+  repeat(1, (x) => {
+    repeat(1, (y) => {
+      newDummy(scene, player.pos.x - 50 + x * 10, player.pos.y - 50 + y * 5);
+    });
   });
 
   setCameraPosition(player.pos.x, player.pos.y);

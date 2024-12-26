@@ -1,7 +1,7 @@
 import { newCombatText } from "entities/combat/combat-text.js";
 import { Entity } from "entity.js";
 import { getItem } from "items.js";
-import { getDelta } from "ridder";
+import { getDelta, setCameraShakeIntensity } from "ridder";
 import { Scene } from "scene.js";
 import { addStats, getScalingValue, newStats, updateStats } from "stats.js";
 
@@ -22,6 +22,8 @@ export function doDamage(scene: Scene, self: Entity, target: Entity) {
   target.isFlashing = true;
 
   newCombatText(scene, target.pos.x, target.pos.y - target.height - 10, damage.toString());
+
+  setCameraShakeIntensity(1);
 
   updateStats(target.stats);
 }

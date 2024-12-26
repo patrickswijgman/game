@@ -15,6 +15,7 @@ export function newDummy(scene: Scene, x: number, y: number) {
   e.centerOffset.y = -4;
   e.height = 10;
   e.hitbox = polygonFromRect(x, y, rect(-4, -10, 8, 10));
+  e.radius = 8;
   e.stats.health = 100;
   e.stats.healthMax = 100;
   e.isEnemy = true;
