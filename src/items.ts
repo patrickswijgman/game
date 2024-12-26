@@ -16,7 +16,7 @@ const items: Record<string, Item> = {
     name: "Longsword",
     description: "A sword of the long variety.",
     spriteId: "item_longsword",
-    pivot: vec(15.5, 30),
+    pivot: vec(10, 15.5),
     stats: newStats({
       damage: 10,
       damageScalingStat: "strength",

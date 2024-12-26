@@ -23,6 +23,7 @@ export function newPlayer(scene: Scene, x: number, y: number) {
   e.weaponId = session.weaponId;
   e.stateIdleId = "idle";
   e.stateNextId = "idle";
+  e.isPlayer = true;
   scene.playerId = e.id;
   return e;
 }

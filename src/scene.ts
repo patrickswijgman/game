@@ -54,6 +54,11 @@ export function destroyEntity(scene: Scene, e: Entity) {
   scene.destroyed.push(e.id);
 }
 
+export function isEntityDestroyed(scene: Scene, id: string) {
+  const e = scene.entities[id];
+  return !e || e.isDestroyed;
+}
+
 export function getEntity(scene: Scene, id: string) {
   return scene.entities[id];
 }

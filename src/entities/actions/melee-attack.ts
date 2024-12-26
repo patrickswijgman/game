@@ -2,8 +2,9 @@ import { destroyActionEntity } from "actions.js";
 import { doDamage } from "combat.js";
 import { Entity, newEntity, updateState } from "entity.js";
 import { getItem } from "items.js";
-import { addVector, angleVector, copyPolygon, copyVector, doPolygonsIntersect, getAngle, getMousePosition, normalizeVector, setPolygonAngle, tickTimer, tween } from "ridder";
-import { getEntity, Scene } from "scene.js";
+import { addVector, angleVector, copyPolygon, copyVector, doPolygonsIntersect, getAngle, getMousePosition, normalizeVector, tickTimer, tween } from "ridder";
+import { EasingDictionary } from "ridder/lib/easings.js";
+import { getEntity, isEntityDestroyed, Scene } from "scene.js";
 
 export function newMeleeAttack(scene: Scene, caster: Entity) {
   const weapon = getItem(caster.weaponId);
@@ -29,6 +30,11 @@ export function newMeleeAttack(scene: Scene, caster: Entity) {
 }
 
 export function updateMeleeAttack(e: Entity, scene: Scene) {
+  if (isEntityDestroyed(scene, e.parentId)) {
+    destroyActionEntity(e, scene);
+    return;
+  }
+
   updateState(e, scene, onStateEnter, onStateUpdate, onStateExit);
   updatePosition(e);
 
@@ -40,7 +46,7 @@ export function updateMeleeAttack(e: Entity, scene: Scene) {
     const caster = getEntity(scene, e.parentId);
     const target = getEntity(scene, id);
 
-    if (target && !target.isDestroyed && !e.blacklist.includes(id) && doPolygonsIntersect(e.hitbox, target.hitbox)) {
+    if (!isEntityDestroyed(scene, id) && !e.blacklist.includes(id) && doPolygonsIntersect(e.hitbox, target.hitbox)) {
       doDamage(caster, target);
       e.blacklist.push(target.id);
     }
@@ -52,8 +58,7 @@ function updatePosition(e: Entity) {
   angleVector(e.pos, angle);
   normalizeVector(e.pos);
   addVector(e.pos, e.start);
-  e.angle = angle + 90;
-  setPolygonAngle(e.hitbox, angle + e.tweenAngle);
+  e.angle = angle;
 }
 
 function onStateEnter() {}
@@ -62,37 +67,32 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
   switch (state) {
     case "windup":
       {
-        tickTimer(e.tweenTimer, e.stats.windupDuration);
-        e.tweenAngle = tween(-40, -120, e.stats.windupDuration, "easeOutCirc", e.tweenTimer.elapsed);
-
-        if (tickTimer(e.stateTimer, e.stats.windupDuration)) {
+        if (swing(e, e.stats.windupDuration, -40, -120, "easeOutCirc")) {
           return "release";
         }
       }
       break;
-
     case "release":
       {
-        tickTimer(e.tweenTimer, e.stats.releaseDuration);
-        e.tweenAngle = tween(-120, 120, e.stats.releaseDuration, "linear", e.tweenTimer.elapsed);
-
-        if (tickTimer(e.stateTimer, e.stats.releaseDuration)) {
+        if (swing(e, e.stats.releaseDuration, -120, 120, "linear")) {
           return "recovery";
         }
       }
       break;
-
     case "recovery":
       {
-        tickTimer(e.tweenTimer, e.stats.recoveryDuration);
-        e.tweenAngle = tween(120, 40, e.stats.recoveryDuration, "easeOutCirc", e.tweenTimer.elapsed);
-
-        if (tickTimer(e.stateTimer, e.stats.recoveryDuration)) {
+        if (swing(e, e.stats.recoveryDuration, 120, 40, "easeOutCirc")) {
           destroyActionEntity(e, scene);
         }
       }
       break;
   }
+}
+
+function swing(e: Entity, duration: number, from: number, to: number, easing: keyof EasingDictionary) {
+  tickTimer(e.tweenTimer, duration);
+  e.tweenAngle = tween(from, to, duration, easing, e.tweenTimer.elapsed);
+  return tickTimer(e.stateTimer, duration);
 }
 
 function onStateExit() {}

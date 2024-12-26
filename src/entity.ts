@@ -1,5 +1,5 @@
 import { onAction } from "actions.js";
-import { addVectorScaled, applyCameraTransform, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setVector, TextAlign, TextBaseline, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
+import { addVectorScaled, applyCameraTransform, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setPolygonAngle, setVector, TextAlign, TextBaseline, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
 import { addEntity, Scene } from "scene.js";
 import { newStats, Stats } from "stats.js";
 
@@ -38,6 +38,7 @@ export type Entity = {
   actionId: string;
   weaponId: string;
   blacklist: Array<string>;
+  isPlayer: boolean;
   isEnemy: boolean;
   isFlipped: boolean;
   isDestroyed: boolean;
@@ -79,6 +80,7 @@ export function newEntity(scene: Scene, x: number, y: number): Entity {
     actionId: "",
     weaponId: "",
     blacklist: [],
+    isPlayer: false,
     isEnemy: false,
     isFlipped: false,
     isDestroyed: false,
@@ -100,14 +102,10 @@ export function updateState(e: Entity, scene: Scene, onEnter: StateLifecycleHook
     setVector(e.tweenScale, 1, 1);
     e.tweenAngle = 0;
 
-    switch (e.stateId) {
-      case "action":
-        onAction(e, scene);
-        break;
-
-      default:
-        onEnter(e, scene, e.stateId);
-        break;
+    if (e.stateId === "action") {
+      onAction(e, scene);
+    } else {
+      onEnter(e, scene, e.stateId);
     }
   }
 
@@ -126,6 +124,7 @@ export function updateHitbox(e: Entity) {
   if (isPolygonValid(e.hitbox)) {
     e.hitbox.x = e.pos.x;
     e.hitbox.y = e.pos.y;
+    setPolygonAngle(e.hitbox, e.angle + e.tweenAngle);
   }
 }
 

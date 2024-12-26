@@ -12,9 +12,6 @@ type StatsBase = {
   manaMax: number;
   manaCost: number;
   damage: number;
-  strength: number;
-  dexterity: number;
-  intelligence: number;
   movementSpeed: number;
   windupDuration: number;
   releaseDuration: number;
@@ -23,12 +20,18 @@ type StatsBase = {
   cooldownReduction: number;
 };
 
+type StatsAttributes = {
+  strength: number;
+  dexterity: number;
+  intelligence: number;
+};
+
 type StatsScaling = {
-  damageScalingStat: keyof StatsBase | None;
+  damageScalingStat: keyof StatsAttributes | None;
   damageScalingFactor: number;
 };
 
-export type Stats = StatsBase & StatsScaling;
+export type Stats = StatsBase & StatsAttributes & StatsScaling;
 
 export function newStats(stats: Partial<Stats> = {}): Stats {
   return {
@@ -65,12 +68,8 @@ export function updateStats(stats: Stats) {
 }
 
 export function addStats(a: Stats, b: Stats) {
-  for (const key in b) {
-    const value = b[key];
-    if (typeof value === "number") {
-      a[key] += value;
-    }
-  }
+  a.damage += b.damage;
+  a.movementSpeed += b.movementSpeed;
 }
 
 export function getScalingValue(stats: Stats, scaling: Stats) {

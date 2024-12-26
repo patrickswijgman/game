@@ -56,11 +56,10 @@ run({
 
       updatePhysics(e);
       updateHitbox(e);
-    }
 
-    const player = getPlayer(scene);
-    if (player) {
-      updateCamera(player.pos.x, player.pos.y);
+      if (e.isPlayer) {
+        updateCamera(e.pos.x, e.pos.y);
+      }
     }
   },
 
@@ -83,7 +82,7 @@ run({
       if (e.isEnemy && e.stats.health < e.stats.healthMax) {
         resetTransform();
         applyCameraTransform();
-        translateTransform(e.pos.x, e.pos.y - e.height);
+        translateTransform(e.pos.x, e.pos.y - e.height - 10);
         scaleTransform(0.5, 0.5);
         drawBar(-15, 0, e.stats.health, e.stats.healthMax, COLOR_HEALTH, 30, 8);
       }
