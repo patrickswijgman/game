@@ -1,12 +1,9 @@
-import { LINE_HEIGHT, WIDTH } from "consts.js";
+import { DEBUG, LINE_HEIGHT, WIDTH } from "consts.js";
 import { applyCameraTransform, drawCircle, drawPolygonInstance, drawText, getFramePerSecond, isPolygonValid, resetTransform, translateTransform } from "ridder";
 import { getEntity, getPlayer, Scene } from "scene.js";
 
-const url = new URL(window.location.href);
-const IS_DEBUGGING = !!url.searchParams.get("debug");
-
 export function renderDebugInfo(scene: Scene) {
-  if (!IS_DEBUGGING) return;
+  if (!DEBUG) return;
 
   resetTransform();
   applyCameraTransform();

@@ -6,6 +6,8 @@ import { getItem } from "items.js";
 import { getMousePosition, getVectorLength, InputCode, isInputDown, normalizeVector, polygonFromRect, rect, resetVector, scaleVector, tickTimer, tween } from "ridder";
 import { Scene } from "scene.js";
 
+const SPEED = 1.5;
+
 export function newPlayer(scene: Scene, x: number, y: number) {
   const session = getSession();
   const e = newEntity(scene, x, y);
@@ -95,7 +97,7 @@ function move(e: Entity) {
   }
 
   normalizeVector(e.vel);
-  scaleVector(e.vel, e.stats.movementSpeed);
+  scaleVector(e.vel, SPEED * e.stats.movementSpeed);
 
   return !!getVectorLength(e.vel);
 }

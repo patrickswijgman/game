@@ -54,7 +54,5 @@ export function destroyActionEntity(e: Entity, scene: Scene) {
   destroyEntity(scene, e);
 
   const caster = getEntity(scene, e.parentId);
-  if (caster) {
-    caster.stateNextId = caster.stateIdleId;
-  }
+  caster.stateNextId = caster.stateIdleId;
 }

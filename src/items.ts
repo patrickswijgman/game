@@ -1,6 +1,8 @@
 import { Polygon, polygonFromRect, rect, vec, Vector } from "ridder";
 import { newStats, Stats } from "stats.js";
 
+type ArcTuple = [start: number, windup: number, release: number, recovery: number];
+
 export type Item = {
   name: string;
   description: string;
@@ -9,6 +11,7 @@ export type Item = {
   stats: Stats;
   hitbox: Polygon;
   actionId: string;
+  arc: ArcTuple;
 };
 
 const items: Record<string, Item> = {
@@ -28,6 +31,7 @@ const items: Record<string, Item> = {
     }),
     hitbox: polygonFromRect(0, 0, rect(8, -2, 12, 4)),
     actionId: "melee_attack",
+    arc: [0, -90, 90, 0],
   },
 };
 

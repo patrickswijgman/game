@@ -29,6 +29,6 @@ export function doDamage(scene: Scene, self: Entity, target: Entity) {
 }
 
 export function generateStamina(e: Entity) {
-  e.stats.stamina += e.stats.staminaRegen * getDelta();
+  e.stats.stamina += 1 * e.stats.staminaRegen * getDelta();
   updateStats(e.stats);
 }

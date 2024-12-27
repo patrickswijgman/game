@@ -16,14 +16,12 @@ export function newMeleeAttack(scene: Scene, caster: Entity) {
   e.type = "melee_attack";
   e.spriteId = weapon.spriteId;
   e.pivot = weapon.pivot;
-  e.stats = weapon.stats;
   e.weaponId = caster.weaponId;
   e.parentId = caster.id;
   e.stateNextId = "windup";
 
   copyPolygon(e.hitbox, weapon.hitbox);
   copyVector(e.target, mouse);
-  updatePosition(e);
 
   return e;
 }
@@ -37,39 +35,36 @@ export function updateMeleeAttack(e: Entity, scene: Scene) {
   }
 
   updateState(e, scene, onStateEnter, onStateUpdate, onStateExit);
-  updatePosition(e);
-}
-
-function updatePosition(e: Entity) {
-  const angle = getAngle(e.start.x, e.start.y, e.target.x, e.target.y);
-  angleVector(e.pos, angle);
-  normalizeVector(e.pos);
-  addVector(e.pos, e.start);
-  e.angle = angle;
 }
 
 function onStateEnter() {}
 
 function onStateUpdate(e: Entity, scene: Scene, state: string) {
+  const weapon = getItem(e.weaponId);
+  const [start, windup, release, recovery] = weapon.arc;
+
   switch (state) {
     case "windup":
       {
-        if (swing(e, e.stats.windupDuration, -40, -120, "easeOutCirc")) {
+        if (swing(e, weapon.stats.windupDuration, start, windup, "easeOutCirc")) {
           return "release";
         }
       }
       break;
     case "release":
       {
+        const completed = swing(e, weapon.stats.releaseDuration, windup, release, "linear");
+
         doDamageToTargets(e, scene);
-        if (swing(e, e.stats.releaseDuration, -120, 120, "linear")) {
+
+        if (completed) {
           return "recovery";
         }
       }
       break;
     case "recovery":
       {
-        if (swing(e, e.stats.recoveryDuration, 120, 40, "easeOutCirc")) {
+        if (swing(e, weapon.stats.recoveryDuration, release, recovery, "easeOutCirc")) {
           destroyActionEntity(e, scene);
         }
       }
@@ -78,9 +73,17 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
 }
 
 function swing(e: Entity, duration: number, from: number, to: number, easing: keyof EasingDictionary) {
-  tickTimer(e.tweenTimer, duration);
+  const angle = getAngle(e.start.x, e.start.y, e.target.x, e.target.y);
+
+  angleVector(e.pos, angle);
+  normalizeVector(e.pos);
+  addVector(e.pos, e.start);
+  e.angle = angle;
+
+  const completed = tickTimer(e.tweenTimer, duration);
   e.tweenAngle = tween(from, to, duration, easing, e.tweenTimer.elapsed);
-  return tickTimer(e.stateTimer, duration);
+
+  return completed;
 }
 
 function onStateExit() {}
