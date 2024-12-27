@@ -20,15 +20,14 @@ export function doDamage(scene: Scene, self: Entity, target: Entity) {
 
   target.stats.health -= damage;
   target.isFlashing = true;
+  updateStats(target.stats);
 
   newCombatText(scene, target.pos.x, target.pos.y - target.height - 10, damage.toString());
 
   setCameraShakeIntensity(1);
-
-  updateStats(target.stats);
 }
 
 export function generateStamina(e: Entity) {
-  e.stats.stamina += 1 * e.stats.staminaRegen * getDelta();
+  e.stats.stamina += e.stats.staminaRegen * getDelta();
   updateStats(e.stats);
 }

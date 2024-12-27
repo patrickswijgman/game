@@ -1,25 +1,16 @@
 import { isActionValid, spendAction } from "actions.js";
 import { generateStamina } from "combat.js";
-import { Entity, newEntity, updateState } from "entity.js";
+import { Entity, newEntity, setSprites, updateState } from "entity.js";
 import { getSession } from "game.js";
 import { getItem } from "items.js";
-import { getMousePosition, getVectorLength, InputCode, isInputDown, normalizeVector, polygonFromRect, rect, resetVector, scaleVector, tickTimer, tween } from "ridder";
+import { copyVector, getMousePosition, getVectorLength, InputCode, isInputDown, isInputPressed, normalizeVector, polygonFromRect, rect, resetVector, scaleVector, tickTimer, tween } from "ridder";
 import { Scene } from "scene.js";
-
-const SPEED = 1.5;
+import { updateStats } from "stats.js";
 
 export function newPlayer(scene: Scene, x: number, y: number) {
   const session = getSession();
-  const e = newEntity(scene, x, y);
-  e.type = "player";
-  e.spriteId = "player";
-  e.pivot.x = 8;
-  e.pivot.y = 15;
-  e.shadowId = "player_shadow";
-  e.shadowOffset.x = 0;
-  e.shadowOffset.y = 2;
-  e.centerOffset.x = 0;
-  e.centerOffset.y = -4;
+  const e = newEntity(scene, "player", x, y);
+  setSprites(e, "player", 8, 15, 0, -4, true, 0, 2, true);
   e.hitbox = polygonFromRect(x, y, rect(-4, -10, 8, 10));
   e.radius = 8;
   e.stats = session.stats;
@@ -64,6 +55,10 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
           return "action";
         }
 
+        if (doDodgeAction(e)) {
+          return "action";
+        }
+
         if (!move(e)) {
           return "idle";
         }
@@ -97,7 +92,8 @@ function move(e: Entity) {
   }
 
   normalizeVector(e.vel);
-  scaleVector(e.vel, SPEED * e.stats.movementSpeed);
+  copyVector(e.direction, e.vel);
+  scaleVector(e.vel, e.stats.movementSpeed);
 
   return !!getVectorLength(e.vel);
 }
@@ -116,6 +112,17 @@ function doAction(e: Entity) {
       spendAction(e.stats, weapon.stats);
       return true;
     }
+  }
+
+  return false;
+}
+
+function doDodgeAction(e: Entity) {
+  if (isInputPressed(InputCode.KEY_SPACE) && e.stats.stamina >= 20) {
+    e.stats.stamina -= 20;
+    updateStats(e.stats);
+    e.actionId = "dodge";
+    return true;
   }
 
   return false;

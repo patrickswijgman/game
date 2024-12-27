@@ -1,17 +1,28 @@
 import { doDamage } from "combat.js";
+import { updateDodge } from "entities/actions/dodge.js";
 import { newMeleeAttack } from "entities/actions/melee-attack.js";
 import { Entity } from "entity.js";
 import { doPolygonsIntersect } from "ridder";
-import { destroyEntity, getEntity, Scene } from "scene.js";
+import { getEntity, Scene } from "scene.js";
 import { Stats, updateStats } from "stats.js";
 
-export function onAction(e: Entity, scene: Scene) {
+export function onActionEnter(e: Entity, scene: Scene) {
   switch (e.actionId) {
     case "melee_attack":
       newMeleeAttack(scene, e);
       break;
   }
 }
+
+export function onActionUpdate(e: Entity, scene: Scene) {
+  switch (e.actionId) {
+    case "dodge":
+      updateDodge(e);
+      break;
+  }
+}
+
+export function onActionExit(e: Entity, scene: Scene) {}
 
 export function doDamageToTargets(e: Entity, scene: Scene) {
   for (const id of scene.active) {
@@ -48,11 +59,4 @@ export function spendAction(stats: Stats, requirements: Stats) {
   stats.stamina -= requirements.staminaCost;
   stats.mana -= requirements.manaCost;
   updateStats(stats);
-}
-
-export function destroyActionEntity(e: Entity, scene: Scene) {
-  destroyEntity(scene, e);
-
-  const caster = getEntity(scene, e.parentId);
-  caster.stateNextId = caster.stateIdleId;
 }

@@ -1,9 +1,9 @@
-import { destroyActionEntity, doDamageToTargets } from "actions.js";
-import { Entity, newEntity, updateState } from "entity.js";
+import { doDamageToTargets } from "actions.js";
+import { Entity, newEntity, resetState, updateState } from "entity.js";
 import { getItem } from "items.js";
 import { addVector, angleVector, copyPolygon, copyVector, getAngle, getMousePosition, normalizeVector, tickTimer, tween } from "ridder";
 import { EasingDictionary } from "ridder/lib/easings.js";
-import { getEntity, Scene } from "scene.js";
+import { destroyEntity, getEntity, Scene } from "scene.js";
 
 export function newMeleeAttack(scene: Scene, caster: Entity) {
   const weapon = getItem(caster.weaponId);
@@ -12,8 +12,7 @@ export function newMeleeAttack(scene: Scene, caster: Entity) {
   const x = caster.pos.x + caster.centerOffset.x;
   const y = caster.pos.y + caster.centerOffset.y;
 
-  const e = newEntity(scene, x, y);
-  e.type = "melee_attack";
+  const e = newEntity(scene, "melee_attack", x, y);
   e.spriteId = weapon.spriteId;
   e.pivot = weapon.pivot;
   e.weaponId = caster.weaponId;
@@ -30,7 +29,8 @@ export function updateMeleeAttack(e: Entity, scene: Scene) {
   const caster = getEntity(scene, e.parentId);
 
   if (caster.isDestroyed) {
-    destroyActionEntity(e, scene);
+    resetState(caster);
+    destroyEntity(scene, e);
     return;
   }
 
@@ -54,9 +54,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
     case "release":
       {
         const completed = swing(e, weapon.stats.releaseDuration, windup, release, "linear");
-
         doDamageToTargets(e, scene);
-
         if (completed) {
           return "recovery";
         }
@@ -65,7 +63,9 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
     case "recovery":
       {
         if (swing(e, weapon.stats.recoveryDuration, release, recovery, "easeOutCirc")) {
-          destroyActionEntity(e, scene);
+          const caster = getEntity(scene, e.parentId);
+          resetState(caster);
+          destroyEntity(scene, e);
         }
       }
       break;

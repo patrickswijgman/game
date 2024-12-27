@@ -1,18 +1,10 @@
-import { newEntity } from "entity.js";
+import { newEntity, setSprites } from "entity.js";
 import { polygonFromRect, rect } from "ridder";
 import { Scene } from "scene.js";
 
 export function newDummy(scene: Scene, x: number, y: number) {
-  const e = newEntity(scene, x, y);
-  e.type = "dummy";
-  e.spriteId = "player";
-  e.pivot.x = 8;
-  e.pivot.y = 15;
-  e.shadowId = "player_shadow";
-  e.shadowOffset.x = 0;
-  e.shadowOffset.y = 2;
-  e.centerOffset.x = 0;
-  e.centerOffset.y = -4;
+  const e = newEntity(scene, "dummy", x, y);
+  setSprites(e, "player", 8, 15, 0, -4, true, 0, 2, true);
   e.height = 10;
   e.hitbox = polygonFromRect(x, y, rect(-4, -10, 8, 10));
   e.radius = 8;

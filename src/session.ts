@@ -16,7 +16,7 @@ export function newSession(): Session {
       staminaRegen: 1,
       mana: 20,
       manaMax: 20,
-      movementSpeed: 1,
+      movementSpeed: 1.5,
     }),
     weaponId: "longsword",
     armorId: "",

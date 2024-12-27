@@ -42,7 +42,7 @@ run({
     for (const id of scene.active) {
       const e = getEntity(scene, id);
 
-      if (e.stats.health <= 0) {
+      if (e.stats.health === 0) {
         destroyEntity(scene, e);
         continue;
       }

@@ -1,4 +1,4 @@
-import { onAction } from "actions.js";
+import { onActionEnter, onActionExit, onActionUpdate } from "actions.js";
 import { addVectorScaled, applyCameraTransform, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setPolygonAngle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
 import { addEntity, Scene } from "scene.js";
 import { newStats, Stats } from "stats.js";
@@ -14,7 +14,6 @@ export type Entity = {
   avoid: Vector;
   target: Vector;
   direction: Vector;
-  centerOffset: Vector;
   stateId: string;
   stateNextId: string;
   stateIdleId: string;
@@ -25,11 +24,13 @@ export type Entity = {
   radius: number;
   textureId: string;
   spriteId: string;
+  spriteFlashId: string;
   pivot: Vector;
   scale: Vector;
   angle: number;
   shadowId: string;
   shadowOffset: Vector;
+  centerOffset: Vector;
   text: string;
   textAlign: TextAlign;
   textBaseline: TextBaseline;
@@ -55,10 +56,10 @@ export type Entity = {
   isDestroyed: boolean;
 };
 
-export function newEntity(scene: Scene, x: number, y: number): Entity {
+export function newEntity(scene: Scene, type: string, x: number, y: number): Entity {
   return addEntity(scene, {
     id: uuid(),
-    type: "",
+    type,
     start: vec(x, y),
     pos: vec(x, y),
     vel: vec(),
@@ -66,7 +67,6 @@ export function newEntity(scene: Scene, x: number, y: number): Entity {
     avoid: vec(),
     target: vec(),
     direction: vec(),
-    centerOffset: vec(),
     stateId: "",
     stateTimer: timer(),
     stateNextId: "",
@@ -77,11 +77,13 @@ export function newEntity(scene: Scene, x: number, y: number): Entity {
     radius: 0,
     textureId: "",
     spriteId: "",
+    spriteFlashId: "",
     pivot: vec(),
     scale: vec(1, 1),
     angle: 0,
     shadowId: "",
     shadowOffset: vec(),
+    centerOffset: vec(),
     text: "",
     textAlign: "left",
     textBaseline: "top",
@@ -108,11 +110,33 @@ export function newEntity(scene: Scene, x: number, y: number): Entity {
   });
 }
 
+export function setSprites(e: Entity, id: string, pivotX: number, pivotY: number, centerOffsetX: number, centerOffsetY: number, shadow: boolean, shadowOffsetX: number, shadowOffsetY: number, flash: boolean) {
+  e.spriteId = id;
+  e.pivot.x = pivotX;
+  e.pivot.y = pivotY;
+  e.centerOffset.x = centerOffsetX;
+  e.centerOffset.y = centerOffsetY;
+
+  if (shadow) {
+    e.shadowId = `${id}_shadow`;
+    e.shadowOffset.x = shadowOffsetX;
+    e.shadowOffset.y = shadowOffsetY;
+  }
+
+  if (flash) {
+    e.spriteFlashId = `${id}_flash`;
+  }
+}
+
 type StateLifecycleHook = (e: Entity, scene: Scene, state: string) => string | void;
 
 export function updateState(e: Entity, scene: Scene, onEnter: StateLifecycleHook, onUpdate: StateLifecycleHook, onExit: StateLifecycleHook) {
   if (e.stateId !== e.stateNextId) {
-    onExit(e, scene, e.stateId);
+    if (e.stateId === "action") {
+      onActionExit(e, scene);
+    } else {
+      onExit(e, scene, e.stateId);
+    }
 
     e.stateId = e.stateNextId;
 
@@ -124,16 +148,19 @@ export function updateState(e: Entity, scene: Scene, onEnter: StateLifecycleHook
     e.tweenAngle = 0;
 
     if (e.stateId === "action") {
-      onAction(e, scene);
+      onActionEnter(e, scene);
     } else {
       onEnter(e, scene, e.stateId);
     }
   }
 
-  const nextStateId = onUpdate(e, scene, e.stateId);
-
-  if (nextStateId) {
-    e.stateNextId = nextStateId;
+  if (e.stateId === "action") {
+    onActionUpdate(e, scene);
+  } else {
+    const nextStateId = onUpdate(e, scene, e.stateId);
+    if (nextStateId) {
+      e.stateNextId = nextStateId;
+    }
   }
 }
 
@@ -166,6 +193,11 @@ export function renderEntity(e: Entity) {
   resetTransform();
   applyCameraTransform();
   translateTransform(e.pos.x, e.pos.y);
+
+  if (e.isFlipped) {
+    scaleTransform(-1, 1);
+  }
+
   scaleTransform(e.scale.x, e.scale.y);
   rotateTransform(e.angle);
 
@@ -173,17 +205,13 @@ export function renderEntity(e: Entity) {
   scaleTransform(e.tweenScale.x, e.tweenScale.y);
   rotateTransform(e.tweenAngle);
 
-  if (e.isFlipped) {
-    scaleTransform(-1, 1);
-  }
-
   if (e.textureId) {
     drawTexture(e.textureId, -e.pivot.x, -e.pivot.y);
   }
 
   if (e.spriteId) {
     if (e.isFlashing) {
-      drawSprite(`${e.spriteId}_flash`, -e.pivot.x, -e.pivot.y);
+      drawSprite(e.spriteFlashId, -e.pivot.x, -e.pivot.y);
     } else {
       drawSprite(e.spriteId, -e.pivot.x, -e.pivot.y);
     }
@@ -211,5 +239,13 @@ export function renderShadow(e: Entity) {
     }
 
     drawSprite(e.shadowId, -e.pivot.x + e.shadowOffset.x, -e.pivot.y + e.shadowOffset.y);
+  }
+}
+
+export function resetState(e: Entity) {
+  if (e.stateIdleId) {
+    e.stateNextId = e.stateIdleId;
+  } else {
+    e.stateNextId = "";
   }
 }

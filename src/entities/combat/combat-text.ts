@@ -6,8 +6,7 @@ import { Scene } from "scene.js";
 const DIRECTIONS = [-1, 1];
 
 export function newCombatText(scene: Scene, x: number, y: number, text: string) {
-  const e = newEntity(scene, x, y);
-  e.type = "combat_text";
+  const e = newEntity(scene, "combat_text", x, y);
   e.text = text;
   e.textAlign = "center";
   e.textBaseline = "middle";
