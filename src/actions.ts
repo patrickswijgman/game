@@ -1,5 +1,5 @@
+import { updateDodge } from "actions/dodge.js";
 import { doDamage } from "combat.js";
-import { updateDodge } from "entities/actions/dodge.js";
 import { newMeleeAttack } from "entities/actions/melee-attack.js";
 import { Entity } from "entity.js";
 import { doPolygonsIntersect } from "ridder";
