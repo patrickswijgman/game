@@ -1,6 +1,6 @@
 import { onActionEnter, onActionExit, onActionUpdate } from "actions.js";
-import { addVectorScaled, applyCameraTransform, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setPolygonAngle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
-import { addEntity, Scene } from "scene.js";
+import { addVectorScaled, applyCameraTransform, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, polygonFromRect, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setPolygonAngle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
+import { addEnemy, addEntity, Scene } from "scene.js";
 import { newStats, Stats } from "stats.js";
 import { avoid } from "steering.js";
 
@@ -20,11 +20,13 @@ export type Entity = {
   stateTimer: Timer;
   stats: Stats;
   hitbox: Polygon;
+  hitarea: Rectangle;
   body: Rectangle;
   radius: number;
   textureId: string;
   spriteId: string;
   spriteFlashId: string;
+  spriteOutlineId: string;
   pivot: Vector;
   scale: Vector;
   angle: number;
@@ -38,6 +40,7 @@ export type Entity = {
   textOutline: string;
   width: number;
   height: number;
+  node: Vector;
   flashTimer: Timer;
   lifetime: number;
   lifeTimer: Timer;
@@ -53,6 +56,7 @@ export type Entity = {
   isEnemy: boolean;
   isFlipped: boolean;
   isFlashing: boolean;
+  isOutlineVisible: boolean;
   isDestroyed: boolean;
 };
 
@@ -73,11 +77,13 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     stateIdleId: "",
     stats: newStats(),
     hitbox: polygon(),
+    hitarea: rect(),
     body: rect(),
     radius: 0,
     textureId: "",
     spriteId: "",
     spriteFlashId: "",
+    spriteOutlineId: "",
     pivot: vec(),
     scale: vec(1, 1),
     angle: 0,
@@ -91,6 +97,7 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     textOutline: "",
     width: 0,
     height: 0,
+    node: vec(),
     lifetime: 0,
     lifeTimer: timer(),
     flashTimer: timer(),
@@ -106,12 +113,21 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     isEnemy: false,
     isFlipped: false,
     isFlashing: false,
+    isOutlineVisible: false,
     isDestroyed: false,
   });
 }
 
-export function setSprites(e: Entity, id: string, pivotX: number, pivotY: number, centerOffsetX: number, centerOffsetY: number, shadow: boolean, shadowOffsetX: number, shadowOffsetY: number, flash: boolean) {
+export function newEnemy(scene: Scene, type: string, x: number, y: number) {
+  const e = newEntity(scene, type, x, y);
+  e.isEnemy = true;
+  return addEnemy(scene, e);
+}
+
+export function setSprites(e: Entity, id: string, pivotX: number, pivotY: number, centerOffsetX = 0, centerOffsetY = 0, shadow = false, shadowOffsetX = 0, shadowOffsetY = 0) {
   e.spriteId = id;
+  e.spriteFlashId = `${id}_flash`;
+  e.spriteOutlineId = `${id}_outline`;
   e.pivot.x = pivotX;
   e.pivot.y = pivotY;
   e.centerOffset.x = centerOffsetX;
@@ -122,10 +138,13 @@ export function setSprites(e: Entity, id: string, pivotX: number, pivotY: number
     e.shadowOffset.x = shadowOffsetX;
     e.shadowOffset.y = shadowOffsetY;
   }
+}
 
-  if (flash) {
-    e.spriteFlashId = `${id}_flash`;
-  }
+export function setConstraints(e: Entity, width: number, height: number) {
+  e.hitbox = polygonFromRect(e.pos.x, e.pos.y, rect(-width / 2, -height, width, height));
+  e.width = width;
+  e.height = height;
+  e.radius = width / 2;
 }
 
 type StateLifecycleHook = (e: Entity, scene: Scene, state: string) => string | void;
@@ -215,6 +234,10 @@ export function renderEntity(e: Entity, scene: Scene) {
       drawSprite(e.spriteFlashId, -e.pivot.x, -e.pivot.y);
     } else {
       drawSprite(e.spriteId, -e.pivot.x, -e.pivot.y);
+    }
+
+    if (e.isOutlineVisible) {
+      drawSprite(e.spriteOutlineId, -e.pivot.x, -e.pivot.y);
     }
   }
 

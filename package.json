@@ -20,6 +20,6 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "dependencies": {
-    "ridder": "^3.5.0"
+    "ridder": "^3.7.1"
   }
 }

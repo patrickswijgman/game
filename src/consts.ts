@@ -4,6 +4,7 @@ export const HEIGHT = (WIDTH / 16) * 9;
 export const LINE_HEIGHT = 12;
 
 export const COLOR_BG = "#1e1e1e";
+export const COLOR_DIM = "#333333";
 export const COLOR_HEALTH = "#ff3737";
 export const COLOR_STAMINA = "#5ca933";
 export const COLOR_MANA = "#3f60ff";

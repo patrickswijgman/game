@@ -3,13 +3,14 @@ import { COLOR_HEALTH, COLOR_MANA, COLOR_STAMINA, HEIGHT, WIDTH } from "consts.j
 import { renderDebugInfo } from "debug.js";
 import { updateMeleeAttack } from "entities/actions/melee-attack.js";
 import { updateCombatText } from "entities/combat/combat-text.js";
+import { updateMapRoom } from "entities/map/map-room.js";
 import { updatePlayer } from "entities/player.js";
 import { renderEntity, renderShadow, updateAvoidance, updateFlash, updateHitbox, updatePhysics } from "entity.js";
 import { getCurrentScene, switchScene, transitionToNextScene } from "game.js";
-import { applyCameraTransform, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setFont, tickTimer, translateTransform, updateCamera } from "ridder";
+import { applyCameraTransform, drawTexture, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setFont, tickTimer, translateTransform, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
-import { loadMainScene } from "scenes/main.js";
-import { loadMapScene } from "scenes/map.js";
+import { newMapScene, renderMapScene } from "scenes/map.js";
+import { updateCombatRoomScene } from "scenes/room-combat.js";
 import { drawBar } from "ui/bar.js";
 
 let isDebugging = false;
@@ -21,12 +22,11 @@ run({
   setup: async () => {
     await loadAssets();
 
-    loadMapScene();
-    loadMainScene();
-
     setFont("default");
 
-    switchScene("map");
+    const scene = newMapScene();
+
+    switchScene(scene.id);
   },
 
   update: () => {
@@ -36,6 +36,10 @@ run({
 
     if (isInputPressed(InputCode.KEY_H)) {
       isDebugging = !isDebugging;
+    }
+
+    if (isInputPressed(InputCode.KEY_M)) {
+      switchScene("map");
     }
 
     transitionToNextScene();
@@ -67,6 +71,9 @@ run({
         case "combat_text":
           updateCombatText(e);
           break;
+        case "map_room":
+          updateMapRoom(e);
+          break;
       }
 
       updateAvoidance(e, scene);
@@ -78,10 +85,27 @@ run({
         updateCamera(scene.camera, e.pos.x, e.pos.y);
       }
     }
+
+    switch (scene.id) {
+      case "room_combat":
+        updateCombatRoomScene(scene);
+        break;
+    }
   },
 
   render: () => {
     const scene = getCurrentScene();
+
+    if (scene.backgroundTextureId) {
+      resetTransform();
+      drawTexture(scene.backgroundTextureId, 0, 0);
+    }
+
+    switch (scene.id) {
+      case "map":
+        renderMapScene(scene);
+        break;
+    }
 
     sortEntitiesOnDepth(scene);
 

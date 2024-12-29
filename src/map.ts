@@ -1,5 +1,4 @@
-import { getGridValue, Grid, grid, isInsideGridBounds } from "engine/grid.js";
-import { pick, vec } from "ridder";
+import { getGridValue, Grid, grid, isInsideGridBounds, pick, random, repeat } from "ridder";
 
 export type DungeonMapNode = {
   type: string;
@@ -9,15 +8,32 @@ export type DungeonMapNode = {
 };
 
 export type DungeonMap = {
+  width: number;
+  height: number;
   rooms: Grid<DungeonMapNode>;
+  visited: Array<DungeonMapNode>;
+};
+
+const ROOM_TYPES_PER_LEVEL: Record<number, Array<string>> = {
+  1: ["combat"],
+  2: ["combat"],
+  3: ["combat"],
+  4: ["combat"],
+  5: ["combat"],
+  6: ["combat"],
+  7: ["combat"],
+  8: ["combat"],
 };
 
 export function newDungeonMap() {
-  const w = 5;
-  const h = 10;
+  const width = 5;
+  const height = 10;
 
   const map: DungeonMap = {
-    rooms: grid(w, h, (x, y) => ({ type: "", x, y, children: [] })),
+    width,
+    height,
+    rooms: grid(width, height, (x, y) => ({ type: "", x, y, children: [] })),
+    visited: [],
   };
 
   generateRooms(map);
@@ -26,33 +42,58 @@ export function newDungeonMap() {
 }
 
 function generateRooms(map: DungeonMap) {
-  const start = getGridValue(map.rooms, 2, 0);
+  const center = Math.floor(map.width / 2);
+  const depth = map.height - 1;
+
+  const start = getGridValue(map.rooms, center, 0);
   start.type = "start";
 
-  const end = getGridValue(map.rooms, 2, 9);
+  const end = getGridValue(map.rooms, center, depth);
   end.type = "boss";
 
-  const pos = vec();
-  const dirs = [-1, 0, 1];
+  map.visited.push(start);
 
-  let prev = start;
+  repeat(3, () => {
+    let prev = start;
+    let x = 0;
+    let y = 0;
 
-  for (let i = 0; i < 2; i++) {
-    for (let y = start.y + 1; y < end.y; y++) {
+    for (let level = 1; level < depth; level++) {
       while (true) {
-        pos.x = prev.x + pick(dirs);
-        pos.y = y;
+        x = prev.x + random(-1, 1);
+        y = level;
 
-        if (isInsideGridBounds(map.rooms, pos.x, pos.y)) {
+        if (isInsideGridBounds(map.rooms, x, y)) {
           break;
         }
       }
 
-      const node = getGridValue(map.rooms, pos.x, pos.y);
-      node.type = "???";
+      const node = getGridValue(map.rooms, x, y);
+      node.type = pick(ROOM_TYPES_PER_LEVEL[level]);
 
       prev.children.push(node);
       prev = node;
+
+      if (level === depth - 1) {
+        node.children.push(end);
+      }
     }
-  }
+  });
+}
+
+export function visitDungeonRoom(map: DungeonMap, x: number, y: number) {
+  const node = getGridValue(map.rooms, x, y);
+  map.visited.push(node);
+  return node;
+}
+
+export function isDungeonRoomVisited(map: DungeonMap, x: number, y: number) {
+  const node = getGridValue(map.rooms, x, y);
+  return map.visited.includes(node);
+}
+
+export function isNextDungeonRoom(map: DungeonMap, x: number, y: number) {
+  const node = getGridValue(map.rooms, x, y);
+  const lastVisited = map.visited[map.visited.length - 1];
+  return lastVisited.children.includes(node);
 }

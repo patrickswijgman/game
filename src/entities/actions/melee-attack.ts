@@ -6,12 +6,12 @@ import { EasingDictionary } from "ridder/lib/easings.js";
 import { destroyEntity, getEntity, Scene } from "scene.js";
 
 export function newMeleeAttack(scene: Scene, caster: Entity) {
-  const weapon = getItem(caster.weaponId);
-
   const x = caster.pos.x + caster.centerOffset.x;
   const y = caster.pos.y + caster.centerOffset.y;
 
   const e = newEntity(scene, "melee_attack", x, y);
+  const weapon = getItem(caster.weaponId);
+
   e.spriteId = weapon.spriteId;
   e.pivot = weapon.pivot;
   e.weaponId = caster.weaponId;

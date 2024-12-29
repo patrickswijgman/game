@@ -1,10 +1,11 @@
 import { newDummy } from "entities/enemies/dummy.js";
 import { newPlayer } from "entities/player.js";
+import { switchScene } from "game.js";
 import { repeat, setCameraPosition } from "ridder";
-import { newScene } from "scene.js";
+import { newScene, Scene } from "scene.js";
 
-export function loadMainScene() {
-  const scene = newScene("main");
+export function newCombatRoomScene() {
+  const scene = newScene("room_combat");
 
   const w = 1000;
   const h = 1000;
@@ -23,4 +24,12 @@ export function loadMainScene() {
   });
 
   setCameraPosition(scene.camera, player.pos.x, player.pos.y);
+
+  return scene;
+}
+
+export function updateCombatRoomScene(scene: Scene) {
+  if (scene.enemies.length === 0) {
+    switchScene("map");
+  }
 }
