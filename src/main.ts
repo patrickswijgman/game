@@ -86,7 +86,7 @@ run({
       }
     }
 
-    switch (scene.id) {
+    switch (scene.type) {
       case "room_combat":
         updateCombatRoomScene(scene);
         break;
@@ -101,7 +101,7 @@ run({
       drawTexture(scene.backgroundTextureId, 0, 0);
     }
 
-    switch (scene.id) {
+    switch (scene.type) {
       case "map":
         renderMapScene(scene);
         break;

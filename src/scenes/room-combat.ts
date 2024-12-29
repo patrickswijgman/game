@@ -5,7 +5,7 @@ import { repeat, setCameraPosition } from "ridder";
 import { newScene, Scene } from "scene.js";
 
 export function newCombatRoomScene() {
-  const scene = newScene("room_combat");
+  const scene = newScene("room", "room_combat");
 
   const w = 1000;
   const h = 1000;
@@ -14,6 +14,7 @@ export function newCombatRoomScene() {
   scene.bounds.h = h;
   scene.camera.smoothing = 0.05;
   scene.camera.shakeReduction = 0.01;
+  scene.camera.bounds = scene.bounds;
 
   const player = newPlayer(scene, w / 2, h / 2);
 

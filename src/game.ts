@@ -1,4 +1,4 @@
-import { Scene } from "scene.js";
+import { destroyScene, Scene } from "scene.js";
 import { newSession, Session } from "session.js";
 
 export type Game = {
@@ -18,7 +18,13 @@ const game: Game = {
 console.log(game);
 
 export function addScene(id: string, scene: Scene) {
+  if (id in game.scenes) {
+    const oldScene = game.scenes[id];
+    destroyScene(oldScene);
+  }
+
   game.scenes[id] = scene;
+
   return scene;
 }
 

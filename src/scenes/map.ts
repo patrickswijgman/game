@@ -6,7 +6,7 @@ import { drawLine, drawSprite, getElapsedTime, getGridHeight, getGridValue, getG
 import { newScene, Scene } from "scene.js";
 
 export function newMapScene() {
-  const scene = newScene("map");
+  const scene = newScene("map", "map");
 
   scene.backgroundTextureId = "map_bg";
 

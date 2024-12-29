@@ -58,10 +58,6 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
           return "action";
         }
 
-        if (doDodgeAction(e)) {
-          return "action";
-        }
-
         if (!move(e)) {
           return "idle";
         }
@@ -116,14 +112,10 @@ function doAction(e: Entity) {
     }
   }
 
-  return false;
-}
-
-function doDodgeAction(e: Entity) {
   if (isInputPressed(InputCode.KEY_SPACE) && e.stats.stamina >= 20) {
+    e.actionId = "dodge";
     e.stats.stamina -= 20;
     updateStats(e.stats);
-    e.actionId = "dodge";
     return true;
   }
 

@@ -4,6 +4,7 @@ import { camera, Camera, rect, Rectangle, remove } from "ridder";
 
 export type Scene = {
   id: string;
+  type: string;
   entities: Record<string, Entity>;
   active: Array<string>;
   visible: Array<string>;
@@ -15,9 +16,10 @@ export type Scene = {
   playerId: string;
 };
 
-export function newScene(id: string): Scene {
+export function newScene(id: string, type: string): Scene {
   return addScene(id, {
     id,
+    type,
     entities: {},
     active: [],
     visible: [],
