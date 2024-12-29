@@ -13,6 +13,7 @@ export async function loadAssets() {
   loadSprites("ui_map_start", "atlas", 0, 160, 16, 16);
   loadSprites("ui_map_combat", "atlas", 16, 160, 16, 16);
   loadSprites("ui_map_boss", "atlas", 32, 160, 16, 16);
+  loadSprites("ui_map_current", "atlas", 48, 160, 16, 16);
 
   loadRenderTexture("map_bg", 1024, 1024, (ctx, w, h) => {
     ctx.fillStyle = COLOR_BG;

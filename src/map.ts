@@ -94,6 +94,10 @@ export function isDungeonRoomVisited(map: DungeonMap, x: number, y: number) {
 
 export function isNextDungeonRoom(map: DungeonMap, x: number, y: number) {
   const node = getGridValue(map.rooms, x, y);
-  const lastVisited = map.visited[map.visited.length - 1];
-  return lastVisited.children.includes(node);
+  const current = getCurrentDungeonRoom(map);
+  return current.children.includes(node);
+}
+
+export function getCurrentDungeonRoom(map: DungeonMap) {
+  return map.visited[map.visited.length - 1];
 }
