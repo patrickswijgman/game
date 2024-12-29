@@ -10,7 +10,7 @@ import { getCurrentScene, switchScene, transitionToNextScene } from "game.js";
 import { applyCameraTransform, drawTexture, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setFont, tickTimer, translateTransform, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
 import { newMapScene, renderMapScene } from "scenes/map.js";
-import { updateCombatRoomScene } from "scenes/room-combat.js";
+import { updateCombatRoomScene } from "scenes/rooms/combat.js";
 import { drawBar } from "ui/bar.js";
 
 let isDebugging = false;

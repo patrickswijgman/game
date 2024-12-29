@@ -3,7 +3,7 @@ import { getSession, switchScene } from "game.js";
 import { DungeonMapNode, isNextDungeonRoom, visitDungeonRoom } from "map.js";
 import { copyVector, doesRectangleContain, getMousePosition, InputCode, isInputPressed, setRectangle } from "ridder";
 import { Scene } from "scene.js";
-import { newCombatRoomScene } from "scenes/room-combat.js";
+import { newCombatRoomScene } from "scenes/rooms/combat.js";
 
 export function newMapRoom(scene: Scene, x: number, y: number, node: DungeonMapNode) {
   const e = newEntity(scene, "map_room", x, y);
