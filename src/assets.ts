@@ -9,6 +9,10 @@ export async function loadAssets() {
 
   loadSprite("item_longsword", "atlas", 0, 64, 32, 32);
 
+  loadSprite("ui_map_start", "atlas", 0, 160, 16, 16);
+  loadSprite("ui_map_room", "atlas", 16, 160, 16, 16);
+  loadSprite("ui_map_boss", "atlas", 32, 160, 16, 16);
+
   await loadFont("default", "fonts/pixelmix.ttf", "pixelmix", 8);
 }
 

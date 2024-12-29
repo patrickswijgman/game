@@ -1,6 +1,6 @@
 import { Entity } from "entity.js";
 import { addScene, removeScene } from "game.js";
-import { rect, Rectangle, remove } from "ridder";
+import { camera, Camera, rect, Rectangle, remove } from "ridder";
 
 export type Scene = {
   id: string;
@@ -8,8 +8,9 @@ export type Scene = {
   active: Array<string>;
   visible: Array<string>;
   destroyed: Array<string>;
-  playerId: string;
+  camera: Camera;
   bounds: Rectangle;
+  playerId: string;
 };
 
 export function newScene(id: string): Scene {
@@ -19,8 +20,9 @@ export function newScene(id: string): Scene {
     active: [],
     visible: [],
     destroyed: [],
-    playerId: "",
+    camera: camera(),
     bounds: rect(),
+    playerId: "",
   });
 }
 

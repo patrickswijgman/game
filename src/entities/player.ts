@@ -3,7 +3,7 @@ import { generateStamina } from "combat.js";
 import { Entity, newEntity, setSprites, updateState } from "entity.js";
 import { getSession } from "game.js";
 import { getItem } from "items.js";
-import { copyVector, getMousePosition, getVectorLength, InputCode, isInputDown, isInputPressed, normalizeVector, polygonFromRect, rect, resetVector, scaleVector, tickTimer, tween } from "ridder";
+import { copyVector, getVectorLength, InputCode, isInputDown, isInputPressed, normalizeVector, polygonFromRect, rect, resetVector, scaleVector, tickTimer, tween } from "ridder";
 import { Scene } from "scene.js";
 import { updateStats } from "stats.js";
 
@@ -44,7 +44,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
         e.tweenScale.x = tween(1, 1.2, 2000, "easeInOutSine", e.tweenTimer.elapsed);
         e.tweenScale.y = tween(1, 1.2, 2000, "easeInOutSine", e.tweenTimer.elapsed);
 
-        look(e);
+        look(e, scene);
         generateStamina(e);
       }
       break;
@@ -66,7 +66,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
         tickTimer(e.tweenTimer, Infinity);
         e.tweenPos.y = tween(0, -2, 100, "easeInOutSine", e.tweenTimer.elapsed);
 
-        look(e);
+        look(e, scene);
         generateStamina(e);
       }
       break;
@@ -98,9 +98,8 @@ function move(e: Entity) {
   return !!getVectorLength(e.vel);
 }
 
-function look(e: Entity) {
-  const mouse = getMousePosition(true);
-  e.isFlipped = mouse.x < e.pos.x;
+function look(e: Entity, scene: Scene) {
+  e.isFlipped = scene.camera.mousePosition.x < e.pos.x;
 }
 
 function doAction(e: Entity) {

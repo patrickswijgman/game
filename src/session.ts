@@ -1,9 +1,11 @@
+import { DungeonMap, newDungeonMap } from "map.js";
 import { newStats, Stats } from "stats.js";
 
 export type Session = {
   stats: Stats;
   weaponId: string;
   armorId: string;
+  map: DungeonMap;
 };
 
 export function newSession(): Session {
@@ -20,5 +22,6 @@ export function newSession(): Session {
     }),
     weaponId: "longsword",
     armorId: "",
+    map: newDungeonMap(),
   };
 }

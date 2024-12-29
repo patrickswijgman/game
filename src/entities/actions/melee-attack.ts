@@ -1,13 +1,12 @@
 import { doDamageToTargets } from "actions.js";
 import { Entity, newEntity, resetState, updateState } from "entity.js";
 import { getItem } from "items.js";
-import { addVector, angleVector, copyPolygon, copyVector, getAngle, getMousePosition, normalizeVector, tickTimer, tween } from "ridder";
+import { addVector, angleVector, copyPolygon, copyVector, getAngle, normalizeVector, tickTimer, tween } from "ridder";
 import { EasingDictionary } from "ridder/lib/easings.js";
 import { destroyEntity, getEntity, Scene } from "scene.js";
 
 export function newMeleeAttack(scene: Scene, caster: Entity) {
   const weapon = getItem(caster.weaponId);
-  const mouse = getMousePosition(true);
 
   const x = caster.pos.x + caster.centerOffset.x;
   const y = caster.pos.y + caster.centerOffset.y;
@@ -20,7 +19,7 @@ export function newMeleeAttack(scene: Scene, caster: Entity) {
   e.stateNextId = "windup";
 
   copyPolygon(e.hitbox, weapon.hitbox);
-  copyVector(e.target, mouse);
+  copyVector(e.target, scene.camera.mousePosition);
 
   return e;
 }
@@ -46,14 +45,14 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
   switch (state) {
     case "windup":
       {
-        if (swing(e, weapon.stats.windupDuration, start, windup, "easeOutCirc")) {
+        if (swing(e, weapon.windupDuration, start, windup, "easeOutCirc")) {
           return "release";
         }
       }
       break;
     case "release":
       {
-        const completed = swing(e, weapon.stats.releaseDuration, windup, release, "linear");
+        const completed = swing(e, weapon.releaseDuration, windup, release, "linear");
         doDamageToTargets(e, scene);
         if (completed) {
           return "recovery";
@@ -62,7 +61,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
       break;
     case "recovery":
       {
-        if (swing(e, weapon.stats.recoveryDuration, release, recovery, "easeOutCirc")) {
+        if (swing(e, weapon.recoveryDuration, release, recovery, "easeOutCirc")) {
           const caster = getEntity(scene, e.parentId);
           resetState(caster);
           destroyEntity(scene, e);

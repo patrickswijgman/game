@@ -170,9 +170,10 @@ export function updatePhysics(e: Entity) {
 
 export function updateHitbox(e: Entity) {
   if (isPolygonValid(e.hitbox)) {
-    e.hitbox.x = e.pos.x;
-    e.hitbox.y = e.pos.y;
-    setPolygonAngle(e.hitbox, e.angle + e.tweenAngle);
+    e.hitbox.x = e.pos.x + e.tweenPos.x;
+    e.hitbox.y = e.pos.y + e.tweenPos.y;
+    const angle = e.angle + e.tweenAngle;
+    setPolygonAngle(e.hitbox, e.isFlipped ? -angle : angle);
   }
 }
 
@@ -189,9 +190,9 @@ export function updateFlash(e: Entity) {
   }
 }
 
-export function renderEntity(e: Entity) {
+export function renderEntity(e: Entity, scene: Scene) {
   resetTransform();
-  applyCameraTransform();
+  applyCameraTransform(scene.camera);
   translateTransform(e.pos.x, e.pos.y);
 
   if (e.isFlipped) {
@@ -228,11 +229,11 @@ export function renderEntity(e: Entity) {
   }
 }
 
-export function renderShadow(e: Entity) {
+export function renderShadow(e: Entity, scene: Scene) {
   if (e.shadowId) {
     resetTransform();
     translateTransform(e.pos.x, e.pos.y);
-    applyCameraTransform();
+    applyCameraTransform(scene.camera);
 
     if (e.isFlipped) {
       scaleTransform(-1, 1);

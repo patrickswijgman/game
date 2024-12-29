@@ -1,4 +1,3 @@
-import { setCameraBounds } from "ridder";
 import { Scene } from "scene.js";
 import { newSession, Session } from "session.js";
 
@@ -16,6 +15,8 @@ const game: Game = {
   session: newSession(),
 };
 
+console.log(game);
+
 export function addScene(id: string, scene: Scene) {
   game.scenes[id] = scene;
   return scene;
@@ -28,9 +29,6 @@ export function switchScene(id: string) {
 export function transitionToNextScene() {
   if (game.sceneId !== game.sceneNextId) {
     game.sceneId = game.sceneNextId;
-
-    const scene = game.scenes[game.sceneId];
-    setCameraBounds(scene.bounds);
   }
 }
 

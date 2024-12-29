@@ -11,6 +11,9 @@ export type Item = {
   stats: Stats;
   hitbox: Polygon;
   actionId: string;
+  windupDuration: number;
+  releaseDuration: number;
+  recoveryDuration: number;
   arc: ArcTuple;
 };
 
@@ -25,12 +28,12 @@ const items: Record<string, Item> = {
       damageScalingStat: "strength",
       damageScalingFactor: 0.25,
       staminaCost: 25,
-      windupDuration: 300,
-      releaseDuration: 200,
-      recoveryDuration: 200,
     }),
     hitbox: polygonFromRect(0, 0, rect(8, -2, 12, 4)),
     actionId: "melee_attack",
+    windupDuration: 300,
+    releaseDuration: 200,
+    recoveryDuration: 200,
     arc: [0, -90, 90, 0],
   },
 };

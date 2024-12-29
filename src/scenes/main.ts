@@ -11,6 +11,8 @@ export function loadMainScene() {
 
   scene.bounds.w = w;
   scene.bounds.h = h;
+  scene.camera.smoothing = 0.05;
+  scene.camera.shakeReduction = 0.01;
 
   const player = newPlayer(scene, w / 2, h / 2);
 
@@ -20,5 +22,5 @@ export function loadMainScene() {
     });
   });
 
-  setCameraPosition(player.pos.x, player.pos.y);
+  setCameraPosition(scene.camera, player.pos.x, player.pos.y);
 }

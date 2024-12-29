@@ -1,12 +1,10 @@
-import { DEBUG, LINE_HEIGHT, WIDTH } from "consts.js";
+import { LINE_HEIGHT, WIDTH } from "consts.js";
 import { applyCameraTransform, drawCircle, drawPolygonInstance, drawText, getFramePerSecond, isPolygonValid, resetTransform, translateTransform } from "ridder";
 import { getEntity, getPlayer, Scene } from "scene.js";
 
 export function renderDebugInfo(scene: Scene) {
-  if (!DEBUG) return;
-
   resetTransform();
-  applyCameraTransform();
+  applyCameraTransform(scene.camera);
   for (const id of scene.active) {
     const e = getEntity(scene, id);
 

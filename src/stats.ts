@@ -13,9 +13,6 @@ type StatsBase = {
   manaCost: number;
   damage: number;
   movementSpeed: number;
-  windupDuration: number;
-  releaseDuration: number;
-  recoveryDuration: number;
   cooldown: number;
   cooldownReduction: number;
 };
@@ -52,9 +49,6 @@ export function newStats(stats: Partial<Stats> = {}): Stats {
     dexterity: 0,
     intelligence: 0,
     movementSpeed: 0,
-    windupDuration: 0,
-    releaseDuration: 0,
-    recoveryDuration: 0,
     cooldown: 0,
     cooldownReduction: 0,
     ...stats,
