@@ -5,6 +5,10 @@ export const LINE_HEIGHT = 12;
 
 export const COLOR_BG = "#1e1e1e";
 export const COLOR_DIM = "#333333";
-export const COLOR_HEALTH = "#ff3737";
-export const COLOR_STAMINA = "#5ca933";
-export const COLOR_MANA = "#3f60ff";
+export const COLOR_PRIMARY = "#92817A";
+export const COLOR_TEXT = "#ffffff";
+export const COLOR_MAP_LINE = "#ffffff";
+export const COLOR_MAP_LINE_DIM = "#85706d";
+export const COLOR_HEALTH = "#F24236";
+export const COLOR_STAMINA = "#4CB944";
+export const COLOR_MANA = "#3066BE";

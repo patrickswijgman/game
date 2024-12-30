@@ -1,4 +1,4 @@
-import { newCombatText } from "entities/combat/combat-text.js";
+import { newCombatText } from "entities/combat/text.js";
 import { Entity } from "entity.js";
 import { getItem } from "items.js";
 import { getDelta } from "ridder";

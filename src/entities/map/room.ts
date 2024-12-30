@@ -31,9 +31,11 @@ export function updateMapRoom(e: Entity) {
   const mouse = getMousePosition();
 
   e.isOutlineVisible = false;
+  e.isOutlinePrimaryVisible = true;
 
   if (isNextDungeonRoom(session.map, e.node.x, e.node.y) && doesRectangleContain(e.hitarea, mouse.x, mouse.y)) {
     e.isOutlineVisible = true;
+    e.isOutlinePrimaryVisible = false;
 
     if (isInputPressed(InputCode.MOUSE_LEFT, true)) {
       const node = visitDungeonRoom(session.map, e.node.x, e.node.y);
@@ -42,6 +44,7 @@ export function updateMapRoom(e: Entity) {
 
       switch (node.type) {
         case "combat":
+        case "boss":
           scene = newCombatRoomScene();
           break;
       }

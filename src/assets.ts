@@ -1,10 +1,11 @@
-import { COLOR_BG } from "consts.js";
+import { COLOR_PRIMARY } from "consts.js";
 import { loadFlashTexture, loadFont, loadOutlineTexture, loadRenderTexture, loadSprite, loadTexture } from "ridder";
 
 export async function loadAssets() {
   await loadTexture("atlas", "textures/atlas.png");
   await loadFlashTexture("atlas_flash", "textures/atlas.png", "white");
   await loadOutlineTexture("atlas_outline", "textures/atlas.png", "square", "white");
+  await loadOutlineTexture("atlas_outline_primary", "textures/atlas.png", "square", COLOR_PRIMARY);
 
   loadSprites("player", "atlas", 0, 0, 16, 16);
 
@@ -16,7 +17,7 @@ export async function loadAssets() {
   loadSprites("ui_map_current", "atlas", 48, 160, 16, 16);
 
   loadRenderTexture("map_bg", 1024, 1024, (ctx, w, h) => {
-    ctx.fillStyle = COLOR_BG;
+    ctx.fillStyle = COLOR_PRIMARY;
     ctx.fillRect(0, 0, w, h);
   });
 
@@ -28,4 +29,5 @@ function loadSprites(id: string, textureId: string, x: number, y: number, w: num
   loadSprite(`${id}_shadow`, textureId, x, y + h, w, h);
   loadSprite(`${id}_flash`, `${textureId}_flash`, x, y, w, h);
   loadSprite(`${id}_outline`, `${textureId}_outline`, x, y, w, h);
+  loadSprite(`${id}_outline_primary`, `${textureId}_outline_primary`, x, y, w, h);
 }

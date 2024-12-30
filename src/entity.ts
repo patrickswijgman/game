@@ -27,6 +27,7 @@ export type Entity = {
   spriteId: string;
   spriteFlashId: string;
   spriteOutlineId: string;
+  spriteOutlinePrimaryId: string;
   pivot: Vector;
   scale: Vector;
   angle: number;
@@ -57,6 +58,7 @@ export type Entity = {
   isFlipped: boolean;
   isFlashing: boolean;
   isOutlineVisible: boolean;
+  isOutlinePrimaryVisible: boolean;
   isDestroyed: boolean;
 };
 
@@ -84,6 +86,7 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     spriteId: "",
     spriteFlashId: "",
     spriteOutlineId: "",
+    spriteOutlinePrimaryId: "",
     pivot: vec(),
     scale: vec(1, 1),
     angle: 0,
@@ -114,6 +117,7 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     isFlipped: false,
     isFlashing: false,
     isOutlineVisible: false,
+    isOutlinePrimaryVisible: false,
     isDestroyed: false,
   });
 }
@@ -128,6 +132,7 @@ export function setSprites(e: Entity, id: string, pivotX: number, pivotY: number
   e.spriteId = id;
   e.spriteFlashId = `${id}_flash`;
   e.spriteOutlineId = `${id}_outline`;
+  e.spriteOutlinePrimaryId = `${id}_outline_primary`;
   e.pivot.x = pivotX;
   e.pivot.y = pivotY;
   e.centerOffset.x = centerOffsetX;
@@ -238,6 +243,10 @@ export function renderEntity(e: Entity, scene: Scene) {
 
     if (e.isOutlineVisible) {
       drawSprite(e.spriteOutlineId, -e.pivot.x, -e.pivot.y);
+    }
+
+    if (e.isOutlinePrimaryVisible) {
+      drawSprite(e.spriteOutlinePrimaryId, -e.pivot.x, -e.pivot.y);
     }
   }
 

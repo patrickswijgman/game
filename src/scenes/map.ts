@@ -1,5 +1,5 @@
-import { COLOR_DIM } from "consts.js";
-import { newMapRoom } from "entities/map/map-room.js";
+import { COLOR_MAP_LINE, COLOR_MAP_LINE_DIM } from "consts.js";
+import { newMapRoom } from "entities/map/room.js";
 import { getSession } from "game.js";
 import { DungeonMap, getCurrentDungeonRoom, isDungeonRoomVisited, isNextDungeonRoom } from "map.js";
 import { drawLine, drawSprite, getElapsedTime, getGridHeight, getGridValue, getGridWidth, getWidth, resetTransform, tween } from "ridder";
@@ -36,7 +36,7 @@ export function renderMapScene(scene: Scene) {
 
       if (node.type) {
         for (const child of node.children) {
-          const color = isDungeonRoomVisited(session.map, node.x, node.y) && isNextDungeonRoom(session.map, child.x, child.y) ? "white" : COLOR_DIM;
+          const color = isDungeonRoomVisited(session.map, node.x, node.y) && isNextDungeonRoom(session.map, child.x, child.y) ? COLOR_MAP_LINE : COLOR_MAP_LINE_DIM;
           drawLine(getX(node.x, session.map), getY(node.y), getX(child.x, session.map), getY(child.y), color);
         }
 
