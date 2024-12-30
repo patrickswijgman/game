@@ -19,8 +19,7 @@ console.log(game);
 
 export function addScene(id: string, scene: Scene) {
   if (id in game.scenes) {
-    const oldScene = game.scenes[id];
-    destroyScene(oldScene);
+    destroyScene(game.scenes[id]);
   }
 
   game.scenes[id] = scene;

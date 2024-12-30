@@ -112,7 +112,7 @@ function doAction(e: Entity) {
     }
   }
 
-  if (isInputPressed(InputCode.KEY_SPACE) && e.stats.stamina >= 20) {
+  if (isInputPressed(InputCode.KEY_SPACE) && e.stats.stamina >= 20 && getVectorLength(e.vel)) {
     e.actionId = "dodge";
     e.stats.stamina -= 20;
     updateStats(e.stats);
