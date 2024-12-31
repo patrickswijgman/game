@@ -1,5 +1,5 @@
 import { loadAssets } from "assets.js";
-import { COLOR_HEALTH, COLOR_MANA, COLOR_STAMINA, HEIGHT, WIDTH } from "consts.js";
+import { COLOR_HEALTH, COLOR_STAMINA, HEIGHT, WIDTH } from "consts.js";
 import { renderDebugInfo } from "debug.js";
 import { updateMeleeAttack } from "entities/actions/melee-attack.js";
 import { updateCombatText } from "entities/combat/text.js";
@@ -51,7 +51,7 @@ run({
     for (const id of scene.active) {
       const e = getEntity(scene, id);
 
-      if (e.stats.health === 0) {
+      if (e.stats.healthMax && e.stats.health === 0) {
         destroyEntity(scene, e);
         continue;
       }
@@ -134,7 +134,6 @@ run({
       resetTransform();
       drawBar(10, 10, player.stats.health, player.stats.healthMax, COLOR_HEALTH, player.stats.healthMax, 10);
       drawBar(10, 25, player.stats.stamina, player.stats.staminaMax, COLOR_STAMINA, player.stats.staminaMax, 10);
-      drawBar(10, 40, player.stats.mana, player.stats.manaMax, COLOR_MANA, player.stats.manaMax, 10);
     }
 
     if (isDebugging) {

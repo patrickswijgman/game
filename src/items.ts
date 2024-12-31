@@ -24,9 +24,9 @@ const items: Record<string, Item> = {
     spriteId: "item_longsword",
     pivot: vec(2, 15.5),
     stats: newStats({
-      damage: 10,
-      damageScalingStat: "strength",
-      damageScalingFactor: 0.25,
+      damage: 8,
+      strengthScaling: 1,
+      dexterityScaling: 1,
       staminaCost: 25,
     }),
     hitbox: polygonFromRect(0, 0, rect(12, -2, 12, 4)),

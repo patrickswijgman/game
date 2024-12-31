@@ -7,7 +7,7 @@ export async function loadAssets() {
   await loadOutlineTexture("atlas_outline", "textures/atlas.png", "square", "white");
   await loadOutlineTexture("atlas_outline_primary", "textures/atlas.png", "square", COLOR_PRIMARY);
 
-  loadSprites("player", "atlas", 0, 0, 16, 16);
+  loadSprites("player", "atlas", 0, 0, 32, 32);
 
   loadSprite("item_longsword", "atlas", 0, 64, 32, 32);
 

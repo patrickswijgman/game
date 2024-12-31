@@ -74,8 +74,8 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
 function swing(e: Entity, duration: number, from: number, to: number, easing: keyof EasingDictionary) {
   const angle = getAngle(e.start.x, e.start.y, e.target.x, e.target.y);
 
-  angleVector(e.pos, angle);
   normalizeVector(e.pos);
+  angleVector(e.pos, angle);
   addVector(e.pos, e.start);
   e.angle = angle;
 

@@ -11,7 +11,7 @@ export function newPlayer(scene: Scene, x: number, y: number) {
   const e = newEntity(scene, "player", x, y);
   const session = getSession();
 
-  setSprites(e, "player", 8, 15, 0, -4, true, 0, 2);
+  setSprites(e, "player", 15, 31, 0, -4, true, 0, 2);
   setConstraints(e, 8, 10);
 
   e.stats = session.stats;

@@ -16,7 +16,7 @@ export function doDamage(scene: Scene, self: Entity, target: Entity) {
     bonusDamage += getScalingValue(totalStats, weapon.stats);
   }
 
-  const damage = totalStats.damage + bonusDamage;
+  const damage = Math.max(1, totalStats.damage + bonusDamage);
 
   target.stats.health -= damage;
   target.isFlashing = true;

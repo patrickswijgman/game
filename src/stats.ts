@@ -1,6 +1,6 @@
 import { clamp } from "ridder";
 
-type StatsBase = {
+export type Stats = {
   health: number;
   healthMax: number;
   healthCost: number;
@@ -12,28 +12,21 @@ type StatsBase = {
   manaMax: number;
   manaCost: number;
   damage: number;
+  strength: number;
+  strengthScaling: number;
+  dexterity: number;
+  dexterityScaling: number;
+  intelligence: number;
+  intelligenceScaling: number;
   movementSpeed: number;
   cooldown: number;
   cooldownReduction: number;
 };
 
-type StatsAttributes = {
-  strength: number;
-  dexterity: number;
-  intelligence: number;
-};
-
-type StatsScaling = {
-  damageScalingStat: keyof StatsAttributes | None;
-  damageScalingFactor: number;
-};
-
-export type Stats = StatsBase & StatsAttributes & StatsScaling;
-
 export function newStats(stats: Partial<Stats> = {}): Stats {
   return {
-    health: 1,
-    healthMax: 1,
+    health: 0,
+    healthMax: 0,
     healthCost: 0,
     stamina: 0,
     staminaMax: 0,
@@ -43,11 +36,12 @@ export function newStats(stats: Partial<Stats> = {}): Stats {
     manaMax: 0,
     manaCost: 0,
     damage: 0,
-    damageScalingStat: "",
-    damageScalingFactor: 0,
     strength: 0,
+    strengthScaling: 0,
     dexterity: 0,
+    dexterityScaling: 0,
     intelligence: 0,
+    intelligenceScaling: 0,
     movementSpeed: 0,
     cooldown: 0,
     cooldownReduction: 0,
@@ -63,13 +57,20 @@ export function updateStats(stats: Stats) {
 
 export function addStats(a: Stats, b: Stats) {
   a.damage += b.damage;
+  a.strength += b.strength;
+  a.dexterity += b.dexterity;
+  a.intelligence += b.intelligence;
   a.movementSpeed += b.movementSpeed;
 }
 
-export function getScalingValue(stats: Stats, scaling: Stats) {
-  if (scaling.damageScalingStat) {
-    return Math.ceil(stats[scaling.damageScalingStat] * scaling.damageScalingFactor);
-  }
+export function getModifier(stats: Stats, key: keyof Stats) {
+  return Math.floor((stats[key] - 10) / 2);
+}
 
-  return 0;
+export function getScalingValue(stats: Stats, scaling: Stats) {
+  let value = 0;
+  value += Math.ceil(getModifier(stats, "strength") * scaling.strengthScaling);
+  value += Math.ceil(getModifier(stats, "dexterity") * scaling.dexterityScaling);
+  value += Math.ceil(getModifier(stats, "intelligence") * scaling.intelligenceScaling);
+  return value;
 }
