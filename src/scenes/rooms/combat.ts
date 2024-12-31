@@ -15,6 +15,7 @@ export function newCombatRoomScene() {
   scene.camera.smoothing = 0.05;
   scene.camera.shakeReduction = 0.01;
   scene.camera.bounds = scene.bounds;
+  scene.backgroundTextureId = "test_bg";
 
   const player = newPlayer(scene, w / 2, h / 2);
 

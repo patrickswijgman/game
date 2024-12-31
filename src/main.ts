@@ -8,9 +8,9 @@ import { updatePlayer } from "entities/player.js";
 import { renderEntity, renderShadow, updateAvoidance, updateFlash, updateHitbox, updatePhysics } from "entity.js";
 import { getCurrentScene, switchScene, transitionToNextScene } from "game.js";
 import { applyCameraTransform, drawTexture, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setFont, tickTimer, translateTransform, updateCamera } from "ridder";
-import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
+import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, Scene, sortEntitiesOnDepth } from "scene.js";
 import { newMapScene, renderMapScene } from "scenes/map.js";
-import { updateCombatRoomScene } from "scenes/rooms/combat.js";
+import { newCombatRoomScene, updateCombatRoomScene } from "scenes/rooms/combat.js";
 import { drawBar } from "ui/bar.js";
 
 let isDebugging = false;
@@ -24,7 +24,10 @@ run({
 
     setFont("default");
 
-    const scene = newMapScene();
+    let scene: Scene;
+
+    scene = newMapScene();
+    scene = newCombatRoomScene();
 
     switchScene(scene.id);
   },

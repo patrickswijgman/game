@@ -13,8 +13,8 @@ export function newCombatText(scene: Scene, x: number, y: number, text: string) 
   e.textBaseline = "middle";
   e.textOutline = COLOR_BG;
   e.lifetime = 1000;
-  e.scale.x = 0.5;
-  e.scale.y = 0.5;
+  e.scale.x = 0.75;
+  e.scale.y = 0.75;
   e.direction.x = pick(DIRECTIONS);
 
   return e;

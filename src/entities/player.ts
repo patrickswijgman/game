@@ -12,7 +12,7 @@ export function newPlayer(scene: Scene, x: number, y: number) {
   const session = getSession();
 
   setSprites(e, "player", 15, 31, 0, -4, true, 0, 2);
-  setConstraints(e, 8, 10);
+  setConstraints(e, 10, 12);
 
   e.stats = session.stats;
   e.weaponId = session.weaponId;
@@ -44,8 +44,8 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
         }
 
         tickTimer(e.tweenTimer, Infinity);
-        e.tweenScale.x = tween(1, 1.2, 2000, "easeInOutSine", e.tweenTimer.elapsed);
-        e.tweenScale.y = tween(1, 1.2, 2000, "easeInOutSine", e.tweenTimer.elapsed);
+        e.tweenScale.x = tween(1, 1.1, 2000, "easeInOutSine", e.tweenTimer.elapsed);
+        e.tweenScale.y = tween(1, 1.1, 2000, "easeInOutSine", e.tweenTimer.elapsed);
 
         look(e, scene);
         generateStamina(e);

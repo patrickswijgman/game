@@ -21,6 +21,11 @@ export async function loadAssets() {
     ctx.fillRect(0, 0, w, h);
   });
 
+  loadRenderTexture("test_bg", 1024, 1024, (ctx, w, h) => {
+    ctx.fillStyle = "slategray";
+    ctx.fillRect(0, 0, w, h);
+  });
+
   await loadFont("default", "fonts/pixelmix.ttf", "pixelmix", 8);
 }
 
