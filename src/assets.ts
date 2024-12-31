@@ -9,6 +9,8 @@ export async function loadAssets() {
 
   loadSprites("player", "atlas", 0, 0, 32, 32);
 
+  loadSprites("tree_pine", "atlas", 0, 96, 32, 32);
+
   loadSprite("item_longsword", "atlas", 0, 64, 32, 32);
 
   loadSprites("ui_map_start", "atlas", 0, 160, 16, 16);
@@ -23,6 +25,11 @@ export async function loadAssets() {
 
   loadRenderTexture("test_bg", 1024, 1024, (ctx, w, h) => {
     ctx.fillStyle = "slategray";
+    ctx.fillRect(0, 0, w, h);
+  });
+
+  loadRenderTexture("grass", 1024, 1024, (ctx, w, h) => {
+    ctx.fillStyle = "#4b7b5b";
     ctx.fillRect(0, 0, w, h);
   });
 

@@ -5,6 +5,7 @@ import { updateMeleeAttack } from "entities/actions/melee-attack.js";
 import { updateCombatText } from "entities/combat/text.js";
 import { updateMapRoom } from "entities/map/room.js";
 import { updatePlayer } from "entities/player.js";
+import { updateTree } from "entities/tree.js";
 import { renderEntity, renderShadow, updateAvoidance, updateFlash, updateHitbox, updatePhysics } from "entity.js";
 import { getCurrentScene, switchScene, transitionToNextScene } from "game.js";
 import { applyCameraTransform, drawTexture, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setFont, tickTimer, translateTransform, updateCamera } from "ridder";
@@ -73,6 +74,9 @@ run({
           break;
         case "combat_text":
           updateCombatText(e);
+          break;
+        case "tree":
+          updateTree(e);
           break;
         case "map_room":
           updateMapRoom(e);

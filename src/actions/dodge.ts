@@ -3,7 +3,7 @@ import { copyVector, scaleVector, tickTimer, tween } from "ridder";
 
 export function updateDodge(e: Entity) {
   copyVector(e.vel, e.direction);
-  scaleVector(e.vel, e.stats.movementSpeed * 1.5);
+  scaleVector(e.vel, e.stats.movementSpeed * 2);
 
   e.isFlipped = e.direction.x < 0;
 

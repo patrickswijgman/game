@@ -49,6 +49,7 @@ export type Entity = {
   tweenScale: Vector;
   tweenAngle: number;
   tweenTimer: Timer;
+  tweenDuration: number;
   parentId: string;
   actionId: string;
   weaponId: string;
@@ -108,6 +109,7 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     tweenScale: vec(1, 1),
     tweenAngle: 0,
     tweenTimer: timer(),
+    tweenDuration: 0,
     parentId: "",
     actionId: "",
     weaponId: "",
@@ -271,7 +273,8 @@ export function renderShadow(e: Entity, scene: Scene) {
       scaleTransform(-1, 1);
     }
 
-    drawSprite(e.shadowId, -e.pivot.x + e.shadowOffset.x, -e.pivot.y + e.shadowOffset.y);
+    translateTransform(e.shadowOffset.x, e.shadowOffset.y);
+    drawSprite(e.shadowId, -e.pivot.x, -e.pivot.y);
   }
 }
 

@@ -50,7 +50,7 @@ export function renderMapScene(scene: Scene) {
 }
 
 function getX(x: number, map: DungeonMap) {
-  return getWidth() / 2 - Math.floor(map.width / 2) * 64 + x * 64;
+  return getWidth() / 2 - Math.floor(map.width / 2) * 48 + x * 48;
 }
 
 function getY(y: number) {
