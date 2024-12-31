@@ -14,6 +14,7 @@ export type Scene = {
   bounds: Rectangle;
   backgroundTextureId: string;
   playerId: string;
+  safeArea: Rectangle;
 };
 
 export function newScene(id: string, type: string): Scene {
@@ -29,6 +30,7 @@ export function newScene(id: string, type: string): Scene {
     bounds: rect(),
     backgroundTextureId: "",
     playerId: "",
+    safeArea: rect(),
   });
 }
 

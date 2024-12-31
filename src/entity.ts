@@ -41,7 +41,7 @@ export type Entity = {
   textOutline: string;
   width: number;
   height: number;
-  node: Vector;
+  roomCoordinates: Vector;
   flashTimer: Timer;
   lifetime: number;
   lifeTimer: Timer;
@@ -101,7 +101,7 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     textOutline: "",
     width: 0,
     height: 0,
-    node: vec(),
+    roomCoordinates: vec(),
     lifetime: 0,
     lifeTimer: timer(),
     flashTimer: timer(),

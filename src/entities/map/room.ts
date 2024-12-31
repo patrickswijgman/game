@@ -1,14 +1,14 @@
 import { Entity, newEntity, setSprites } from "entity.js";
 import { getSession, switchScene } from "game.js";
-import { DungeonMapNode, isNextDungeonRoom, visitDungeonRoom } from "map.js";
+import { DungeonRoom, isNextDungeonRoom, visitDungeonRoom } from "map.js";
 import { copyVector, doesRectangleContain, getMousePosition, InputCode, isInputPressed, setRectangle } from "ridder";
 import { Scene } from "scene.js";
 import { newCombatRoomScene } from "scenes/rooms/combat.js";
 
-export function newMapRoom(scene: Scene, x: number, y: number, node: DungeonMapNode) {
+export function newMapRoom(scene: Scene, x: number, y: number, room: DungeonRoom) {
   const e = newEntity(scene, "map_room", x, y);
 
-  switch (node.type) {
+  switch (room.type) {
     case "start":
       setSprites(e, "ui_map_start", 8, 8);
       break;
@@ -20,7 +20,7 @@ export function newMapRoom(scene: Scene, x: number, y: number, node: DungeonMapN
       break;
   }
 
-  copyVector(e.node, node);
+  copyVector(e.roomCoordinates, room);
   setRectangle(e.hitarea, x - 8, y - 8, 16, 16);
 
   return e;
@@ -33,16 +33,16 @@ export function updateMapRoom(e: Entity) {
   e.isOutlineVisible = false;
   e.isOutlinePrimaryVisible = true;
 
-  if (isNextDungeonRoom(session.map, e.node.x, e.node.y) && doesRectangleContain(e.hitarea, mouse.x, mouse.y)) {
+  if (isNextDungeonRoom(session.map, e.roomCoordinates.x, e.roomCoordinates.y) && doesRectangleContain(e.hitarea, mouse.x, mouse.y)) {
     e.isOutlineVisible = true;
     e.isOutlinePrimaryVisible = false;
 
     if (isInputPressed(InputCode.MOUSE_LEFT, true)) {
-      const node = visitDungeonRoom(session.map, e.node.x, e.node.y);
+      const room = visitDungeonRoom(session.map, e.roomCoordinates.x, e.roomCoordinates.y);
 
       let scene: Scene;
 
-      switch (node.type) {
+      switch (room.type) {
         case "combat":
         case "boss":
           scene = newCombatRoomScene();
