@@ -11,4 +11,3 @@ export const COLOR_MAP_LINE = "#ffffff";
 export const COLOR_MAP_LINE_DIM = "#85706d";
 export const COLOR_HEALTH = "#F24236";
 export const COLOR_STAMINA = "#4CB944";
-export const COLOR_MANA = "#3066BE";

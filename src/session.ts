@@ -16,8 +16,6 @@ export function newSession(): Session {
       stamina: 100,
       staminaMax: 100,
       staminaRegen: 1,
-      mana: 20,
-      manaMax: 20,
       strength: 10,
       dexterity: 10,
       intelligence: 10,

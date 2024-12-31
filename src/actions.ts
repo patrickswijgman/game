@@ -47,9 +47,6 @@ export function isActionValid(stats: Stats, requiremens: Stats) {
   if (stats.stamina < requiremens.staminaCost) {
     return false;
   }
-  if (stats.mana < requiremens.manaCost) {
-    return false;
-  }
 
   return true;
 }
@@ -57,6 +54,5 @@ export function isActionValid(stats: Stats, requiremens: Stats) {
 export function spendAction(stats: Stats, requirements: Stats) {
   stats.health -= requirements.healthCost;
   stats.stamina -= requirements.staminaCost;
-  stats.mana -= requirements.manaCost;
   updateStats(stats);
 }
