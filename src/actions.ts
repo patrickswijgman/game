@@ -1,9 +1,9 @@
-import { updateDodge } from "actions/dodge.js";
+import { onDodgeEnter, onDodgeExit, onDodgeUpdate } from "actions/dodge.js";
 import { doDamage } from "combat.js";
 import { newMeleeAttack } from "entities/actions/melee-attack.js";
-import { Entity } from "entity.js";
+import { Entity, resetState } from "entity.js";
 import { doPolygonsIntersect } from "ridder";
-import { getEntity, Scene } from "scene.js";
+import { destroyEntity, getEntity, Scene } from "scene.js";
 import { Stats, updateStats } from "stats.js";
 
 export function onActionEnter(e: Entity, scene: Scene) {
@@ -14,18 +14,28 @@ export function onActionEnter(e: Entity, scene: Scene) {
     case "melee_attack":
       newMeleeAttack(scene, e, target);
       break;
+
+    case "dodge":
+      onDodgeEnter(e);
+      break;
   }
 }
 
 export function onActionUpdate(e: Entity, scene: Scene) {
   switch (e.actionId) {
     case "dodge":
-      updateDodge(e);
+      onDodgeUpdate(e);
       break;
   }
 }
 
-export function onActionExit(e: Entity, scene: Scene) {}
+export function onActionExit(e: Entity, scene: Scene) {
+  switch (e.actionId) {
+    case "dodge":
+      onDodgeExit(e);
+      break;
+  }
+}
 
 export function doDamageToTargets(e: Entity, scene: Scene) {
   const caster = getEntity(scene, e.parentId);
@@ -60,4 +70,19 @@ export function spendAction(stats: Stats, requirements: Stats) {
   stats.health -= requirements.healthCost;
   stats.stamina -= requirements.staminaCost;
   updateStats(stats);
+}
+
+export function destroyIfCasterIsInvalid(e: Entity, scene: Scene, caster: Entity) {
+  if (caster.conditions.isStaggered) {
+    destroyEntity(scene, e);
+    return true;
+  }
+
+  if (caster.isDestroyed) {
+    resetState(caster);
+    destroyEntity(scene, e);
+    return true;
+  }
+
+  return false;
 }

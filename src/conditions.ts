@@ -4,6 +4,10 @@ export type Conditions = {
   staggerDuration: number;
   staggerTimer: Timer;
   isStaggered: boolean;
+
+  invulnerableDuration: number;
+  invulnerableTimer: Timer;
+  isInvulnerable: boolean;
 };
 
 export function newConditions(conditions: Partial<Conditions> = {}): Conditions {
@@ -11,6 +15,11 @@ export function newConditions(conditions: Partial<Conditions> = {}): Conditions 
     staggerDuration: 0,
     staggerTimer: timer(),
     isStaggered: false,
+
+    invulnerableDuration: 0,
+    invulnerableTimer: timer(),
+    isInvulnerable: false,
+
     ...conditions,
   };
 }

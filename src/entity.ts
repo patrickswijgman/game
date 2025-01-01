@@ -211,6 +211,11 @@ export function updateConditions(e: Entity) {
       resetState(e);
     }
   }
+
+  if (e.conditions.isInvulnerable && tickTimer(e.conditions.invulnerableTimer, e.conditions.invulnerableDuration)) {
+    e.conditions.isInvulnerable = false;
+    resetTimer(e.conditions.invulnerableTimer);
+  }
 }
 
 export function updatePhysics(e: Entity) {

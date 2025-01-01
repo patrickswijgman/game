@@ -1,4 +1,4 @@
-import { doDamageToTargets } from "actions.js";
+import { destroyIfCasterIsInvalid, doDamageToTargets } from "actions.js";
 import { Entity, newEntity, resetState, updateState } from "entity.js";
 import { getItem } from "items.js";
 import { addVector, angleVector, copyPolygon, copyVector, getAngle, normalizeVector, tickTimer, tween, Vector } from "ridder";
@@ -27,14 +27,7 @@ export function newMeleeAttack(scene: Scene, caster: Entity, target: Vector) {
 export function updateMeleeAttack(e: Entity, scene: Scene) {
   const caster = getEntity(scene, e.parentId);
 
-  if (caster.conditions.isStaggered) {
-    destroyEntity(scene, e);
-    return;
-  }
-
-  if (caster.isDestroyed) {
-    resetState(caster);
-    destroyEntity(scene, e);
+  if (destroyIfCasterIsInvalid(e, scene, caster)) {
     return;
   }
 

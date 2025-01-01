@@ -6,6 +6,10 @@ import { Scene } from "scene.js";
 import { addStats, getScalingValue, newStats, updateStats } from "stats.js";
 
 export function doDamage(scene: Scene, self: Entity, target: Entity) {
+  if (target.conditions.isInvulnerable) {
+    return;
+  }
+
   const totalStats = newStats(self.stats);
 
   let bonusDamage = 0;

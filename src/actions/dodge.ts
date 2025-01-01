@@ -1,7 +1,12 @@
 import { Entity, resetState } from "entity.js";
 import { copyVector, scaleVector, tickTimer, tween } from "ridder";
 
-export function updateDodge(e: Entity) {
+export function onDodgeEnter(e: Entity) {
+  e.conditions.isInvulnerable = true;
+  e.conditions.invulnerableDuration = 250;
+}
+
+export function onDodgeUpdate(e: Entity) {
   copyVector(e.velocity, e.direction);
   scaleVector(e.velocity, e.stats.movementSpeed * 2);
 
@@ -14,4 +19,8 @@ export function updateDodge(e: Entity) {
   if (completed) {
     resetState(e);
   }
+}
+
+export function onDodgeExit(e: Entity) {
+  e.conditions.isInvulnerable = false;
 }
