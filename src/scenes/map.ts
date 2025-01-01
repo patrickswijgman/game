@@ -37,8 +37,12 @@ export function renderMapScene(scene: Scene) {
       const room = getGridValue(map.rooms, x, y);
 
       if (room.type) {
+        const isRoomVisited = isDungeonRoomVisited(map, room.x, room.y);
+
         for (const child of room.children) {
-          const color = isDungeonRoomVisited(map, room.x, room.y) && isNextDungeonRoom(map, child.x, child.y) ? COLOR_MAP_LINE : COLOR_MAP_LINE_DIM;
+          const isChildVisited = isRoomVisited && isDungeonRoomVisited(map, child.x, child.y);
+          const isChildNext = isRoomVisited && isNextDungeonRoom(map, child.x, child.y);
+          const color = isChildVisited || isChildNext ? COLOR_MAP_LINE : COLOR_MAP_LINE_DIM;
           drawLine(getX(room.x, map), getY(room.y), getX(child.x, map), getY(child.y), color);
         }
 
