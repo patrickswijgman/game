@@ -12,6 +12,7 @@ export async function loadAssets() {
   loadSprites("bandit", "atlas", 32, 0, 32, 32);
 
   loadSprites("tree_pine", "atlas", 0, 96, 32, 32);
+  loadSprites("portal", "atlas", 32, 96, 32, 32);
 
   loadSprite("item_longsword", "atlas", 0, 64, 32, 32);
 

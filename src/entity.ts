@@ -1,5 +1,7 @@
 import { onActionEnter, onActionExit, onActionUpdate } from "actions.js";
 import { Conditions, newConditions } from "conditions.js";
+import { drawOutlinedText } from "engine/render.js";
+import { renderPortal } from "entities/portal.js";
 import { addVectorScaled, applyCameraTransform, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, polygonFromRect, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setPolygonAngle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
 import { addEnemy, addEntity, Scene } from "scene.js";
 import { newStats, Stats } from "stats.js";
@@ -290,12 +292,16 @@ export function renderEntity(e: Entity, scene: Scene) {
 
   if (e.text) {
     if (e.textOutline) {
-      drawText(e.text, 0, -1, e.textOutline, e.textAlign, e.textBaseline);
-      drawText(e.text, 1, 0, e.textOutline, e.textAlign, e.textBaseline);
-      drawText(e.text, 0, 1, e.textOutline, e.textAlign, e.textBaseline);
-      drawText(e.text, -1, 0, e.textOutline, e.textAlign, e.textBaseline);
+      drawOutlinedText(e.text, 0, 0, e.textColor, e.textOutline, e.textAlign, e.textBaseline);
+    } else {
+      drawText(e.text, 0, 0, e.textColor, e.textAlign, e.textBaseline);
     }
-    drawText(e.text, 0, 0, e.textColor, e.textAlign, e.textBaseline);
+  }
+
+  switch (e.type) {
+    case "portal":
+      renderPortal(e, scene);
+      break;
   }
 }
 

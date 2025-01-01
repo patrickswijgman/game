@@ -1,6 +1,6 @@
 import { newMeleeEnemy } from "entities/enemies/melee.js";
 import { newPlayer } from "entities/player.js";
-import { game, switchScene } from "game.js";
+import { newPortal } from "entities/portal.js";
 import { ENEMY_AMOUNT_PER_LEVEL, ENEMY_TYPES_PER_LEVEL } from "map.js";
 import { pick, random, setRectangle, setVector } from "ridder";
 import { initCamera, newRoom, Scene } from "scene.js";
@@ -19,8 +19,9 @@ export function newCombatRoomScene(level: number) {
 }
 
 export function updateCombatRoomScene(scene: Scene) {
-  if (scene.enemies.length === 0) {
-    switchScene(game.sceneMapId);
+  if (scene.enemies.length === 0 && !scene.isPortalSpawned) {
+    newPortal(scene, scene.portalPosition.x, scene.portalPosition.y);
+    scene.isPortalSpawned = true;
   }
 }
 
@@ -35,6 +36,7 @@ function initLayout(scene: Scene) {
   const y = scene.safeArea.y + random(50, scene.safeArea.h - 100);
 
   setVector(scene.playerStart, x, y);
+  setVector(scene.portalPosition, scene.bounds.w / 2, scene.bounds.h / 2);
 }
 
 function addEnemies(scene: Scene) {

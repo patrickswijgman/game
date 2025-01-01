@@ -6,6 +6,7 @@ import { updateCombatText } from "entities/combat/text.js";
 import { updateMeleeEnemy } from "entities/enemies/melee.js";
 import { updateMapRoom } from "entities/map/room.js";
 import { updatePlayer } from "entities/player.js";
+import { updatePortal } from "entities/portal.js";
 import { updateTree } from "entities/tree.js";
 import { renderEntity, renderShadow, updateAvoidance, updateConditions, updateFlash, updateHitbox, updatePhysics } from "entity.js";
 import { game, getCurrentScene, switchScene, transitionToNextScene } from "game.js";
@@ -83,6 +84,9 @@ run({
           break;
         case "tree":
           updateTree(e);
+          break;
+        case "portal":
+          updatePortal(e, scene);
           break;
         case "map_room":
           updateMapRoom(e);
