@@ -1,26 +1,27 @@
 import { polygon, Polygon, polygonFromRect, rect, vec, Vector } from "ridder";
 import { newStats, Stats } from "stats.js";
 
-type ArcTuple = [start: number, windup: number, release: number, recovery: number];
+type Arc = {
+  start: number;
+  windup: number;
+  release: number;
+  recovery: number;
+};
 
 export type Item = {
   name: string;
-  description: string;
   spriteId: string;
   pivot: Vector;
   stats: Stats;
   hitbox: Polygon;
   actionId: string;
-  windupDuration: number;
-  releaseDuration: number;
-  recoveryDuration: number;
-  arc: ArcTuple;
+  arcDuration: Arc;
+  arcAngle: Arc;
 };
 
 const items: Record<string, Item> = {
   longsword: newItem({
     name: "Longsword",
-    description: "A sword of the long variety.",
     spriteId: "item_longsword",
     pivot: vec(2, 15.5),
     stats: newStats({
@@ -31,26 +32,67 @@ const items: Record<string, Item> = {
     }),
     hitbox: polygonFromRect(0, 0, rect(12, -2, 12, 4)),
     actionId: "melee_attack",
-    windupDuration: 300,
-    releaseDuration: 150,
-    recoveryDuration: 200,
-    arc: [0, -90, 90, 0],
+    arcDuration: {
+      start: 0,
+      windup: 300,
+      release: 150,
+      recovery: 200,
+    },
+    arcAngle: {
+      start: 0,
+      windup: -90,
+      release: 90,
+      recovery: 0,
+    },
+  }),
+
+  rusty_sword: newItem({
+    name: "Rusty sword",
+    spriteId: "item_longsword",
+    pivot: vec(2, 15.5),
+    stats: newStats({
+      damage: 6,
+      strengthScaling: 1,
+      dexterityScaling: 1,
+      staminaCost: 25,
+    }),
+    hitbox: polygonFromRect(0, 0, rect(12, -2, 12, 4)),
+    actionId: "melee_attack",
+    arcDuration: {
+      start: 0,
+      windup: 400,
+      release: 200,
+      recovery: 300,
+    },
+    arcAngle: {
+      start: 0,
+      windup: -90,
+      release: 90,
+      recovery: 0,
+    },
   }),
 };
 
 function newItem(item: Partial<Item>): Item {
   return {
     name: "",
-    description: "",
     spriteId: "",
     pivot: vec(),
     stats: newStats(),
     hitbox: polygon(),
     actionId: "",
-    windupDuration: 0,
-    releaseDuration: 0,
-    recoveryDuration: 0,
-    arc: [0, 0, 0, 0],
+    arcDuration: {
+      start: 0,
+      windup: 0,
+      release: 0,
+      recovery: 0,
+    },
+    arcAngle: {
+      start: 0,
+      windup: 0,
+      release: 0,
+      recovery: 0,
+    },
     ...item,
   };
 }

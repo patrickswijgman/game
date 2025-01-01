@@ -12,13 +12,13 @@ export function newMeleeEnemy(scene: Scene, x: number, y: number) {
   setSprites(e, "bandit", 15, 31, 0, -4, true, 0, 2);
   setConstraints(e, 10, 12);
 
-  e.stats.health = 10;
-  e.stats.healthMax = 10;
-  e.stats.strength = 10;
-  e.stats.dexterity = 10;
+  e.stats.health = 18;
+  e.stats.healthMax = 18;
+  e.stats.strength = 11;
+  e.stats.dexterity = 12;
   e.stats.intelligence = 8;
   e.stats.movementSpeed = 1;
-  e.weaponId = "longsword";
+  e.weaponId = "rusty_sword";
   e.stateStartId = "seek";
   e.stateNextId = "seek";
 
