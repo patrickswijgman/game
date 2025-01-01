@@ -1,48 +1,50 @@
 import { COLOR_MAP_LINE, COLOR_MAP_LINE_DIM } from "consts.js";
 import { newMapRoom } from "entities/map/room.js";
-import { getSession } from "game.js";
+import { game } from "game.js";
 import { DungeonMap, getCurrentDungeonRoom, isDungeonRoomVisited, isNextDungeonRoom } from "map.js";
 import { drawLine, drawSprite, getElapsedTime, getGridHeight, getGridValue, getGridWidth, getWidth, resetTransform, tween } from "ridder";
 import { newScene, Scene } from "scene.js";
 
 export function newMapScene() {
-  const scene = newScene("map", "map");
+  const scene = newScene("map");
 
   scene.backgroundTextureId = "map_bg";
 
-  const session = getSession();
+  const { map } = game.session;
 
-  for (let y = 0; y < getGridHeight(session.map.rooms); y++) {
-    for (let x = 0; x < getGridWidth(session.map.rooms); x++) {
-      const room = getGridValue(session.map.rooms, x, y);
+  for (let y = 0; y < getGridHeight(map.rooms); y++) {
+    for (let x = 0; x < getGridWidth(map.rooms); x++) {
+      const room = getGridValue(map.rooms, x, y);
 
       if (room.type) {
-        newMapRoom(scene, getX(x, session.map), getY(y), room);
+        newMapRoom(scene, getX(x, map), getY(y), room);
       }
     }
   }
+
+  game.sceneMapId = scene.id;
 
   return scene;
 }
 
 export function renderMapScene(scene: Scene) {
-  const session = getSession();
+  const { map } = game.session;
 
   resetTransform();
 
-  for (let y = 0; y < getGridHeight(session.map.rooms); y++) {
-    for (let x = 0; x < getGridWidth(session.map.rooms); x++) {
-      const room = getGridValue(session.map.rooms, x, y);
+  for (let y = 0; y < getGridHeight(map.rooms); y++) {
+    for (let x = 0; x < getGridWidth(map.rooms); x++) {
+      const room = getGridValue(map.rooms, x, y);
 
       if (room.type) {
         for (const child of room.children) {
-          const color = isDungeonRoomVisited(session.map, room.x, room.y) && isNextDungeonRoom(session.map, child.x, child.y) ? COLOR_MAP_LINE : COLOR_MAP_LINE_DIM;
-          drawLine(getX(room.x, session.map), getY(room.y), getX(child.x, session.map), getY(child.y), color);
+          const color = isDungeonRoomVisited(map, room.x, room.y) && isNextDungeonRoom(map, child.x, child.y) ? COLOR_MAP_LINE : COLOR_MAP_LINE_DIM;
+          drawLine(getX(room.x, map), getY(room.y), getX(child.x, map), getY(child.y), color);
         }
 
-        if (room === getCurrentDungeonRoom(session.map)) {
+        if (room === getCurrentDungeonRoom(map)) {
           const tweenY = tween(0, 5, 500, "easeInOutSine", getElapsedTime());
-          drawSprite("ui_map_current", getX(room.x, session.map) - 8, getY(room.y) - 20 - tweenY);
+          drawSprite("ui_map_current", getX(room.x, map) - 8, getY(room.y) - 20 - tweenY);
         }
       }
     }

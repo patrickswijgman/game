@@ -1,11 +1,11 @@
 import { newPineTree } from "entities/tree-pine.js";
-import { doesRectangleContain, random, rect, roll } from "ridder";
+import { doesRectangleContain, random, roll } from "ridder";
 import { Scene } from "scene.js";
 
-export function addForestTheme(scene: Scene, w: number, h: number) {
-  scene.backgroundTextureId = "forest_bg";
+export function initForestTheme(scene: Scene) {
+  const { w, h } = scene.bounds;
 
-  scene.safeArea = rect(100, 100, w - 200, h - 200);
+  scene.backgroundTextureId = "forest_bg";
 
   for (let x = 0; x <= w; x += 20) {
     for (let y = 0; y <= h; y += 20) {

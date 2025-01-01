@@ -1,4 +1,4 @@
-import { getGridValue, Grid, grid, isInsideGridBounds, pick, random, repeat } from "ridder";
+import { getGridValue, Grid, grid, isInsideGridBounds, pick, random } from "ridder";
 
 export type DungeonRoom = {
   type: string;
@@ -15,7 +15,6 @@ export type DungeonMap = {
 };
 
 export const ROOM_TYPES_PER_LEVEL: Record<number, Array<string>> = {
-  0: ["start"],
   1: ["combat"],
   2: ["combat"],
   3: ["combat"],
@@ -24,11 +23,9 @@ export const ROOM_TYPES_PER_LEVEL: Record<number, Array<string>> = {
   6: ["combat"],
   7: ["combat"],
   8: ["combat"],
-  9: ["boss"],
 };
 
 export const ENEMY_TYPES_PER_LEVEL: Record<number, Array<string>> = {
-  0: ["melee"],
   1: ["melee"],
   2: ["melee"],
   3: ["melee"],
@@ -37,20 +34,17 @@ export const ENEMY_TYPES_PER_LEVEL: Record<number, Array<string>> = {
   6: ["melee"],
   7: ["melee"],
   8: ["melee"],
-  9: ["boss"],
 };
 
 export const ENEMY_AMOUNT_PER_LEVEL: Record<number, [min: number, max: number]> = {
-  0: [1, 2],
-  1: [1, 3],
-  2: [2, 3],
-  3: [2, 4],
-  4: [1, 3],
-  5: [1, 3],
-  6: [1, 3],
-  7: [1, 3],
-  8: [1, 3],
-  9: [1, 3],
+  1: [1, 2],
+  2: [1, 3],
+  3: [2, 3],
+  4: [2, 4],
+  5: [3, 4],
+  6: [3, 5],
+  7: [4, 5],
+  8: [4, 6],
 };
 
 export function newDungeonMap() {
@@ -81,7 +75,7 @@ function generateRooms(map: DungeonMap) {
 
   map.visited.push(start);
 
-  repeat(3, () => {
+  for (let i = 0; i < 3; i++) {
     let prev = start;
     let x = 0;
     let y = 0;
@@ -106,7 +100,7 @@ function generateRooms(map: DungeonMap) {
         room.children.push(end);
       }
     }
-  });
+  }
 }
 
 export function visitDungeonRoom(map: DungeonMap, x: number, y: number) {

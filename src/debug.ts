@@ -5,6 +5,9 @@ import { getEntity, getPlayer, Scene } from "scene.js";
 export function renderDebugInfo(scene: Scene) {
   resetTransform();
   applyCameraTransform(scene.camera);
+
+  drawRectInstance(scene.safeArea, "purple");
+
   for (const id of scene.active) {
     const e = getEntity(scene, id);
 

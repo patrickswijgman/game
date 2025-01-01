@@ -1,7 +1,9 @@
 import { DungeonMap, newDungeonMap } from "map.js";
+import { uuid } from "ridder";
 import { newStats, Stats } from "stats.js";
 
 export type Session = {
+  id: string;
   stats: Stats;
   weaponId: string;
   armorId: string;
@@ -10,6 +12,7 @@ export type Session = {
 
 export function newSession(): Session {
   return {
+    id: uuid(),
     stats: newStats({
       health: 50,
       healthMax: 50,

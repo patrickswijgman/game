@@ -7,7 +7,7 @@ import { updateMapRoom } from "entities/map/room.js";
 import { updatePlayer } from "entities/player.js";
 import { updateTree } from "entities/tree.js";
 import { renderEntity, renderShadow, updateAvoidance, updateFlash, updateHitbox, updatePhysics } from "entity.js";
-import { getCurrentScene, switchScene, transitionToNextScene } from "game.js";
+import { game, getCurrentScene, switchScene, transitionToNextScene } from "game.js";
 import { applyCameraTransform, drawTexture, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setFont, tickTimer, translateTransform, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, Scene, sortEntitiesOnDepth } from "scene.js";
 import { newMapScene, renderMapScene } from "scenes/map.js";
@@ -28,7 +28,7 @@ run({
     let scene: Scene;
 
     scene = newMapScene();
-    scene = newCombatRoomScene();
+    scene = newCombatRoomScene(1);
 
     switchScene(scene.id);
   },
@@ -43,7 +43,7 @@ run({
     }
 
     if (isInputPressed(InputCode.KEY_M)) {
-      switchScene("map");
+      switchScene(game.sceneMapId);
     }
 
     transitionToNextScene();

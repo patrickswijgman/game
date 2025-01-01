@@ -1,6 +1,6 @@
 import { Entity } from "entity.js";
-import { addScene, removeScene } from "game.js";
-import { camera, Camera, rect, Rectangle, remove } from "ridder";
+import { addScene, game } from "game.js";
+import { camera, Camera, rect, Rectangle, remove, uuid, vec, Vector } from "ridder";
 
 export type Scene = {
   id: string;
@@ -13,13 +13,17 @@ export type Scene = {
   camera: Camera;
   bounds: Rectangle;
   backgroundTextureId: string;
+  roomType: string;
+  roomLevel: number;
   playerId: string;
+  playerStart: Vector;
   safeArea: Rectangle;
+  sessionId: string;
 };
 
-export function newScene(id: string, type: string): Scene {
-  return addScene(id, {
-    id,
+export function newScene(type: string): Scene {
+  return addScene({
+    id: uuid(),
     type,
     entities: {},
     active: [],
@@ -29,9 +33,21 @@ export function newScene(id: string, type: string): Scene {
     camera: camera(),
     bounds: rect(),
     backgroundTextureId: "",
+    roomType: "",
+    roomLevel: 0,
     playerId: "",
+    playerStart: vec(),
     safeArea: rect(),
+    sessionId: "",
   });
+}
+
+export function newRoom(type: string, roomType: string, roomLevel: number) {
+  const scene = newScene(type);
+  scene.roomType = roomType;
+  scene.roomLevel = roomLevel;
+  scene.sessionId = game.session.id;
+  return scene;
 }
 
 export function cleanupDestroyedEntities(scene: Scene) {
@@ -52,6 +68,12 @@ export function sortEntitiesOnDepth(scene: Scene) {
     const b = scene.entities[idB];
     return a.pos.y - b.pos.y;
   });
+}
+
+export function initCamera(scene: Scene) {
+  scene.camera.smoothing = 0.05;
+  scene.camera.shakeReduction = 0.01;
+  scene.camera.bounds = scene.bounds;
 }
 
 export function addEntity(scene: Scene, e: Entity) {
@@ -77,9 +99,4 @@ export function getEntity(scene: Scene, id: string) {
 
 export function getPlayer(scene: Scene) {
   return scene.entities[scene.playerId];
-}
-
-export function destroyScene(scene: Scene) {
-  delete scene.entities;
-  removeScene(scene);
 }

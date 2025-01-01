@@ -1,26 +1,27 @@
 import { isActionValid, spendAction } from "actions.js";
 import { generateStamina } from "combat.js";
 import { Entity, newEntity, setConstraints, setSprites, updateState } from "entity.js";
-import { getSession } from "game.js";
+import { game } from "game.js";
 import { getItem } from "items.js";
-import { copyVector, getVectorLength, InputCode, isInputDown, isInputPressed, normalizeVector, resetVector, scaleVector, tickTimer, tween } from "ridder";
+import { copyVector, getVectorLength, InputCode, isInputDown, isInputPressed, normalizeVector, resetVector, scaleVector, setCameraPosition, tickTimer, tween } from "ridder";
 import { Scene } from "scene.js";
 import { updateStats } from "stats.js";
 
 export function newPlayer(scene: Scene, x: number, y: number) {
   const e = newEntity(scene, "player", x, y);
-  const session = getSession();
 
   setSprites(e, "player", 15, 31, 0, -4, true, 0, 2);
   setConstraints(e, 10, 12);
 
-  e.stats = session.stats;
-  e.weaponId = session.weaponId;
+  e.stats = game.session.stats;
+  e.weaponId = game.session.weaponId;
   e.stateIdleId = "idle";
   e.stateNextId = "idle";
   e.isPlayer = true;
 
   scene.playerId = e.id;
+
+  setCameraPosition(scene.camera, x, y);
 
   return e;
 }
