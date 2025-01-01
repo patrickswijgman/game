@@ -1,4 +1,4 @@
-import { COLOR_PRIMARY } from "consts.js";
+import { COLOR_DANGER, COLOR_PRIMARY } from "consts.js";
 import { loadFlashTexture, loadFont, loadOutlineTexture, loadRenderTexture, loadSprite, loadTexture } from "ridder";
 
 export async function loadAssets() {
@@ -6,6 +6,7 @@ export async function loadAssets() {
   await loadFlashTexture("atlas_flash", "textures/atlas.png", "white");
   await loadOutlineTexture("atlas_outline", "textures/atlas.png", "square", "white");
   await loadOutlineTexture("atlas_outline_primary", "textures/atlas.png", "square", COLOR_PRIMARY);
+  await loadOutlineTexture("atlas_outline_danger", "textures/atlas.png", "square", COLOR_DANGER);
 
   loadSprites("player", "atlas", 0, 0, 32, 32);
   loadSprites("bandit", "atlas", 32, 0, 32, 32);
@@ -38,4 +39,5 @@ function loadSprites(id: string, textureId: string, x: number, y: number, w: num
   loadSprite(`${id}_flash`, `${textureId}_flash`, x, y, w, h);
   loadSprite(`${id}_outline`, `${textureId}_outline`, x, y, w, h);
   loadSprite(`${id}_outline_primary`, `${textureId}_outline_primary`, x, y, w, h);
+  loadSprite(`${id}_outline_danger`, `${textureId}_outline_danger`, x, y, w, h);
 }

@@ -7,9 +7,12 @@ import { getEntity, Scene } from "scene.js";
 import { Stats, updateStats } from "stats.js";
 
 export function onActionEnter(e: Entity, scene: Scene) {
+  const player = getEntity(scene, scene.playerId);
+  const target = e.isPlayer ? scene.camera.mousePosition : player.pos;
+
   switch (e.actionId) {
     case "melee_attack":
-      newMeleeAttack(scene, e);
+      newMeleeAttack(scene, e, target);
       break;
   }
 }
@@ -25,12 +28,14 @@ export function onActionUpdate(e: Entity, scene: Scene) {
 export function onActionExit(e: Entity, scene: Scene) {}
 
 export function doDamageToTargets(e: Entity, scene: Scene) {
-  for (const id of scene.active) {
+  const caster = getEntity(scene, e.parentId);
+  const targets = e.isPlayer || caster.isPlayer ? scene.enemies : scene.allies;
+
+  for (const id of targets) {
     if (id === e.id || id === e.parentId) {
       continue;
     }
 
-    const caster = getEntity(scene, e.parentId);
     const target = getEntity(scene, id);
 
     if (!target.isDestroyed && !e.blacklist.includes(id) && doPolygonsIntersect(e.hitbox, target.hitbox)) {

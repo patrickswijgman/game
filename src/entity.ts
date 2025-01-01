@@ -28,6 +28,7 @@ export type Entity = {
   spriteFlashId: string;
   spriteOutlineId: string;
   spriteOutlinePrimaryId: string;
+  spriteOutlineDangerId: string;
   pivot: Vector;
   scale: Vector;
   angle: number;
@@ -60,6 +61,7 @@ export type Entity = {
   isFlashing: boolean;
   isOutlineVisible: boolean;
   isOutlinePrimaryVisible: boolean;
+  isOutlineDangerVisible: boolean;
   isDestroyed: boolean;
 };
 
@@ -88,6 +90,7 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     spriteFlashId: "",
     spriteOutlineId: "",
     spriteOutlinePrimaryId: "",
+    spriteOutlineDangerId: "",
     pivot: vec(),
     scale: vec(1, 1),
     angle: 0,
@@ -120,6 +123,7 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     isFlashing: false,
     isOutlineVisible: false,
     isOutlinePrimaryVisible: false,
+    isOutlineDangerVisible: false,
     isDestroyed: false,
   });
 }
@@ -135,6 +139,7 @@ export function setSprites(e: Entity, id: string, pivotX: number, pivotY: number
   e.spriteFlashId = `${id}_flash`;
   e.spriteOutlineId = `${id}_outline`;
   e.spriteOutlinePrimaryId = `${id}_outline_primary`;
+  e.spriteOutlineDangerId = `${id}_outline_danger`;
   e.pivot.x = pivotX;
   e.pivot.y = pivotY;
   e.centerOffset.x = centerOffsetX;
@@ -160,9 +165,9 @@ export function updateState(e: Entity, scene: Scene, onEnter: StateLifecycleHook
   if (e.stateId !== e.stateNextId) {
     if (e.stateId === "action") {
       onActionExit(e, scene);
-    } else {
-      onExit(e, scene, e.stateId);
     }
+
+    onExit(e, scene, e.stateId);
 
     e.stateId = e.stateNextId;
 
@@ -175,18 +180,18 @@ export function updateState(e: Entity, scene: Scene, onEnter: StateLifecycleHook
 
     if (e.stateId === "action") {
       onActionEnter(e, scene);
-    } else {
-      onEnter(e, scene, e.stateId);
     }
+
+    onEnter(e, scene, e.stateId);
   }
 
   if (e.stateId === "action") {
     onActionUpdate(e, scene);
-  } else {
-    const nextStateId = onUpdate(e, scene, e.stateId);
-    if (nextStateId) {
-      e.stateNextId = nextStateId;
-    }
+  }
+
+  const nextStateId = onUpdate(e, scene, e.stateId);
+  if (nextStateId) {
+    e.stateNextId = nextStateId;
   }
 }
 
@@ -249,6 +254,10 @@ export function renderEntity(e: Entity, scene: Scene) {
 
     if (e.isOutlinePrimaryVisible) {
       drawSprite(e.spriteOutlinePrimaryId, -e.pivot.x, -e.pivot.y);
+    }
+
+    if (e.isOutlineDangerVisible) {
+      drawSprite(e.spriteOutlineDangerId, -e.pivot.x, -e.pivot.y);
     }
   }
 

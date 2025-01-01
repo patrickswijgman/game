@@ -1,11 +1,11 @@
 import { doDamageToTargets } from "actions.js";
 import { Entity, newEntity, resetState, updateState } from "entity.js";
 import { getItem } from "items.js";
-import { addVector, angleVector, copyPolygon, copyVector, getAngle, normalizeVector, tickTimer, tween } from "ridder";
+import { addVector, angleVector, copyPolygon, copyVector, getAngle, normalizeVector, tickTimer, tween, Vector } from "ridder";
 import { EasingDictionary } from "ridder/lib/easings.js";
 import { destroyEntity, getEntity, Scene } from "scene.js";
 
-export function newMeleeAttack(scene: Scene, caster: Entity) {
+export function newMeleeAttack(scene: Scene, caster: Entity, target: Vector) {
   const x = caster.pos.x + caster.centerOffset.x;
   const y = caster.pos.y + caster.centerOffset.y;
 
@@ -19,7 +19,7 @@ export function newMeleeAttack(scene: Scene, caster: Entity) {
   e.stateNextId = "windup";
 
   copyPolygon(e.hitbox, weapon.hitbox);
-  copyVector(e.target, scene.camera.mousePosition);
+  copyVector(e.target, target);
 
   return e;
 }

@@ -1,4 +1,4 @@
-import { newBanditMelee } from "entities/enemies/melee-bandit.js";
+import { newMeleeEnemy } from "entities/enemies/melee.js";
 import { newPlayer } from "entities/player.js";
 import { game, switchScene } from "game.js";
 import { ENEMY_AMOUNT_PER_LEVEL, ENEMY_TYPES_PER_LEVEL } from "map.js";
@@ -48,7 +48,7 @@ function addEnemies(scene: Scene) {
 
     switch (type) {
       case "melee":
-        newBanditMelee(scene, x, y);
+        newMeleeEnemy(scene, x, y);
         break;
     }
   }

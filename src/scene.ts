@@ -9,6 +9,7 @@ export type Scene = {
   active: Array<string>;
   visible: Array<string>;
   enemies: Array<string>;
+  allies: Array<string>;
   destroyed: Array<string>;
   camera: Camera;
   bounds: Rectangle;
@@ -29,6 +30,7 @@ export function newScene(type: string): Scene {
     active: [],
     visible: [],
     enemies: [],
+    allies: [],
     destroyed: [],
     camera: camera(),
     bounds: rect(),
@@ -56,6 +58,7 @@ export function cleanupDestroyedEntities(scene: Scene) {
       remove(scene.active, id);
       remove(scene.visible, id);
       remove(scene.enemies, id);
+      remove(scene.allies, id);
     }
 
     scene.destroyed.length = 0;
@@ -80,6 +83,12 @@ export function addEntity(scene: Scene, e: Entity) {
   scene.entities[e.id] = e;
   scene.active.push(e.id);
   scene.visible.push(e.id);
+  return e;
+}
+
+export function addPlayer(scene: Scene, e: Entity) {
+  scene.playerId = e.id;
+  scene.allies.push(e.id);
   return e;
 }
 

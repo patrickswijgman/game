@@ -1,10 +1,12 @@
 import { isActionValid, spendAction } from "actions.js";
+import { updateBreathAnimation } from "anims/breath.js";
+import { updateWalkAnimation } from "anims/walk.js";
 import { generateStamina } from "combat.js";
 import { Entity, newEntity, setConstraints, setSprites, updateState } from "entity.js";
 import { game } from "game.js";
 import { getItem } from "items.js";
-import { copyVector, getVectorLength, InputCode, isInputDown, isInputPressed, normalizeVector, resetVector, scaleVector, setCameraPosition, tickTimer, tween } from "ridder";
-import { Scene } from "scene.js";
+import { copyVector, getVectorLength, InputCode, isInputDown, isInputPressed, normalizeVector, resetVector, scaleVector, setCameraPosition } from "ridder";
+import { addPlayer, Scene } from "scene.js";
 import { updateStats } from "stats.js";
 
 export function newPlayer(scene: Scene, x: number, y: number) {
@@ -19,7 +21,7 @@ export function newPlayer(scene: Scene, x: number, y: number) {
   e.stateNextId = "idle";
   e.isPlayer = true;
 
-  scene.playerId = e.id;
+  addPlayer(scene, e);
 
   setCameraPosition(scene.camera, x, y);
 
@@ -44,10 +46,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
           return "move";
         }
 
-        tickTimer(e.tweenTimer, Infinity);
-        e.tweenScale.x = tween(1, 1.1, 2000, "easeInOutSine", e.tweenTimer.elapsed);
-        e.tweenScale.y = tween(1, 1.1, 2000, "easeInOutSine", e.tweenTimer.elapsed);
-
+        updateBreathAnimation(e);
         look(e, scene);
         generateStamina(e);
       }
@@ -63,9 +62,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
           return "idle";
         }
 
-        tickTimer(e.tweenTimer, Infinity);
-        e.tweenPos.y = tween(0, -2, 100, "easeInOutSine", e.tweenTimer.elapsed);
-
+        updateWalkAnimation(e);
         look(e, scene);
         generateStamina(e);
       }

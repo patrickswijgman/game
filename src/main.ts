@@ -3,6 +3,7 @@ import { COLOR_HEALTH, COLOR_STAMINA, HEIGHT, WIDTH } from "consts.js";
 import { renderDebugInfo } from "debug.js";
 import { updateMeleeAttack } from "entities/actions/melee-attack.js";
 import { updateCombatText } from "entities/combat/text.js";
+import { updateMeleeEnemy } from "entities/enemies/melee.js";
 import { updateMapRoom } from "entities/map/room.js";
 import { updatePlayer } from "entities/player.js";
 import { updateTree } from "entities/tree.js";
@@ -71,6 +72,9 @@ run({
           break;
         case "melee_attack":
           updateMeleeAttack(e, scene);
+          break;
+        case "enemy_melee":
+          updateMeleeEnemy(e, scene);
           break;
         case "combat_text":
           updateCombatText(e);
