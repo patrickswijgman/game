@@ -1,4 +1,5 @@
 import { onActionEnter, onActionExit, onActionUpdate } from "actions.js";
+import { Conditions, newConditions } from "conditions.js";
 import { addVectorScaled, applyCameraTransform, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, polygonFromRect, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setPolygonAngle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
 import { addEnemy, addEntity, Scene } from "scene.js";
 import { newStats, Stats } from "stats.js";
@@ -8,17 +9,18 @@ export type Entity = {
   id: string;
   type: string;
   start: Vector;
-  pos: Vector;
-  vel: Vector;
+  position: Vector;
+  velocity: Vector;
   ahead: Vector;
   avoid: Vector;
   target: Vector;
   direction: Vector;
   stateId: string;
   stateNextId: string;
-  stateIdleId: string;
+  stateStartId: string;
   stateTimer: Timer;
   stats: Stats;
+  conditions: Conditions;
   hitbox: Polygon;
   hitarea: Rectangle;
   body: Rectangle;
@@ -43,9 +45,10 @@ export type Entity = {
   width: number;
   height: number;
   roomCoordinates: Vector;
-  flashTimer: Timer;
   lifetime: number;
   lifeTimer: Timer;
+  flashDuration: number;
+  flashTimer: Timer;
   tweenPos: Vector;
   tweenScale: Vector;
   tweenAngle: number;
@@ -70,8 +73,8 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     id: uuid(),
     type,
     start: vec(x, y),
-    pos: vec(x, y),
-    vel: vec(),
+    position: vec(x, y),
+    velocity: vec(),
     ahead: vec(),
     avoid: vec(),
     target: vec(),
@@ -79,8 +82,9 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     stateId: "",
     stateTimer: timer(),
     stateNextId: "",
-    stateIdleId: "",
+    stateStartId: "",
     stats: newStats(),
+    conditions: newConditions(),
     hitbox: polygon(),
     hitarea: rect(),
     body: rect(),
@@ -107,6 +111,7 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     roomCoordinates: vec(),
     lifetime: 0,
     lifeTimer: timer(),
+    flashDuration: 0,
     flashTimer: timer(),
     tweenPos: vec(),
     tweenScale: vec(1, 1),
@@ -131,7 +136,8 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
 export function newEnemy(scene: Scene, type: string, x: number, y: number) {
   const e = newEntity(scene, type, x, y);
   e.isEnemy = true;
-  return addEnemy(scene, e);
+  addEnemy(scene, e);
+  return e;
 }
 
 export function setSprites(e: Entity, id: string, pivotX: number, pivotY: number, centerOffsetX = 0, centerOffsetY = 0, shadow = false, shadowOffsetX = 0, shadowOffsetY = 0) {
@@ -153,7 +159,7 @@ export function setSprites(e: Entity, id: string, pivotX: number, pivotY: number
 }
 
 export function setConstraints(e: Entity, width: number, height: number) {
-  e.hitbox = polygonFromRect(e.pos.x, e.pos.y, rect(-width / 2, -height, width, height));
+  e.hitbox = polygonFromRect(e.position.x, e.position.y, rect(-width / 2, -height, width, height));
   e.width = width;
   e.height = height;
   e.radius = width / 2;
@@ -172,7 +178,7 @@ export function updateState(e: Entity, scene: Scene, onEnter: StateLifecycleHook
     e.stateId = e.stateNextId;
 
     resetTimer(e.stateTimer);
-    resetVector(e.vel);
+    resetVector(e.velocity);
     resetTimer(e.tweenTimer);
     resetVector(e.tweenPos);
     setVector(e.tweenScale, 1, 1);
@@ -195,14 +201,26 @@ export function updateState(e: Entity, scene: Scene, onEnter: StateLifecycleHook
   }
 }
 
+export function updateConditions(e: Entity) {
+  if (e.conditions.isStaggered) {
+    e.stateNextId = "stagger";
+
+    if (tickTimer(e.conditions.staggerTimer, e.conditions.staggerDuration)) {
+      e.conditions.isStaggered = false;
+      resetTimer(e.conditions.staggerTimer);
+      resetState(e);
+    }
+  }
+}
+
 export function updatePhysics(e: Entity) {
-  addVectorScaled(e.pos, e.vel, getDelta());
+  addVectorScaled(e.position, e.velocity, getDelta());
 }
 
 export function updateHitbox(e: Entity) {
   if (isPolygonValid(e.hitbox)) {
-    e.hitbox.x = e.pos.x + e.tweenPos.x;
-    e.hitbox.y = e.pos.y + e.tweenPos.y;
+    e.hitbox.x = e.position.x + e.tweenPos.x;
+    e.hitbox.y = e.position.y + e.tweenPos.y;
     const angle = e.angle + e.tweenAngle;
     setPolygonAngle(e.hitbox, e.isFlipped ? -angle : angle);
   }
@@ -215,20 +233,20 @@ export function updateAvoidance(e: Entity, scene: Scene) {
 }
 
 export function updateFlash(e: Entity) {
-  if (e.isFlashing && tickTimer(e.flashTimer, 100)) {
+  if (e.isFlashing && tickTimer(e.flashTimer, e.flashDuration)) {
     e.isFlashing = false;
     resetTimer(e.flashTimer);
   }
 }
 
 export function lookAt(e: Entity, target: Vector) {
-  e.isFlipped = target.x < e.pos.x;
+  e.isFlipped = target.x < e.position.x;
 }
 
 export function renderEntity(e: Entity, scene: Scene) {
   resetTransform();
   applyCameraTransform(scene.camera);
-  translateTransform(e.pos.x, e.pos.y);
+  translateTransform(e.position.x, e.position.y);
 
   if (e.isFlipped) {
     scaleTransform(-1, 1);
@@ -279,7 +297,7 @@ export function renderEntity(e: Entity, scene: Scene) {
 export function renderShadow(e: Entity, scene: Scene) {
   if (e.shadowId) {
     resetTransform();
-    translateTransform(e.pos.x, e.pos.y);
+    translateTransform(e.position.x, e.position.y);
     applyCameraTransform(scene.camera);
 
     if (e.isFlipped) {
@@ -292,8 +310,8 @@ export function renderShadow(e: Entity, scene: Scene) {
 }
 
 export function resetState(e: Entity) {
-  if (e.stateIdleId) {
-    e.stateNextId = e.stateIdleId;
+  if (e.stateStartId) {
+    e.stateNextId = e.stateStartId;
   } else {
     e.stateNextId = "";
   }

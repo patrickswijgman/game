@@ -7,7 +7,7 @@ import { updateMeleeEnemy } from "entities/enemies/melee.js";
 import { updateMapRoom } from "entities/map/room.js";
 import { updatePlayer } from "entities/player.js";
 import { updateTree } from "entities/tree.js";
-import { renderEntity, renderShadow, updateAvoidance, updateFlash, updateHitbox, updatePhysics } from "entity.js";
+import { renderEntity, renderShadow, updateAvoidance, updateConditions, updateFlash, updateHitbox, updatePhysics } from "entity.js";
 import { game, getCurrentScene, switchScene, transitionToNextScene } from "game.js";
 import { applyCameraTransform, drawTexture, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setFont, tickTimer, translateTransform, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, Scene, sortEntitiesOnDepth } from "scene.js";
@@ -66,6 +66,8 @@ run({
         continue;
       }
 
+      updateConditions(e);
+
       switch (e.type) {
         case "player":
           updatePlayer(e, scene);
@@ -93,7 +95,7 @@ run({
       updateFlash(e);
 
       if (e.isPlayer) {
-        updateCamera(scene.camera, e.pos.x, e.pos.y);
+        updateCamera(scene.camera, e.position.x, e.position.y);
       }
     }
 
@@ -134,7 +136,7 @@ run({
       if (e.isEnemy && e.stats.health < e.stats.healthMax) {
         resetTransform();
         applyCameraTransform(scene.camera);
-        translateTransform(e.pos.x, e.pos.y - e.height - 10);
+        translateTransform(e.position.x, e.position.y - e.height - 10);
         scaleTransform(0.5, 0.5);
         drawBar(-15, 0, e.stats.health, e.stats.healthMax, COLOR_HEALTH, 30, 8);
       }

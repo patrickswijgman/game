@@ -17,12 +17,17 @@ export function doDamage(scene: Scene, self: Entity, target: Entity) {
   }
 
   const damage = Math.max(1, totalStats.damage + bonusDamage);
+  const stagger = 100;
 
   target.stats.health -= damage;
+  target.conditions.isStaggered = true;
+  target.conditions.staggerDuration = stagger;
   target.isFlashing = true;
+  target.flashDuration = stagger;
+
   updateStats(target.stats);
 
-  newCombatText(scene, target.pos.x, target.pos.y - target.height - 10, damage.toString());
+  newCombatText(scene, target.position.x, target.position.y - target.height - 10, damage.toString());
 }
 
 export function generateStamina(e: Entity) {

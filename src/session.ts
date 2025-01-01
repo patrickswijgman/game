@@ -1,3 +1,4 @@
+import { Conditions, newConditions } from "conditions.js";
 import { DungeonMap, newDungeonMap } from "map.js";
 import { uuid } from "ridder";
 import { newStats, Stats } from "stats.js";
@@ -5,6 +6,7 @@ import { newStats, Stats } from "stats.js";
 export type Session = {
   id: string;
   stats: Stats;
+  conditions: Conditions;
   weaponId: string;
   armorId: string;
   map: DungeonMap;
@@ -24,6 +26,7 @@ export function newSession(): Session {
       intelligence: 10,
       movementSpeed: 1.5,
     }),
+    conditions: newConditions(),
     weaponId: "longsword",
     armorId: "",
     map: newDungeonMap(),

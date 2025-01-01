@@ -19,7 +19,7 @@ export function newMeleeEnemy(scene: Scene, x: number, y: number) {
   e.stats.intelligence = 8;
   e.stats.movementSpeed = 1;
   e.weaponId = "longsword";
-  e.stateIdleId = "seek";
+  e.stateStartId = "seek";
   e.stateNextId = "seek";
 
   return e;
@@ -37,11 +37,6 @@ export function updateMeleeEnemy(e: Entity, scene: Scene) {
 
 function onStateEnter(e: Entity, scene: Scene, state: string) {
   switch (state) {
-    case "idle":
-    case "seek":
-      e.isOutlineDangerVisible = false;
-      break;
-
     case "action":
       e.isOutlineDangerVisible = true;
       break;
@@ -57,7 +52,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
     case "seek":
       {
         const player = getPlayer(scene);
-        const distance = getVectorDistance(e.pos, player.pos);
+        const distance = getVectorDistance(e.position, player.position);
 
         if (distance < 20) {
           const weapon = getItem(e.weaponId);
@@ -65,12 +60,18 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
           return "action";
         }
 
-        seek(e, player.pos, e.stats.movementSpeed);
-        lookAt(e, player.pos);
+        seek(e, player.position, e.stats.movementSpeed);
+        lookAt(e, player.position);
         updateWalkAnimation(e);
       }
       break;
   }
 }
 
-function onStateExit() {}
+function onStateExit(e: Entity, scene: Scene, state: string) {
+  switch (state) {
+    case "action":
+      e.isOutlineDangerVisible = false;
+      break;
+  }
+}

@@ -17,7 +17,7 @@ export function newPlayer(scene: Scene, x: number, y: number) {
 
   e.stats = game.session.stats;
   e.weaponId = game.session.weaponId;
-  e.stateIdleId = "idle";
+  e.stateStartId = "idle";
   e.stateNextId = "idle";
   e.isPlayer = true;
 
@@ -73,26 +73,26 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
 function onStateExit() {}
 
 function move(e: Entity) {
-  resetVector(e.vel);
+  resetVector(e.velocity);
 
   if (isInputDown(InputCode.KEY_W)) {
-    e.vel.y -= 1;
+    e.velocity.y -= 1;
   }
   if (isInputDown(InputCode.KEY_S)) {
-    e.vel.y += 1;
+    e.velocity.y += 1;
   }
   if (isInputDown(InputCode.KEY_A)) {
-    e.vel.x -= 1;
+    e.velocity.x -= 1;
   }
   if (isInputDown(InputCode.KEY_D)) {
-    e.vel.x += 1;
+    e.velocity.x += 1;
   }
 
-  normalizeVector(e.vel);
-  copyVector(e.direction, e.vel);
-  scaleVector(e.vel, e.stats.movementSpeed);
+  normalizeVector(e.velocity);
+  copyVector(e.direction, e.velocity);
+  scaleVector(e.velocity, e.stats.movementSpeed);
 
-  return !!getVectorLength(e.vel);
+  return !!getVectorLength(e.velocity);
 }
 
 function doAction(e: Entity) {
@@ -106,7 +106,7 @@ function doAction(e: Entity) {
     }
   }
 
-  if (isInputPressed(InputCode.KEY_SPACE) && e.stats.stamina >= 20 && getVectorLength(e.vel)) {
+  if (isInputPressed(InputCode.KEY_SPACE) && e.stats.stamina >= 20 && getVectorLength(e.velocity)) {
     e.actionId = "dodge";
     e.stats.stamina -= 20;
     updateStats(e.stats);

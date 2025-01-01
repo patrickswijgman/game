@@ -2,8 +2,8 @@ import { Entity, resetState } from "entity.js";
 import { copyVector, scaleVector, tickTimer, tween } from "ridder";
 
 export function updateDodge(e: Entity) {
-  copyVector(e.vel, e.direction);
-  scaleVector(e.vel, e.stats.movementSpeed * 2);
+  copyVector(e.velocity, e.direction);
+  scaleVector(e.velocity, e.stats.movementSpeed * 2);
 
   e.isFlipped = e.direction.x < 0;
 

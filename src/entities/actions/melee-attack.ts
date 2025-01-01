@@ -6,8 +6,8 @@ import { EasingDictionary } from "ridder/lib/easings.js";
 import { destroyEntity, getEntity, Scene } from "scene.js";
 
 export function newMeleeAttack(scene: Scene, caster: Entity, target: Vector) {
-  const x = caster.pos.x + caster.centerOffset.x;
-  const y = caster.pos.y + caster.centerOffset.y;
+  const x = caster.position.x + caster.centerOffset.x;
+  const y = caster.position.y + caster.centerOffset.y;
 
   const e = newEntity(scene, "melee_attack", x, y);
   const weapon = getItem(caster.weaponId);
@@ -26,6 +26,11 @@ export function newMeleeAttack(scene: Scene, caster: Entity, target: Vector) {
 
 export function updateMeleeAttack(e: Entity, scene: Scene) {
   const caster = getEntity(scene, e.parentId);
+
+  if (caster.conditions.isStaggered) {
+    destroyEntity(scene, e);
+    return;
+  }
 
   if (caster.isDestroyed) {
     resetState(caster);
@@ -76,9 +81,9 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
 function swing(e: Entity, duration: number, from: number, to: number, easing: keyof EasingDictionary) {
   const angle = getAngle(e.start.x, e.start.y, e.target.x, e.target.y);
 
-  normalizeVector(e.pos);
-  angleVector(e.pos, angle);
-  addVector(e.pos, e.start);
+  normalizeVector(e.position);
+  angleVector(e.position, angle);
+  addVector(e.position, e.start);
   e.angle = angle;
 
   const completed = tickTimer(e.tweenTimer, duration);

@@ -20,7 +20,7 @@ export function renderDebugInfo(scene: Scene) {
     }
 
     if (e.radius) {
-      drawCircle(e.pos.x, e.pos.y, e.radius, "red", false);
+      drawCircle(e.position.x, e.position.y, e.radius, "red", false);
     }
   }
 

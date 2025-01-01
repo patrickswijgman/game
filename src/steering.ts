@@ -3,28 +3,28 @@ import { addVector, addVectorScaled, copyVector, getDelta, getVectorDistance, ge
 import { getEntity, Scene } from "scene.js";
 
 export function seek(e: Entity, target: Vector, speed: number) {
-  copyVector(e.vel, target);
-  subtractVector(e.vel, e.pos);
-  normalizeVector(e.vel);
-  scaleVector(e.vel, speed);
+  copyVector(e.velocity, target);
+  subtractVector(e.velocity, e.position);
+  normalizeVector(e.velocity);
+  scaleVector(e.velocity, speed);
 }
 
 export function avoid(e: Entity, scene: Scene) {
-  copyVector(e.ahead, e.pos);
-  addVector(e.ahead, e.vel);
+  copyVector(e.ahead, e.position);
+  addVector(e.ahead, e.velocity);
   resetVector(e.avoid);
 
   const closest = findClosestAhead(e, scene);
 
   if (closest) {
-    const distance = getVectorDistance(e.ahead, closest.pos);
+    const distance = getVectorDistance(e.ahead, closest.position);
 
     if (distance < closest.radius) {
       copyVector(e.avoid, e.ahead);
-      subtractVector(e.avoid, closest.pos);
+      subtractVector(e.avoid, closest.position);
       normalizeVector(e.avoid);
-      scaleVector(e.avoid, getVectorLength(e.vel));
-      addVectorScaled(e.vel, e.avoid, getDelta());
+      scaleVector(e.avoid, getVectorLength(e.velocity));
+      addVectorScaled(e.velocity, e.avoid, getDelta());
     }
   }
 }
@@ -41,7 +41,7 @@ function findClosestAhead(e: Entity, scene: Scene) {
     const c = getEntity(scene, id);
 
     if (c.radius) {
-      const d = getVectorDistance(e.ahead, c.pos);
+      const d = getVectorDistance(e.ahead, c.position);
 
       if (d < distance) {
         distance = d;

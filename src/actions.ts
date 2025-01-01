@@ -8,7 +8,7 @@ import { Stats, updateStats } from "stats.js";
 
 export function onActionEnter(e: Entity, scene: Scene) {
   const player = getEntity(scene, scene.playerId);
-  const target = e.isPlayer ? scene.camera.mousePosition : player.pos;
+  const target = e.isPlayer ? scene.camera.mousePosition : player.position;
 
   switch (e.actionId) {
     case "melee_attack":

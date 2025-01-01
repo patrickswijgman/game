@@ -69,7 +69,7 @@ export function sortEntitiesOnDepth(scene: Scene) {
   scene.visible.sort((idA, idB) => {
     const a = scene.entities[idA];
     const b = scene.entities[idB];
-    return a.pos.y - b.pos.y;
+    return a.position.y - b.position.y;
   });
 }
 
