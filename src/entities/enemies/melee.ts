@@ -1,6 +1,6 @@
 import { updateBreathAnimation } from "anims/breath.js";
 import { updateWalkAnimation } from "anims/walk.js";
-import { Entity, newEnemy, setConstraints, setSprites, updateState } from "entity.js";
+import { Entity, lookAt, newEnemy, setConstraints, setSprites, updateState } from "entity.js";
 import { getItem } from "items.js";
 import { getVectorDistance } from "ridder";
 import { getPlayer, Scene } from "scene.js";
@@ -66,9 +66,8 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
         }
 
         seek(e, player.pos, e.stats.movementSpeed);
+        lookAt(e, player.pos);
         updateWalkAnimation(e);
-
-        e.isFlipped = player.pos.x < e.pos.x;
       }
       break;
   }

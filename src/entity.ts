@@ -221,6 +221,10 @@ export function updateFlash(e: Entity) {
   }
 }
 
+export function lookAt(e: Entity, target: Vector) {
+  e.isFlipped = target.x < e.pos.x;
+}
+
 export function renderEntity(e: Entity, scene: Scene) {
   resetTransform();
   applyCameraTransform(scene.camera);

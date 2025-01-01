@@ -2,7 +2,7 @@ import { isActionValid, spendAction } from "actions.js";
 import { updateBreathAnimation } from "anims/breath.js";
 import { updateWalkAnimation } from "anims/walk.js";
 import { generateStamina } from "combat.js";
-import { Entity, newEntity, setConstraints, setSprites, updateState } from "entity.js";
+import { Entity, lookAt, newEntity, setConstraints, setSprites, updateState } from "entity.js";
 import { game } from "game.js";
 import { getItem } from "items.js";
 import { copyVector, getVectorLength, InputCode, isInputDown, isInputPressed, normalizeVector, resetVector, scaleVector, setCameraPosition } from "ridder";
@@ -46,8 +46,8 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
           return "move";
         }
 
+        lookAt(e, scene.camera.mousePosition);
         updateBreathAnimation(e);
-        look(e, scene);
         generateStamina(e);
       }
       break;
@@ -62,8 +62,8 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
           return "idle";
         }
 
+        lookAt(e, scene.camera.mousePosition);
         updateWalkAnimation(e);
-        look(e, scene);
         generateStamina(e);
       }
       break;
@@ -93,10 +93,6 @@ function move(e: Entity) {
   scaleVector(e.vel, e.stats.movementSpeed);
 
   return !!getVectorLength(e.vel);
-}
-
-function look(e: Entity, scene: Scene) {
-  e.isFlipped = scene.camera.mousePosition.x < e.pos.x;
 }
 
 function doAction(e: Entity) {

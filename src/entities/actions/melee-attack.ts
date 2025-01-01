@@ -50,6 +50,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
         }
       }
       break;
+
     case "release":
       {
         const completed = swing(e, weapon.releaseDuration, windup, release, "linear");
@@ -59,6 +60,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
         }
       }
       break;
+
     case "recovery":
       {
         if (swing(e, weapon.recoveryDuration, release, recovery, "easeOutCirc")) {
