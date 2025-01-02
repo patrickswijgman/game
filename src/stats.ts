@@ -50,6 +50,11 @@ export function updateStats(stats: Stats) {
   stats.stamina = clamp(stats.stamina, 0, stats.staminaMax);
 }
 
+export function fillStats(stats: Stats) {
+  stats.health = stats.healthMax;
+  stats.stamina = stats.staminaMax;
+}
+
 export function addStats(a: Stats, b: Stats) {
   a.damage += b.damage;
   a.strength += b.strength;

@@ -8,7 +8,7 @@ import { getPlayer, Scene } from "scene.js";
 export function newPortal(scene: Scene, x: number, y: number) {
   const e = newEntity(scene, "portal", x, y);
 
-  setSprites(e, "portal", 15, 31, 0, 0, true, 0, 6);
+  setSprites(e, "portal", 16, 31, 0, 0, true, 0, 6);
 
   return e;
 }

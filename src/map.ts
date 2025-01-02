@@ -15,10 +15,10 @@ export type DungeonMap = {
 };
 
 export const ROOM_TYPES_PER_LEVEL: Record<number, Array<string>> = {
-  1: ["bonfire"],
+  1: ["combat"],
   2: ["combat"],
   3: ["combat"],
-  4: ["combat"],
+  4: ["combat", "bonfire"],
   5: ["combat"],
   6: ["combat"],
   7: ["combat"],
@@ -38,13 +38,13 @@ export const ENEMY_TYPES_PER_LEVEL: Record<number, Array<string>> = {
 
 export const ENEMY_AMOUNT_PER_LEVEL: Record<number, [min: number, max: number]> = {
   1: [1, 2],
-  2: [1, 3],
-  3: [2, 3],
-  4: [2, 4],
-  5: [3, 4],
-  6: [3, 5],
-  7: [4, 5],
-  8: [4, 6],
+  2: [2, 3],
+  3: [3, 4],
+  4: [4, 5],
+  5: [5, 6],
+  6: [6, 7],
+  7: [7, 8],
+  8: [8, 9],
 };
 
 export function newDungeonMap() {

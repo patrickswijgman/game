@@ -170,7 +170,7 @@ export function setConstraints(e: Entity, width: number, height: number) {
   e.hitbox = polygonFromRect(e.position.x, e.position.y, rect(-width / 2, -height, width, height));
   e.width = width;
   e.height = height;
-  e.radius = width / 2;
+  e.radius = (width + height) / 2;
 }
 
 type StateLifecycleHook = (e: Entity, scene: Scene, state: string) => string | void;

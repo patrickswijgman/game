@@ -9,7 +9,7 @@ import { seek } from "steering.js";
 export function newMeleeEnemy(scene: Scene, x: number, y: number) {
   const e = newEnemy(scene, "enemy_melee", x, y);
 
-  setSprites(e, "bandit", 15, 31, 0, -4, true, 0, 2);
+  setSprites(e, "bandit", 16, 31, 0, -4, true, 0, 2);
   setConstraints(e, 10, 12);
 
   e.stats.health = 18;

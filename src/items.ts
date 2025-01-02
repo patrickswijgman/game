@@ -36,7 +36,7 @@ const items: Record<string, Item> = {
     }),
     hitbox: polygonFromRect(0, 0, rect(12, -2, 12, 4)),
     actionId: "melee_attack",
-    attackDuration: newAttack(0, 300, 150, 200),
+    attackDuration: newAttack(0, 300, 150, 100),
     attackArc: newAttack(0, -90, 90, 0),
   }),
 
@@ -52,7 +52,7 @@ const items: Record<string, Item> = {
     }),
     hitbox: polygonFromRect(0, 0, rect(12, -2, 12, 4)),
     actionId: "melee_attack",
-    attackDuration: newAttack(0, 400, 200, 300),
+    attackDuration: newAttack(0, 500, 200, 300),
     attackArc: newAttack(0, -90, 90, 0),
   }),
 };
