@@ -3,7 +3,7 @@ import { Conditions, newConditions } from "conditions.js";
 import { COLOR_TEXT } from "consts.js";
 import { renderPortal } from "entities/portal.js";
 import { drawOutlinedText } from "render.js";
-import { addVectorScaled, applyCameraTransform, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, polygonFromRect, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setPolygonAngle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
+import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, polygonFromRect, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setPolygonAngle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
 import { addEnemy, addEntity, Scene } from "scene.js";
 import { newStats, Stats } from "stats.js";
 import { avoid } from "steering.js";
@@ -39,6 +39,7 @@ export type Entity = {
   angle: number;
   shadowId: string;
   shadowOffset: Vector;
+  center: Vector;
   centerOffset: Vector;
   text: string;
   textAlign: TextAlign;
@@ -103,6 +104,7 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     angle: 0,
     shadowId: "",
     shadowOffset: vec(),
+    center: vec(),
     centerOffset: vec(),
     text: "",
     textAlign: "left",
@@ -221,15 +223,20 @@ export function updateConditions(e: Entity) {
   }
 }
 
+export function updateCenter(e: Entity) {
+  copyVector(e.center, e.position);
+  addVector(e.center, e.centerOffset);
+}
+
 export function updatePhysics(e: Entity) {
   addVectorScaled(e.position, e.velocity, getDelta());
 }
 
 export function updateHitbox(e: Entity) {
   if (isPolygonValid(e.hitbox)) {
-    e.hitbox.x = e.position.x + e.tweenPos.x;
-    e.hitbox.y = e.position.y + e.tweenPos.y;
     const angle = e.angle + e.tweenAngle;
+    copyVector(e.hitbox, e.position);
+    addVector(e.hitbox, e.tweenPos);
     setPolygonAngle(e.hitbox, e.isFlipped ? -angle : angle);
   }
 }

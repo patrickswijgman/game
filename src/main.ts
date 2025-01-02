@@ -8,7 +8,7 @@ import { updateMapRoom } from "entities/map/room.js";
 import { updatePlayer } from "entities/player.js";
 import { updatePortal } from "entities/portal.js";
 import { updateTree } from "entities/tree.js";
-import { renderEntity, renderShadow, updateAvoidance, updateConditions, updateFlash, updateHitbox, updatePhysics } from "entity.js";
+import { renderEntity, renderShadow, updateAvoidance, updateCenter, updateConditions, updateFlash, updateHitbox, updatePhysics } from "entity.js";
 import { game, getCurrentScene, switchScene, transitionToNextScene } from "game.js";
 import { applyCameraTransform, drawTexture, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setFont, tickTimer, translateTransform, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, Scene, sortEntitiesOnDepth } from "scene.js";
@@ -96,6 +96,7 @@ run({
       updateAvoidance(e, scene);
       updatePhysics(e);
       updateHitbox(e);
+      updateCenter(e);
       updateFlash(e);
 
       if (e.isPlayer) {
