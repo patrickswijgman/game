@@ -11,16 +11,16 @@ export function newMapRoom(scene: Scene, x: number, y: number, room: DungeonRoom
 
   switch (room.type) {
     case "start":
-      setSprites(e, "ui_map_start", 8, 8);
+      setSprites(e, "map_start", 8, 8);
       break;
     case "boss":
-      setSprites(e, "ui_map_boss", 8, 8);
+      setSprites(e, "map_boss", 8, 8);
       break;
     case "combat":
-      setSprites(e, "ui_map_combat", 8, 8);
+      setSprites(e, "map_combat", 8, 8);
       break;
     case "bonfire":
-      setSprites(e, "ui_map_bonfire", 8, 8);
+      setSprites(e, "map_bonfire", 8, 8);
       break;
   }
 

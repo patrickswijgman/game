@@ -17,11 +17,13 @@ export async function loadAssets() {
 
   loadSprite("item_longsword", "atlas", 0, 64, 32, 32);
 
-  loadSprites("ui_map_start", "atlas", 0, 176, 16, 16);
-  loadSprites("ui_map_combat", "atlas", 16, 176, 16, 16);
-  loadSprites("ui_map_boss", "atlas", 32, 176, 16, 16);
-  loadSprites("ui_map_current", "atlas", 48, 176, 16, 16);
-  loadSprites("ui_map_bonfire", "atlas", 64, 176, 16, 16);
+  loadSprites("map_start", "atlas", 0, 176, 16, 16);
+  loadSprites("map_combat", "atlas", 16, 176, 16, 16);
+  loadSprites("map_boss", "atlas", 32, 176, 16, 16);
+  loadSprites("map_current", "atlas", 48, 176, 16, 16);
+  loadSprites("map_bonfire", "atlas", 64, 176, 16, 16);
+
+  loadSprites("icon_experience", "atlas", 0, 192, 16, 16);
 
   loadRenderTexture("map_bg", 1024, 1024, (ctx, w, h) => {
     ctx.fillStyle = COLOR_PRIMARY;

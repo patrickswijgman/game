@@ -48,7 +48,7 @@ export function renderMapScene(scene: Scene) {
 
         if (room === getCurrentDungeonRoom(map)) {
           const tweenY = tween(0, 5, 500, "easeInOutSine", getElapsedTime());
-          drawSprite("ui_map_current", getX(room.x, map) - 8, getY(room.y) - 20 - tweenY);
+          drawSprite("map_current", getX(room.x, map) - 8, getY(room.y) - 20 - tweenY);
         }
       }
     }

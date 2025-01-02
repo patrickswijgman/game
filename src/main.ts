@@ -11,12 +11,12 @@ import { updateTree } from "entities/tree.js";
 import { updateExperienceOrb } from "entities/xp-orb.js";
 import { renderEntity, renderShadow, updateAvoidance, updateCenter, updateConditions, updateFlash, updateHitbox, updatePhysics } from "entity.js";
 import { game, getCurrentScene, switchScene, transitionToNextScene } from "game.js";
-import { drawOutlinedText } from "render.js";
 import { applyCameraTransform, drawTexture, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setFont, tickTimer, translateTransform, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, Scene, sortEntitiesOnDepth } from "scene.js";
 import { newMapScene, renderMapScene } from "scenes/map.js";
 import { newCombatRoomScene, updateCombatRoomScene } from "scenes/rooms/combat.js";
 import { drawBar } from "ui/bar.js";
+import { drawExperience } from "ui/experience.js";
 
 let isDebugging = false;
 
@@ -157,7 +157,8 @@ run({
       resetTransform();
       drawBar(10, 10, player.stats.health, player.stats.healthMax, COLOR_HEALTH, player.stats.healthMax, 10);
       drawBar(10, 25, player.stats.stamina, player.stats.staminaMax, COLOR_STAMINA, player.stats.staminaMax, 10);
-      drawOutlinedText(player.stats.experience.toString(), 10, 40);
+      translateTransform(10, 40);
+      drawExperience();
     }
 
     if (isDebugging) {

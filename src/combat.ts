@@ -22,22 +22,22 @@ export function doDamage(scene: Scene, self: Entity, target: Entity) {
   }
 
   const damage = Math.max(1, totalStats.damage + bonusDamage);
-  const stagger = 100;
+  const duration = 100;
 
   target.stats.health -= damage;
   updateStats(target.stats);
 
   target.isFlashing = true;
-  target.flashDuration = stagger;
+  target.flashDuration = duration;
 
   if (!target.conditions.isHyperArmor) {
     target.conditions.isStaggered = true;
-    target.conditions.staggerDuration = stagger;
+    target.conditions.staggerDuration = duration;
   }
 
   newCombatText(scene, target.position.x, target.position.y - target.height - 10, damage.toString());
 
-  if (target.stats.health === 0) {
+  if (target.isEnemy && target.stats.health === 0) {
     newExperienceOrb(scene, target.position.x, target.position.y, target.stats.experience);
   }
 }

@@ -8,7 +8,7 @@ export function newExperienceOrb(scene: Scene, x: number, y: number, experience:
   e.stats.experience = experience;
   e.tweenDuration = random(5, 10) * 100;
 
-  setSprites(e, "experience_orb", 8, 10, 0, 0, true, 0, 1);
+  setSprites(e, "experience_orb", 8, 10, 0, 0, true);
 
   return e;
 }
