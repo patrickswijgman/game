@@ -22,7 +22,7 @@ export function doDamage(scene: Scene, self: Entity, target: Entity) {
   }
 
   const damage = Math.max(1, totalStats.damage + bonusDamage);
-  const duration = 100;
+  const duration = totalStats.staggerDuration;
 
   target.stats.health -= damage;
   updateStats(target.stats);

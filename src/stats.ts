@@ -9,6 +9,7 @@ export type Stats = {
   staminaRegen: number;
   staminaCost: number;
   damage: number;
+  staggerDuration: number;
   strength: number;
   strengthScaling: number;
   dexterity: number;
@@ -31,6 +32,7 @@ export function newStats(stats: Partial<Stats> = {}): Stats {
     staminaRegen: 0,
     staminaCost: 0,
     damage: 0,
+    staggerDuration: 0,
     strength: 0,
     strengthScaling: 0,
     dexterity: 0,
@@ -57,6 +59,7 @@ export function fillStats(stats: Stats) {
 
 export function addStats(a: Stats, b: Stats) {
   a.damage += b.damage;
+  a.staggerDuration += b.staggerDuration;
   a.strength += b.strength;
   a.dexterity += b.dexterity;
   a.intelligence += b.intelligence;
