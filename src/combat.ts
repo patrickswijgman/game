@@ -2,7 +2,7 @@ import { newCombatText } from "entities/combat/text.js";
 import { newExperienceOrb } from "entities/xp-orb.js";
 import { Entity } from "entity.js";
 import { getItem } from "items.js";
-import { getDelta } from "ridder";
+import { getDelta, random } from "ridder";
 import { Scene } from "scene.js";
 import { addStats, getScalingValue, newStats, updateStats } from "stats.js";
 
@@ -38,7 +38,9 @@ export function doDamage(scene: Scene, self: Entity, target: Entity) {
   newCombatText(scene, target.position.x, target.position.y - target.height - 10, damage.toString());
 
   if (target.isEnemy && target.stats.health === 0) {
-    newExperienceOrb(scene, target.position.x, target.position.y, target.stats.experience);
+    for (let i = 0; i < target.stats.experience; i += 5) {
+      newExperienceOrb(scene, target.position.x + random(-8, 8), target.position.y + random(-8, 8), 5);
+    }
   }
 }
 
