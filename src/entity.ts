@@ -54,12 +54,13 @@ export type Entity = {
   lifeTimer: Timer;
   flashDuration: number;
   flashTimer: Timer;
-  tweenPos: Vector;
+  tweenPosition: Vector;
   tweenScale: Vector;
   tweenAngle: number;
   tweenAlpha: number;
   tweenTimer: Timer;
   tweenDuration: number;
+  timer: Timer;
   parentId: string;
   actionId: string;
   weaponId: string;
@@ -120,12 +121,13 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     lifeTimer: timer(),
     flashDuration: 0,
     flashTimer: timer(),
-    tweenPos: vec(),
+    tweenPosition: vec(),
     tweenScale: vec(1, 1),
     tweenAngle: 0,
     tweenAlpha: 1,
     tweenTimer: timer(),
     tweenDuration: 0,
+    timer: timer(),
     parentId: "",
     actionId: "",
     weaponId: "",
@@ -188,7 +190,7 @@ export function updateState(e: Entity, scene: Scene, onEnter: StateLifecycleHook
     resetTimer(e.stateTimer);
     resetVector(e.velocity);
     resetTimer(e.tweenTimer);
-    resetVector(e.tweenPos);
+    resetVector(e.tweenPosition);
     setVector(e.tweenScale, 1, 1);
     e.tweenAngle = 0;
 
@@ -239,7 +241,7 @@ export function updateHitbox(e: Entity) {
   if (isPolygonValid(e.hitbox)) {
     const angle = e.angle + e.tweenAngle;
     copyVector(e.hitbox, e.position);
-    addVector(e.hitbox, e.tweenPos);
+    addVector(e.hitbox, e.tweenPosition);
     setPolygonAngle(e.hitbox, e.isFlipped ? -angle : angle);
   }
 }
@@ -273,7 +275,7 @@ export function renderEntity(e: Entity, scene: Scene) {
   scaleTransform(e.scale.x, e.scale.y);
   rotateTransform(e.angle);
 
-  translateTransform(e.tweenPos.x, e.tweenPos.y);
+  translateTransform(e.tweenPosition.x, e.tweenPosition.y);
   scaleTransform(e.tweenScale.x, e.tweenScale.y);
   rotateTransform(e.tweenAngle);
 

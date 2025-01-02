@@ -12,6 +12,7 @@ import { updateTree } from "entities/tree.js";
 import { updateExperienceOrb } from "entities/xp-orb.js";
 import { renderEntity, renderShadow, updateAvoidance, updateCenter, updateConditions, updateFlash, updateHitbox, updatePhysics } from "entity.js";
 import { game, getCurrentScene, switchScene, transitionToNextScene } from "game.js";
+import { updatePortalParticle } from "particles/portal.js";
 import { applyCameraTransform, drawTexture, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setFont, tickTimer, translateTransform, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, Scene, sortEntitiesOnDepth } from "scene.js";
 import { newMapScene, renderMapScene } from "scenes/map.js";
@@ -97,6 +98,9 @@ run({
           break;
         case "bonfire":
           updateBonfire(e, scene);
+          break;
+        case "particle_portal":
+          updatePortalParticle(e, scene);
           break;
         case "map_room":
           updateMapRoom(e);

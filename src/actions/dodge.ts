@@ -14,7 +14,7 @@ export function onDodgeUpdate(e: Entity) {
 
   const completed = tickTimer(e.tweenTimer, 500);
   e.tweenAngle = tween(0, 360, 500, "easeInSine", e.tweenTimer.elapsed);
-  e.tweenPos.y = -tween(0, e.height * 0.8, 250, "easeOutSine", e.tweenTimer.elapsed);
+  e.tweenPosition.y = -tween(0, e.height * 0.8, 250, "easeOutSine", e.tweenTimer.elapsed);
 
   if (completed) {
     resetState(e);

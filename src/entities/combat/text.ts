@@ -22,6 +22,6 @@ export function newCombatText(scene: Scene, x: number, y: number, text: string) 
 
 export function updateCombatText(e: Entity) {
   tickTimer(e.tweenTimer, 1000);
-  e.tweenPos.x = tween(0, e.direction.x * 20, 1000, "linear", e.tweenTimer.elapsed);
-  e.tweenPos.y = tween(0, -40, 500, "easeOutSine", e.tweenTimer.elapsed);
+  e.tweenPosition.x = tween(0, e.direction.x * 20, 1000, "linear", e.tweenTimer.elapsed);
+  e.tweenPosition.y = tween(0, -40, 500, "easeOutSine", e.tweenTimer.elapsed);
 }

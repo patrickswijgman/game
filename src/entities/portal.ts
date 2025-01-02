@@ -1,8 +1,9 @@
 import { COLOR_BG, COLOR_TEXT } from "consts.js";
 import { Entity, newEntity, setSprites } from "entity.js";
 import { game, switchScene } from "game.js";
+import { newPortalParticle } from "particles/portal.js";
 import { drawOutlinedText } from "render.js";
-import { getVectorDistance, InputCode, isInputPressed, scaleTransform } from "ridder";
+import { getVectorDistance, InputCode, isInputPressed, random, resetTimer, scaleTransform, tickTimer } from "ridder";
 import { getPlayer, Scene } from "scene.js";
 
 export function newPortal(scene: Scene, x: number, y: number) {
@@ -16,6 +17,11 @@ export function newPortal(scene: Scene, x: number, y: number) {
 export function updatePortal(e: Entity, scene: Scene) {
   const player = getPlayer(scene);
   const distance = getVectorDistance(e.position, player.position);
+
+  if (tickTimer(e.timer, 100)) {
+    newPortalParticle(scene, e.position.x + random(-10, 10), e.position.y + random(-1, 1));
+    resetTimer(e.timer);
+  }
 
   if (distance < 20 && isInputPressed(InputCode.KEY_E)) {
     switchScene(game.sceneMapId);
