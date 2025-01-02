@@ -179,11 +179,11 @@ type StateLifecycleHook = (e: Entity, scene: Scene, state: string) => string | v
 
 export function updateState(e: Entity, scene: Scene, onEnter: StateLifecycleHook, onUpdate: StateLifecycleHook, onExit: StateLifecycleHook) {
   if (e.stateId !== e.stateNextId) {
+    onExit(e, scene, e.stateId);
+
     if (e.stateId === "action") {
       onActionExit(e, scene);
     }
-
-    onExit(e, scene, e.stateId);
 
     e.stateId = e.stateNextId;
 
@@ -194,18 +194,19 @@ export function updateState(e: Entity, scene: Scene, onEnter: StateLifecycleHook
     setVector(e.tweenScale, 1, 1);
     e.tweenAngle = 0;
 
+    onEnter(e, scene, e.stateId);
+
     if (e.stateId === "action") {
       onActionEnter(e, scene);
     }
-
-    onEnter(e, scene, e.stateId);
   }
+
+  const nextStateId = onUpdate(e, scene, e.stateId);
 
   if (e.stateId === "action") {
     onActionUpdate(e, scene);
   }
 
-  const nextStateId = onUpdate(e, scene, e.stateId);
   if (nextStateId) {
     e.stateNextId = nextStateId;
   }
