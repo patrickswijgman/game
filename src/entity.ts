@@ -1,9 +1,10 @@
 import { onActionEnter, onActionExit, onActionUpdate } from "actions.js";
 import { Conditions, newConditions } from "conditions.js";
 import { COLOR_TEXT } from "consts.js";
+import { renderBonfire } from "entities/bonfire.js";
 import { renderPortal } from "entities/portal.js";
 import { drawOutlinedText } from "render.js";
-import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, polygonFromRect, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setPolygonAngle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
+import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, polygonFromRect, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setPolygonAngle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
 import { addEnemy, addEntity, Scene } from "scene.js";
 import { newStats, Stats } from "stats.js";
 import { avoid } from "steering.js";
@@ -56,6 +57,7 @@ export type Entity = {
   tweenPos: Vector;
   tweenScale: Vector;
   tweenAngle: number;
+  tweenAlpha: number;
   tweenTimer: Timer;
   tweenDuration: number;
   parentId: string;
@@ -121,6 +123,7 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     tweenPos: vec(),
     tweenScale: vec(1, 1),
     tweenAngle: 0,
+    tweenAlpha: 1,
     tweenTimer: timer(),
     tweenDuration: 0,
     parentId: "",
@@ -274,6 +277,8 @@ export function renderEntity(e: Entity, scene: Scene) {
   scaleTransform(e.tweenScale.x, e.tweenScale.y);
   rotateTransform(e.tweenAngle);
 
+  setAlpha(e.tweenAlpha);
+
   if (e.textureId) {
     drawTexture(e.textureId, -e.pivot.x, -e.pivot.y);
   }
@@ -306,9 +311,14 @@ export function renderEntity(e: Entity, scene: Scene) {
     }
   }
 
+  setAlpha(1);
+
   switch (e.type) {
     case "portal":
       renderPortal(e, scene);
+      break;
+    case "bonfire":
+      renderBonfire(e, scene);
       break;
   }
 }

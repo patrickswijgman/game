@@ -1,4 +1,5 @@
 import { HEIGHT, WIDTH } from "consts.js";
+import { newBonfire } from "entities/bonfire.js";
 import { newPlayer } from "entities/player.js";
 import { newPortal } from "entities/portal.js";
 import { setRectangle, setVector } from "ridder";
@@ -13,6 +14,7 @@ export function newBonfireRoomScene(level: number) {
   initForestTheme(scene);
   newPlayer(scene, scene.playerStart.x, scene.playerStart.y);
   newPortal(scene, scene.portalPosition.x, scene.portalPosition.y);
+  newBonfire(scene, scene.bounds.w / 2, scene.bounds.h / 2);
 
   return scene;
 }

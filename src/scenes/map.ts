@@ -1,8 +1,8 @@
-import { COLOR_MAP_LINE, COLOR_MAP_LINE_DIM } from "consts.js";
+import { COLOR_BG, COLOR_MAP_LINE, COLOR_MAP_LINE_DIM } from "consts.js";
 import { newMapRoom } from "entities/map/room.js";
 import { game } from "game.js";
 import { DungeonMap, getCurrentDungeonRoom, isDungeonRoomVisited, isNextDungeonRoom } from "map.js";
-import { drawLine, drawSprite, getElapsedTime, getGridHeight, getGridValue, getGridWidth, getWidth, resetTransform, tween } from "ridder";
+import { drawLine, drawSprite, drawText, getElapsedTime, getGridHeight, getGridValue, getGridWidth, getWidth, resetTransform, scaleTransform, translateTransform, tween } from "ridder";
 import { newScene, Scene } from "scene.js";
 
 export function newMapScene() {
@@ -29,6 +29,25 @@ export function newMapScene() {
 
 export function renderMapScene(scene: Scene) {
   const { map } = game.session;
+
+  resetTransform();
+  translateTransform(10, 20);
+  scaleTransform(1.25, 1.25);
+  drawText("Legend", 0, 0, COLOR_BG);
+
+  resetTransform();
+  translateTransform(10, 40);
+  drawSprite("map_start", 0, 0);
+  drawText("- Start", 20, 8, COLOR_BG, "left", "middle");
+  translateTransform(0, 20);
+  drawSprite("map_bonfire", 0, 0);
+  drawText("- Bonfire", 20, 8, COLOR_BG, "left", "middle");
+  translateTransform(0, 20);
+  drawSprite("map_combat", 0, 0);
+  drawText("- Combat", 20, 8, COLOR_BG, "left", "middle");
+  translateTransform(0, 20);
+  drawSprite("map_boss", 0, 0);
+  drawText("- Boss", 20, 8, COLOR_BG, "left", "middle");
 
   resetTransform();
 

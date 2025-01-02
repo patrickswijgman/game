@@ -2,6 +2,7 @@ import { loadAssets } from "assets.js";
 import { COLOR_HEALTH, COLOR_STAMINA, HEIGHT, WIDTH } from "consts.js";
 import { renderDebugInfo } from "debug.js";
 import { updateMeleeAttack } from "entities/actions/melee-attack.js";
+import { updateBonfire } from "entities/bonfire.js";
 import { updateCombatText } from "entities/combat/text.js";
 import { updateMeleeEnemy } from "entities/enemies/melee.js";
 import { updateMapRoom } from "entities/map/room.js";
@@ -14,7 +15,8 @@ import { game, getCurrentScene, switchScene, transitionToNextScene } from "game.
 import { applyCameraTransform, drawTexture, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setFont, tickTimer, translateTransform, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, Scene, sortEntitiesOnDepth } from "scene.js";
 import { newMapScene, renderMapScene } from "scenes/map.js";
-import { newCombatRoomScene, updateCombatRoomScene } from "scenes/rooms/combat.js";
+import { newBonfireRoomScene } from "scenes/rooms/bonfire.js";
+import { updateCombatRoomScene } from "scenes/rooms/combat.js";
 import { drawBar } from "ui/bar.js";
 import { drawExperience } from "ui/experience.js";
 
@@ -32,7 +34,7 @@ run({
     let scene: Scene;
 
     scene = newMapScene();
-    scene = newCombatRoomScene(1);
+    scene = newBonfireRoomScene(1);
 
     switchScene(scene.id);
   },
@@ -92,6 +94,9 @@ run({
           break;
         case "portal":
           updatePortal(e, scene);
+          break;
+        case "bonfire":
+          updateBonfire(e, scene);
           break;
         case "map_room":
           updateMapRoom(e);

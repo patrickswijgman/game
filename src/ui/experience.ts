@@ -3,7 +3,7 @@ import { game } from "game.js";
 import { drawRect, drawSprite, drawText, scaleTransform, setAlpha, translateTransform } from "ridder";
 
 export function drawExperience() {
-  drawSprite("icon_experience", -2, -1);
+  drawSprite("icon_experience", -2, -2);
   setAlpha(0.25);
   drawRect(12, 0, 50, 13, COLOR_BG, true);
   setAlpha(1);
