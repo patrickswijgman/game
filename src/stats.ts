@@ -18,6 +18,7 @@ export type Stats = {
   movementSpeed: number;
   cooldown: number;
   cooldownReduction: number;
+  experience: number;
 };
 
 export function newStats(stats: Partial<Stats> = {}): Stats {
@@ -39,6 +40,7 @@ export function newStats(stats: Partial<Stats> = {}): Stats {
     movementSpeed: 0,
     cooldown: 0,
     cooldownReduction: 0,
+    experience: 0,
     ...stats,
   };
 }

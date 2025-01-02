@@ -1,4 +1,5 @@
 import { newCombatText } from "entities/combat/text.js";
+import { newExperienceOrb } from "entities/xp-orb.js";
 import { Entity } from "entity.js";
 import { getItem } from "items.js";
 import { getDelta } from "ridder";
@@ -35,6 +36,10 @@ export function doDamage(scene: Scene, self: Entity, target: Entity) {
   }
 
   newCombatText(scene, target.position.x, target.position.y - target.height - 10, damage.toString());
+
+  if (target.stats.health === 0) {
+    newExperienceOrb(scene, target.position.x, target.position.y, target.stats.experience);
+  }
 }
 
 export function generateStamina(e: Entity) {

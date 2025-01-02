@@ -18,6 +18,7 @@ export function newMeleeEnemy(scene: Scene, x: number, y: number) {
   e.stats.dexterity = 12;
   e.stats.intelligence = 8;
   e.stats.movementSpeed = 1;
+  e.stats.experience = 25;
   e.weaponId = "rusty_sword";
   e.stateStartId = "seek";
   e.stateNextId = "seek";

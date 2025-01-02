@@ -8,8 +8,10 @@ import { updateMapRoom } from "entities/map/room.js";
 import { updatePlayer } from "entities/player.js";
 import { updatePortal } from "entities/portal.js";
 import { updateTree } from "entities/tree.js";
+import { updateExperienceOrb } from "entities/xp-orb.js";
 import { renderEntity, renderShadow, updateAvoidance, updateCenter, updateConditions, updateFlash, updateHitbox, updatePhysics } from "entity.js";
 import { game, getCurrentScene, switchScene, transitionToNextScene } from "game.js";
+import { drawOutlinedText } from "render.js";
 import { applyCameraTransform, drawTexture, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setFont, tickTimer, translateTransform, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, Scene, sortEntitiesOnDepth } from "scene.js";
 import { newMapScene, renderMapScene } from "scenes/map.js";
@@ -78,6 +80,9 @@ run({
           break;
         case "enemy_melee":
           updateMeleeEnemy(e, scene);
+          break;
+        case "experience_orb":
+          updateExperienceOrb(e, scene);
           break;
         case "combat_text":
           updateCombatText(e);
@@ -152,6 +157,7 @@ run({
       resetTransform();
       drawBar(10, 10, player.stats.health, player.stats.healthMax, COLOR_HEALTH, player.stats.healthMax, 10);
       drawBar(10, 25, player.stats.stamina, player.stats.staminaMax, COLOR_STAMINA, player.stats.staminaMax, 10);
+      drawOutlinedText(player.stats.experience.toString(), 10, 40);
     }
 
     if (isDebugging) {
