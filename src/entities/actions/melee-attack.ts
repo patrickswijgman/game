@@ -52,7 +52,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
   switch (state) {
     case "windup":
       {
-        if (swing(e, weapon.arcDuration.windup, weapon.arcAngle.start, weapon.arcAngle.windup, "easeOutCirc")) {
+        if (swing(e, weapon.attackDuration.windup, weapon.attackArc.start, weapon.attackArc.windup, "easeOutCirc")) {
           return "release";
         }
       }
@@ -60,7 +60,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
 
     case "release":
       {
-        const completed = swing(e, weapon.arcDuration.release, weapon.arcAngle.windup, weapon.arcAngle.release, "linear");
+        const completed = swing(e, weapon.attackDuration.release, weapon.attackArc.windup, weapon.attackArc.release, "linear");
         doDamageToTargets(e, scene);
         if (completed) {
           return "recovery";
@@ -70,7 +70,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
 
     case "recovery":
       {
-        if (swing(e, weapon.arcDuration.recovery, weapon.arcAngle.release, weapon.arcAngle.recovery, "easeOutCirc")) {
+        if (swing(e, weapon.attackDuration.recovery, weapon.attackArc.release, weapon.attackArc.recovery, "easeOutCirc")) {
           const caster = getEntity(scene, e.parentId);
           resetState(caster);
           destroyEntity(scene, e);

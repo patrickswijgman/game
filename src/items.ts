@@ -1,12 +1,16 @@
 import { polygon, Polygon, polygonFromRect, rect, vec, Vector } from "ridder";
 import { newStats, Stats } from "stats.js";
 
-type Arc = {
+type Attack = {
   start: number;
   windup: number;
   release: number;
   recovery: number;
 };
+
+function newAttack(start = 0, windup = 0, release = 0, recovery = 0): Attack {
+  return { start, windup, release, recovery };
+}
 
 export type Item = {
   name: string;
@@ -15,8 +19,8 @@ export type Item = {
   stats: Stats;
   hitbox: Polygon;
   actionId: string;
-  arcDuration: Arc;
-  arcAngle: Arc;
+  attackDuration: Attack;
+  attackArc: Attack;
 };
 
 const items: Record<string, Item> = {
@@ -32,18 +36,8 @@ const items: Record<string, Item> = {
     }),
     hitbox: polygonFromRect(0, 0, rect(12, -2, 12, 4)),
     actionId: "melee_attack",
-    arcDuration: {
-      start: 0,
-      windup: 300,
-      release: 150,
-      recovery: 200,
-    },
-    arcAngle: {
-      start: 0,
-      windup: -90,
-      release: 90,
-      recovery: 0,
-    },
+    attackDuration: newAttack(0, 300, 150, 200),
+    attackArc: newAttack(0, -90, 90, 0),
   }),
 
   rusty_sword: newItem({
@@ -58,18 +52,8 @@ const items: Record<string, Item> = {
     }),
     hitbox: polygonFromRect(0, 0, rect(12, -2, 12, 4)),
     actionId: "melee_attack",
-    arcDuration: {
-      start: 0,
-      windup: 400,
-      release: 200,
-      recovery: 300,
-    },
-    arcAngle: {
-      start: 0,
-      windup: -90,
-      release: 90,
-      recovery: 0,
-    },
+    attackDuration: newAttack(0, 400, 200, 300),
+    attackArc: newAttack(0, -90, 90, 0),
   }),
 };
 
@@ -81,18 +65,8 @@ function newItem(item: Partial<Item>): Item {
     stats: newStats(),
     hitbox: polygon(),
     actionId: "",
-    arcDuration: {
-      start: 0,
-      windup: 0,
-      release: 0,
-      recovery: 0,
-    },
-    arcAngle: {
-      start: 0,
-      windup: 0,
-      release: 0,
-      recovery: 0,
-    },
+    attackDuration: newAttack(),
+    attackArc: newAttack(),
     ...item,
   };
 }
