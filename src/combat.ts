@@ -24,12 +24,15 @@ export function doDamage(scene: Scene, self: Entity, target: Entity) {
   const stagger = 100;
 
   target.stats.health -= damage;
-  target.conditions.isStaggered = true;
-  target.conditions.staggerDuration = stagger;
+  updateStats(target.stats);
+
   target.isFlashing = true;
   target.flashDuration = stagger;
 
-  updateStats(target.stats);
+  if (!target.conditions.isHyperArmor) {
+    target.conditions.isStaggered = true;
+    target.conditions.staggerDuration = stagger;
+  }
 
   newCombatText(scene, target.position.x, target.position.y - target.height - 10, damage.toString());
 }

@@ -1,7 +1,8 @@
 import { onActionEnter, onActionExit, onActionUpdate } from "actions.js";
 import { Conditions, newConditions } from "conditions.js";
-import { drawOutlinedText } from "engine/render.js";
+import { COLOR_TEXT } from "consts.js";
 import { renderPortal } from "entities/portal.js";
+import { drawOutlinedText } from "render.js";
 import { addVectorScaled, applyCameraTransform, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, polygonFromRect, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setPolygonAngle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
 import { addEnemy, addEntity, Scene } from "scene.js";
 import { newStats, Stats } from "stats.js";
@@ -106,7 +107,7 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     text: "",
     textAlign: "left",
     textBaseline: "top",
-    textColor: "white",
+    textColor: COLOR_TEXT,
     textOutline: "",
     width: 0,
     height: 0,

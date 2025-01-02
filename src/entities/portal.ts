@@ -1,7 +1,7 @@
-import { COLOR_BG } from "consts.js";
-import { drawOutlinedText } from "engine/render.js";
+import { COLOR_BG, COLOR_TEXT } from "consts.js";
 import { Entity, newEntity, setSprites } from "entity.js";
 import { game, switchScene } from "game.js";
+import { drawOutlinedText } from "render.js";
 import { getVectorDistance, InputCode, isInputPressed, scaleTransform } from "ridder";
 import { getPlayer, Scene } from "scene.js";
 
@@ -28,6 +28,6 @@ export function renderPortal(e: Entity, scene: Scene) {
 
   if (distance < 20) {
     scaleTransform(0.75, 0.75);
-    drawOutlinedText("Press [E] to go through the portal", 0, -50, "white", COLOR_BG, "center", "middle");
+    drawOutlinedText("Press [E] to go through the portal", 0, -50, COLOR_TEXT, COLOR_BG, "center", "middle");
   }
 }
