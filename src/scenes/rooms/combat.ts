@@ -36,7 +36,7 @@ function initLayout(scene: Scene) {
   const y = scene.safeArea.y + random(50, scene.safeArea.h - 100);
 
   setVector(scene.playerStart, x, y);
-  setVector(scene.portalPosition, scene.bounds.w / 2, scene.bounds.h / 2);
+  setVector(scene.portalPosition, w / 2, h / 2);
 }
 
 function addEnemies(scene: Scene) {

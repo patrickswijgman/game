@@ -3,6 +3,7 @@ import { game, switchScene } from "game.js";
 import { DungeonRoom, isNextDungeonRoom, visitDungeonRoom } from "map.js";
 import { copyVector, doesRectangleContain, getMousePosition, InputCode, isInputPressed, setRectangle } from "ridder";
 import { Scene } from "scene.js";
+import { newBonfireRoomScene } from "scenes/rooms/bonfire.js";
 import { newCombatRoomScene } from "scenes/rooms/combat.js";
 
 export function newMapRoom(scene: Scene, x: number, y: number, room: DungeonRoom) {
@@ -17,6 +18,9 @@ export function newMapRoom(scene: Scene, x: number, y: number, room: DungeonRoom
       break;
     case "combat":
       setSprites(e, "ui_map_combat", 8, 8);
+      break;
+    case "bonfire":
+      setSprites(e, "ui_map_bonfire", 8, 8);
       break;
   }
 
@@ -44,6 +48,9 @@ export function updateMapRoom(e: Entity) {
       switch (room.type) {
         case "combat":
           scene = newCombatRoomScene(room.y);
+          break;
+        case "bonfire":
+          scene = newBonfireRoomScene(room.y);
           break;
       }
 

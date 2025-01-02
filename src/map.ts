@@ -15,14 +15,14 @@ export type DungeonMap = {
 };
 
 export const ROOM_TYPES_PER_LEVEL: Record<number, Array<string>> = {
-  1: ["combat"],
+  1: ["bonfire"],
   2: ["combat"],
   3: ["combat"],
   4: ["combat"],
   5: ["combat"],
   6: ["combat"],
   7: ["combat"],
-  8: ["combat"],
+  8: ["bonfire"],
 };
 
 export const ENEMY_TYPES_PER_LEVEL: Record<number, Array<string>> = {
