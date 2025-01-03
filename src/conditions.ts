@@ -1,9 +1,9 @@
 import { Timer, timer } from "ridder";
 
 export type Conditions = {
-  staggerDuration: number;
-  staggerTimer: Timer;
-  isStaggered: boolean;
+  stunDuration: number;
+  stunTimer: Timer;
+  isStunned: boolean;
 
   invulnerableDuration: number;
   invulnerableTimer: Timer;
@@ -12,9 +12,9 @@ export type Conditions = {
 
 export function newConditions(conditions: Partial<Conditions> = {}): Conditions {
   return {
-    staggerDuration: 0,
-    staggerTimer: timer(),
-    isStaggered: false,
+    stunDuration: 0,
+    stunTimer: timer(),
+    isStunned: false,
 
     invulnerableDuration: 0,
     invulnerableTimer: timer(),

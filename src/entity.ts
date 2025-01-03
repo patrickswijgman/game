@@ -208,12 +208,12 @@ export function updateState(e: Entity, scene: Scene, onEnter: StateLifecycleHook
 }
 
 export function updateConditions(e: Entity) {
-  if (e.conditions.isStaggered) {
-    e.stateNextId = "stagger";
+  if (e.conditions.isStunned) {
+    e.stateNextId = "stun";
 
-    if (tickTimer(e.conditions.staggerTimer, e.conditions.staggerDuration)) {
-      e.conditions.isStaggered = false;
-      resetTimer(e.conditions.staggerTimer);
+    if (tickTimer(e.conditions.stunTimer, e.conditions.stunDuration)) {
+      e.conditions.isStunned = false;
+      resetTimer(e.conditions.stunTimer);
       resetState(e);
     }
   }
@@ -257,6 +257,12 @@ export function updateFlash(e: Entity) {
 
 export function lookAt(e: Entity, target: Vector) {
   e.isFlipped = target.x < e.position.x;
+}
+
+export function flash(e: Entity, duration: number) {
+  e.isFlashing = true;
+  e.flashDuration = duration;
+  resetTimer(e.flashTimer);
 }
 
 export function renderEntity(e: Entity, scene: Scene) {

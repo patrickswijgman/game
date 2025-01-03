@@ -1,6 +1,6 @@
 import { clamp } from "ridder";
 
-const CUM_STATS: Array<keyof Stats> = ["damage", "healthMax", "staminaMax", "stunMax", "stunDamage", "stunDuration", "strength", "dexterity", "intelligence", "movementSpeed"];
+const CUM_STATS: Array<keyof Stats> = ["damage", "healthMax", "staminaMax", "stunMax", "stunDamage", "strength", "dexterity", "intelligence", "movementSpeed"];
 
 export type Stats = {
   health: number;
@@ -13,7 +13,6 @@ export type Stats = {
   stun: number;
   stunMax: number;
   stunDamage: number;
-  stunDuration: number;
   damage: number;
   strength: number;
   strengthScaling: number;
@@ -39,7 +38,6 @@ export function newStats(stats: Partial<Stats> = {}): Stats {
     stun: 0,
     stunMax: 0,
     stunDamage: 0,
-    stunDuration: 0,
     damage: 0,
     strength: 0,
     strengthScaling: 0,

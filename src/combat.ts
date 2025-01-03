@@ -1,6 +1,6 @@
 import { newCombatText } from "entities/combat/text.js";
 import { newExperienceOrb } from "entities/xp-orb.js";
-import { Entity } from "entity.js";
+import { Entity, flash } from "entity.js";
 import { getItem } from "items.js";
 import { getDelta, random } from "ridder";
 import { Scene } from "scene.js";
@@ -28,14 +28,12 @@ export function doDamage(scene: Scene, caster: Entity, target: Entity) {
   updateStats(target.stats);
 
   if (target.stats.stun === target.stats.stunMax) {
-    target.conditions.isStaggered = true;
-    target.conditions.staggerDuration = totalStats.stunDuration;
+    target.conditions.isStunned = true;
+    target.conditions.stunDuration = 500;
     target.stats.stun = 0;
-    target.isFlashing = true;
-    target.flashDuration = totalStats.stunDuration;
+    flash(target, 500);
   } else {
-    target.isFlashing = true;
-    target.flashDuration = 100;
+    flash(target, 100);
   }
 
   newCombatText(scene, target.position.x, target.position.y - target.height - 10, damage.toString());
