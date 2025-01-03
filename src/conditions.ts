@@ -8,8 +8,6 @@ export type Conditions = {
   invulnerableDuration: number;
   invulnerableTimer: Timer;
   isInvulnerable: boolean;
-
-  isHyperArmor: boolean;
 };
 
 export function newConditions(conditions: Partial<Conditions> = {}): Conditions {
@@ -21,8 +19,6 @@ export function newConditions(conditions: Partial<Conditions> = {}): Conditions 
     invulnerableDuration: 0,
     invulnerableTimer: timer(),
     isInvulnerable: false,
-
-    isHyperArmor: false,
 
     ...conditions,
   };

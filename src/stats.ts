@@ -1,5 +1,7 @@
 import { clamp } from "ridder";
 
+const CUM_STATS: Array<keyof Stats> = ["damage", "healthMax", "staminaMax", "stunMax", "stunDamage", "stunDuration", "strength", "dexterity", "intelligence", "movementSpeed"];
+
 export type Stats = {
   health: number;
   healthMax: number;
@@ -8,8 +10,11 @@ export type Stats = {
   staminaMax: number;
   staminaRegen: number;
   staminaCost: number;
+  stun: number;
+  stunMax: number;
+  stunDamage: number;
+  stunDuration: number;
   damage: number;
-  staggerDuration: number;
   strength: number;
   strengthScaling: number;
   dexterity: number;
@@ -31,8 +36,11 @@ export function newStats(stats: Partial<Stats> = {}): Stats {
     staminaMax: 0,
     staminaRegen: 0,
     staminaCost: 0,
+    stun: 0,
+    stunMax: 0,
+    stunDamage: 0,
+    stunDuration: 0,
     damage: 0,
-    staggerDuration: 0,
     strength: 0,
     strengthScaling: 0,
     dexterity: 0,
@@ -50,6 +58,7 @@ export function newStats(stats: Partial<Stats> = {}): Stats {
 export function updateStats(stats: Stats) {
   stats.health = clamp(stats.health, 0, stats.healthMax);
   stats.stamina = clamp(stats.stamina, 0, stats.staminaMax);
+  stats.stun = clamp(stats.stun, 0, stats.stunMax);
 }
 
 export function fillStats(stats: Stats) {
@@ -58,12 +67,9 @@ export function fillStats(stats: Stats) {
 }
 
 export function addStats(a: Stats, b: Stats) {
-  a.damage += b.damage;
-  a.staggerDuration += b.staggerDuration;
-  a.strength += b.strength;
-  a.dexterity += b.dexterity;
-  a.intelligence += b.intelligence;
-  a.movementSpeed += b.movementSpeed;
+  for (const key of CUM_STATS) {
+    a[key] += b[key];
+  }
 }
 
 export function getModifier(stats: Stats, key: keyof Stats) {

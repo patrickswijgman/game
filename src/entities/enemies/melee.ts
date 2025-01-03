@@ -14,6 +14,7 @@ export function newMeleeEnemy(scene: Scene, x: number, y: number) {
 
   e.stats.health = 18;
   e.stats.healthMax = 18;
+  e.stats.stunMax = 100;
   e.stats.strength = 11;
   e.stats.dexterity = 12;
   e.stats.intelligence = 8;

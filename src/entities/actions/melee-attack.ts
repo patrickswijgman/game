@@ -31,17 +31,7 @@ export function updateMeleeAttack(e: Entity, scene: Scene) {
   updateState(e, scene, onStateEnter, onStateUpdate, onStateExit);
 }
 
-function onStateEnter(e: Entity, scene: Scene, state: string) {
-  const caster = getEntity(scene, e.parentId);
-
-  switch (state) {
-    case "release":
-      {
-        caster.conditions.isHyperArmor = true;
-      }
-      break;
-  }
-}
+function onStateEnter() {}
 
 function onStateUpdate(e: Entity, scene: Scene, state: string) {
   const weapon = getItem(e.weaponId);
@@ -77,17 +67,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
   }
 }
 
-function onStateExit(e: Entity, scene: Scene, state: string) {
-  const caster = getEntity(scene, e.parentId);
-
-  switch (state) {
-    case "recovery":
-      {
-        caster.conditions.isHyperArmor = false;
-      }
-      break;
-  }
-}
+function onStateExit() {}
 
 function swing(e: Entity, duration: number, from: number, to: number, easing: keyof EasingDictionary) {
   const angle = getAngle(e.start.x, e.start.y, e.target.x, e.target.y);

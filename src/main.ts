@@ -1,5 +1,5 @@
 import { loadAssets } from "assets.js";
-import { COLOR_HEALTH, COLOR_STAMINA, HEIGHT, WIDTH } from "consts.js";
+import { COLOR_HEALTH, COLOR_STAMINA, COLOR_STUN, HEIGHT, WIDTH } from "consts.js";
 import { renderDebugInfo } from "debug.js";
 import { updateMeleeAttack } from "entities/actions/melee-attack.js";
 import { updateBonfire } from "entities/bonfire.js";
@@ -140,6 +140,7 @@ run({
         translateTransform(e.position.x, e.position.y - e.height - 10);
         scaleTransform(0.5, 0.5);
         drawBar(-15, 0, e.stats.health, e.stats.healthMax, COLOR_HEALTH, 30, 8);
+        drawBar(-15, 8, e.stats.stun, e.stats.stunMax, COLOR_STUN, 30, 6);
       }
     }
 
@@ -148,7 +149,8 @@ run({
       resetTransform();
       drawBar(10, 10, player.stats.health, player.stats.healthMax, COLOR_HEALTH, player.stats.healthMax, 10);
       drawBar(10, 25, player.stats.stamina, player.stats.staminaMax, COLOR_STAMINA, player.stats.staminaMax, 10);
-      translateTransform(10, 40);
+      drawBar(10, 40, player.stats.stun, player.stats.stunMax, COLOR_STUN, player.stats.stunMax, 5);
+      translateTransform(10, 50);
       drawExperience();
     }
 

@@ -1,7 +1,7 @@
 import { isActionValid, spendAction } from "actions.js";
 import { updateBreathAnimation } from "anims/breath.js";
 import { updateWalkAnimation } from "anims/walk.js";
-import { generateStamina } from "combat.js";
+import { depleteStun, generateStamina } from "combat.js";
 import { Entity, lookAt, newEntity, setConstraints, setSprites, updateState } from "entity.js";
 import { game } from "game.js";
 import { getItem } from "items.js";
@@ -35,6 +35,8 @@ export function updatePlayer(e: Entity, scene: Scene) {
 function onStateEnter() {}
 
 function onStateUpdate(e: Entity, scene: Scene, state: string) {
+  depleteStun(e);
+
   switch (state) {
     case "idle":
       {
