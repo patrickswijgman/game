@@ -8,6 +8,7 @@ import { getVectorDistance, InputCode, isInputPressed, random, resetTimer, scale
 import { getPlayer, Scene } from "scene.js";
 import { newBonfireRoomScene } from "scenes/rooms/bonfire.js";
 import { newCombatRoomScene } from "scenes/rooms/combat.js";
+import { newStartRoomScene } from "scenes/rooms/start.js";
 
 export function newPortal(scene: Scene, x: number, y: number) {
   const e = newEntity(scene, "portal", x, y);
@@ -36,9 +37,11 @@ export function updatePortal(e: Entity, scene: Scene) {
       case "combat":
         scene = newCombatRoomScene(level);
         break;
-
       case "bonfire":
         scene = newBonfireRoomScene(level);
+        break;
+      default:
+        scene = newStartRoomScene();
         break;
     }
 
