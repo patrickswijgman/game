@@ -77,6 +77,18 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
   }
 }
 
+function onStateExit(e: Entity, scene: Scene, state: string) {
+  const caster = getEntity(scene, e.parentId);
+
+  switch (state) {
+    case "recovery":
+      {
+        caster.conditions.isHyperArmor = false;
+      }
+      break;
+  }
+}
+
 function swing(e: Entity, duration: number, from: number, to: number, easing: keyof EasingDictionary) {
   const angle = getAngle(e.start.x, e.start.y, e.target.x, e.target.y);
 
@@ -89,16 +101,4 @@ function swing(e: Entity, duration: number, from: number, to: number, easing: ke
   e.tweenAngle = tween(from, to, duration, easing, e.tweenTimer.elapsed);
 
   return completed;
-}
-
-function onStateExit(e: Entity, scene: Scene, state: string) {
-  const caster = getEntity(scene, e.parentId);
-
-  switch (state) {
-    case "recovery":
-      {
-        caster.conditions.isHyperArmor = false;
-      }
-      break;
-  }
 }

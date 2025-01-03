@@ -2,13 +2,12 @@ import { Entity, newEntity, setSprites } from "entity.js";
 import { random, tickTimer, tween } from "ridder";
 import { destroyEntity, getPlayer, Scene } from "scene.js";
 
-export function newExperienceOrb(scene: Scene, x: number, y: number, experience: number) {
+export function newExperienceOrb(scene: Scene, x: number, y: number) {
   const e = newEntity(scene, "experience_orb", x, y);
 
-  e.stats.experience = experience;
-  e.tweenDuration = random(5, 10) * 100;
-
   setSprites(e, "experience_orb", 8, 10, 0, 0, true);
+
+  e.tweenDuration = random(5, 10) * 100;
 
   return e;
 }
@@ -22,6 +21,5 @@ export function updateExperienceOrb(e: Entity, scene: Scene) {
 
   if (completed) {
     destroyEntity(scene, e);
-    player.stats.experience += e.stats.experience;
   }
 }

@@ -34,7 +34,7 @@ export async function loadAssets() {
   });
 
   loadRenderTexture("forest_bg", 1024, 1024, (ctx, w, h) => {
-    ctx.fillStyle = "#3d6457";
+    ctx.fillStyle = "#3d6556";
     ctx.fillRect(0, 0, w, h);
   });
 

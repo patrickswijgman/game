@@ -38,8 +38,10 @@ export function doDamage(scene: Scene, self: Entity, target: Entity) {
   newCombatText(scene, target.position.x, target.position.y - target.height - 10, damage.toString());
 
   if (target.isEnemy && target.stats.health === 0) {
+    self.stats.experience += target.stats.experience;
+
     for (let i = 0; i < target.stats.experience; i += 5) {
-      newExperienceOrb(scene, target.position.x + random(-8, 8), target.position.y + random(-8, 8), 5);
+      newExperienceOrb(scene, target.position.x + random(-8, 8), target.position.y + random(-8, 8));
     }
   }
 }

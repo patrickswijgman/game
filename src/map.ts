@@ -18,7 +18,7 @@ export const ROOM_TYPES_PER_LEVEL: Record<number, Array<string>> = {
   1: ["combat"],
   2: ["combat"],
   3: ["combat"],
-  4: ["combat", "bonfire"],
+  4: ["bonfire"],
   5: ["combat"],
   6: ["combat"],
   7: ["combat"],
