@@ -5,19 +5,17 @@ import { updateMeleeAttack } from "entities/actions/melee-attack.js";
 import { updateBonfire } from "entities/bonfire.js";
 import { updateCombatText } from "entities/combat/text.js";
 import { updateMeleeEnemy } from "entities/enemies/melee.js";
-import { updateMapRoom } from "entities/map/room.js";
 import { updatePlayer } from "entities/player.js";
 import { updatePortal } from "entities/portal.js";
 import { updateTree } from "entities/tree.js";
 import { updateExperienceOrb } from "entities/xp-orb.js";
 import { renderEntity, renderShadow, updateAvoidance, updateCenter, updateConditions, updateFlash, updateHitbox, updatePhysics } from "entity.js";
-import { game, getCurrentScene, switchScene, transitionToNextScene } from "game.js";
+import { getCurrentScene, switchScene, transitionToNextScene } from "game.js";
 import { updatePortalParticle } from "particles/portal.js";
 import { applyCameraTransform, drawTexture, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setFont, tickTimer, translateTransform, updateCamera } from "ridder";
-import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, Scene, sortEntitiesOnDepth } from "scene.js";
-import { newMapScene, renderMapScene } from "scenes/map.js";
-import { newBonfireRoomScene } from "scenes/rooms/bonfire.js";
+import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
 import { updateCombatRoomScene } from "scenes/rooms/combat.js";
+import { newStartRoomScene } from "scenes/rooms/start.js";
 import { drawBar } from "ui/bar.js";
 import { drawExperience } from "ui/experience.js";
 
@@ -32,10 +30,7 @@ run({
 
     setFont("default");
 
-    let scene: Scene;
-
-    scene = newMapScene();
-    scene = newBonfireRoomScene(1);
+    const scene = newStartRoomScene();
 
     switchScene(scene.id);
   },
@@ -47,10 +42,6 @@ run({
 
     if (isInputPressed(InputCode.KEY_H)) {
       isDebugging = !isDebugging;
-    }
-
-    if (isInputPressed(InputCode.KEY_M)) {
-      switchScene(game.sceneMapId);
     }
 
     transitionToNextScene();
@@ -102,9 +93,6 @@ run({
         case "particle_portal":
           updatePortalParticle(e, scene);
           break;
-        case "map_room":
-          updateMapRoom(e);
-          break;
       }
 
       updateAvoidance(e, scene);
@@ -131,12 +119,6 @@ run({
     if (scene.backgroundTextureId) {
       resetTransform();
       drawTexture(scene.backgroundTextureId, 0, 0);
-    }
-
-    switch (scene.type) {
-      case "map":
-        renderMapScene(scene);
-        break;
     }
 
     sortEntitiesOnDepth(scene);

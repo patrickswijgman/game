@@ -1,6 +1,6 @@
 import { COLOR_BG, COLOR_TEXT } from "consts.js";
 import { Entity, newEntity, setSprites } from "entity.js";
-import { game, switchScene } from "game.js";
+import { game } from "game.js";
 import { drawOutlinedText } from "render.js";
 import { getVectorDistance, InputCode, isInputPressed, scaleTransform } from "ridder";
 import { getPlayer, Scene } from "scene.js";
@@ -20,7 +20,6 @@ export function updateBonfire(e: Entity, scene: Scene) {
 
   if (distance < 20 && isInputPressed(InputCode.KEY_E)) {
     fillStats(game.session.stats);
-    switchScene(game.sceneMapId);
   }
 }
 

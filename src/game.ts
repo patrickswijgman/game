@@ -5,7 +5,6 @@ export type Game = {
   scenes: Record<string, Scene>;
   sceneId: string;
   sceneNextId: string;
-  sceneMapId: string;
   session: Session;
 };
 
@@ -13,7 +12,6 @@ export const game: Game = {
   scenes: {},
   sceneId: "",
   sceneNextId: "",
-  sceneMapId: "",
   session: newSession(),
 };
 

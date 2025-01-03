@@ -1,20 +1,8 @@
-import { getGridValue, Grid, grid, isInsideGridBounds, pick, random } from "ridder";
-
-export type DungeonRoom = {
-  type: string;
-  x: number;
-  y: number;
-  children: Array<DungeonRoom>;
-};
-
-export type DungeonMap = {
-  width: number;
-  height: number;
-  rooms: Grid<DungeonRoom>;
-  visited: Array<DungeonRoom>;
-};
+import { pick } from "ridder";
+import { table } from "table.js";
 
 export const ROOM_TYPES_PER_LEVEL: Record<number, Array<string>> = {
+  0: ["start"],
   1: ["combat"],
   2: ["combat"],
   3: ["combat"],
@@ -23,9 +11,11 @@ export const ROOM_TYPES_PER_LEVEL: Record<number, Array<string>> = {
   6: ["combat"],
   7: ["combat"],
   8: ["bonfire"],
+  9: ["boss"],
 };
 
 export const ENEMY_TYPES_PER_LEVEL: Record<number, Array<string>> = {
+  0: [],
   1: ["melee"],
   2: ["melee"],
   3: ["melee"],
@@ -34,9 +24,11 @@ export const ENEMY_TYPES_PER_LEVEL: Record<number, Array<string>> = {
   6: ["melee"],
   7: ["melee"],
   8: ["melee"],
+  9: ["boss"],
 };
 
 export const ENEMY_AMOUNT_PER_LEVEL: Record<number, [min: number, max: number]> = {
+  0: [0, 0],
   1: [1, 2],
   2: [2, 3],
   3: [3, 4],
@@ -45,81 +37,25 @@ export const ENEMY_AMOUNT_PER_LEVEL: Record<number, [min: number, max: number]> 
   6: [6, 7],
   7: [7, 8],
   8: [8, 9],
+  9: [1, 1],
 };
 
-export function newDungeonMap() {
-  const width = 5;
-  const height = 10;
+export type DungeonMap = {
+  rooms: Array<string>;
+  level: number;
+};
 
-  const map: DungeonMap = {
-    width,
-    height,
-    rooms: grid(width, height, (x, y) => ({ type: "", x, y, children: [] })),
-    visited: [],
+export function newDungeonMap(): DungeonMap {
+  return {
+    rooms: table(10, (level) => pick(ROOM_TYPES_PER_LEVEL[level])),
+    level: 0,
   };
-
-  generateRooms(map);
-
-  return map;
 }
 
-function generateRooms(map: DungeonMap) {
-  const center = Math.floor(map.width / 2);
-  const depth = map.height - 1;
-
-  const start = getGridValue(map.rooms, center, 0);
-  start.type = "start";
-
-  const end = getGridValue(map.rooms, center, depth);
-  end.type = "boss";
-
-  map.visited.push(start);
-
-  for (let i = 0; i < 3; i++) {
-    let prev = start;
-    let x = 0;
-    let y = 0;
-
-    for (let level = 1; level < depth; level++) {
-      while (true) {
-        x = prev.x + random(-1, 1);
-        y = level;
-
-        if (isInsideGridBounds(map.rooms, x, y)) {
-          break;
-        }
-      }
-
-      const room = getGridValue(map.rooms, x, y);
-      room.type = pick(ROOM_TYPES_PER_LEVEL[level]);
-
-      prev.children.push(room);
-      prev = room;
-
-      if (level === depth - 1) {
-        room.children.push(end);
-      }
-    }
-  }
-}
-
-export function visitDungeonRoom(map: DungeonMap, x: number, y: number) {
-  const room = getGridValue(map.rooms, x, y);
-  map.visited.push(room);
-  return room;
-}
-
-export function isDungeonRoomVisited(map: DungeonMap, x: number, y: number) {
-  const room = getGridValue(map.rooms, x, y);
-  return map.visited.includes(room);
-}
-
-export function isNextDungeonRoom(map: DungeonMap, x: number, y: number) {
-  const room = getGridValue(map.rooms, x, y);
-  const current = getCurrentDungeonRoom(map);
-  return current.children.includes(room);
+export function goToNextDungeonRoom(map: DungeonMap) {
+  return ++map.level;
 }
 
 export function getCurrentDungeonRoom(map: DungeonMap) {
-  return map.visited[map.visited.length - 1];
+  return map.rooms[map.level];
 }
