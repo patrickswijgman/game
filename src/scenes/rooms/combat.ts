@@ -1,5 +1,6 @@
 import { newQuickMeleeEnemy } from "entities/enemies/melee-quick.js";
 import { newMeleeEnemy } from "entities/enemies/melee.js";
+import { newRangedEnemy } from "entities/enemies/ranged.js";
 import { newPlayer } from "entities/player.js";
 import { newPortal } from "entities/portal.js";
 import { ENEMY_AMOUNT_PER_LEVEL, ENEMY_TYPES_PER_LEVEL } from "map.js";
@@ -55,6 +56,9 @@ function addEnemies(scene: Scene) {
         break;
       case "melee_quick":
         newQuickMeleeEnemy(scene, x, y);
+        break;
+      case "ranged":
+        newRangedEnemy(scene, x, y);
         break;
     }
   }

@@ -61,12 +61,14 @@ export type Entity = {
   tweenDuration: number;
   timer: Timer;
   parentId: string;
+  targetId: string;
   actionId: string;
   weaponId: string;
   blacklist: Array<string>;
   isPlayer: boolean;
   isEnemy: boolean;
   isFlipped: boolean;
+  isMirrored: boolean;
   isFlashing: boolean;
   isVisible: boolean;
   isOutlineVisible: boolean;
@@ -127,12 +129,14 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     tweenDuration: 0,
     timer: timer(),
     parentId: "",
+    targetId: "",
     actionId: "",
     weaponId: "",
     blacklist: [],
     isPlayer: false,
     isEnemy: false,
     isFlipped: false,
+    isMirrored: false,
     isFlashing: false,
     isVisible: true,
     isOutlineVisible: false,
@@ -279,6 +283,10 @@ export function renderEntity(e: Entity, scene: Scene) {
   translateTransform(e.tweenPosition.x, e.tweenPosition.y);
   scaleTransform(e.tweenScale.x, e.tweenScale.y);
   rotateTransform(e.tweenAngle);
+
+  if (e.isMirrored) {
+    scaleTransform(1, -1);
+  }
 
   setAlpha(e.tweenAlpha);
 

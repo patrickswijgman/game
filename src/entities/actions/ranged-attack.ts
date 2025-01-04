@@ -1,16 +1,16 @@
-import { destroyIfCasterIsInvalid, doDamageToTargets } from "actions.js";
+import { destroyIfCasterIsInvalid } from "actions.js";
+import { newArrow } from "entities/actions/arrow.js";
 import { Entity, newEntity, resetState, setSprites, updateState } from "entity.js";
 import { getItem } from "items.js";
-import { addVector, angleVector, copyPolygon, copyVector, getAngle, normalizeVector, scaleVector, subtractVector, tickTimer, tween, Vector } from "ridder";
-import { EasingDictionary } from "ridder/lib/easings.js";
+import { addVector, copyVector, getAngle, normalizeVector, scaleVector, subtractVector, tickTimer, tween, Vector } from "ridder";
 import { destroyEntity, getEntity, Scene } from "scene.js";
 
-export function newMeleeAttack(scene: Scene, caster: Entity, target: Vector) {
+export function newRangedAttack(scene: Scene, caster: Entity, target: Vector | string) {
   const x = caster.center.x;
   const y = caster.center.y;
   const weapon = getItem(caster.weaponId);
 
-  const e = newEntity(scene, "melee_attack", x, y);
+  const e = newEntity(scene, "ranged_attack", x, y);
 
   setSprites(e, weapon.spriteId, weapon.pivot.x, weapon.pivot.y);
 
@@ -19,13 +19,16 @@ export function newMeleeAttack(scene: Scene, caster: Entity, target: Vector) {
   e.parentId = caster.id;
   e.stateNextId = "windup";
 
-  copyPolygon(e.hitbox, weapon.hitbox);
-  copyVector(e.target, target);
+  if (typeof target === "string") {
+    e.targetId = target;
+  } else {
+    copyVector(e.target, target);
+  }
 
   return e;
 }
 
-export function updateMeleeAttack(e: Entity, scene: Scene) {
+export function updateRangedAttack(e: Entity, scene: Scene) {
   const caster = getEntity(scene, e.parentId);
 
   if (destroyIfCasterIsInvalid(e, scene, caster)) {
@@ -51,7 +54,9 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
   switch (state) {
     case "windup":
       {
-        if (swing(e, scene, weapon.attackDuration.windup, weapon.attackArc.start, weapon.attackArc.windup, "easeOutCirc")) {
+        aim(e, scene);
+
+        if (tickTimer(e.stateTimer, weapon.attackDuration.windup)) {
           return "release";
         }
       }
@@ -59,8 +64,22 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
 
     case "release":
       {
-        const completed = swing(e, scene, weapon.attackDuration.release, weapon.attackArc.windup, weapon.attackArc.release, "linear");
-        doDamageToTargets(e, scene);
+        const completed = tickTimer(e.tweenTimer, weapon.attackDuration.release);
+        const shootDuration = weapon.attackDuration.release / 2;
+
+        e.tweenScale.x = tween(1, 1.5, shootDuration, "easeInOutSine", e.tweenTimer.elapsed);
+        e.tweenScale.y = tween(1, 1.5, shootDuration, "easeInOutSine", e.tweenTimer.elapsed);
+
+        if (tickTimer(e.stateTimer, shootDuration)) {
+          const target = getEntity(scene, e.targetId);
+
+          if (target) {
+            newArrow(scene, e, target.center);
+          } else {
+            newArrow(scene, e, e.target);
+          }
+        }
+
         if (completed) {
           return "recovery";
         }
@@ -69,7 +88,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
 
     case "recovery":
       {
-        if (swing(e, scene, weapon.attackDuration.recovery, weapon.attackArc.release, weapon.attackArc.recovery, "easeOutCirc")) {
+        if (tickTimer(e.stateTimer, weapon.attackDuration.recovery)) {
           const caster = getEntity(scene, e.parentId);
           resetState(caster);
           destroyEntity(scene, e);
@@ -81,24 +100,26 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
 
 function onStateExit() {}
 
-function swing(e: Entity, scene: Scene, duration: number, from: number, to: number, easing: keyof EasingDictionary) {
+function aim(e: Entity, scene: Scene) {
   const caster = getEntity(scene, e.parentId);
 
-  const completed = tickTimer(e.tweenTimer, duration);
-  const tweenAngle = tween(from, to, duration, easing, e.tweenTimer.elapsed);
-  const baseAngle = getAngle(caster.center.x, caster.center.y, e.target.x, e.target.y);
-  const angle = baseAngle + tweenAngle;
+  if (e.targetId) {
+    const target = getEntity(scene, e.targetId);
+    e.target = target.center;
+  }
 
   copyVector(e.direction, e.target);
   subtractVector(e.direction, caster.center);
   normalizeVector(e.direction);
   scaleVector(e.direction, caster.radius + 2);
-  angleVector(e.direction, angle);
 
   copyVector(e.position, caster.center);
   addVector(e.position, e.direction);
 
-  e.angle = angle;
+  const angle = getAngle(e.position.x, e.position.y, e.target.x, e.target.y);
+  const isFlipped = e.target.x < e.position.x;
 
-  return completed;
+  e.angle = angle;
+  e.isMirrored = isFlipped;
+  caster.isFlipped = isFlipped;
 }

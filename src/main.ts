@@ -1,12 +1,15 @@
 import { loadAssets } from "assets.js";
 import { COLOR_BG, COLOR_HEALTH, COLOR_STAMINA, COLOR_STUN, COLOR_TEXT, HEIGHT, WIDTH } from "consts.js";
 import { renderDebugInfo } from "debug.js";
+import { updateArrow } from "entities/actions/arrow.js";
 import { updateBite } from "entities/actions/bite.js";
 import { updateMeleeAttack } from "entities/actions/melee-attack.js";
+import { updateRangedAttack } from "entities/actions/ranged-attack.js";
 import { updateBonfire } from "entities/bonfire.js";
 import { updateCombatText } from "entities/combat/text.js";
 import { updateQuickMeleeEnemy } from "entities/enemies/melee-quick.js";
 import { updateMeleeEnemy } from "entities/enemies/melee.js";
+import { updateRangedEnemy } from "entities/enemies/ranged.js";
 import { updatePlayer } from "entities/player.js";
 import { updatePortal } from "entities/portal.js";
 import { updateTree } from "entities/tree.js";
@@ -78,6 +81,9 @@ run({
         case "enemy_melee_quick":
           updateQuickMeleeEnemy(e, scene);
           break;
+        case "enemy_ranged":
+          updateRangedEnemy(e, scene);
+          break;
         case "experience_orb":
           updateExperienceOrb(e, scene);
           break;
@@ -98,6 +104,12 @@ run({
           break;
         case "melee_attack":
           updateMeleeAttack(e, scene);
+          break;
+        case "ranged_attack":
+          updateRangedAttack(e, scene);
+          break;
+        case "arrow":
+          updateArrow(e, scene);
           break;
         case "bite":
           updateBite(e, scene);

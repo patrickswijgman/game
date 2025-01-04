@@ -12,7 +12,7 @@ import { updateStats } from "stats.js";
 export function newPlayer(scene: Scene, x: number, y: number) {
   const e = newEntity(scene, "player", x, y);
 
-  setSprites(e, "player", 16, 31, 0, -4, true, 0, 2);
+  setSprites(e, "player", 16, 31, 0, -5, true, 0, 2);
   setConstraints(e, 10, 12);
 
   e.stats = game.session.stats;

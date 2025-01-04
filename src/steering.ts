@@ -9,6 +9,13 @@ export function seek(e: Entity, target: Vector, speed: number) {
   scaleVector(e.velocity, speed);
 }
 
+export function flee(e: Entity, target: Vector, speed: number) {
+  copyVector(e.velocity, e.position);
+  subtractVector(e.velocity, target);
+  normalizeVector(e.velocity);
+  scaleVector(e.velocity, speed);
+}
+
 export function avoid(e: Entity, scene: Scene) {
   copyVector(e.ahead, e.position);
   addVector(e.ahead, e.velocity);

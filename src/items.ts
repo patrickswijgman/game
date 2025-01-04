@@ -27,7 +27,7 @@ const items: Record<string, Item> = {
   longsword: newItem({
     name: "Longsword",
     spriteId: "longsword",
-    pivot: vec(0, 15.5),
+    pivot: vec(16, 15.5),
     stats: newStats({
       damage: 8,
       strengthScaling: 1,
@@ -35,16 +35,16 @@ const items: Record<string, Item> = {
       staminaCost: 30,
       stunDamage: 50,
     }),
-    hitbox: polygonFromRect(0, 0, rect(12, -2, 12, 4)),
+    hitbox: polygonFromRect(0, 0, rect(-2, -2, 12, 4)),
     actionId: "melee_attack",
     attackDuration: newAttack(0, 300, 150, 100),
-    attackArc: newAttack(0, -90, 90, 0),
+    attackArc: newAttack(0, -90, 90, 45),
   }),
 
-  rusty_sword: newItem({
-    name: "Rusty sword",
+  worn_longsword: newItem({
+    name: "Worn Longsword",
     spriteId: "longsword",
-    pivot: vec(0, 15.5),
+    pivot: vec(16, 15.5),
     stats: newStats({
       damage: 6,
       strengthScaling: 1,
@@ -52,10 +52,25 @@ const items: Record<string, Item> = {
       staminaCost: 30,
       stunDamage: 25,
     }),
-    hitbox: polygonFromRect(0, 0, rect(12, -2, 12, 4)),
+    hitbox: polygonFromRect(0, 0, rect(-2, -2, 12, 4)),
     actionId: "melee_attack",
     attackDuration: newAttack(0, 500, 200, 300),
-    attackArc: newAttack(0, -90, 90, 0),
+    attackArc: newAttack(0, -90, 90, 45),
+  }),
+
+  light_crossbow: newItem({
+    name: "Light Crossbow",
+    spriteId: "crossbow",
+    pivot: vec(16, 15.5),
+    stats: newStats({
+      damage: 8,
+      dexterityScaling: 1,
+      staminaCost: 30,
+      stunDamage: 25,
+      range: 100,
+    }),
+    actionId: "ranged_attack",
+    attackDuration: newAttack(0, 750, 200, 300),
   }),
 };
 

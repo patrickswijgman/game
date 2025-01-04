@@ -16,10 +16,12 @@ export async function loadAssets() {
   loadSprites("experience_orb", "atlas", 64, 96, 16, 16);
   loadSprites("bonfire", "atlas", 80, 96, 32, 32);
 
-  loadSprites("particle_portal", "atlas", 0, 160, 16, 16);
-
   loadSprite("longsword", "atlas", 0, 64, 32, 32);
   loadSprite("bite", "atlas", 32, 64, 32, 32);
+  loadSprite("crossbow", "atlas", 64, 64, 32, 32);
+  loadSprite("arrow", "atlas", 96, 64, 32, 32);
+
+  loadSprites("particle_portal", "atlas", 0, 160, 16, 16);
 
   loadSprites("icon_experience", "atlas", 0, 192, 16, 16);
 

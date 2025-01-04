@@ -14,6 +14,7 @@ export type Stats = {
   stunMax: number;
   stunDamage: number;
   damage: number;
+  range: number;
   strength: number;
   strengthScaling: number;
   dexterity: number;
@@ -39,6 +40,7 @@ export function newStats(stats: Partial<Stats> = {}): Stats {
     stunMax: 0,
     stunDamage: 0,
     damage: 0,
+    range: 0,
     strength: 0,
     strengthScaling: 0,
     dexterity: 0,

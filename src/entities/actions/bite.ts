@@ -3,7 +3,8 @@ import { Entity, newEntity, resetState, setSprites, updateState } from "entity.j
 import { polygonFromRect, rect, tickTimer } from "ridder";
 import { destroyEntity, getEntity, Scene } from "scene.js";
 
-export function newBite(scene: Scene, caster: Entity, target: Entity) {
+export function newBite(scene: Scene, caster: Entity, targetId: string) {
+  const target = getEntity(scene, targetId);
   const x = target.center.x;
   const y = target.center.y;
 
@@ -29,7 +30,15 @@ export function updateBite(e: Entity, scene: Scene) {
   updateState(e, scene, onStateEnter, onStateUpdate, onStateExit);
 }
 
-function onStateEnter() {}
+function onStateEnter(e: Entity, scene: Scene, state: string) {
+  const caster = getEntity(scene, e.parentId);
+
+  switch (state) {
+    case "recovery":
+      caster.isOutlineDangerVisible = false;
+      break;
+  }
+}
 
 function onStateUpdate(e: Entity, scene: Scene, state: string) {
   switch (state) {

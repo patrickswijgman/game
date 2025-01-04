@@ -2,6 +2,7 @@ import { onDodgeEnter, onDodgeExit, onDodgeUpdate } from "actions/dodge.js";
 import { doDamage } from "combat.js";
 import { newBite } from "entities/actions/bite.js";
 import { newMeleeAttack } from "entities/actions/melee-attack.js";
+import { newRangedAttack } from "entities/actions/ranged-attack.js";
 import { Entity, resetState } from "entity.js";
 import { doPolygonsIntersect } from "ridder";
 import { destroyEntity, getEntity, Scene } from "scene.js";
@@ -9,12 +10,15 @@ import { Stats, updateStats } from "stats.js";
 
 export function onActionEnter(e: Entity, scene: Scene) {
   const player = getEntity(scene, scene.playerId);
-  const target = e.isPlayer ? scene.camera.mousePosition : player.position;
-  const enemy = e.isPlayer ? e : player;
+  const target = e.isPlayer ? scene.camera.mousePosition : player.center;
+  const enemy = e.isPlayer ? e.id : player.id;
 
   switch (e.actionId) {
     case "melee_attack":
       newMeleeAttack(scene, e, target);
+      break;
+    case "ranged_attack":
+      newRangedAttack(scene, e, enemy);
       break;
     case "bite":
       newBite(scene, e, enemy);
