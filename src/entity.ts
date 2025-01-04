@@ -5,7 +5,7 @@ import { renderBonfire } from "entities/bonfire.js";
 import { renderPortal } from "entities/portal.js";
 import { drawOutlinedText } from "render.js";
 import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, polygonFromRect, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setPolygonAngle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
-import { addEnemy, addEntity, Scene } from "scene.js";
+import { addEntity, Scene } from "scene.js";
 import { newStats, Stats } from "stats.js";
 import { avoid } from "steering.js";
 
@@ -48,7 +48,7 @@ export type Entity = {
   textOutline: string;
   width: number;
   height: number;
-  roomCoordinates: Vector;
+  depth: number;
   lifetime: number;
   lifeTimer: Timer;
   flashDuration: number;
@@ -68,6 +68,7 @@ export type Entity = {
   isEnemy: boolean;
   isFlipped: boolean;
   isFlashing: boolean;
+  isVisible: boolean;
   isOutlineVisible: boolean;
   isOutlineDangerVisible: boolean;
   isDestroyed: boolean;
@@ -113,7 +114,7 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     textOutline: "",
     width: 0,
     height: 0,
-    roomCoordinates: vec(),
+    depth: 0,
     lifetime: 0,
     lifeTimer: timer(),
     flashDuration: 0,
@@ -133,17 +134,11 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     isEnemy: false,
     isFlipped: false,
     isFlashing: false,
+    isVisible: true,
     isOutlineVisible: false,
     isOutlineDangerVisible: false,
     isDestroyed: false,
   });
-}
-
-export function newEnemy(scene: Scene, type: string, x: number, y: number) {
-  const e = newEntity(scene, type, x, y);
-  e.isEnemy = true;
-  addEnemy(scene, e);
-  return e;
 }
 
 export function setSprites(e: Entity, id: string, pivotX: number, pivotY: number, centerOffsetX = 0, centerOffsetY = 0, shadow = false, shadowOffsetX = 0, shadowOffsetY = 0) {
@@ -266,6 +261,10 @@ export function flash(e: Entity, duration: number) {
 }
 
 export function renderEntity(e: Entity, scene: Scene) {
+  if (!e.isVisible) {
+    return;
+  }
+
   resetTransform();
   applyCameraTransform(scene.camera);
   translateTransform(e.position.x, e.position.y);
@@ -325,6 +324,10 @@ export function renderEntity(e: Entity, scene: Scene) {
 
 export function renderShadow(e: Entity, scene: Scene) {
   if (e.shadowId) {
+    if (!e.isVisible) {
+      return;
+    }
+
     resetTransform();
     translateTransform(e.position.x, e.position.y);
     applyCameraTransform(scene.camera);

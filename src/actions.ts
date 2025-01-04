@@ -1,5 +1,6 @@
 import { onDodgeEnter, onDodgeExit, onDodgeUpdate } from "actions/dodge.js";
 import { doDamage } from "combat.js";
+import { newBite } from "entities/actions/bite.js";
 import { newMeleeAttack } from "entities/actions/melee-attack.js";
 import { Entity, resetState } from "entity.js";
 import { doPolygonsIntersect } from "ridder";
@@ -9,12 +10,15 @@ import { Stats, updateStats } from "stats.js";
 export function onActionEnter(e: Entity, scene: Scene) {
   const player = getEntity(scene, scene.playerId);
   const target = e.isPlayer ? scene.camera.mousePosition : player.position;
+  const enemy = e.isPlayer ? e : player;
 
   switch (e.actionId) {
     case "melee_attack":
       newMeleeAttack(scene, e, target);
       break;
-
+    case "bite":
+      newBite(scene, e, enemy);
+      break;
     case "dodge":
       onDodgeEnter(e);
       break;
@@ -38,18 +42,25 @@ export function onActionExit(e: Entity, scene: Scene) {
 }
 
 export function doDamageToTargets(e: Entity, scene: Scene) {
-  const caster = getEntity(scene, e.parentId);
-  const targets = e.isPlayer || caster.isPlayer ? scene.enemies : scene.allies;
+  let source: Entity;
+
+  if (e.parentId) {
+    source = getEntity(scene, e.parentId);
+  } else {
+    source = e;
+  }
+
+  const targets = source.isPlayer ? scene.enemies : scene.allies;
 
   for (const id of targets) {
-    if (id === e.id || id === e.parentId) {
+    if (id === e.id || id === source.id) {
       continue;
     }
 
     const target = getEntity(scene, id);
 
     if (!target.isDestroyed && !e.blacklist.includes(id) && doPolygonsIntersect(e.hitbox, target.hitbox)) {
-      doDamage(scene, caster, target);
+      doDamage(scene, source, target);
       e.blacklist.push(target.id);
     }
   }

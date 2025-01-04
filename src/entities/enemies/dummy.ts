@@ -1,4 +1,5 @@
-import { newEnemy, setConstraints, setSprites } from "entity.js";
+import { newEnemy } from "enemy.js";
+import { setConstraints, setSprites } from "entity.js";
 import { Scene } from "scene.js";
 
 export function newDummy(scene: Scene, x: number, y: number) {

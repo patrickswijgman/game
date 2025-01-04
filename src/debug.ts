@@ -8,7 +8,7 @@ export function renderDebugInfo(scene: Scene) {
 
   drawRectInstance(scene.safeArea, "purple");
 
-  for (const id of scene.active) {
+  for (const id of scene.update) {
     const e = getEntity(scene, id);
 
     if (isPolygonValid(e.hitbox)) {

@@ -33,7 +33,7 @@ function findClosestAhead(e: Entity, scene: Scene) {
   let distance = Infinity;
   let closest: Entity | null = null;
 
-  for (const id of scene.active) {
+  for (const id of scene.update) {
     if (id === e.id) {
       continue;
     }

@@ -59,9 +59,11 @@ export function updateStats(stats: Stats) {
   stats.stun = clamp(stats.stun, 0, stats.stunMax);
 }
 
-export function fillStats(stats: Stats) {
+export function restoreStats(stats: Stats) {
   stats.health = stats.healthMax;
   stats.stamina = stats.staminaMax;
+  stats.stun = 0;
+  updateStats(stats);
 }
 
 export function addStats(a: Stats, b: Stats) {

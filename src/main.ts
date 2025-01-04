@@ -1,17 +1,20 @@
 import { loadAssets } from "assets.js";
-import { COLOR_HEALTH, COLOR_STAMINA, COLOR_STUN, HEIGHT, WIDTH } from "consts.js";
+import { COLOR_BG, COLOR_HEALTH, COLOR_STAMINA, COLOR_STUN, COLOR_TEXT, HEIGHT, WIDTH } from "consts.js";
 import { renderDebugInfo } from "debug.js";
+import { updateBite } from "entities/actions/bite.js";
 import { updateMeleeAttack } from "entities/actions/melee-attack.js";
 import { updateBonfire } from "entities/bonfire.js";
 import { updateCombatText } from "entities/combat/text.js";
+import { updateQuickMeleeEnemy } from "entities/enemies/melee-quick.js";
 import { updateMeleeEnemy } from "entities/enemies/melee.js";
 import { updatePlayer } from "entities/player.js";
 import { updatePortal } from "entities/portal.js";
 import { updateTree } from "entities/tree.js";
 import { updateExperienceOrb } from "entities/xp-orb.js";
 import { renderEntity, renderShadow, updateAvoidance, updateCenter, updateConditions, updateFlash, updateHitbox, updatePhysics } from "entity.js";
-import { getCurrentScene, switchScene, transitionToNextScene } from "game.js";
+import { game, getCurrentScene, switchScene, transitionToNextScene } from "game.js";
 import { updatePortalParticle } from "particles/portal.js";
+import { drawOutlinedText } from "render.js";
 import { applyCameraTransform, drawTexture, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setFont, tickTimer, translateTransform, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
 import { updateCombatRoomScene } from "scenes/rooms/combat.js";
@@ -50,7 +53,7 @@ run({
 
     cleanupDestroyedEntities(scene);
 
-    for (const id of scene.active) {
+    for (const id of scene.update) {
       const e = getEntity(scene, id);
 
       if (e.stats.healthMax && e.stats.health === 0) {
@@ -69,11 +72,11 @@ run({
         case "player":
           updatePlayer(e, scene);
           break;
-        case "melee_attack":
-          updateMeleeAttack(e, scene);
-          break;
         case "enemy_melee":
           updateMeleeEnemy(e, scene);
+          break;
+        case "enemy_melee_quick":
+          updateQuickMeleeEnemy(e, scene);
           break;
         case "experience_orb":
           updateExperienceOrb(e, scene);
@@ -92,6 +95,12 @@ run({
           break;
         case "particle_portal":
           updatePortalParticle(e, scene);
+          break;
+        case "melee_attack":
+          updateMeleeAttack(e, scene);
+          break;
+        case "bite":
+          updateBite(e, scene);
           break;
       }
 
@@ -124,13 +133,13 @@ run({
     sortEntitiesOnDepth(scene);
 
     setAlpha(0.4);
-    for (const id of scene.visible) {
+    for (const id of scene.render) {
       const e = getEntity(scene, id);
       renderShadow(e, scene);
     }
     setAlpha(1);
 
-    for (const id of scene.visible) {
+    for (const id of scene.render) {
       const e = getEntity(scene, id);
       renderEntity(e, scene);
 
@@ -152,6 +161,9 @@ run({
       drawBar(10, 40, player.stats.stun, player.stats.stunMax, COLOR_STUN, player.stats.stunMax, 5);
       translateTransform(10, 50);
       drawExperience();
+      resetTransform();
+      translateTransform(12, 70);
+      drawOutlinedText(`Room ${game.session.map.level + 1}/${game.session.map.rooms.length}`, 0, 0, COLOR_TEXT, COLOR_BG);
     }
 
     if (isDebugging) {

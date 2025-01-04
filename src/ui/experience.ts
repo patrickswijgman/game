@@ -1,4 +1,4 @@
-import { COLOR_BG } from "consts.js";
+import { COLOR_BG, COLOR_TEXT } from "consts.js";
 import { game } from "game.js";
 import { drawRect, drawSprite, drawText, scaleTransform, setAlpha, translateTransform } from "ridder";
 
@@ -10,5 +10,5 @@ export function drawExperience() {
   drawRect(12 + 1, 1, 50 - 2, 13 - 2, COLOR_BG, true);
   translateTransform(16, 3);
   scaleTransform(0.75, 0.75);
-  drawText(game.session.stats.experience.toString(), 0, 0);
+  drawText(game.session.stats.experience.toString(), 0, 0, COLOR_TEXT);
 }

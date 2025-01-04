@@ -6,8 +6,8 @@ export type Scene = {
   id: string;
   type: string;
   entities: Record<string, Entity>;
-  active: Array<string>;
-  visible: Array<string>;
+  update: Array<string>;
+  render: Array<string>;
   enemies: Array<string>;
   allies: Array<string>;
   destroyed: Array<string>;
@@ -29,8 +29,8 @@ export function newScene(type: string): Scene {
     id: uuid(),
     type,
     entities: {},
-    active: [],
-    visible: [],
+    update: [],
+    render: [],
     enemies: [],
     allies: [],
     destroyed: [],
@@ -59,8 +59,8 @@ export function newRoom(type: string, roomType: string, roomLevel: number) {
 export function cleanupDestroyedEntities(scene: Scene) {
   if (scene.destroyed.length) {
     for (const id of scene.destroyed) {
-      remove(scene.active, id);
-      remove(scene.visible, id);
+      remove(scene.update, id);
+      remove(scene.render, id);
       remove(scene.enemies, id);
       remove(scene.allies, id);
     }
@@ -70,10 +70,10 @@ export function cleanupDestroyedEntities(scene: Scene) {
 }
 
 export function sortEntitiesOnDepth(scene: Scene) {
-  scene.visible.sort((idA, idB) => {
+  scene.render.sort((idA, idB) => {
     const a = scene.entities[idA];
     const b = scene.entities[idB];
-    return a.position.y - b.position.y;
+    return a.position.y + a.depth - b.position.y + b.depth;
   });
 }
 
@@ -85,8 +85,8 @@ export function initCamera(scene: Scene) {
 
 export function addEntity(scene: Scene, e: Entity) {
   scene.entities[e.id] = e;
-  scene.active.push(e.id);
-  scene.visible.push(e.id);
+  scene.update.push(e.id);
+  scene.render.push(e.id);
   return e;
 }
 

@@ -2,22 +2,21 @@ import { updateBreathAnimation } from "anims/breath.js";
 import { updateWalkAnimation } from "anims/walk.js";
 import { initEnemy, newEnemy, onEnemyStateEnter, onEnemyStateExit, updateEnemy } from "enemy.js";
 import { Entity, lookAt, setConstraints, setSprites, updateState } from "entity.js";
-import { getItem } from "items.js";
 import { getVectorDistance } from "ridder";
 import { getPlayer, Scene } from "scene.js";
 import { seek } from "steering.js";
 
-export function newMeleeEnemy(scene: Scene, x: number, y: number) {
-  const e = newEnemy(scene, "enemy_melee", x, y);
+export function newQuickMeleeEnemy(scene: Scene, x: number, y: number) {
+  const e = newEnemy(scene, "enemy_melee_quick", x, y);
 
-  setSprites(e, "bandit", 16, 31, 0, -4, true, 0, 2);
-  setConstraints(e, 10, 12);
-  initEnemy(e, 18, 11, 12, 8, 1, 25, "seek", "rusty_sword", 0);
+  setSprites(e, "wolf", 16, 31, 0, -4, true, 0, 2);
+  setConstraints(e, 18, 10);
+  initEnemy(e, 18, 12, 15, 3, 1.5, 50, "seek", "", 10);
 
   return e;
 }
 
-export function updateMeleeEnemy(e: Entity, scene: Scene) {
+export function updateQuickMeleeEnemy(e: Entity, scene: Scene) {
   updateEnemy(e, scene);
   updateState(e, scene, onStateEnter, onStateUpdate, onStateExit);
 }
@@ -38,8 +37,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
         const distance = getVectorDistance(e.position, player.position);
 
         if (distance < 20) {
-          const weapon = getItem(e.weaponId);
-          e.actionId = weapon.actionId;
+          e.actionId = "bite";
           return "action";
         }
 

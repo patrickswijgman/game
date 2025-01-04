@@ -16,7 +16,7 @@ export const ROOM_TYPES_PER_LEVEL: Record<number, Array<string>> = {
 
 export const ENEMY_TYPES_PER_LEVEL: Record<number, Array<string>> = {
   0: [],
-  1: ["melee"],
+  1: ["melee_quick"],
   2: ["melee"],
   3: ["melee"],
   4: ["melee"],

@@ -26,14 +26,14 @@ export type Item = {
 const items: Record<string, Item> = {
   longsword: newItem({
     name: "Longsword",
-    spriteId: "item_longsword",
-    pivot: vec(2, 15.5),
+    spriteId: "longsword",
+    pivot: vec(0, 15.5),
     stats: newStats({
       damage: 8,
       strengthScaling: 1,
       dexterityScaling: 1,
       staminaCost: 30,
-      stunDamage: 100,
+      stunDamage: 50,
     }),
     hitbox: polygonFromRect(0, 0, rect(12, -2, 12, 4)),
     actionId: "melee_attack",
@@ -43,14 +43,14 @@ const items: Record<string, Item> = {
 
   rusty_sword: newItem({
     name: "Rusty sword",
-    spriteId: "item_longsword",
-    pivot: vec(2, 15.5),
+    spriteId: "longsword",
+    pivot: vec(0, 15.5),
     stats: newStats({
       damage: 6,
       strengthScaling: 1,
       dexterityScaling: 1,
       staminaCost: 30,
-      stunDamage: 50,
+      stunDamage: 25,
     }),
     hitbox: polygonFromRect(0, 0, rect(12, -2, 12, 4)),
     actionId: "melee_attack",

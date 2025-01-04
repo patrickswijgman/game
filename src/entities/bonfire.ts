@@ -4,7 +4,7 @@ import { game } from "game.js";
 import { drawOutlinedText } from "render.js";
 import { getVectorDistance, InputCode, isInputPressed, scaleTransform } from "ridder";
 import { getPlayer, Scene } from "scene.js";
-import { fillStats } from "stats.js";
+import { restoreStats } from "stats.js";
 
 export function newBonfire(scene: Scene, x: number, y: number) {
   const e = newEntity(scene, "bonfire", x, y);
@@ -19,7 +19,7 @@ export function updateBonfire(e: Entity, scene: Scene) {
   const distance = getVectorDistance(e.position, player.position);
 
   if (distance < 20 && isInputPressed(InputCode.KEY_E)) {
-    fillStats(game.session.stats);
+    restoreStats(game.session.stats);
   }
 }
 

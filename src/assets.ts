@@ -9,6 +9,7 @@ export async function loadAssets() {
 
   loadSprites("player", "atlas", 0, 0, 32, 32);
   loadSprites("bandit", "atlas", 32, 0, 32, 32);
+  loadSprites("wolf", "atlas", 64, 0, 32, 32);
 
   loadSprites("tree_pine", "atlas", 0, 96, 32, 32);
   loadSprites("portal", "atlas", 32, 96, 32, 32);
@@ -17,7 +18,8 @@ export async function loadAssets() {
 
   loadSprites("particle_portal", "atlas", 0, 160, 16, 16);
 
-  loadSprite("item_longsword", "atlas", 0, 64, 32, 32);
+  loadSprite("longsword", "atlas", 0, 64, 32, 32);
+  loadSprite("bite", "atlas", 32, 64, 32, 32);
 
   loadSprites("icon_experience", "atlas", 0, 192, 16, 16);
 

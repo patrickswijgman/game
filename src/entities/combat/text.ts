@@ -1,4 +1,4 @@
-import { COLOR_BG } from "consts.js";
+import { COLOR_BG, COLOR_TEXT } from "consts.js";
 import { Entity, newEntity } from "entity.js";
 import { pick, tickTimer, tween } from "ridder";
 import { Scene } from "scene.js";
@@ -11,6 +11,7 @@ export function newCombatText(scene: Scene, x: number, y: number, text: string) 
   e.text = text;
   e.textAlign = "center";
   e.textBaseline = "middle";
+  e.textColor = COLOR_TEXT;
   e.textOutline = COLOR_BG;
   e.lifetime = 1000;
   e.scale.x = 0.75;

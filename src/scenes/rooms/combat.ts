@@ -1,3 +1,4 @@
+import { newQuickMeleeEnemy } from "entities/enemies/melee-quick.js";
 import { newMeleeEnemy } from "entities/enemies/melee.js";
 import { newPlayer } from "entities/player.js";
 import { newPortal } from "entities/portal.js";
@@ -51,6 +52,9 @@ function addEnemies(scene: Scene) {
     switch (type) {
       case "melee":
         newMeleeEnemy(scene, x, y);
+        break;
+      case "melee_quick":
+        newQuickMeleeEnemy(scene, x, y);
         break;
     }
   }
