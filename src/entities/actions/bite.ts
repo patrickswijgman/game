@@ -1,6 +1,5 @@
 import { destroyIfCasterIsInvalid, doDamageToTargets } from "actions.js";
 import { Entity, newEntity, resetState, setSprites, updateState } from "entity.js";
-import { getItem } from "items.js";
 import { polygonFromRect, rect, tickTimer } from "ridder";
 import { destroyEntity, getEntity, Scene } from "scene.js";
 
@@ -33,12 +32,10 @@ export function updateBite(e: Entity, scene: Scene) {
 function onStateEnter() {}
 
 function onStateUpdate(e: Entity, scene: Scene, state: string) {
-  const weapon = getItem(e.weaponId);
-
   switch (state) {
     case "windup":
       {
-        if (tickTimer(e.stateTimer, 200)) {
+        if (tickTimer(e.stateTimer, 250)) {
           return "release";
         }
       }
@@ -54,7 +51,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
 
     case "recovery":
       {
-        if (tickTimer(e.stateTimer, 300)) {
+        if (tickTimer(e.stateTimer, 500)) {
           const caster = getEntity(scene, e.parentId);
           resetState(caster);
           destroyEntity(scene, e);

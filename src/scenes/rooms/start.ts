@@ -1,4 +1,5 @@
 import { HEIGHT, WIDTH } from "consts.js";
+import { newDummy } from "entities/enemies/dummy.js";
 import { newPlayer } from "entities/player.js";
 import { newPortal } from "entities/portal.js";
 import { setRectangle, setVector } from "ridder";
@@ -13,6 +14,7 @@ export function newStartRoomScene() {
   initForestTheme(scene);
   newPlayer(scene, scene.playerStart.x, scene.playerStart.y);
   newPortal(scene, scene.portalPosition.x, scene.portalPosition.y);
+  newDummy(scene, scene.playerStart.x + 75, scene.playerStart.y - 75);
 
   return scene;
 }

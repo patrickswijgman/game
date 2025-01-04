@@ -1,5 +1,5 @@
 import { destroyIfCasterIsInvalid, doDamageToTargets } from "actions.js";
-import { Entity, newEntity, resetState, updateState } from "entity.js";
+import { Entity, newEntity, resetState, setSprites, updateState } from "entity.js";
 import { getItem } from "items.js";
 import { addVector, angleVector, copyPolygon, copyVector, getAngle, normalizeVector, tickTimer, tween, Vector } from "ridder";
 import { EasingDictionary } from "ridder/lib/easings.js";
@@ -9,8 +9,8 @@ export function newMeleeAttack(scene: Scene, caster: Entity, target: Vector) {
   const e = newEntity(scene, "melee_attack", caster.center.x, caster.center.y);
   const weapon = getItem(caster.weaponId);
 
-  e.spriteId = weapon.spriteId;
-  e.pivot = weapon.pivot;
+  setSprites(e, weapon.spriteId, weapon.pivot.x, weapon.pivot.y);
+
   e.weaponId = caster.weaponId;
   e.parentId = caster.id;
   e.stateNextId = "windup";

@@ -8,15 +8,28 @@ export function newEnemy(scene: Scene, type: string, x: number, y: number) {
   return e;
 }
 
-export function initEnemy(e: Entity, hp: number, str: number, dex: number, int: number, spd: number, xp: number, state: string, weaponId: string, damage: number) {
-  e.stats.health = hp;
-  e.stats.healthMax = hp;
-  e.stats.stunMax = 100;
-  e.stats.strength = str;
-  e.stats.dexterity = dex;
-  e.stats.intelligence = int;
-  e.stats.movementSpeed = spd;
-  e.stats.experience = xp;
+type EnemyOptions = {
+  health: number;
+  stun: number;
+  strength: number;
+  dexterity: number;
+  intelligence: number;
+  movementSpeed: number;
+  experience: number;
+  state: string;
+  weaponId?: string;
+  damage?: number;
+};
+
+export function initEnemy(e: Entity, { health, stun, strength, dexterity, intelligence, movementSpeed, experience, state, weaponId = "", damage = 0 }: EnemyOptions) {
+  e.stats.health = health;
+  e.stats.healthMax = health;
+  e.stats.stunMax = stun;
+  e.stats.strength = strength;
+  e.stats.dexterity = dexterity;
+  e.stats.intelligence = intelligence;
+  e.stats.movementSpeed = movementSpeed;
+  e.stats.experience = experience;
   e.stats.damage = damage;
   e.stateStartId = state;
   e.stateNextId = state;

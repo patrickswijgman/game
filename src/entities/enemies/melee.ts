@@ -12,7 +12,18 @@ export function newMeleeEnemy(scene: Scene, x: number, y: number) {
 
   setSprites(e, "bandit", 16, 31, 0, -4, true, 0, 2);
   setConstraints(e, 10, 12);
-  initEnemy(e, 18, 11, 12, 8, 1, 25, "seek", "rusty_sword", 0);
+
+  initEnemy(e, {
+    health: 18,
+    stun: 100,
+    strength: 11,
+    dexterity: 12,
+    intelligence: 8,
+    movementSpeed: 1,
+    experience: 25,
+    state: "seek",
+    weaponId: "rusty_sword",
+  });
 
   return e;
 }

@@ -11,7 +11,18 @@ export function newQuickMeleeEnemy(scene: Scene, x: number, y: number) {
 
   setSprites(e, "wolf", 16, 31, 0, -4, true, 0, 2);
   setConstraints(e, 18, 10);
-  initEnemy(e, 18, 12, 15, 3, 1.5, 50, "seek", "", 10);
+
+  initEnemy(e, {
+    health: 18,
+    stun: 50,
+    strength: 12,
+    dexterity: 15,
+    intelligence: 3,
+    movementSpeed: 1.5,
+    experience: 50,
+    state: "seek",
+    damage: 10,
+  });
 
   return e;
 }
@@ -36,12 +47,17 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
         const player = getPlayer(scene);
         const distance = getVectorDistance(e.position, player.position);
 
+        let speed = e.stats.movementSpeed;
+        if (distance < 75) {
+          speed *= 1.5;
+        }
+
         if (distance < 20) {
           e.actionId = "bite";
           return "action";
         }
 
-        seek(e, player.position, e.stats.movementSpeed);
+        seek(e, player.position, speed);
         lookAt(e, player.position);
         updateWalkAnimation(e);
       }

@@ -1,4 +1,4 @@
-import { newEnemy } from "enemy.js";
+import { initEnemy, newEnemy } from "enemy.js";
 import { setConstraints, setSprites } from "entity.js";
 import { Scene } from "scene.js";
 
@@ -8,8 +8,16 @@ export function newDummy(scene: Scene, x: number, y: number) {
   setSprites(e, "player", 16, 31, 0, -4, true, 0, 2);
   setConstraints(e, 10, 12);
 
-  e.stats.health = 100;
-  e.stats.healthMax = 100;
+  initEnemy(e, {
+    health: Infinity,
+    stun: Infinity,
+    strength: 0,
+    dexterity: 0,
+    intelligence: 0,
+    movementSpeed: 0,
+    experience: 0,
+    state: "",
+  });
 
   return e;
 }

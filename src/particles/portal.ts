@@ -5,7 +5,7 @@ import { destroyEntity, Scene } from "scene.js";
 export function newPortalParticle(scene: Scene, x: number, y: number) {
   const e = newEntity(scene, "particle_portal", x, y);
 
-  setSprites(e, "particle_portal", 8, 8, 0, 0);
+  setSprites(e, "particle_portal", 8, 8);
 
   e.tweenDuration = random(5, 15) * 100;
   e.isFlipped = roll(0.5);
