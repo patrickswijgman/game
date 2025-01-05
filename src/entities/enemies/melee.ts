@@ -22,7 +22,7 @@ export function newMeleeEnemy(scene: Scene, x: number, y: number) {
     movementSpeed: 1,
     experience: 25,
     state: "seek",
-    weaponId: "worn_longsword",
+    weaponId: "longsword_worn",
   });
 
   return e;

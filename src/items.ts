@@ -1,14 +1,17 @@
-import { polygon, Polygon, polygonFromRect, rect, vec, Vector } from "ridder";
+import { newLightCrossbow } from "items/crossbow-light.js";
+import { newWornLongsword } from "items/longsword-worn.js";
+import { newLongsword } from "items/longsword.js";
+import { polygon, Polygon, vec, Vector } from "ridder";
 import { newStats, Stats } from "stats.js";
 
-type Attack = {
+export type Attack = {
   start: number;
   windup: number;
   release: number;
   recovery: number;
 };
 
-function newAttack(start = 0, windup = 0, release = 0, recovery = 0): Attack {
+export function newAttack(start = 0, windup = 0, release = 0, recovery = 0): Attack {
   return { start, windup, release, recovery };
 }
 
@@ -24,57 +27,12 @@ export type Item = {
 };
 
 const items: Record<string, Item> = {
-  longsword: newItem({
-    name: "Longsword",
-    spriteId: "longsword",
-    pivot: vec(5, 15.5),
-    stats: newStats({
-      damage: 8,
-      strengthScaling: 1,
-      dexterityScaling: 1,
-      staminaCost: 30,
-      stunDamage: 50,
-    }),
-    hitbox: polygonFromRect(0, 0, rect(2, -2, 12, 4)),
-    actionId: "melee_attack",
-    attackDuration: newAttack(0, 300, 150, 100),
-    attackArc: newAttack(0, -90, 90, 45),
-  }),
-
-  worn_longsword: newItem({
-    name: "Worn Longsword",
-    spriteId: "longsword",
-    pivot: vec(5, 15.5),
-    stats: newStats({
-      damage: 6,
-      strengthScaling: 1,
-      dexterityScaling: 1,
-      staminaCost: 30,
-      stunDamage: 25,
-    }),
-    hitbox: polygonFromRect(0, 0, rect(2, -2, 12, 4)),
-    actionId: "melee_attack",
-    attackDuration: newAttack(0, 500, 200, 300),
-    attackArc: newAttack(0, -90, 90, 45),
-  }),
-
-  light_crossbow: newItem({
-    name: "Light Crossbow",
-    spriteId: "crossbow",
-    pivot: vec(10, 15.5),
-    stats: newStats({
-      damage: 8,
-      dexterityScaling: 1,
-      staminaCost: 30,
-      stunDamage: 25,
-      range: 100,
-    }),
-    actionId: "ranged_attack",
-    attackDuration: newAttack(0, 750, 200, 500),
-  }),
+  longsword: newLongsword(),
+  longsword_worn: newWornLongsword(),
+  crossbow_light: newLightCrossbow(),
 };
 
-function newItem(item: Partial<Item>): Item {
+export function newItem(item: Partial<Item>): Item {
   return {
     name: "",
     spriteId: "",

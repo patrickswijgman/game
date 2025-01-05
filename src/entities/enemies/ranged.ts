@@ -22,7 +22,7 @@ export function newRangedEnemy(scene: Scene, x: number, y: number) {
     movementSpeed: 1,
     experience: 25,
     state: "seek",
-    weaponId: "light_crossbow",
+    weaponId: "crossbow_light",
   });
 
   return e;
