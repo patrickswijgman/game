@@ -1,6 +1,7 @@
 import { loadAssets } from "assets.js";
 import { COLOR_BG, COLOR_HEALTH, COLOR_STAMINA, COLOR_STUN, COLOR_TEXT, HEIGHT, WIDTH } from "consts.js";
 import { renderDebugInfo } from "debug.js";
+import { drawEnemyStatus } from "enemy.js";
 import { updateArrow } from "entities/actions/arrow.js";
 import { updateBite } from "entities/actions/bite.js";
 import { updateMeleeAttack } from "entities/actions/melee-attack.js";
@@ -18,7 +19,7 @@ import { renderEntity, renderShadow, updateAvoidance, updateCenter, updateCondit
 import { game, getCurrentScene, switchScene, transitionToNextScene } from "game.js";
 import { updatePortalParticle } from "particles/portal.js";
 import { drawOutlinedText } from "render.js";
-import { applyCameraTransform, drawTexture, InputCode, isInputPressed, resetTransform, run, scaleTransform, setAlpha, setFont, tickTimer, translateTransform, updateCamera } from "ridder";
+import { drawTexture, InputCode, isInputPressed, resetTransform, run, setAlpha, setFont, tickTimer, translateTransform, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
 import { updateCombatRoomScene } from "scenes/rooms/combat.js";
 import { newStartRoomScene } from "scenes/rooms/start.js";
@@ -156,12 +157,7 @@ run({
       renderEntity(e, scene);
 
       if (e.isEnemy && e.stats.health < e.stats.healthMax) {
-        resetTransform();
-        applyCameraTransform(scene.camera);
-        translateTransform(e.position.x, e.position.y - e.height - 10);
-        scaleTransform(0.5, 0.5);
-        drawBar(-15, 0, e.stats.health, e.stats.healthMax, COLOR_HEALTH, 30, 8);
-        drawBar(-15, 8, e.stats.stun, e.stats.stunMax, COLOR_STUN, 30, 6);
+        drawEnemyStatus(e, scene);
       }
     }
 

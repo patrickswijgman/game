@@ -3,7 +3,7 @@ import { copyVector, scaleVector, tickTimer, tween } from "ridder";
 
 export function onDodgeEnter(e: Entity) {
   e.conditions.isInvulnerable = true;
-  e.conditions.invulnerableDuration = 250;
+  e.conditions.invulnerableDuration = 400;
 }
 
 export function onDodgeUpdate(e: Entity) {

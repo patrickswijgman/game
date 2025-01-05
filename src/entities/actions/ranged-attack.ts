@@ -2,13 +2,14 @@ import { destroyIfCasterIsInvalid } from "actions.js";
 import { newArrow } from "entities/actions/arrow.js";
 import { Entity, newEntity, resetState, setSprites, updateState } from "entity.js";
 import { getItem } from "items.js";
-import { addVector, copyVector, getAngle, normalizeVector, scaleVector, subtractVector, tickTimer, tween, Vector } from "ridder";
-import { destroyEntity, getEntity, Scene } from "scene.js";
+import { addVector, copyVector, getAngle, normalizeVector, scaleVector, subtractVector, tickTimer, tween } from "ridder";
+import { destroyEntity, getEntity, getPlayer, Scene } from "scene.js";
 
-export function newRangedAttack(scene: Scene, caster: Entity, target: Vector | string) {
+export function newRangedAttack(scene: Scene, caster: Entity) {
   const x = caster.center.x;
   const y = caster.center.y;
   const weapon = getItem(caster.weaponId);
+  const player = getPlayer(scene);
 
   const e = newEntity(scene, "ranged_attack", x, y);
 
@@ -19,10 +20,10 @@ export function newRangedAttack(scene: Scene, caster: Entity, target: Vector | s
   e.parentId = caster.id;
   e.stateNextId = "windup";
 
-  if (typeof target === "string") {
-    e.targetId = target;
+  if (caster.isEnemy) {
+    e.targetId = player.id;
   } else {
-    copyVector(e.target, target);
+    copyVector(e.target, scene.camera.mousePosition);
   }
 
   return e;
@@ -111,7 +112,7 @@ function aim(e: Entity, scene: Scene) {
   copyVector(e.direction, e.target);
   subtractVector(e.direction, caster.center);
   normalizeVector(e.direction);
-  scaleVector(e.direction, caster.radius + 2);
+  scaleVector(e.direction, caster.radius);
 
   copyVector(e.position, caster.center);
   addVector(e.position, e.direction);

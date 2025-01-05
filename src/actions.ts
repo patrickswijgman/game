@@ -9,19 +9,15 @@ import { destroyEntity, getEntity, Scene } from "scene.js";
 import { Stats, updateStats } from "stats.js";
 
 export function onActionEnter(e: Entity, scene: Scene) {
-  const player = getEntity(scene, scene.playerId);
-  const target = e.isPlayer ? scene.camera.mousePosition : player.center;
-  const enemy = e.isPlayer ? e.id : player.id;
-
   switch (e.actionId) {
     case "melee_attack":
-      newMeleeAttack(scene, e, target);
+      newMeleeAttack(scene, e);
       break;
     case "ranged_attack":
-      newRangedAttack(scene, e, enemy);
+      newRangedAttack(scene, e);
       break;
     case "bite":
-      newBite(scene, e, enemy);
+      newBite(scene, e);
       break;
     case "dodge":
       onDodgeEnter(e);

@@ -1,10 +1,10 @@
 import { destroyIfCasterIsInvalid, doDamageToTargets } from "actions.js";
 import { Entity, newEntity, resetState, setSprites, updateState } from "entity.js";
 import { polygonFromRect, rect, tickTimer } from "ridder";
-import { destroyEntity, getEntity, Scene } from "scene.js";
+import { destroyEntity, getEntity, getPlayer, Scene } from "scene.js";
 
-export function newBite(scene: Scene, caster: Entity, targetId: string) {
-  const target = getEntity(scene, targetId);
+export function newBite(scene: Scene, caster: Entity) {
+  const target = getPlayer(scene);
   const x = target.center.x;
   const y = target.center.y;
 

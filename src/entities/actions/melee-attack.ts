@@ -1,14 +1,16 @@
 import { destroyIfCasterIsInvalid, doDamageToTargets } from "actions.js";
 import { Entity, newEntity, resetState, setSprites, updateState } from "entity.js";
 import { getItem } from "items.js";
-import { addVector, angleVector, copyPolygon, copyVector, getAngle, normalizeVector, scaleVector, subtractVector, tickTimer, tween, Vector } from "ridder";
+import { addVector, angleVector, copyPolygon, copyVector, getAngle, normalizeVector, scaleVector, subtractVector, tickTimer, tween } from "ridder";
 import { EasingDictionary } from "ridder/lib/easings.js";
-import { destroyEntity, getEntity, Scene } from "scene.js";
+import { destroyEntity, getEntity, getPlayer, Scene } from "scene.js";
 
-export function newMeleeAttack(scene: Scene, caster: Entity, target: Vector) {
+export function newMeleeAttack(scene: Scene, caster: Entity) {
   const x = caster.center.x;
   const y = caster.center.y;
   const weapon = getItem(caster.weaponId);
+  const player = getPlayer(scene);
+  const target = caster.isEnemy ? player.center : scene.camera.mousePosition;
 
   const e = newEntity(scene, "melee_attack", x, y);
 
@@ -92,7 +94,7 @@ function swing(e: Entity, scene: Scene, duration: number, from: number, to: numb
   copyVector(e.direction, e.target);
   subtractVector(e.direction, caster.center);
   normalizeVector(e.direction);
-  scaleVector(e.direction, caster.radius + 2);
+  scaleVector(e.direction, caster.radius);
   angleVector(e.direction, angle);
 
   copyVector(e.position, caster.center);
