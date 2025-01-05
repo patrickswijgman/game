@@ -19,10 +19,10 @@ import { renderEntity, renderShadow, updateAvoidance, updateCenter, updateCollis
 import { game, getCurrentScene, switchScene, transitionToNextScene } from "game.js";
 import { updatePortalParticle } from "particles/portal.js";
 import { drawOutlinedText } from "render.js";
-import { drawTexture, InputCode, isInputPressed, resetTransform, run, setAlpha, setFont, tickTimer, translateTransform, updateCamera } from "ridder";
+import { drawTexture, InputCode, isInputPressed, resetTransform, run, setAlpha, tickTimer, translateTransform, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
+import { newMenuScene, renderMenuScene, updateMenuScene } from "scenes/menu.js";
 import { updateCombatRoomScene } from "scenes/rooms/combat.js";
-import { newStartRoomScene } from "scenes/rooms/start.js";
 import { drawBar } from "ui/bar.js";
 import { drawExperience } from "ui/experience.js";
 
@@ -35,9 +35,7 @@ run({
   setup: async () => {
     await loadAssets();
 
-    setFont("default");
-
-    const scene = newStartRoomScene();
+    const scene = newMenuScene();
 
     switchScene(scene.id);
   },
@@ -130,6 +128,9 @@ run({
     }
 
     switch (scene.type) {
+      case "menu":
+        updateMenuScene(scene);
+        break;
       case "room_combat":
         updateCombatRoomScene(scene);
         break;
@@ -142,6 +143,12 @@ run({
     if (scene.backgroundTextureId) {
       resetTransform();
       drawTexture(scene.backgroundTextureId, 0, 0);
+    }
+
+    switch (scene.type) {
+      case "menu":
+        renderMenuScene(scene);
+        break;
     }
 
     sortEntitiesOnDepth(scene);
