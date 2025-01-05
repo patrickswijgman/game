@@ -15,6 +15,6 @@ export function newWornLightCrossbow() {
       range: 100,
     }),
     actionId: "ranged_attack",
-    attackDuration: newAttack(0, 750, 200, 500),
+    attackDuration: newAttack(0, 800, 200, 500),
   });
 }

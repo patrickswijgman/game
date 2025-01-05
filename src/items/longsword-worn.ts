@@ -17,7 +17,7 @@ export function newWornLongsword() {
     }),
     hitbox: polygonFromRect(0, 0, rect(2, -2, 12, 4)),
     actionId: "melee_attack",
-    attackDuration: newAttack(0, 500, 200, 300),
+    attackDuration: newAttack(0, 600, 150, 200),
     attackArc: newAttack(0, -90, 90, 45),
   });
 }

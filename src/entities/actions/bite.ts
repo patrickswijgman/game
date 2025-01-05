@@ -1,6 +1,6 @@
 import { destroyIfCasterIsInvalid, doDamageToTargets } from "actions.js";
 import { Entity, newEntity, resetState, setSprites, updateState } from "entity.js";
-import { polygonFromRect, rect, tickTimer } from "ridder";
+import { polygonFromRect, rect, tickTimer, tween } from "ridder";
 import { destroyEntity, getEntity, getPlayer, Scene } from "scene.js";
 
 export function newBite(scene: Scene, caster: Entity) {
@@ -44,6 +44,9 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
   switch (state) {
     case "windup":
       {
+        tickTimer(e.tweenTimer, 200);
+        e.tweenScale.y = tween(0.5, 1, 200, "easeInOutSine", e.tweenTimer.elapsed);
+
         if (tickTimer(e.stateTimer, 250)) {
           return "release";
         }

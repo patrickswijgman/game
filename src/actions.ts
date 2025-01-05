@@ -42,25 +42,24 @@ export function onActionExit(e: Entity, scene: Scene) {
 }
 
 export function doDamageToTargets(e: Entity, scene: Scene) {
-  let source: Entity;
-
+  let caster: Entity;
   if (e.parentId) {
-    source = getEntity(scene, e.parentId);
+    caster = getEntity(scene, e.parentId);
   } else {
-    source = e;
+    caster = e;
   }
 
-  const targets = source.isPlayer ? scene.enemies : scene.allies;
+  const targets = caster.isPlayer ? scene.enemies : scene.allies;
 
   for (const id of targets) {
-    if (id === e.id || id === source.id) {
+    if (id === e.id || id === caster.id) {
       continue;
     }
 
     const target = getEntity(scene, id);
 
     if (!target.isDestroyed && !e.blacklist.includes(id) && doPolygonsIntersect(e.hitbox, target.hitbox)) {
-      doDamage(scene, source, target);
+      doDamage(scene, caster, target);
       e.blacklist.push(target.id);
     }
   }

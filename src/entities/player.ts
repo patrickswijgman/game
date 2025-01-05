@@ -109,9 +109,9 @@ function doAction(e: Entity) {
     }
   }
 
-  if (isInputPressed(InputCode.KEY_SPACE) && e.stats.stamina >= 25 && getVectorLength(e.velocity)) {
+  if (isInputPressed(InputCode.KEY_SPACE) && e.stats.stamina >= 20 && getVectorLength(e.velocity)) {
     e.actionId = "dodge";
-    e.stats.stamina -= 25;
+    e.stats.stamina -= 20;
     updateStats(e.stats);
     return true;
   }
