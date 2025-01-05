@@ -29,7 +29,7 @@ export function newSession(): Session {
     }),
     conditions: newConditions(),
     weaponId: "crossbow_light",
-    armorId: "",
+    armorId: "clothes",
     map: newDungeonMap(),
   };
 }

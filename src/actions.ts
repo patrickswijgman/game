@@ -65,11 +65,11 @@ export function doDamageToTargets(e: Entity, scene: Scene) {
   }
 }
 
-export function isActionValid(stats: Stats, requiremens: Stats) {
-  if (stats.health < requiremens.healthCost + 1) {
+export function isActionValid(stats: Stats, requirements: Stats) {
+  if (stats.health < requirements.healthCost + 1) {
     return false;
   }
-  if (stats.stamina < requiremens.staminaCost) {
+  if (stats.stamina < requirements.staminaCost) {
     return false;
   }
 

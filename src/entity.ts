@@ -26,7 +26,6 @@ export type Entity = {
   stats: Stats;
   conditions: Conditions;
   hitbox: Polygon;
-  hitarea: Rectangle;
   body: Rectangle;
   bodyOffset: Vector;
   bodyIntersection: Vector;
@@ -96,7 +95,6 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     stats: newStats(),
     conditions: newConditions(),
     hitbox: polygon(),
-    hitarea: rect(),
     body: rect(),
     bodyOffset: vec(),
     bodyIntersection: vec(),

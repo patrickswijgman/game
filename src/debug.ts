@@ -1,5 +1,5 @@
-import { LINE_HEIGHT, WIDTH } from "consts.js";
-import { applyCameraTransform, drawCircle, drawPolygonInstance, drawRectInstance, drawText, getFramePerSecond, isPolygonValid, isRectangleValid, resetTransform, translateTransform } from "ridder";
+import { WIDTH } from "consts.js";
+import { applyCameraTransform, drawCircle, drawPolygonInstance, drawRectInstance, drawText, getFramePerSecond, isPolygonValid, resetTransform, translateTransform } from "ridder";
 import { getEntity, getPlayer, Scene } from "scene.js";
 
 export function renderDebugInfo(scene: Scene) {
@@ -11,10 +11,6 @@ export function renderDebugInfo(scene: Scene) {
 
     if (isPolygonValid(e.hitbox)) {
       drawPolygonInstance(e.hitbox, "yellow", false);
-    }
-
-    if (isRectangleValid(e.hitarea)) {
-      drawRectInstance(e.hitarea, "blue", false);
     }
 
     if (e.radius) {
@@ -35,7 +31,7 @@ export function renderDebugInfo(scene: Scene) {
 
   const player = getPlayer(scene);
   if (player) {
-    translateTransform(0, LINE_HEIGHT);
+    translateTransform(0, 12);
     drawText(player.stateId, 0, 0, "lime", "right");
   }
 }

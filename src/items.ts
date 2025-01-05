@@ -1,7 +1,8 @@
-import { newWornLightCrossbow } from "items/crossbow-light-worn.js";
-import { newLightCrossbow } from "items/crossbow-light.js";
-import { newWornLongsword } from "items/longsword-worn.js";
-import { newLongsword } from "items/longsword.js";
+import { newClothes } from "items/armor/clothes.js";
+import { newWornLightCrossbow } from "items/weapons/crossbow-light-worn.js";
+import { newLightCrossbow } from "items/weapons/crossbow-light.js";
+import { newWornLongsword } from "items/weapons/longsword-worn.js";
+import { newLongsword } from "items/weapons/longsword.js";
 import { polygon, Polygon, vec, Vector } from "ridder";
 import { newStats, Stats } from "stats.js";
 
@@ -32,6 +33,7 @@ const items: Record<string, Item> = {
   longsword_worn: newWornLongsword(),
   crossbow_light: newLightCrossbow(),
   crossbow_light_worn: newWornLightCrossbow(),
+  clothes: newClothes(),
 };
 
 export function newItem(item: Partial<Item>): Item {

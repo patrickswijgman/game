@@ -1,5 +1,5 @@
 import { loadAssets } from "assets.js";
-import { COLOR_BG, COLOR_HEALTH, COLOR_STAMINA, COLOR_STUN, COLOR_TEXT, HEIGHT, WIDTH } from "consts.js";
+import { HEIGHT, WIDTH } from "consts.js";
 import { renderDebugInfo } from "debug.js";
 import { drawEnemyStatus } from "enemy.js";
 import { updateArrow } from "entities/actions/arrow.js";
@@ -16,15 +16,14 @@ import { updatePortal } from "entities/portal.js";
 import { updateTree } from "entities/tree.js";
 import { updateExperienceOrb } from "entities/xp-orb.js";
 import { renderEntity, renderShadow, updateAvoidance, updateCenter, updateCollisions, updateConditions, updateFlash, updateHitbox, updatePhysics } from "entity.js";
-import { game, getCurrentScene, switchScene, transitionToNextScene } from "game.js";
+import { getCurrentScene, switchScene, transitionToNextScene } from "game.js";
 import { updatePortalParticle } from "particles/portal.js";
-import { drawOutlinedText } from "render.js";
-import { drawTexture, InputCode, isInputPressed, resetTransform, run, setAlpha, tickTimer, translateTransform, updateCamera } from "ridder";
+import { drawTexture, InputCode, isInputPressed, resetTransform, run, setAlpha, tickTimer, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
+import { renderBuildScene, updateBuildScene } from "scenes/build.js";
 import { newMenuScene, renderMenuScene, updateMenuScene } from "scenes/menu.js";
 import { updateCombatRoomScene } from "scenes/rooms/combat.js";
-import { drawBar } from "ui/bar.js";
-import { drawExperience } from "ui/experience.js";
+import { drawStatus } from "ui/status.js";
 
 let isDebugging = false;
 
@@ -131,6 +130,9 @@ run({
       case "menu":
         updateMenuScene(scene);
         break;
+      case "build":
+        updateBuildScene(scene);
+        break;
       case "room_combat":
         updateCombatRoomScene(scene);
         break;
@@ -143,12 +145,6 @@ run({
     if (scene.backgroundTextureId) {
       resetTransform();
       drawTexture(scene.backgroundTextureId, 0, 0);
-    }
-
-    switch (scene.type) {
-      case "menu":
-        renderMenuScene(scene);
-        break;
     }
 
     sortEntitiesOnDepth(scene);
@@ -169,17 +165,18 @@ run({
       }
     }
 
+    switch (scene.type) {
+      case "menu":
+        renderMenuScene(scene);
+        break;
+      case "build":
+        renderBuildScene(scene);
+        break;
+    }
+
     const player = getPlayer(scene);
     if (player) {
-      resetTransform();
-      drawBar(10, 10, player.stats.health, player.stats.healthMax, COLOR_HEALTH, player.stats.healthMax, 10);
-      drawBar(10, 25, player.stats.stamina, player.stats.staminaMax, COLOR_STAMINA, player.stats.staminaMax, 10);
-      drawBar(10, 40, player.stats.stun, player.stats.stunMax, COLOR_STUN, player.stats.stunMax, 5);
-      translateTransform(10, 50);
-      drawExperience();
-      resetTransform();
-      translateTransform(12, 70);
-      drawOutlinedText(`Room ${game.session.map.level + 1}/${game.session.map.rooms.length}`, 0, 0, COLOR_TEXT, COLOR_BG);
+      drawStatus(player);
     }
 
     if (isDebugging) {
