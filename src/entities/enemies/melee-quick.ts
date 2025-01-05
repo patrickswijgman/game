@@ -1,7 +1,7 @@
 import { updateBreathAnimation } from "anims/breath.js";
 import { updateWalkAnimation } from "anims/walk.js";
 import { initEnemy, newEnemy, onEnemyStateEnter, onEnemyStateExit, updateEnemy } from "enemy.js";
-import { Entity, lookAt, setConstraints, setSprites, updateState } from "entity.js";
+import { Entity, lookAt, setBody, setConstraints, setSprites, updateState } from "entity.js";
 import { getVectorDistance } from "ridder";
 import { getPlayer, Scene } from "scene.js";
 import { seek } from "steering.js";
@@ -11,6 +11,7 @@ export function newQuickMeleeEnemy(scene: Scene, x: number, y: number) {
 
   setSprites(e, "wolf", 16, 31, 0, -4, true, 0, 2);
   setConstraints(e, 18, 10);
+  setBody(e, scene, 18, 4);
 
   initEnemy(e, {
     health: 18,

@@ -4,8 +4,8 @@ import { COLOR_TEXT } from "consts.js";
 import { renderBonfire } from "entities/bonfire.js";
 import { renderPortal } from "entities/portal.js";
 import { drawOutlinedText } from "render.js";
-import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, polygon, Polygon, polygonFromRect, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setPolygonAngle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, uuid, vec, Vector } from "ridder";
-import { addEntity, Scene } from "scene.js";
+import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, isRectangleValid, polygon, Polygon, polygonFromRect, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setPolygonAngle, setRectangle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, uuid, vec, Vector, writeIntersectionBetweenRectangles } from "ridder";
+import { addBody, addEntity, Scene } from "scene.js";
 import { newStats, Stats } from "stats.js";
 import { avoid } from "steering.js";
 
@@ -28,6 +28,8 @@ export type Entity = {
   hitbox: Polygon;
   hitarea: Rectangle;
   body: Rectangle;
+  bodyOffset: Vector;
+  bodyIntersection: Vector;
   radius: number;
   textureId: string;
   spriteId: string;
@@ -96,6 +98,8 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     hitbox: polygon(),
     hitarea: rect(),
     body: rect(),
+    bodyOffset: vec(),
+    bodyIntersection: vec(),
     radius: 0,
     textureId: "",
     spriteId: "",
@@ -169,6 +173,12 @@ export function setConstraints(e: Entity, width: number, height: number) {
   e.radius = (width + height) / 2;
 }
 
+export function setBody(e: Entity, scene: Scene, width: number, height: number) {
+  setRectangle(e.body, 0, 0, width, height);
+  setVector(e.bodyOffset, -width / 2, -height);
+  addBody(scene, e.body);
+}
+
 type StateLifecycleHook = (e: Entity, scene: Scene, state: string) => string | void;
 
 export function updateState(e: Entity, scene: Scene, onEnter: StateLifecycleHook, onUpdate: StateLifecycleHook, onExit: StateLifecycleHook) {
@@ -238,6 +248,35 @@ export function updateHitbox(e: Entity) {
     copyVector(e.hitbox, e.position);
     addVector(e.hitbox, e.tweenPosition);
     setPolygonAngle(e.hitbox, e.isFlipped ? -angle : angle);
+  }
+}
+
+export function updateCollisions(e: Entity, scene: Scene) {
+  if (isRectangleValid(e.body)) {
+    copyVector(e.body, e.position);
+    addVector(e.body, e.bodyOffset);
+
+    for (const other of scene.bodies) {
+      if (other === e.body) {
+        continue;
+      }
+
+      resetVector(e.bodyIntersection);
+
+      writeIntersectionBetweenRectangles(e.body, other, e.velocity, e.bodyIntersection);
+
+      if (e.bodyIntersection.x) {
+        e.position.x += e.bodyIntersection.x;
+        e.body.x += e.bodyIntersection.x;
+        e.velocity.x = 0;
+      }
+
+      if (e.bodyIntersection.y) {
+        e.position.y += e.bodyIntersection.y;
+        e.body.y += e.bodyIntersection.y;
+        e.velocity.y = 0;
+      }
+    }
   }
 }
 

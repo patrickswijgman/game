@@ -4,8 +4,8 @@ import { newRangedEnemy } from "entities/enemies/ranged.js";
 import { newPlayer } from "entities/player.js";
 import { newPortal } from "entities/portal.js";
 import { ENEMY_AMOUNT_PER_LEVEL, ENEMY_TYPES_PER_LEVEL } from "map.js";
-import { pick, random, setRectangle, setVector } from "ridder";
-import { initCamera, newRoom, Scene } from "scene.js";
+import { pick, random, rect, setRectangle, setVector } from "ridder";
+import { addBody, initCamera, newRoom, Scene } from "scene.js";
 import { initForestTheme } from "themes/forest.js";
 
 export function newCombatRoomScene(level: number) {
@@ -33,6 +33,11 @@ function initLayout(scene: Scene) {
 
   setRectangle(scene.bounds, 0, 0, w, h);
   setRectangle(scene.safeArea, 100, 100, w - 200, h - 200);
+
+  addBody(scene, rect(0, 0, 100, h));
+  addBody(scene, rect(w - 100, 0, 100, h));
+  addBody(scene, rect(0, 0, w, 100));
+  addBody(scene, rect(0, h - 100, w, 100));
 
   const x = scene.safeArea.x + random(50, scene.safeArea.w - 100);
   const y = scene.safeArea.y + random(50, scene.safeArea.h - 100);

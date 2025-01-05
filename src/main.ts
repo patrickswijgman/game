@@ -15,7 +15,7 @@ import { updatePlayer } from "entities/player.js";
 import { updatePortal } from "entities/portal.js";
 import { updateTree } from "entities/tree.js";
 import { updateExperienceOrb } from "entities/xp-orb.js";
-import { renderEntity, renderShadow, updateAvoidance, updateCenter, updateConditions, updateFlash, updateHitbox, updatePhysics } from "entity.js";
+import { renderEntity, renderShadow, updateAvoidance, updateCenter, updateCollisions, updateConditions, updateFlash, updateHitbox, updatePhysics } from "entity.js";
 import { game, getCurrentScene, switchScene, transitionToNextScene } from "game.js";
 import { updatePortalParticle } from "particles/portal.js";
 import { drawOutlinedText } from "render.js";
@@ -119,6 +119,7 @@ run({
 
       updateAvoidance(e, scene);
       updatePhysics(e);
+      updateCollisions(e, scene);
       updateHitbox(e);
       updateCenter(e);
       updateFlash(e);

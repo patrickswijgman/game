@@ -2,7 +2,7 @@ import { isActionValid, spendAction } from "actions.js";
 import { updateBreathAnimation } from "anims/breath.js";
 import { updateWalkAnimation } from "anims/walk.js";
 import { depleteStun, generateStamina } from "combat.js";
-import { Entity, lookAt, newEntity, setConstraints, setSprites, updateState } from "entity.js";
+import { Entity, lookAt, newEntity, setBody, setConstraints, setSprites, updateState } from "entity.js";
 import { game } from "game.js";
 import { getItem } from "items.js";
 import { copyVector, getVectorLength, InputCode, isInputDown, isInputPressed, normalizeVector, resetVector, scaleVector, setCameraPosition } from "ridder";
@@ -14,6 +14,7 @@ export function newPlayer(scene: Scene, x: number, y: number) {
 
   setSprites(e, "player", 16, 31, 0, -5, true, 0, 2);
   setConstraints(e, 10, 12);
+  setBody(e, scene, 10, 3);
 
   e.stats = game.session.stats;
   e.weaponId = game.session.weaponId;

@@ -1,7 +1,7 @@
 import { updateBreathAnimation } from "anims/breath.js";
 import { updateWalkAnimation } from "anims/walk.js";
 import { initEnemy, newEnemy, onEnemyStateEnter, onEnemyStateExit, updateEnemy } from "enemy.js";
-import { Entity, lookAt, setConstraints, setSprites, updateState } from "entity.js";
+import { Entity, lookAt, setBody, setConstraints, setSprites, updateState } from "entity.js";
 import { getItem } from "items.js";
 import { getVectorDistance } from "ridder";
 import { getPlayer, Scene } from "scene.js";
@@ -12,6 +12,7 @@ export function newMeleeEnemy(scene: Scene, x: number, y: number) {
 
   setSprites(e, "bandit", 16, 31, 0, -5, true, 0, 2);
   setConstraints(e, 10, 12);
+  setBody(e, scene, 10, 3);
 
   initEnemy(e, {
     health: 18,

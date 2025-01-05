@@ -1,5 +1,5 @@
 import { initEnemy, newEnemy } from "enemy.js";
-import { setConstraints, setSprites } from "entity.js";
+import { setBody, setConstraints, setSprites } from "entity.js";
 import { Scene } from "scene.js";
 
 export function newDummy(scene: Scene, x: number, y: number) {
@@ -7,6 +7,7 @@ export function newDummy(scene: Scene, x: number, y: number) {
 
   setSprites(e, "player", 16, 31, 0, -4, true, 0, 2);
   setConstraints(e, 10, 12);
+  setBody(e, scene, 10, 3);
 
   initEnemy(e, {
     health: Infinity,

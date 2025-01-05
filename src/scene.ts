@@ -11,6 +11,7 @@ export type Scene = {
   enemies: Array<string>;
   allies: Array<string>;
   destroyed: Array<string>;
+  bodies: Array<Rectangle>;
   camera: Camera;
   bounds: Rectangle;
   backgroundTextureId: string;
@@ -34,6 +35,7 @@ export function newScene(type: string): Scene {
     enemies: [],
     allies: [],
     destroyed: [],
+    bodies: [],
     camera: camera(),
     bounds: rect(),
     backgroundTextureId: "",
@@ -59,10 +61,12 @@ export function newRoom(type: string, roomType: string, roomLevel: number) {
 export function cleanupDestroyedEntities(scene: Scene) {
   if (scene.destroyed.length) {
     for (const id of scene.destroyed) {
+      const e = scene.entities[id];
       remove(scene.update, id);
       remove(scene.render, id);
       remove(scene.enemies, id);
       remove(scene.allies, id);
+      remove(scene.bodies, e.body);
     }
 
     scene.destroyed.length = 0;
@@ -101,6 +105,10 @@ export function addEnemy(scene: Scene, e: Entity) {
   return e;
 }
 
+export function addBody(scene: Scene, body: Rectangle) {
+  scene.bodies.push(body);
+}
+
 export function destroyEntity(scene: Scene, e: Entity) {
   e.isDestroyed = true;
   scene.destroyed.push(e.id);
@@ -112,4 +120,9 @@ export function getEntity(scene: Scene, id: string) {
 
 export function getPlayer(scene: Scene) {
   return scene.entities[scene.playerId];
+}
+
+export function destroyScene(scene: Scene) {
+  delete scene.entities;
+  scene.bodies.length = 0;
 }

@@ -1,4 +1,4 @@
-import { Scene } from "scene.js";
+import { destroyScene, Scene } from "scene.js";
 import { newSession, Session } from "session.js";
 
 export type Game = {
@@ -32,6 +32,7 @@ export function startNewSession() {
     const scene = game.scenes[id];
 
     if (scene.sessionId === game.session.id) {
+      destroyScene(scene);
       delete game.scenes[id];
     }
   }

@@ -6,8 +6,6 @@ export function renderDebugInfo(scene: Scene) {
   resetTransform();
   applyCameraTransform(scene.camera);
 
-  drawRectInstance(scene.safeArea, "purple");
-
   for (const id of scene.update) {
     const e = getEntity(scene, id);
 
@@ -20,8 +18,14 @@ export function renderDebugInfo(scene: Scene) {
     }
 
     if (e.radius) {
-      drawCircle(e.position.x, e.position.y, e.radius, "red", false);
+      drawCircle(e.position.x, e.position.y, e.radius, "white", false);
     }
+  }
+
+  drawRectInstance(scene.safeArea, "purple");
+
+  for (const body of scene.bodies) {
+    drawRectInstance(body, "red", false);
   }
 
   resetTransform();
