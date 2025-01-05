@@ -6,7 +6,7 @@ export function newLightCrossbow() {
   return newItem({
     name: "Light Crossbow",
     spriteId: "crossbow",
-    pivot: vec(10, 15.5),
+    pivot: vec(17, 15.5),
     stats: newStats({
       damage: 8,
       dexterityScaling: 1,

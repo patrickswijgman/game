@@ -6,7 +6,7 @@ export function newLongsword() {
   return newItem({
     name: "Longsword",
     spriteId: "longsword",
-    pivot: vec(6, 15.5),
+    pivot: vec(11, 15.5),
     stats: newStats({
       damage: 8,
       strengthScaling: 1,
