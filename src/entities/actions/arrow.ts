@@ -12,9 +12,9 @@ export function newArrow(scene: Scene, caster: Entity, target: Vector) {
 
   setSprites(e, "arrow", 16, 15.5);
 
-  e.hitbox = polygonFromRect(x, y, rect(0, -3.5, 9, 7));
+  e.hitbox = polygonFromRect(x, y, rect(0, -2, 8, 4));
   e.weaponId = caster.weaponId;
-  e.parentId = caster.id;
+  e.parentId = caster.parentId;
   e.angle = getAngle(x, y, target.x, target.y);
 
   copyVector(e.direction, target);

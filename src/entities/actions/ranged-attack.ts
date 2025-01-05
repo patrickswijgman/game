@@ -23,7 +23,7 @@ export function newRangedAttack(scene: Scene, caster: Entity) {
   if (caster.isEnemy) {
     e.targetId = player.id;
   } else {
-    copyVector(e.target, scene.camera.mousePosition);
+    e.target = scene.camera.mousePosition;
   }
 
   return e;

@@ -28,7 +28,7 @@ export function newSession(): Session {
       movementSpeed: 1.5,
     }),
     conditions: newConditions(),
-    weaponId: "longsword",
+    weaponId: "crossbow_light",
     armorId: "",
     map: newDungeonMap(),
   };

@@ -1,3 +1,4 @@
+import { newWornLightCrossbow } from "items/crossbow-light-worn.js";
 import { newLightCrossbow } from "items/crossbow-light.js";
 import { newWornLongsword } from "items/longsword-worn.js";
 import { newLongsword } from "items/longsword.js";
@@ -30,6 +31,7 @@ const items: Record<string, Item> = {
   longsword: newLongsword(),
   longsword_worn: newWornLongsword(),
   crossbow_light: newLightCrossbow(),
+  crossbow_light_worn: newWornLightCrossbow(),
 };
 
 export function newItem(item: Partial<Item>): Item {
