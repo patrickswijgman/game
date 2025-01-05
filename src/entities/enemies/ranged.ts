@@ -10,18 +10,18 @@ import { flee, seek } from "steering.js";
 export function newRangedEnemy(scene: Scene, x: number, y: number) {
   const e = newEnemy(scene, "enemy_ranged", x, y);
 
-  setSprites(e, "bandit", 16, 31, 0, -5, true, 0, 2);
-  setConstraints(e, 10, 12);
-  setBody(e, scene, 10, 3);
+  setSprites(e, "goblin", 16, 31, 0, -3, true, 0, 2);
+  setConstraints(e, 8, 8);
+  setBody(e, scene, 8, 3);
 
   initEnemy(e, {
-    health: 18,
+    health: 12,
     stun: 100,
-    strength: 11,
-    dexterity: 12,
-    intelligence: 8,
+    strength: 8,
+    dexterity: 14,
+    intelligence: 10,
     movementSpeed: 1,
-    experience: 25,
+    experience: 50,
     state: "seek",
     weaponId: "crossbow_light_worn",
   });

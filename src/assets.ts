@@ -10,6 +10,7 @@ export async function loadAssets() {
   loadSprites("player", "atlas", 0, 0, 32, 32);
   loadSprites("bandit", "atlas", 32, 0, 32, 32);
   loadSprites("wolf", "atlas", 64, 0, 32, 32);
+  loadSprites("goblin", "atlas", 96, 0, 32, 32);
 
   loadSprites("tree_pine", "atlas", 0, 96, 32, 32);
   loadSprites("portal", "atlas", 32, 96, 32, 32);

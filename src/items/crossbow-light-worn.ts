@@ -8,7 +8,7 @@ export function newWornLightCrossbow() {
     spriteId: "crossbow",
     pivot: vec(19, 15.5),
     stats: newStats({
-      damage: 8,
+      damage: 6,
       dexterityScaling: 1,
       staminaCost: 30,
       stunDamage: 50,
