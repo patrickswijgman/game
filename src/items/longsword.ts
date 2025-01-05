@@ -13,6 +13,7 @@ export function newLongsword() {
       dexterityScaling: 1,
       staminaCost: 30,
       stunDamage: 50,
+      range: 20,
     }),
     hitbox: polygonFromRect(0, 0, rect(2, -2, 12, 4)),
     actionId: "melee_attack",

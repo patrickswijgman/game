@@ -47,9 +47,9 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
       {
         const player = getPlayer(scene);
         const distance = getVectorDistance(e.position, player.position);
+        const weapon = getItem(e.weaponId);
 
-        if (distance < 20) {
-          const weapon = getItem(e.weaponId);
+        if (distance < weapon.stats.range) {
           e.actionId = weapon.actionId;
           return "action";
         }

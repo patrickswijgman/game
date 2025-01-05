@@ -11,7 +11,7 @@ export function newLightCrossbow() {
       damage: 8,
       dexterityScaling: 1,
       staminaCost: 30,
-      stunDamage: 25,
+      stunDamage: 50,
       range: 100,
     }),
     actionId: "ranged_attack",
