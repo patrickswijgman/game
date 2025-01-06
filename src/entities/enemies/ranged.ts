@@ -17,9 +17,9 @@ export function newRangedEnemy(scene: Scene, x: number, y: number) {
   initEnemy(e, {
     health: 12,
     stun: 100,
-    strength: 8,
-    dexterity: 14,
-    intelligence: 10,
+    strength: -1,
+    dexterity: 2,
+    intelligence: 0,
     movementSpeed: 1,
     experience: 50,
     state: "seek",

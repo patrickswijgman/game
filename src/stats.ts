@@ -13,6 +13,8 @@ export type Stats = {
   stunDamage: number;
   damage: number;
   range: number;
+  constitution: number;
+  endurance: number;
   strength: number;
   strengthScaling: number;
   dexterity: number;
@@ -37,6 +39,8 @@ export function newStats(stats: Partial<Stats> = {}): Stats {
     stunDamage: 0,
     damage: 0,
     range: 0,
+    constitution: 0,
+    endurance: 0,
     strength: 0,
     strengthScaling: 0,
     dexterity: 0,
@@ -80,11 +84,7 @@ export function resetStats(stats: Stats) {
 }
 
 export function addDamageScalingToStats(stats: Stats, scaling: Stats) {
-  stats.damage += Math.ceil(getModifier(stats, "strength") * scaling.strengthScaling);
-  stats.damage += Math.ceil(getModifier(stats, "dexterity") * scaling.dexterityScaling);
-  stats.damage += Math.ceil(getModifier(stats, "intelligence") * scaling.intelligenceScaling);
-}
-
-export function getModifier(stats: Stats, key: keyof Stats) {
-  return Math.floor((stats[key] - 10) / 2);
+  stats.damage += Math.ceil(stats.strength * scaling.strengthScaling);
+  stats.damage += Math.ceil(stats.dexterity * scaling.dexterityScaling);
+  stats.damage += Math.ceil(stats.intelligence * scaling.intelligenceScaling);
 }

@@ -17,9 +17,9 @@ export function newMeleeEnemy(scene: Scene, x: number, y: number) {
   initEnemy(e, {
     health: 18,
     stun: 100,
-    strength: 11,
-    dexterity: 12,
-    intelligence: 8,
+    strength: 0,
+    dexterity: 1,
+    intelligence: -1,
     movementSpeed: 1,
     experience: 25,
     state: "seek",

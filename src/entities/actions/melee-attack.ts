@@ -20,6 +20,7 @@ export function newMeleeAttack(scene: Scene, caster: Entity) {
   e.sheet.weaponId = caster.sheet.weaponId;
   e.parentId = caster.id;
   e.stateNextId = "windup";
+  e.isOutlineDangerVisible = caster.isEnemy;
 
   copyPolygon(e.hitbox, weapon.hitbox);
   copyVector(e.target, target);

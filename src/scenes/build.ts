@@ -4,7 +4,7 @@ import { getItem } from "items.js";
 import { drawRect, drawText, InputCode, isInputPressed, resetTransform, scaleTransform, translateTransform } from "ridder";
 import { newScene, Scene } from "scene.js";
 import { newStartRoomScene } from "scenes/rooms/start.js";
-import { getModifier, Stats } from "stats.js";
+import { Stats } from "stats.js";
 
 export function newBuildScene() {
   const scene = newScene("build");
@@ -31,32 +31,27 @@ export function renderBuildScene(scene: Scene) {
   translateTransform(WIDTH - 20, HEIGHT - 20);
   drawText("Press [Enter] to confirm", 0, 0, COLOR_TEXT, "right");
 
-  drawAbilityScore(100, 70, "Strength", "strength");
-  drawAbilityScore(100, 140, "Dexterity", "dexterity");
-  drawAbilityScore(100, 210, "Intelligence", "intelligence");
+  drawAbilityScores(100, 70);
 
   drawItem(WIDTH / 2, 70, game.session.sheet.weaponId, "Weapon");
   drawItem(WIDTH / 2, 250, game.session.sheet.armorId, "Armor");
   drawStatBlock(WIDTH - 100, 70);
 }
 
-function drawAbilityScore(x: number, y: number, name: string, key: keyof Stats) {
+function drawAbilityScores(x: number, y: number) {
   resetTransform();
   translateTransform(x, y);
   scaleTransform(1.25, 1.25);
-  drawText(name, 0, 0, COLOR_PRIMARY, "center");
+  drawText("Ability scores", 0, 0, COLOR_PRIMARY, "center");
 
   resetTransform();
   translateTransform(x, y);
   translateTransform(0, 20);
-  scaleTransform(1.5, 1.5);
-  drawText(game.session.sheet.stats[key].toString(), 0, 0, COLOR_TEXT, "center");
-
-  const mod = getModifier(game.session.sheet.stats, key);
-  resetTransform();
-  translateTransform(x, y);
-  translateTransform(0, 40);
-  drawText(`[ ${mod > 0 ? "+" : ""}${mod} ]`, 0, 0, COLOR_TEXT, "center");
+  drawStat(game.session.sheet.stats, "Constitution", "constitution");
+  drawStat(game.session.sheet.stats, "Endurance", "endurance");
+  drawStat(game.session.sheet.stats, "Strength", "strength");
+  drawStat(game.session.sheet.stats, "Dexterity", "dexterity");
+  drawStat(game.session.sheet.stats, "Intelligence", "intelligence");
 }
 
 function drawItem(x: number, y: number, id: string, name: string) {
@@ -110,11 +105,11 @@ function drawStatBlock(x: number, y: number) {
 }
 
 function drawStat(stats: Stats, name: string, key: keyof Stats) {
-  translateTransform(-70, 0);
+  translateTransform(-65, 0);
   drawText(name, 0, 0, COLOR_TEXT);
-  translateTransform(140, 0);
+  translateTransform(130, 0);
   drawText(stats[key].toString(), 0, 0, COLOR_TEXT, "right");
-  translateTransform(-140, 12);
-  drawRect(0, 0, 140, 1, COLOR_DARK);
-  translateTransform(70, 10);
+  translateTransform(-130, 12);
+  drawRect(0, 0, 130, 1, COLOR_DARK);
+  translateTransform(65, 10);
 }

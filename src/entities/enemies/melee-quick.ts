@@ -16,9 +16,9 @@ export function newQuickMeleeEnemy(scene: Scene, x: number, y: number) {
   initEnemy(e, {
     health: 18,
     stun: 50,
-    strength: 12,
-    dexterity: 15,
-    intelligence: 3,
+    strength: 1,
+    dexterity: 2,
+    intelligence: -4,
     movementSpeed: 1.25,
     experience: 50,
     state: "seek",

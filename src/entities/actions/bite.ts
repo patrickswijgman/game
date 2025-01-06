@@ -16,6 +16,7 @@ export function newBite(scene: Scene, caster: Entity) {
   e.parentId = caster.id;
   e.depth = target.height;
   e.stateNextId = "windup";
+  e.isOutlineDangerVisible = caster.isEnemy;
 
   return e;
 }

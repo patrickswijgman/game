@@ -2,11 +2,12 @@ import { doDamageToTargets } from "actions.js";
 import { Entity, newEntity, setSprites } from "entity.js";
 import { getItem } from "items.js";
 import { copyVector, getAngle, getVectorDistance, normalizeVector, polygonFromRect, rect, scaleVector, subtractVector, Vector } from "ridder";
-import { destroyEntity, Scene } from "scene.js";
+import { destroyEntity, getEntity, Scene } from "scene.js";
 
-export function newArrow(scene: Scene, caster: Entity, target: Vector) {
-  const x = caster.center.x;
-  const y = caster.center.y;
+export function newArrow(scene: Scene, weapon: Entity, target: Vector) {
+  const x = weapon.center.x;
+  const y = weapon.center.y;
+  const caster = getEntity(scene, weapon.parentId);
 
   const e = newEntity(scene, "arrow", x, y);
 
@@ -14,8 +15,9 @@ export function newArrow(scene: Scene, caster: Entity, target: Vector) {
 
   e.hitbox = polygonFromRect(x, y, rect(0, -2, 8, 4));
   e.sheet.weaponId = caster.sheet.weaponId;
-  e.parentId = caster.parentId;
+  e.parentId = caster.id;
   e.angle = getAngle(x, y, target.x, target.y);
+  e.isOutlineDangerVisible = caster.isEnemy;
 
   copyVector(e.direction, target);
   subtractVector(e.direction, e.position);
