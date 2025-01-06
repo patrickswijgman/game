@@ -26,15 +26,15 @@ type EnemyOptions = {
 };
 
 export function initEnemy(e: Entity, { health, stun, strength, dexterity, intelligence, movementSpeed, experience, state, weaponId = "", damage = 0 }: EnemyOptions) {
-  e.sheet.stats.health = health;
-  e.sheet.stats.healthMax = health;
-  e.sheet.stats.stunMax = stun;
-  e.sheet.stats.strength = strength;
-  e.sheet.stats.dexterity = dexterity;
-  e.sheet.stats.intelligence = intelligence;
-  e.sheet.stats.movementSpeed = movementSpeed;
-  e.sheet.stats.experience = experience;
-  e.sheet.stats.damage = damage;
+  e.sheet.statsBase.health = health;
+  e.sheet.statsBase.healthMax = health;
+  e.sheet.statsBase.stunMax = stun;
+  e.sheet.statsBase.strength = strength;
+  e.sheet.statsBase.dexterity = dexterity;
+  e.sheet.statsBase.intelligence = intelligence;
+  e.sheet.statsBase.movementSpeed = movementSpeed;
+  e.sheet.statsBase.experience = experience;
+  e.sheet.statsBase.damage = damage;
   e.sheet.weaponId = weaponId;
   updateSheet(e.sheet);
   e.stateStartId = state;
