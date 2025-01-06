@@ -48,7 +48,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
         const player = getPlayer(scene);
         const distance = getVectorDistance(e.position, player.position);
 
-        let speed = e.stats.movementSpeed;
+        let speed = e.sheet.stats.movementSpeed;
         if (distance < 75) {
           speed *= 1.5;
         }

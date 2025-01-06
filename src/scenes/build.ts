@@ -25,7 +25,7 @@ export function renderBuildScene(scene: Scene) {
   resetTransform();
   translateTransform(WIDTH / 2, 20);
   scaleTransform(1.5, 1.5);
-  drawText("HERO", 0, 0, COLOR_TEXT, "center");
+  drawText("BUILD", 0, 0, COLOR_TEXT, "center");
 
   resetTransform();
   translateTransform(WIDTH - 20, HEIGHT - 20);
@@ -35,8 +35,8 @@ export function renderBuildScene(scene: Scene) {
   drawAbilityScore(100, 140, "Dexterity", "dexterity");
   drawAbilityScore(100, 210, "Intelligence", "intelligence");
 
-  drawItem(WIDTH / 2, 70, game.session.weaponId, "Weapon");
-  drawItem(WIDTH / 2, 250, game.session.armorId, "Armor");
+  drawItem(WIDTH / 2, 70, game.session.sheet.weaponId, "Weapon");
+  drawItem(WIDTH / 2, 250, game.session.sheet.armorId, "Armor");
   drawStatBlock(WIDTH - 100, 70);
 }
 
@@ -50,9 +50,9 @@ function drawAbilityScore(x: number, y: number, name: string, key: keyof Stats) 
   translateTransform(x, y);
   translateTransform(0, 20);
   scaleTransform(1.5, 1.5);
-  drawText(game.session.stats[key].toString(), 0, 0, COLOR_TEXT, "center");
+  drawText(game.session.sheet.stats[key].toString(), 0, 0, COLOR_TEXT, "center");
 
-  const mod = getModifier(game.session.stats, key);
+  const mod = getModifier(game.session.sheet.stats, key);
   resetTransform();
   translateTransform(x, y);
   translateTransform(0, 40);
@@ -76,9 +76,12 @@ function drawItem(x: number, y: number, id: string, name: string) {
     translateTransform(x, y);
     translateTransform(0, 40);
     drawItemStat(item.stats, "Damage", "damage");
+    drawItemStat(item.stats, "Stun Damage", "stunDamage");
     drawItemStat(item.stats, "Strength Scaling", "strengthScaling");
     drawItemStat(item.stats, "Dexterity Scaling", "dexterityScaling");
     drawItemStat(item.stats, "Intelligence Scaling", "intelligenceScaling");
+    drawItemStat(item.stats, "Stamina Regen", "staminaRegen");
+    drawItemStat(item.stats, "Movement Speed", "movementSpeed");
     drawItemStat(item.stats, "Range", "range");
   }
 }
@@ -98,11 +101,12 @@ function drawStatBlock(x: number, y: number) {
   resetTransform();
   translateTransform(x, y);
   translateTransform(0, 20);
-  drawStat(game.session.stats, "Health", "healthMax");
-  drawStat(game.session.stats, "Stamina", "staminaMax");
-  drawStat(game.session.stats, "Stun", "stunMax");
-  drawStat(game.session.stats, "Damage", "damage");
-  drawStat(game.session.stats, "Movement Speed", "movementSpeed");
+  drawStat(game.session.sheet.stats, "Health", "healthMax");
+  drawStat(game.session.sheet.stats, "Stamina", "staminaMax");
+  drawStat(game.session.sheet.stats, "Stamina Regen", "staminaRegen");
+  drawStat(game.session.sheet.stats, "Stun", "stunMax");
+  drawStat(game.session.sheet.stats, "Damage", "damage");
+  drawStat(game.session.sheet.stats, "Movement Speed", "movementSpeed");
 }
 
 function drawStat(stats: Stats, name: string, key: keyof Stats) {

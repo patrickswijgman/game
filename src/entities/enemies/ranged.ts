@@ -48,7 +48,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
       {
         const player = getPlayer(scene);
         const distance = getVectorDistance(e.position, player.position);
-        const weapon = getItem(e.weaponId);
+        const weapon = getItem(e.sheet.weaponId);
         const shortRange = weapon.stats.range * 0.75;
 
         if (distance < shortRange) {
@@ -56,12 +56,12 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
         }
 
         if (distance < weapon.stats.range) {
-          const weapon = getItem(e.weaponId);
+          const weapon = getItem(e.sheet.weaponId);
           e.actionId = weapon.actionId;
           return "action";
         }
 
-        seek(e, player.position, e.stats.movementSpeed);
+        seek(e, player.position, e.sheet.stats.movementSpeed);
         lookAt(e, player.position);
         updateWalkAnimation(e);
       }
@@ -71,9 +71,9 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
       {
         const player = getPlayer(scene);
         const distance = getVectorDistance(e.position, player.position);
-        const weapon = getItem(e.weaponId);
+        const weapon = getItem(e.sheet.weaponId);
         const shortRange = weapon.stats.range * 0.75;
-        const speed = e.stats.movementSpeed * 0.5;
+        const speed = e.sheet.stats.movementSpeed * 0.5;
 
         if (distance > shortRange) {
           return "seek";

@@ -8,7 +8,7 @@ import { destroyEntity, getEntity, getPlayer, Scene } from "scene.js";
 export function newMeleeAttack(scene: Scene, caster: Entity) {
   const x = caster.center.x;
   const y = caster.center.y;
-  const weapon = getItem(caster.weaponId);
+  const weapon = getItem(caster.sheet.weaponId);
   const player = getPlayer(scene);
   const target = caster.isEnemy ? player.center : scene.camera.mousePosition;
 
@@ -16,8 +16,8 @@ export function newMeleeAttack(scene: Scene, caster: Entity) {
 
   setSprites(e, weapon.spriteId, weapon.pivot.x, weapon.pivot.y);
 
-  e.stats = caster.stats;
-  e.weaponId = caster.weaponId;
+  e.sheet.stats = caster.sheet.stats;
+  e.sheet.weaponId = caster.sheet.weaponId;
   e.parentId = caster.id;
   e.stateNextId = "windup";
 
@@ -48,7 +48,7 @@ function onStateEnter(e: Entity, scene: Scene, state: string) {
 }
 
 function onStateUpdate(e: Entity, scene: Scene, state: string) {
-  const weapon = getItem(e.weaponId);
+  const weapon = getItem(e.sheet.weaponId);
 
   switch (state) {
     case "windup":

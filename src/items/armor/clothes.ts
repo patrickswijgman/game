@@ -7,6 +7,8 @@ export function newClothes() {
     name: "Clothes",
     spriteId: "",
     pivot: vec(16, 16),
-    stats: newStats({}),
+    stats: newStats({
+      staminaRegen: 1,
+    }),
   });
 }

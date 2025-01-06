@@ -6,7 +6,7 @@ import { newRangedAttack } from "entities/actions/ranged-attack.js";
 import { Entity, resetState } from "entity.js";
 import { doPolygonsIntersect } from "ridder";
 import { destroyEntity, getEntity, Scene } from "scene.js";
-import { Stats, updateStats } from "stats.js";
+import { clampStats, Stats } from "stats.js";
 
 export function onActionEnter(e: Entity, scene: Scene) {
   switch (e.actionId) {
@@ -79,11 +79,11 @@ export function isActionValid(stats: Stats, requirements: Stats) {
 export function spendAction(stats: Stats, requirements: Stats) {
   stats.health -= requirements.healthCost;
   stats.stamina -= requirements.staminaCost;
-  updateStats(stats);
+  clampStats(stats);
 }
 
 export function destroyIfCasterIsInvalid(e: Entity, scene: Scene, caster: Entity) {
-  if (caster.conditions.isStunned) {
+  if (caster.sheet.conditions.isStunned) {
     destroyEntity(scene, e);
     return true;
   }

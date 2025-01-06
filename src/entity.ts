@@ -1,12 +1,11 @@
 import { onActionEnter, onActionExit, onActionUpdate } from "actions.js";
-import { Conditions, newConditions } from "conditions.js";
 import { COLOR_TEXT } from "consts.js";
 import { renderBonfire } from "entities/bonfire.js";
 import { renderPortal } from "entities/portal.js";
 import { drawOutlinedText } from "render.js";
 import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, isRectangleValid, polygon, Polygon, polygonFromRect, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setPolygonAngle, setRectangle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, uuid, vec, Vector, writeIntersectionBetweenRectangles } from "ridder";
 import { addBody, addEntity, Scene } from "scene.js";
-import { newStats, Stats } from "stats.js";
+import { newSheet, Sheet } from "sheet.js";
 import { avoid } from "steering.js";
 
 export type Entity = {
@@ -23,8 +22,6 @@ export type Entity = {
   stateNextId: string;
   stateStartId: string;
   stateTimer: Timer;
-  stats: Stats;
-  conditions: Conditions;
   hitbox: Polygon;
   body: Rectangle;
   bodyOffset: Vector;
@@ -64,8 +61,8 @@ export type Entity = {
   parentId: string;
   targetId: string;
   actionId: string;
-  weaponId: string;
   blacklist: Array<string>;
+  sheet: Sheet;
   isPlayer: boolean;
   isEnemy: boolean;
   isFlipped: boolean;
@@ -92,8 +89,6 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     stateTimer: timer(),
     stateNextId: "",
     stateStartId: "",
-    stats: newStats(),
-    conditions: newConditions(),
     hitbox: polygon(),
     body: rect(),
     bodyOffset: vec(),
@@ -133,8 +128,8 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     parentId: "",
     targetId: "",
     actionId: "",
-    weaponId: "",
     blacklist: [],
+    sheet: newSheet(),
     isPlayer: false,
     isEnemy: false,
     isFlipped: false,
@@ -215,19 +210,19 @@ export function updateState(e: Entity, scene: Scene, onEnter: StateLifecycleHook
 }
 
 export function updateConditions(e: Entity) {
-  if (e.conditions.isStunned) {
+  if (e.sheet.conditions.isStunned) {
     e.stateNextId = "stun";
 
-    if (tickTimer(e.conditions.stunTimer, e.conditions.stunDuration)) {
-      e.conditions.isStunned = false;
-      resetTimer(e.conditions.stunTimer);
+    if (tickTimer(e.sheet.conditions.stunTimer, e.sheet.conditions.stunDuration)) {
+      e.sheet.conditions.isStunned = false;
+      resetTimer(e.sheet.conditions.stunTimer);
       resetState(e);
     }
   }
 
-  if (e.conditions.isInvulnerable && tickTimer(e.conditions.invulnerableTimer, e.conditions.invulnerableDuration)) {
-    e.conditions.isInvulnerable = false;
-    resetTimer(e.conditions.invulnerableTimer);
+  if (e.sheet.conditions.isInvulnerable && tickTimer(e.sheet.conditions.invulnerableTimer, e.sheet.conditions.invulnerableDuration)) {
+    e.sheet.conditions.isInvulnerable = false;
+    resetTimer(e.sheet.conditions.invulnerableTimer);
   }
 }
 

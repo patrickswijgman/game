@@ -57,7 +57,7 @@ run({
     for (const id of scene.update) {
       const e = getEntity(scene, id);
 
-      if (e.stats.healthMax && e.stats.health === 0) {
+      if (e.sheet.stats.healthMax && e.sheet.stats.health === 0) {
         destroyEntity(scene, e);
         continue;
       }
@@ -160,7 +160,7 @@ run({
       const e = getEntity(scene, id);
       renderEntity(e, scene);
 
-      if (e.isEnemy && e.stats.health < e.stats.healthMax) {
+      if (e.isEnemy && e.sheet.stats.health < e.sheet.stats.healthMax) {
         drawEnemyStatus(e, scene);
       }
     }

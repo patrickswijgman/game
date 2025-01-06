@@ -2,13 +2,13 @@ import { Entity, resetState } from "entity.js";
 import { copyVector, scaleVector, tickTimer, tween } from "ridder";
 
 export function onDodgeEnter(e: Entity) {
-  e.conditions.isInvulnerable = true;
-  e.conditions.invulnerableDuration = 400;
+  e.sheet.conditions.isInvulnerable = true;
+  e.sheet.conditions.invulnerableDuration = 400;
 }
 
 export function onDodgeUpdate(e: Entity) {
   copyVector(e.velocity, e.direction);
-  scaleVector(e.velocity, e.stats.movementSpeed * 2);
+  scaleVector(e.velocity, e.sheet.stats.movementSpeed * 2);
 
   e.isFlipped = e.direction.x < 0;
 
@@ -22,5 +22,5 @@ export function onDodgeUpdate(e: Entity) {
 }
 
 export function onDodgeExit(e: Entity) {
-  e.conditions.isInvulnerable = false;
+  e.sheet.conditions.isInvulnerable = false;
 }

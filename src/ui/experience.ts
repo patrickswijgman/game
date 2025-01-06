@@ -10,5 +10,5 @@ export function drawExperience() {
   drawRect(12 + 1, 1, 50 - 2, 13 - 2, COLOR_BG, true);
   translateTransform(16, 3);
   scaleTransform(0.75, 0.75);
-  drawText(game.session.stats.experience.toString(), 0, 0, COLOR_TEXT);
+  drawText(game.session.sheet.stats.experience.toString(), 0, 0, COLOR_TEXT);
 }

@@ -19,7 +19,7 @@ export function updateBonfire(e: Entity, scene: Scene) {
   const distance = getVectorDistance(e.position, player.position);
 
   if (distance < 20 && isInputPressed(InputCode.KEY_E)) {
-    restoreStats(game.session.stats);
+    restoreStats(game.session.sheet.stats);
   }
 }
 

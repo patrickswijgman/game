@@ -13,7 +13,7 @@ export function newArrow(scene: Scene, caster: Entity, target: Vector) {
   setSprites(e, "arrow", 16, 15.5);
 
   e.hitbox = polygonFromRect(x, y, rect(0, -2, 8, 4));
-  e.weaponId = caster.weaponId;
+  e.sheet.weaponId = caster.sheet.weaponId;
   e.parentId = caster.parentId;
   e.angle = getAngle(x, y, target.x, target.y);
 
@@ -28,7 +28,7 @@ export function updateArrow(e: Entity, scene: Scene) {
   copyVector(e.velocity, e.direction);
   scaleVector(e.velocity, 4);
 
-  const weapon = getItem(e.weaponId);
+  const weapon = getItem(e.sheet.weaponId);
   const distance = getVectorDistance(e.start, e.position);
 
   if (distance > weapon.stats.range) {

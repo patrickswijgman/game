@@ -8,9 +8,9 @@ import { drawExperience } from "ui/experience.js";
 
 export function drawStatus(e: Entity) {
   resetTransform();
-  drawBar(10, 10, e.stats.health, e.stats.healthMax, COLOR_HEALTH, e.stats.healthMax, 10);
-  drawBar(10, 25, e.stats.stamina, e.stats.staminaMax, COLOR_STAMINA, e.stats.staminaMax, 10);
-  drawBar(10, 40, e.stats.stun, e.stats.stunMax, COLOR_STUN, e.stats.stunMax, 5);
+  drawBar(10, 10, e.sheet.stats.health, e.sheet.stats.healthMax, COLOR_HEALTH, e.sheet.stats.healthMax, 10);
+  drawBar(10, 25, e.sheet.stats.stamina, e.sheet.stats.staminaMax, COLOR_STAMINA, e.sheet.stats.staminaMax, 10);
+  drawBar(10, 40, e.sheet.stats.stun, e.sheet.stats.stunMax, COLOR_STUN, e.sheet.stats.stunMax, 5);
   translateTransform(10, 50);
   drawExperience();
   resetTransform();

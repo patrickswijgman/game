@@ -7,7 +7,7 @@ import { game } from "game.js";
 import { getItem } from "items.js";
 import { copyVector, getVectorLength, InputCode, isInputDown, isInputPressed, normalizeVector, resetVector, scaleVector, setCameraPosition } from "ridder";
 import { addPlayer, Scene } from "scene.js";
-import { updateStats } from "stats.js";
+import { clampStats } from "stats.js";
 
 export function newPlayer(scene: Scene, x: number, y: number) {
   const e = newEntity(scene, "player", x, y);
@@ -16,8 +16,7 @@ export function newPlayer(scene: Scene, x: number, y: number) {
   setConstraints(e, 10, 12);
   setBody(e, scene, 10, 3);
 
-  e.stats = game.session.stats;
-  e.weaponId = game.session.weaponId;
+  e.sheet = game.session.sheet;
   e.stateStartId = "idle";
   e.stateNextId = "idle";
   e.isPlayer = true;
@@ -93,26 +92,26 @@ function move(e: Entity) {
 
   normalizeVector(e.velocity);
   copyVector(e.direction, e.velocity);
-  scaleVector(e.velocity, e.stats.movementSpeed);
+  scaleVector(e.velocity, e.sheet.stats.movementSpeed);
 
   return !!getVectorLength(e.velocity);
 }
 
 function doAction(e: Entity) {
   if (isInputDown(InputCode.MOUSE_LEFT)) {
-    const weapon = getItem(e.weaponId);
+    const weapon = getItem(e.sheet.weaponId);
 
-    if (isActionValid(e.stats, weapon.stats)) {
+    if (isActionValid(e.sheet.stats, weapon.stats)) {
       e.actionId = weapon.actionId;
-      spendAction(e.stats, weapon.stats);
+      spendAction(e.sheet.stats, weapon.stats);
       return true;
     }
   }
 
-  if (isInputPressed(InputCode.KEY_SPACE) && e.stats.stamina >= 20 && getVectorLength(e.velocity)) {
+  if (isInputPressed(InputCode.KEY_SPACE) && e.sheet.stats.stamina >= 20 && getVectorLength(e.velocity)) {
     e.actionId = "dodge";
-    e.stats.stamina -= 20;
-    updateStats(e.stats);
+    e.sheet.stats.stamina -= 20;
+    clampStats(e.sheet.stats);
     return true;
   }
 
