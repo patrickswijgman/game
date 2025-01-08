@@ -4,6 +4,7 @@ export const HEIGHT = (WIDTH / 16) * 9;
 export const COLOR_BG = "#1e1e1e";
 export const COLOR_DIM = "#777777";
 export const COLOR_DARK = "#333333";
+export const COLOR_DARKER = "#222222";
 export const COLOR_PRIMARY = "#B98B82";
 export const COLOR_DANGER = "#ff0000";
 export const COLOR_TEXT = "#ffffff";

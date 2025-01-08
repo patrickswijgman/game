@@ -1,7 +1,5 @@
 import { onActionEnter, onActionExit, onActionUpdate } from "actions.js";
 import { COLOR_TEXT } from "consts.js";
-import { renderBonfire } from "entities/bonfire.js";
-import { renderPortal } from "entities/portal.js";
 import { drawOutlinedText } from "render.js";
 import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, isRectangleValid, polygon, Polygon, polygonFromRect, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setPolygonAngle, setRectangle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, uuid, vec, Vector, writeIntersectionBetweenRectangles } from "ridder";
 import { addBody, addEntity, Scene } from "scene.js";
@@ -26,6 +24,7 @@ export type Entity = {
   body: Rectangle;
   bodyOffset: Vector;
   bodyIntersection: Vector;
+  hitarea: Rectangle;
   radius: number;
   textureId: string;
   spriteId: string;
@@ -63,11 +62,13 @@ export type Entity = {
   actionId: string;
   blacklist: Array<string>;
   sheet: Sheet;
+  buildTab: string;
   isPlayer: boolean;
   isEnemy: boolean;
   isFlipped: boolean;
   isMirrored: boolean;
   isFlashing: boolean;
+  isHovered: boolean;
   isVisible: boolean;
   isOutlineVisible: boolean;
   isOutlineDangerVisible: boolean;
@@ -93,6 +94,7 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     body: rect(),
     bodyOffset: vec(),
     bodyIntersection: vec(),
+    hitarea: rect(),
     radius: 0,
     textureId: "",
     spriteId: "",
@@ -130,11 +132,13 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     actionId: "",
     blacklist: [],
     sheet: newSheet(),
+    buildTab: "",
     isPlayer: false,
     isEnemy: false,
     isFlipped: false,
     isMirrored: false,
     isFlashing: false,
+    isHovered: false,
     isVisible: true,
     isOutlineVisible: false,
     isOutlineDangerVisible: false,
@@ -296,11 +300,7 @@ export function flash(e: Entity, duration: number) {
   resetTimer(e.flashTimer);
 }
 
-export function renderEntity(e: Entity, scene: Scene) {
-  if (!e.isVisible) {
-    return;
-  }
-
+export function renderEntityTransform(e: Entity, scene: Scene) {
   resetTransform();
   applyCameraTransform(scene.camera);
   translateTransform(e.position.x, e.position.y);
@@ -319,7 +319,9 @@ export function renderEntity(e: Entity, scene: Scene) {
   if (e.isMirrored) {
     scaleTransform(1, -1);
   }
+}
 
+export function renderEntity(e: Entity, scene: Scene) {
   setAlpha(e.tweenAlpha);
 
   if (e.textureId) {
@@ -351,15 +353,6 @@ export function renderEntity(e: Entity, scene: Scene) {
   }
 
   setAlpha(1);
-
-  switch (e.type) {
-    case "portal":
-      renderPortal(e, scene);
-      break;
-    case "bonfire":
-      renderBonfire(e, scene);
-      break;
-  }
 }
 
 export function renderShadow(e: Entity, scene: Scene) {

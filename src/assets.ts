@@ -26,6 +26,9 @@ export async function loadAssets() {
 
   loadSprites("icon_experience", "atlas", 0, 192, 16, 16);
 
+  loadSprite("tab_weapon", "atlas", 0, 176, 16, 16);
+  loadSprite("tab_armor", "atlas", 16, 176, 16, 16);
+
   loadRenderTexture("menu_bg", 1024, 1024, (ctx, w, h) => {
     ctx.fillStyle = COLOR_BG;
     ctx.fillRect(0, 0, w, h);

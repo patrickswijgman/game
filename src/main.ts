@@ -6,19 +6,20 @@ import { updateArrow } from "entities/actions/arrow.js";
 import { updateBite } from "entities/actions/bite.js";
 import { updateMeleeAttack } from "entities/actions/melee-attack.js";
 import { updateRangedAttack } from "entities/actions/ranged-attack.js";
-import { updateBonfire } from "entities/bonfire.js";
+import { renderBonfire, updateBonfire } from "entities/bonfire.js";
 import { updateCombatText } from "entities/combat/text.js";
 import { updateQuickMeleeEnemy } from "entities/enemies/melee-quick.js";
 import { updateMeleeEnemy } from "entities/enemies/melee.js";
 import { updateRangedEnemy } from "entities/enemies/ranged.js";
 import { updatePlayer } from "entities/player.js";
-import { updatePortal } from "entities/portal.js";
+import { renderPortal, updatePortal } from "entities/portal.js";
 import { updateTree } from "entities/tree.js";
+import { clickBuildTab, renderBuildTab } from "entities/ui/build-tab.js";
 import { updateExperienceOrb } from "entities/xp-orb.js";
-import { renderEntity, renderShadow, updateAvoidance, updateCenter, updateCollisions, updateConditions, updateFlash, updateHitbox, updatePhysics } from "entity.js";
+import { renderEntity, renderEntityTransform, renderShadow, updateAvoidance, updateCenter, updateCollisions, updateConditions, updateFlash, updateHitbox, updatePhysics } from "entity.js";
 import { getCurrentScene, switchScene, transitionToNextScene } from "game.js";
 import { updatePortalParticle } from "particles/portal.js";
-import { drawTexture, InputCode, isInputPressed, resetTransform, run, setAlpha, tickTimer, updateCamera } from "ridder";
+import { doesRectangleContain, drawTexture, getMousePosition, InputCode, isInputPressed, isRectangleValid, resetTransform, run, setAlpha, tickTimer, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
 import { renderBuildScene, updateBuildScene } from "scenes/build.js";
 import { newMenuScene, renderMenuScene, updateMenuScene } from "scenes/menu.js";
@@ -65,6 +66,18 @@ run({
       if (e.lifetime && tickTimer(e.lifeTimer, e.lifetime)) {
         destroyEntity(scene, e);
         continue;
+      }
+
+      const mouse = getMousePosition();
+
+      e.isHovered = isRectangleValid(e.hitarea) && doesRectangleContain(e.hitarea, mouse.x, mouse.y);
+
+      if (e.isHovered && isInputPressed(InputCode.MOUSE_LEFT, true)) {
+        switch (e.type) {
+          case "build_tab":
+            clickBuildTab(e, scene);
+            break;
+        }
       }
 
       updateConditions(e);
@@ -147,6 +160,15 @@ run({
       drawTexture(scene.backgroundTextureId, 0, 0);
     }
 
+    switch (scene.type) {
+      case "menu":
+        renderMenuScene(scene);
+        break;
+      case "build":
+        renderBuildScene(scene);
+        break;
+    }
+
     sortEntitiesOnDepth(scene);
 
     setAlpha(0.4);
@@ -158,20 +180,31 @@ run({
 
     for (const id of scene.render) {
       const e = getEntity(scene, id);
-      renderEntity(e, scene);
 
-      if (e.isEnemy && e.sheet.stats.health < e.sheet.stats.healthMax) {
-        drawEnemyStatus(e, scene);
+      if (e.isVisible) {
+        renderEntityTransform(e, scene);
+
+        switch (e.type) {
+          case "build_tab":
+            renderBuildTab(e, scene);
+            break;
+        }
+
+        renderEntity(e, scene);
+
+        switch (e.type) {
+          case "portal":
+            renderPortal(e, scene);
+            break;
+          case "bonfire":
+            renderBonfire(e, scene);
+            break;
+        }
+
+        if (e.isEnemy && e.sheet.stats.health < e.sheet.stats.healthMax) {
+          drawEnemyStatus(e, scene);
+        }
       }
-    }
-
-    switch (scene.type) {
-      case "menu":
-        renderMenuScene(scene);
-        break;
-      case "build":
-        renderBuildScene(scene);
-        break;
     }
 
     const player = getPlayer(scene);

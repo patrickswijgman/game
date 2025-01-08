@@ -19,9 +19,10 @@ export type Scene = {
   roomLevel: number;
   playerId: string;
   playerStart: Vector;
-  safeArea: Rectangle;
   portalPosition: Vector;
+  safeArea: Rectangle;
   sessionId: string;
+  buildTab: string;
   isPortalSpawned: boolean;
 };
 
@@ -43,9 +44,10 @@ export function newScene(type: string): Scene {
     roomLevel: 0,
     playerId: "",
     playerStart: vec(),
-    safeArea: rect(),
     portalPosition: vec(),
+    safeArea: rect(),
     sessionId: "",
+    buildTab: "",
     isPortalSpawned: false,
   });
 }

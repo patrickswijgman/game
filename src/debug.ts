@@ -1,5 +1,5 @@
 import { WIDTH } from "consts.js";
-import { applyCameraTransform, drawCircle, drawPolygonInstance, drawRectInstance, drawText, getFramePerSecond, isPolygonValid, resetTransform, translateTransform } from "ridder";
+import { applyCameraTransform, drawCircle, drawPolygonInstance, drawRectInstance, drawText, getFramePerSecond, isPolygonValid, isRectangleValid, resetTransform, translateTransform } from "ridder";
 import { getEntity, getPlayer, Scene } from "scene.js";
 
 export function renderDebugInfo(scene: Scene) {
@@ -11,6 +11,10 @@ export function renderDebugInfo(scene: Scene) {
 
     if (isPolygonValid(e.hitbox)) {
       drawPolygonInstance(e.hitbox, "yellow", false);
+    }
+
+    if (isRectangleValid(e.hitarea)) {
+      drawRectInstance(e.hitarea, "blue", false);
     }
 
     if (e.radius) {

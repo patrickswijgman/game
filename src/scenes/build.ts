@@ -1,4 +1,5 @@
-import { COLOR_DARK, COLOR_PRIMARY, COLOR_TEXT, HEIGHT, WIDTH } from "consts.js";
+import { COLOR_BG, COLOR_DARK, COLOR_DARKER, COLOR_PRIMARY, COLOR_TEXT, HEIGHT, WIDTH } from "consts.js";
+import { newBuildTab } from "entities/ui/build-tab.js";
 import { game, switchScene } from "game.js";
 import { getItem } from "items.js";
 import { drawRect, drawText, InputCode, isInputPressed, resetTransform, scaleTransform, translateTransform } from "ridder";
@@ -10,6 +11,10 @@ export function newBuildScene() {
   const scene = newScene("build");
 
   scene.backgroundTextureId = "menu_bg";
+  scene.buildTab = "weapon";
+
+  newBuildTab(scene, WIDTH / 2 - 100, 75, "tab_weapon", "weapon");
+  newBuildTab(scene, WIDTH / 2 - 80, 75, "tab_armor", "armor");
 
   return scene;
 }
@@ -31,11 +36,52 @@ export function renderBuildScene(scene: Scene) {
   translateTransform(WIDTH - 20, HEIGHT - 20);
   drawText("Press [Enter] to confirm", 0, 0, COLOR_TEXT, "right");
 
-  drawAbilityScores(100, 70);
+  drawAbilityScores(100, 100);
+  drawTabs(scene, WIDTH / 2 - 100, 80);
+  drawStatBlock(WIDTH - 100, 100);
+}
 
-  drawItem(WIDTH / 2, 70, game.session.sheet.weaponId, "Weapon");
-  drawItem(WIDTH / 2, 250, game.session.sheet.armorId, "Armor");
-  drawStatBlock(WIDTH - 100, 70);
+function drawTabs(scene: Scene, x: number, y: number) {
+  resetTransform();
+  translateTransform(x, y);
+  drawRect(0, 15, 200, 230, COLOR_DARKER, true);
+  drawRect(0, 15, 200, 21, COLOR_PRIMARY, true);
+
+  switch (scene.buildTab) {
+    case "weapon":
+      drawItem(x + 100, y + 20, game.session.sheet.weaponId, "Weapon");
+      break;
+    case "armor":
+      drawItem(x + 100, y + 20, game.session.sheet.armorId, "Armor");
+      break;
+  }
+}
+
+function drawItem(x: number, y: number, id: string, name: string) {
+  const item = getItem(id);
+
+  resetTransform();
+  translateTransform(x, y);
+  scaleTransform(1.25, 1.25);
+  drawText(name, 0, 0, COLOR_BG, "center");
+
+  if (item) {
+    resetTransform();
+    translateTransform(x, y);
+    translateTransform(0, 25);
+    drawText(item.name, 0, 0, COLOR_TEXT, "center");
+    resetTransform();
+    translateTransform(x, y);
+    translateTransform(0, 50);
+    drawItemStat(item.stats, "Damage", "damage");
+    drawItemStat(item.stats, "Stun Damage", "stunDamage");
+    drawItemStat(item.stats, "Strength Scaling", "strengthScaling");
+    drawItemStat(item.stats, "Dexterity Scaling", "dexterityScaling");
+    drawItemStat(item.stats, "Intelligence Scaling", "intelligenceScaling");
+    drawItemStat(item.stats, "Stamina Regen", "staminaRegen");
+    drawItemStat(item.stats, "Movement Speed", "movementSpeed");
+    drawItemStat(item.stats, "Range", "range");
+  }
 }
 
 function drawAbilityScores(x: number, y: number) {
@@ -52,33 +98,6 @@ function drawAbilityScores(x: number, y: number) {
   drawStat(game.session.sheet.stats, "Strength", "strength");
   drawStat(game.session.sheet.stats, "Dexterity", "dexterity");
   drawStat(game.session.sheet.stats, "Intelligence", "intelligence");
-}
-
-function drawItem(x: number, y: number, id: string, name: string) {
-  const item = getItem(id);
-
-  resetTransform();
-  translateTransform(x, y);
-  scaleTransform(1.25, 1.25);
-  drawText(name, 0, 0, COLOR_PRIMARY, "center");
-
-  if (item) {
-    resetTransform();
-    translateTransform(x, y);
-    translateTransform(0, 20);
-    drawText(item.name, 0, 0, COLOR_TEXT, "center");
-    resetTransform();
-    translateTransform(x, y);
-    translateTransform(0, 40);
-    drawItemStat(item.stats, "Damage", "damage");
-    drawItemStat(item.stats, "Stun Damage", "stunDamage");
-    drawItemStat(item.stats, "Strength Scaling", "strengthScaling");
-    drawItemStat(item.stats, "Dexterity Scaling", "dexterityScaling");
-    drawItemStat(item.stats, "Intelligence Scaling", "intelligenceScaling");
-    drawItemStat(item.stats, "Stamina Regen", "staminaRegen");
-    drawItemStat(item.stats, "Movement Speed", "movementSpeed");
-    drawItemStat(item.stats, "Range", "range");
-  }
 }
 
 function drawItemStat(stats: Stats, name: string, key: keyof Stats) {
