@@ -9,8 +9,8 @@ export function newBuildTab(scene: Scene, x: number, y: number, spriteId: string
   e.spriteId = spriteId;
   e.buildTab = tab;
 
-  setVector(e.pivot, -2, -2);
-  setRectangle(e.hitarea, x, y, 20, 20);
+  setVector(e.pivot, -12, -2);
+  setRectangle(e.hitarea, x, y, 40, 20);
 
   return e;
 }
@@ -21,5 +21,5 @@ export function clickBuildTab(e: Entity, scene: Scene) {
 
 export function renderBuildTab(e: Entity, scene: Scene) {
   const color = e.buildTab === scene.buildTab ? COLOR_PRIMARY : e.isHovered ? COLOR_DIM : COLOR_DARK;
-  drawRect(0, 0, 20, 20, color, true);
+  drawRect(0, 0, 40, 20, color, true);
 }

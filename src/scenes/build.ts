@@ -13,8 +13,8 @@ export function newBuildScene() {
   scene.backgroundTextureId = "menu_bg";
   scene.buildTab = "weapon";
 
-  newBuildTab(scene, WIDTH / 2 - 100, 75, "tab_weapon", "weapon");
-  newBuildTab(scene, WIDTH / 2 - 80, 75, "tab_armor", "armor");
+  newBuildTab(scene, WIDTH / 2 - 100, 55, "tab_weapon", "weapon");
+  newBuildTab(scene, WIDTH / 2 - 60, 55, "tab_armor", "armor");
 
   return scene;
 }
@@ -36,9 +36,9 @@ export function renderBuildScene(scene: Scene) {
   translateTransform(WIDTH - 20, HEIGHT - 20);
   drawText("Press [Enter] to confirm", 0, 0, COLOR_TEXT, "right");
 
-  drawAbilityScores(100, 100);
-  drawTabs(scene, WIDTH / 2 - 100, 80);
-  drawStatBlock(WIDTH - 100, 100);
+  drawAbilityScores(100, 80);
+  drawTabs(scene, WIDTH / 2 - 100, 60);
+  drawStatBlock(WIDTH - 100, 80);
 }
 
 function drawTabs(scene: Scene, x: number, y: number) {
@@ -89,10 +89,11 @@ function drawAbilityScores(x: number, y: number) {
   translateTransform(x, y);
   scaleTransform(1.25, 1.25);
   drawText("Ability scores", 0, 0, COLOR_PRIMARY, "center");
-
   resetTransform();
   translateTransform(x, y);
-  translateTransform(0, 20);
+  translateTransform(0, 16);
+  drawRect(-65, 0, 130, 1, COLOR_PRIMARY);
+  translateTransform(0, 14);
   drawStat(game.session.sheet.stats, "Constitution", "constitution");
   drawStat(game.session.sheet.stats, "Endurance", "endurance");
   drawStat(game.session.sheet.stats, "Strength", "strength");
@@ -114,7 +115,9 @@ function drawStatBlock(x: number, y: number) {
   drawText("Stats", 0, 0, COLOR_PRIMARY, "center");
   resetTransform();
   translateTransform(x, y);
-  translateTransform(0, 20);
+  translateTransform(0, 16);
+  drawRect(-65, 0, 130, 1, COLOR_PRIMARY);
+  translateTransform(0, 14);
   drawStat(game.session.sheet.stats, "Health", "healthMax");
   drawStat(game.session.sheet.stats, "Stamina", "staminaMax");
   drawStat(game.session.sheet.stats, "Stamina Regen", "staminaRegen");
