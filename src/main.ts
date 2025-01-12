@@ -10,7 +10,7 @@ import { updateCombatText } from "entities/combat/text.js";
 import { updateQuickMeleeEnemy } from "entities/enemies/melee-quick.js";
 import { updateMeleeEnemy } from "entities/enemies/melee.js";
 import { updateRangedEnemy } from "entities/enemies/ranged.js";
-import { updatePlayer } from "entities/player.js";
+import { drawPlayerStatus, updatePlayer } from "entities/player.js";
 import { updateTree } from "entities/tree.js";
 import { clickBuildTab, renderBuildTab } from "entities/ui/build-tab.js";
 import { updateExperienceOrb } from "entities/xp-orb.js";
@@ -21,7 +21,6 @@ import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, sortEnti
 import { renderBuildScene, updateBuildScene } from "scenes/build.js";
 import { updateCombatScene } from "scenes/combat.js";
 import { newMenuScene, renderMenuScene, updateMenuScene } from "scenes/menu.js";
-import { drawStatus } from "ui/status.js";
 
 let isDebugging = false;
 
@@ -187,7 +186,7 @@ run({
 
     const player = getPlayer(scene);
     if (player) {
-      drawStatus(player);
+      drawPlayerStatus(player);
     }
 
     if (isDebugging) {

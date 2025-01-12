@@ -2,12 +2,14 @@ import { isActionValid, spendAction } from "actions.js";
 import { updateBreathAnimation } from "anims/breath.js";
 import { updateWalkAnimation } from "anims/walk.js";
 import { generateStamina } from "combat.js";
+import { COLOR_BG, COLOR_HEALTH, COLOR_STAMINA, COLOR_TEXT } from "consts.js";
 import { Entity, lookAt, newEntity, setBody, setConstraints, setSprites, updateState } from "entity.js";
 import { game } from "game.js";
 import { getItem } from "items.js";
-import { copyVector, getVectorLength, InputCode, isInputDown, isInputPressed, normalizeVector, resetVector, scaleVector, setCameraPosition } from "ridder";
+import { copyVector, drawRect, drawSprite, drawText, getVectorLength, InputCode, isInputDown, isInputPressed, normalizeVector, resetTransform, resetVector, scaleTransform, scaleVector, setAlpha, setCameraPosition, translateTransform } from "ridder";
 import { addPlayer, Scene } from "scene.js";
 import { clampStats } from "stats.js";
+import { drawBar } from "ui/bar.js";
 
 export function newPlayer(scene: Scene, x: number, y: number) {
   const e = newEntity(scene, "player", x, y);
@@ -114,4 +116,19 @@ function doAction(e: Entity) {
   }
 
   return false;
+}
+
+export function drawPlayerStatus(e: Entity) {
+  resetTransform();
+  drawBar(10, 10, e.sheet.stats.health, e.sheet.stats.healthMax, COLOR_HEALTH, e.sheet.stats.healthMax, 10);
+  drawBar(10, 25, e.sheet.stats.stamina, e.sheet.stats.staminaMax, COLOR_STAMINA, e.sheet.stats.staminaMax, 10);
+  translateTransform(10, 40);
+  drawSprite("icon_experience", -2, -2);
+  setAlpha(0.25);
+  drawRect(12, 0, 50, 13, COLOR_BG, true);
+  setAlpha(1);
+  drawRect(12 + 1, 1, 50 - 2, 13 - 2, COLOR_BG, true);
+  translateTransform(16, 3);
+  scaleTransform(0.75, 0.75);
+  drawText(game.sheet.stats.experience.toString(), 0, 0, COLOR_TEXT);
 }
