@@ -11,7 +11,6 @@ export function newDummy(scene: Scene, x: number, y: number) {
 
   initEnemy(e, {
     health: Infinity,
-    stun: Infinity,
     strength: 0,
     dexterity: 0,
     intelligence: 0,

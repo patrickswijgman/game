@@ -1,18 +1,34 @@
-import { destroyScene, Scene } from "scene.js";
-import { newSession, Session } from "session.js";
+import { Scene } from "scene.js";
+import { newSheet, Sheet } from "sheet.js";
 
 export type Game = {
   scenes: Record<string, Scene>;
   sceneId: string;
   sceneNextId: string;
-  session: Session;
+  sheet: Sheet;
 };
 
 export const game: Game = {
   scenes: {},
   sceneId: "",
   sceneNextId: "",
-  session: newSession(),
+  sheet: newSheet({
+    stats: {
+      health: 50,
+      healthMax: 50,
+      stamina: 100,
+      staminaMax: 100,
+      staminaRegen: 1,
+      constitution: 0,
+      endurance: 0,
+      strength: 0,
+      dexterity: 3,
+      intelligence: 0,
+      movementSpeed: 1.5,
+    },
+    weaponId: "crossbow_light",
+    armorId: "clothes",
+  }),
 };
 
 console.log(game);
@@ -25,19 +41,6 @@ export function transitionToNextScene() {
   if (game.sceneId !== game.sceneNextId) {
     game.sceneId = game.sceneNextId;
   }
-}
-
-export function startNewSession() {
-  for (const id in game.scenes) {
-    const scene = game.scenes[id];
-
-    if (scene.sessionId === game.session.id) {
-      destroyScene(scene);
-      delete game.scenes[id];
-    }
-  }
-
-  game.session = newSession();
 }
 
 export function addScene(scene: Scene) {

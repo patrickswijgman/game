@@ -1,4 +1,4 @@
-import { COLOR_HEALTH, COLOR_STUN } from "consts.js";
+import { COLOR_HEALTH } from "consts.js";
 import { Entity, newEntity } from "entity.js";
 import { applyCameraTransform, resetTransform, scaleTransform, translateTransform } from "ridder";
 import { Scene, addEnemy, getPlayer } from "scene.js";
@@ -14,7 +14,6 @@ export function newEnemy(scene: Scene, type: string, x: number, y: number) {
 
 type EnemyOptions = {
   health: number;
-  stun: number;
   strength: number;
   dexterity: number;
   intelligence: number;
@@ -25,10 +24,9 @@ type EnemyOptions = {
   damage?: number;
 };
 
-export function initEnemy(e: Entity, { health, stun, strength, dexterity, intelligence, movementSpeed, experience, state, weaponId = "", damage = 0 }: EnemyOptions) {
+export function initEnemy(e: Entity, { health, strength, dexterity, intelligence, movementSpeed, experience, state, weaponId = "", damage = 0 }: EnemyOptions) {
   e.sheet.statsBase.health = health;
   e.sheet.statsBase.healthMax = health;
-  e.sheet.statsBase.stunMax = stun;
   e.sheet.statsBase.strength = strength;
   e.sheet.statsBase.dexterity = dexterity;
   e.sheet.statsBase.intelligence = intelligence;
@@ -71,5 +69,4 @@ export function drawEnemyStatus(e: Entity, scene: Scene) {
   translateTransform(e.position.x, e.position.y - e.height - 10);
   scaleTransform(0.5, 0.5);
   drawBar(-15, 0, e.sheet.stats.health, e.sheet.stats.healthMax, COLOR_HEALTH, 30, 8);
-  drawBar(-15, 8, e.sheet.stats.stun, e.sheet.stats.stunMax, COLOR_STUN, 30, 6);
 }

@@ -8,9 +8,6 @@ export type Stats = {
   staminaMax: number;
   staminaRegen: number;
   staminaCost: number;
-  stun: number;
-  stunMax: number;
-  stunDamage: number;
   damage: number;
   range: number;
   constitution: number;
@@ -34,9 +31,6 @@ export function newStats(stats: Partial<Stats> = {}): Stats {
     staminaMax: 0,
     staminaRegen: 0,
     staminaCost: 0,
-    stun: 0,
-    stunMax: 0,
-    stunDamage: 0,
     damage: 0,
     range: 0,
     constitution: 0,
@@ -56,13 +50,11 @@ export function newStats(stats: Partial<Stats> = {}): Stats {
 export function clampStats(stats: Stats) {
   stats.health = clamp(stats.health, 0, stats.healthMax);
   stats.stamina = clamp(stats.stamina, 0, stats.staminaMax);
-  stats.stun = clamp(stats.stun, 0, stats.stunMax);
 }
 
 export function restoreStats(stats: Stats) {
   stats.health = stats.healthMax;
   stats.stamina = stats.staminaMax;
-  stats.stun = 0;
 }
 
 export function addStats(a: Stats, b: Stats) {

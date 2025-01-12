@@ -6,24 +6,21 @@ import { updateArrow } from "entities/actions/arrow.js";
 import { updateBite } from "entities/actions/bite.js";
 import { updateMeleeAttack } from "entities/actions/melee-attack.js";
 import { updateRangedAttack } from "entities/actions/ranged-attack.js";
-import { renderBonfire, updateBonfire } from "entities/bonfire.js";
 import { updateCombatText } from "entities/combat/text.js";
 import { updateQuickMeleeEnemy } from "entities/enemies/melee-quick.js";
 import { updateMeleeEnemy } from "entities/enemies/melee.js";
 import { updateRangedEnemy } from "entities/enemies/ranged.js";
 import { updatePlayer } from "entities/player.js";
-import { renderPortal, updatePortal } from "entities/portal.js";
 import { updateTree } from "entities/tree.js";
 import { clickBuildTab, renderBuildTab } from "entities/ui/build-tab.js";
 import { updateExperienceOrb } from "entities/xp-orb.js";
 import { renderEntity, renderEntityTransform, renderShadow, updateAvoidance, updateCenter, updateCollisions, updateConditions, updateFlash, updateHitbox, updateHovered, updatePhysics } from "entity.js";
 import { getCurrentScene, switchScene, transitionToNextScene } from "game.js";
-import { updatePortalParticle } from "particles/portal.js";
 import { drawTexture, InputCode, isInputPressed, resetTransform, run, setAlpha, tickTimer, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
 import { renderBuildScene, updateBuildScene } from "scenes/build.js";
+import { updateCombatScene } from "scenes/combat.js";
 import { newMenuScene, renderMenuScene, updateMenuScene } from "scenes/menu.js";
-import { updateCombatRoomScene } from "scenes/rooms/combat.js";
 import { drawStatus } from "ui/status.js";
 
 let isDebugging = false;
@@ -102,15 +99,6 @@ run({
         case "tree":
           updateTree(e);
           break;
-        case "portal":
-          updatePortal(e, scene);
-          break;
-        case "bonfire":
-          updateBonfire(e, scene);
-          break;
-        case "particle_portal":
-          updatePortalParticle(e, scene);
-          break;
         case "melee_attack":
           updateMeleeAttack(e, scene);
           break;
@@ -144,8 +132,8 @@ run({
       case "build":
         updateBuildScene(scene);
         break;
-      case "room_combat":
-        updateCombatRoomScene(scene);
+      case "combat":
+        updateCombatScene(scene);
         break;
     }
   },
@@ -189,15 +177,6 @@ run({
         }
 
         renderEntity(e, scene);
-
-        switch (e.type) {
-          case "portal":
-            renderPortal(e, scene);
-            break;
-          case "bonfire":
-            renderBonfire(e, scene);
-            break;
-        }
 
         if (e.isEnemy && e.sheet.stats.health < e.sheet.stats.healthMax) {
           drawEnemyStatus(e, scene);

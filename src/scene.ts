@@ -1,6 +1,6 @@
 import { Entity } from "entity.js";
-import { addScene, game } from "game.js";
-import { camera, Camera, rect, Rectangle, remove, uuid, vec, Vector } from "ridder";
+import { addScene } from "game.js";
+import { camera, Camera, rect, Rectangle, remove, uuid } from "ridder";
 
 export type Scene = {
   id: string;
@@ -14,16 +14,10 @@ export type Scene = {
   bodies: Array<Rectangle>;
   camera: Camera;
   bounds: Rectangle;
-  backgroundTextureId: string;
-  roomType: string;
-  roomLevel: number;
-  playerId: string;
-  playerStart: Vector;
-  portalPosition: Vector;
   safeArea: Rectangle;
-  sessionId: string;
+  backgroundTextureId: string;
+  playerId: string;
   buildTab: string;
-  isPortalSpawned: boolean;
 };
 
 export function newScene(type: string): Scene {
@@ -39,25 +33,11 @@ export function newScene(type: string): Scene {
     bodies: [],
     camera: camera(),
     bounds: rect(),
-    backgroundTextureId: "",
-    roomType: "",
-    roomLevel: 0,
-    playerId: "",
-    playerStart: vec(),
-    portalPosition: vec(),
     safeArea: rect(),
-    sessionId: "",
+    backgroundTextureId: "",
+    playerId: "",
     buildTab: "",
-    isPortalSpawned: false,
   });
-}
-
-export function newRoom(type: string, roomType: string, roomLevel: number) {
-  const scene = newScene(type);
-  scene.roomType = roomType;
-  scene.roomLevel = roomLevel;
-  scene.sessionId = game.session.id;
-  return scene;
 }
 
 export function cleanupDestroyedEntities(scene: Scene) {

@@ -4,7 +4,7 @@ import { game, switchScene } from "game.js";
 import { getItem } from "items.js";
 import { drawRect, drawText, InputCode, isInputPressed, resetTransform, scaleTransform, translateTransform } from "ridder";
 import { newScene, Scene } from "scene.js";
-import { newStartRoomScene } from "scenes/rooms/start.js";
+import { newCombatScene } from "scenes/combat.js";
 import { Stats } from "stats.js";
 
 export function newBuildScene() {
@@ -21,7 +21,7 @@ export function newBuildScene() {
 
 export function updateBuildScene(scene: Scene) {
   if (isInputPressed(InputCode.KEY_ENTER)) {
-    const next = newStartRoomScene();
+    const next = newCombatScene();
     switchScene(next.id);
   }
 }
@@ -49,10 +49,10 @@ function drawTabsAndTabContent(scene: Scene, x: number, y: number) {
 
   switch (scene.buildTab) {
     case "weapon":
-      drawItem(x + 100, y + 20, game.session.sheet.weaponId, "Weapon");
+      drawItem(x + 100, y + 20, game.sheet.weaponId, "Weapon");
       break;
     case "armor":
-      drawItem(x + 100, y + 20, game.session.sheet.armorId, "Armor");
+      drawItem(x + 100, y + 20, game.sheet.armorId, "Armor");
       break;
   }
 }
@@ -74,7 +74,6 @@ function drawItem(x: number, y: number, id: string, name: string) {
     translateTransform(x, y);
     translateTransform(0, 50);
     drawItemStat(item.stats, "Damage", "damage");
-    drawItemStat(item.stats, "Stun Damage", "stunDamage");
     drawItemStat(item.stats, "Strength Scaling", "strengthScaling");
     drawItemStat(item.stats, "Dexterity Scaling", "dexterityScaling");
     drawItemStat(item.stats, "Intelligence Scaling", "intelligenceScaling");
@@ -94,11 +93,11 @@ function drawAbilityScores(x: number, y: number) {
   translateTransform(0, 16);
   drawRect(-65, 0, 130, 1, COLOR_PRIMARY);
   translateTransform(0, 14);
-  drawStat(game.session.sheet.stats, "Constitution", "constitution");
-  drawStat(game.session.sheet.stats, "Endurance", "endurance");
-  drawStat(game.session.sheet.stats, "Strength", "strength");
-  drawStat(game.session.sheet.stats, "Dexterity", "dexterity");
-  drawStat(game.session.sheet.stats, "Intelligence", "intelligence");
+  drawStat(game.sheet.stats, "Constitution", "constitution");
+  drawStat(game.sheet.stats, "Endurance", "endurance");
+  drawStat(game.sheet.stats, "Strength", "strength");
+  drawStat(game.sheet.stats, "Dexterity", "dexterity");
+  drawStat(game.sheet.stats, "Intelligence", "intelligence");
 }
 
 function drawItemStat(stats: Stats, name: string, key: keyof Stats) {
@@ -118,12 +117,11 @@ function drawStatBlock(x: number, y: number) {
   translateTransform(0, 16);
   drawRect(-65, 0, 130, 1, COLOR_PRIMARY);
   translateTransform(0, 14);
-  drawStat(game.session.sheet.stats, "Health", "healthMax");
-  drawStat(game.session.sheet.stats, "Stamina", "staminaMax");
-  drawStat(game.session.sheet.stats, "Stamina Regen", "staminaRegen");
-  drawStat(game.session.sheet.stats, "Stun", "stunMax");
-  drawStat(game.session.sheet.stats, "Damage", "damage");
-  drawStat(game.session.sheet.stats, "Movement Speed", "movementSpeed");
+  drawStat(game.sheet.stats, "Health", "healthMax");
+  drawStat(game.sheet.stats, "Stamina", "staminaMax");
+  drawStat(game.sheet.stats, "Stamina Regen", "staminaRegen");
+  drawStat(game.sheet.stats, "Damage", "damage");
+  drawStat(game.sheet.stats, "Movement Speed", "movementSpeed");
 }
 
 function drawStat(stats: Stats, name: string, key: keyof Stats) {

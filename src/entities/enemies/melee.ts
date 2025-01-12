@@ -16,7 +16,6 @@ export function newMeleeEnemy(scene: Scene, x: number, y: number) {
 
   initEnemy(e, {
     health: 18,
-    stun: 100,
     strength: 0,
     dexterity: 1,
     intelligence: -1,

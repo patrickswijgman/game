@@ -1,7 +1,7 @@
 import { isActionValid, spendAction } from "actions.js";
 import { updateBreathAnimation } from "anims/breath.js";
 import { updateWalkAnimation } from "anims/walk.js";
-import { depleteStun, generateStamina } from "combat.js";
+import { generateStamina } from "combat.js";
 import { Entity, lookAt, newEntity, setBody, setConstraints, setSprites, updateState } from "entity.js";
 import { game } from "game.js";
 import { getItem } from "items.js";
@@ -16,7 +16,7 @@ export function newPlayer(scene: Scene, x: number, y: number) {
   setConstraints(e, 10, 12);
   setBody(e, scene, 10, 3);
 
-  e.sheet = game.session.sheet;
+  e.sheet = game.sheet;
   e.stateStartId = "idle";
   e.stateNextId = "idle";
   e.isPlayer = true;
@@ -35,8 +35,6 @@ export function updatePlayer(e: Entity, scene: Scene) {
 function onStateEnter() {}
 
 function onStateUpdate(e: Entity, scene: Scene, state: string) {
-  depleteStun(e);
-
   switch (state) {
     case "idle":
       {
