@@ -192,6 +192,7 @@ export function updateState(e: Entity, scene: Scene, onEnter: StateLifecycleHook
     resetVector(e.tweenPosition);
     setVector(e.tweenScale, 1, 1);
     e.tweenAngle = 0;
+    e.tweenAlpha = 1;
 
     onEnter(e, scene, e.stateId);
 
@@ -296,6 +297,14 @@ export function lookAt(e: Entity, target: Vector) {
   e.isFlipped = target.x < e.position.x;
 }
 
+export function resetState(e: Entity) {
+  if (e.stateStartId) {
+    e.stateNextId = e.stateStartId;
+  } else {
+    e.stateNextId = "";
+  }
+}
+
 export function renderEntityTransform(e: Entity, scene: Scene) {
   resetTransform();
   applyCameraTransform(scene.camera);
@@ -367,13 +376,5 @@ export function renderShadow(e: Entity, scene: Scene) {
 
     translateTransform(e.shadowOffset.x, e.shadowOffset.y);
     drawSprite(e.shadowId, -e.pivot.x, -e.pivot.y);
-  }
-}
-
-export function resetState(e: Entity) {
-  if (e.stateStartId) {
-    e.stateNextId = e.stateStartId;
-  } else {
-    e.stateNextId = "";
   }
 }

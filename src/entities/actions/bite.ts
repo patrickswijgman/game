@@ -48,7 +48,7 @@ function onStateUpdate(e: Entity, scene: Scene, state: string) {
         tickTimer(e.tweenTimer, 200);
         e.tweenScale.y = tween(0.5, 1, 200, "easeInOutSine", e.tweenTimer.elapsed);
 
-        if (tickTimer(e.stateTimer, 250)) {
+        if (tickTimer(e.stateTimer, 300)) {
           return "release";
         }
       }

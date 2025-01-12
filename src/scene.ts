@@ -1,6 +1,6 @@
 import { Entity } from "entity.js";
 import { addScene } from "game.js";
-import { camera, Camera, rect, Rectangle, remove, uuid } from "ridder";
+import { camera, Camera, rect, Rectangle, remove, timer, Timer, uuid } from "ridder";
 
 export type Scene = {
   id: string;
@@ -16,6 +16,8 @@ export type Scene = {
   bounds: Rectangle;
   safeArea: Rectangle;
   backgroundTextureId: string;
+  enemySpawnDuration: number;
+  enemySpawnTimer: Timer;
   playerId: string;
   buildTab: string;
 };
@@ -35,6 +37,8 @@ export function newScene(type: string): Scene {
     bounds: rect(),
     safeArea: rect(),
     backgroundTextureId: "",
+    enemySpawnDuration: 3000,
+    enemySpawnTimer: timer(),
     playerId: "",
     buildTab: "",
   });
