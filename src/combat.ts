@@ -1,6 +1,6 @@
 import { newCombatText } from "entities/combat/text.js";
 import { newExperienceOrb } from "entities/xp-orb.js";
-import { Entity, flash } from "entity.js";
+import { Entity } from "entity.js";
 import { getDelta, random, resetTimer } from "ridder";
 import { Scene } from "scene.js";
 import { clampStats } from "stats.js";
@@ -15,7 +15,8 @@ export function doDamage(scene: Scene, caster: Entity, target: Entity) {
   target.sheet.stats.health -= damage;
   clampStats(target.sheet.stats);
 
-  flash(target, 100);
+  target.isFlashing = true;
+  resetTimer(target.flashTimer);
 
   newCombatText(scene, target.position.x, target.position.y - target.height - 10, damage.toString());
 

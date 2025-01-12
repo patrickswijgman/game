@@ -48,7 +48,6 @@ export type Entity = {
   depth: number;
   lifetime: number;
   lifeTimer: Timer;
-  flashDuration: number;
   flashTimer: Timer;
   tweenPosition: Vector;
   tweenScale: Vector;
@@ -118,7 +117,6 @@ export function newEntity(scene: Scene, type: string, x: number, y: number): Ent
     depth: 0,
     lifetime: 0,
     lifeTimer: timer(),
-    flashDuration: 0,
     flashTimer: timer(),
     tweenPosition: vec(),
     tweenScale: vec(1, 1),
@@ -283,7 +281,7 @@ export function updateAvoidance(e: Entity, scene: Scene) {
 }
 
 export function updateFlash(e: Entity) {
-  if (e.isFlashing && tickTimer(e.flashTimer, e.flashDuration)) {
+  if (e.isFlashing && tickTimer(e.flashTimer, 100)) {
     e.isFlashing = false;
     resetTimer(e.flashTimer);
   }
@@ -296,12 +294,6 @@ export function updateHovered(e: Entity) {
 
 export function lookAt(e: Entity, target: Vector) {
   e.isFlipped = target.x < e.position.x;
-}
-
-export function flash(e: Entity, duration: number) {
-  e.isFlashing = true;
-  e.flashDuration = duration;
-  resetTimer(e.flashTimer);
 }
 
 export function renderEntityTransform(e: Entity, scene: Scene) {
