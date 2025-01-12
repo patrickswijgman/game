@@ -16,10 +16,10 @@ import { renderPortal, updatePortal } from "entities/portal.js";
 import { updateTree } from "entities/tree.js";
 import { clickBuildTab, renderBuildTab } from "entities/ui/build-tab.js";
 import { updateExperienceOrb } from "entities/xp-orb.js";
-import { renderEntity, renderEntityTransform, renderShadow, updateAvoidance, updateCenter, updateCollisions, updateConditions, updateFlash, updateHitbox, updatePhysics } from "entity.js";
+import { renderEntity, renderEntityTransform, renderShadow, updateAvoidance, updateCenter, updateCollisions, updateConditions, updateFlash, updateHitbox, updateHovered, updatePhysics } from "entity.js";
 import { getCurrentScene, switchScene, transitionToNextScene } from "game.js";
 import { updatePortalParticle } from "particles/portal.js";
-import { doesRectangleContain, drawTexture, getMousePosition, InputCode, isInputPressed, isRectangleValid, resetTransform, run, setAlpha, tickTimer, updateCamera } from "ridder";
+import { drawTexture, InputCode, isInputPressed, resetTransform, run, setAlpha, tickTimer, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
 import { renderBuildScene, updateBuildScene } from "scenes/build.js";
 import { newMenuScene, renderMenuScene, updateMenuScene } from "scenes/menu.js";
@@ -68,9 +68,7 @@ run({
         continue;
       }
 
-      const mouse = getMousePosition();
-
-      e.isHovered = isRectangleValid(e.hitarea) && doesRectangleContain(e.hitarea, mouse.x, mouse.y);
+      updateHovered(e);
 
       if (e.isHovered && isInputPressed(InputCode.MOUSE_LEFT, true)) {
         switch (e.type) {

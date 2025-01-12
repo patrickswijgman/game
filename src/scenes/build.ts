@@ -1,4 +1,4 @@
-import { COLOR_BG, COLOR_DARK, COLOR_DARKER, COLOR_PRIMARY, COLOR_TEXT, HEIGHT, WIDTH } from "consts.js";
+import { COLOR_DARK, COLOR_DARKER, COLOR_PRIMARY, COLOR_TEXT, HEIGHT, WIDTH } from "consts.js";
 import { newBuildTab } from "entities/ui/build-tab.js";
 import { game, switchScene } from "game.js";
 import { getItem } from "items.js";
@@ -37,11 +37,11 @@ export function renderBuildScene(scene: Scene) {
   drawText("Press [Enter] to confirm", 0, 0, COLOR_TEXT, "right");
 
   drawAbilityScores(100, 80);
-  drawTabs(scene, WIDTH / 2 - 100, 60);
+  drawTabsAndTabContent(scene, WIDTH / 2 - 100, 60);
   drawStatBlock(WIDTH - 100, 80);
 }
 
-function drawTabs(scene: Scene, x: number, y: number) {
+function drawTabsAndTabContent(scene: Scene, x: number, y: number) {
   resetTransform();
   translateTransform(x, y);
   drawRect(0, 15, 200, 230, COLOR_DARKER, true);
@@ -63,7 +63,7 @@ function drawItem(x: number, y: number, id: string, name: string) {
   resetTransform();
   translateTransform(x, y);
   scaleTransform(1.25, 1.25);
-  drawText(name, 0, 0, COLOR_BG, "center");
+  drawText(name, 0, 0, COLOR_DARKER, "center");
 
   if (item) {
     resetTransform();

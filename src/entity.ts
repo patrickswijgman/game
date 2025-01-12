@@ -1,7 +1,7 @@
 import { onActionEnter, onActionExit, onActionUpdate } from "actions.js";
 import { COLOR_TEXT } from "consts.js";
 import { drawOutlinedText } from "render.js";
-import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, drawText, drawTexture, getDelta, isPolygonValid, isRectangleValid, polygon, Polygon, polygonFromRect, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setPolygonAngle, setRectangle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, uuid, vec, Vector, writeIntersectionBetweenRectangles } from "ridder";
+import { addVector, addVectorScaled, applyCameraTransform, copyVector, doesRectangleContain, drawSprite, drawText, drawTexture, getDelta, getMousePosition, isPolygonValid, isRectangleValid, polygon, Polygon, polygonFromRect, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setPolygonAngle, setRectangle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, uuid, vec, Vector, writeIntersectionBetweenRectangles } from "ridder";
 import { addBody, addEntity, Scene } from "scene.js";
 import { newSheet, Sheet } from "sheet.js";
 import { avoid } from "steering.js";
@@ -259,7 +259,6 @@ export function updateCollisions(e: Entity, scene: Scene) {
       }
 
       resetVector(e.bodyIntersection);
-
       writeIntersectionBetweenRectangles(e.body, other, e.velocity, e.bodyIntersection);
 
       if (e.bodyIntersection.x) {
@@ -288,6 +287,11 @@ export function updateFlash(e: Entity) {
     e.isFlashing = false;
     resetTimer(e.flashTimer);
   }
+}
+
+export function updateHovered(e: Entity) {
+  const mouse = getMousePosition();
+  e.isHovered = isRectangleValid(e.hitarea) && doesRectangleContain(e.hitarea, mouse.x, mouse.y);
 }
 
 export function lookAt(e: Entity, target: Vector) {

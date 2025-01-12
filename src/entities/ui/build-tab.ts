@@ -1,4 +1,4 @@
-import { COLOR_DARK, COLOR_DIM, COLOR_PRIMARY } from "consts.js";
+import { COLOR_DARK, COLOR_DARKER, COLOR_PRIMARY } from "consts.js";
 import { Entity, newEntity } from "entity.js";
 import { drawRect, setRectangle, setVector } from "ridder";
 import { Scene } from "scene.js";
@@ -20,6 +20,7 @@ export function clickBuildTab(e: Entity, scene: Scene) {
 }
 
 export function renderBuildTab(e: Entity, scene: Scene) {
-  const color = e.buildTab === scene.buildTab ? COLOR_PRIMARY : e.isHovered ? COLOR_DIM : COLOR_DARK;
-  drawRect(0, 0, 40, 20, color, true);
+  const color = e.buildTab === scene.buildTab ? COLOR_PRIMARY : e.isHovered ? COLOR_DARK : COLOR_DARKER;
+  drawRect(1, 0, 38, 20, color, true);
+  drawRect(0, 1, 40, 19, color, true);
 }
