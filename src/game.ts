@@ -26,7 +26,7 @@ export const game: Game = {
       intelligence: 0,
       movementSpeed: 1.5,
     },
-    weaponId: "crossbow_light",
+    weaponId: "longsword",
     armorId: "clothes",
   }),
 };

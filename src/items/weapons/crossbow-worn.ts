@@ -2,18 +2,18 @@ import { newAttack, newItem } from "items.js";
 import { vec } from "ridder";
 import { newStats } from "stats.js";
 
-export function newLightCrossbow() {
+export function newWornCrossbow() {
   return newItem({
-    name: "Light Crossbow",
+    name: "Worn Crossbow",
     spriteId: "crossbow",
     pivot: vec(19, 15.5),
     stats: newStats({
-      damage: 8,
+      damage: 6,
       dexterityScaling: 1,
       staminaCost: 30,
-      range: 150,
+      range: 100,
     }),
     actionId: "ranged_attack",
-    attackDuration: newAttack(0, 400, 100, 250),
+    attackDuration: newAttack(0, 800, 200, 500),
   });
 }

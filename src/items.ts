@@ -1,6 +1,6 @@
 import { newClothes } from "items/armor/clothes.js";
-import { newWornLightCrossbow } from "items/weapons/crossbow-light-worn.js";
-import { newLightCrossbow } from "items/weapons/crossbow-light.js";
+import { newWornCrossbow } from "items/weapons/crossbow-worn.js";
+import { newCrossbow } from "items/weapons/crossbow.js";
 import { newWornLongsword } from "items/weapons/longsword-worn.js";
 import { newLongsword } from "items/weapons/longsword.js";
 import { polygon, Polygon, vec, Vector } from "ridder";
@@ -31,8 +31,9 @@ export type Item = {
 const items: Record<string, Item> = {
   longsword: newLongsword(),
   longsword_worn: newWornLongsword(),
-  crossbow_light: newLightCrossbow(),
-  crossbow_light_worn: newWornLightCrossbow(),
+  crossbow: newCrossbow(),
+  crossbow_worn: newWornCrossbow(),
+
   clothes: newClothes(),
 };
 
