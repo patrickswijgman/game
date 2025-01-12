@@ -16,7 +16,7 @@ import { clickBuildTab, renderBuildTab } from "entities/ui/build-tab.js";
 import { updateExperienceOrb } from "entities/xp-orb.js";
 import { renderEntity, renderEntityTransform, renderShadow, updateAvoidance, updateCenter, updateCollisions, updateConditions, updateFlash, updateHitbox, updateHovered, updatePhysics } from "entity.js";
 import { getCurrentScene, switchScene, transitionToNextScene } from "game.js";
-import { drawTexture, InputCode, isInputPressed, resetTransform, run, setAlpha, tickTimer, updateCamera } from "ridder";
+import { applyCameraTransform, drawTexture, InputCode, isInputPressed, resetTransform, run, setAlpha, tickTimer, updateCamera } from "ridder";
 import { cleanupDestroyedEntities, destroyEntity, getEntity, getPlayer, sortEntitiesOnDepth } from "scene.js";
 import { renderBuildScene, updateBuildScene } from "scenes/build.js";
 import { updateCombatScene } from "scenes/combat.js";
@@ -143,6 +143,7 @@ run({
 
     if (scene.backgroundTextureId) {
       resetTransform();
+      applyCameraTransform(scene.camera);
       drawTexture(scene.backgroundTextureId, 0, 0);
     }
 

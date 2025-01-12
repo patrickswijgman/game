@@ -83,7 +83,7 @@ export function spendAction(stats: Stats, requirements: Stats) {
 }
 
 export function destroyIfCasterIsInvalid(e: Entity, scene: Scene, caster: Entity) {
-  if (caster.sheet.conditions.isStunned) {
+  if (caster.sheet.conditions.isStaggered) {
     destroyEntity(scene, e);
     return true;
   }

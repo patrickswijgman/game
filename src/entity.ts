@@ -214,12 +214,12 @@ export function updateState(e: Entity, scene: Scene, onEnter: StateLifecycleHook
 }
 
 export function updateConditions(e: Entity) {
-  if (e.sheet.conditions.isStunned) {
-    e.stateNextId = "stun";
+  if (e.sheet.conditions.isStaggered) {
+    e.stateNextId = "stagger";
 
-    if (tickTimer(e.sheet.conditions.stunTimer, e.sheet.conditions.stunDuration)) {
-      e.sheet.conditions.isStunned = false;
-      resetTimer(e.sheet.conditions.stunTimer);
+    if (tickTimer(e.sheet.conditions.staggerTimer, 100)) {
+      e.sheet.conditions.isStaggered = false;
+      resetTimer(e.sheet.conditions.staggerTimer);
       resetState(e);
     }
   }
