@@ -1,18 +1,39 @@
 import { getSprite, getTexture, loadFont, loadRenderTexture, loadSprite, loadTexture, pick, setFont } from "ridder";
 
-const GRASS_TILES = ["tile_grass_1", "tile_grass_2", "tile_grass_3"];
+/*
+ * TODO tables and enums for resources? (requires engine update)
+ */
+
+export const enum TextureId {
+  ATLAS = "atlas",
+  GRASS = "grass",
+}
+
+export const enum SpriteId {
+  PLAYER = "player",
+  TREE_PINE = "tree_pine",
+  TILE_GRASS_1 = "tile_grass_1",
+  TILE_GRASS_2 = "tile_grass_2",
+  TILE_GRASS_3 = "tile_grass_3",
+}
+
+export const enum FontId {
+  DEFAULT = "default",
+}
+
+const GRASS_TILES = [SpriteId.TILE_GRASS_1, SpriteId.TILE_GRASS_2, SpriteId.TILE_GRASS_3];
 
 export async function loadAssets() {
-  await loadTexture("atlas", "textures/atlas.png");
+  await loadTexture(TextureId.ATLAS, "textures/atlas.png");
 
-  loadSprite("player", "atlas", 0, 16, 16, 16);
-  loadSprite("tree_pine", "atlas", 0, 64, 16, 16);
+  loadSprite(SpriteId.PLAYER, TextureId.ATLAS, 0, 16, 16, 16);
+  loadSprite(SpriteId.TREE_PINE, TextureId.ATLAS, 0, 64, 16, 16);
 
-  loadSprite("tile_grass_1", "atlas", 0, 80, 16, 16);
-  loadSprite("tile_grass_2", "atlas", 16, 80, 16, 16);
-  loadSprite("tile_grass_3", "atlas", 32, 80, 16, 16);
+  loadSprite(SpriteId.TILE_GRASS_1, TextureId.ATLAS, 0, 80, 16, 16);
+  loadSprite(SpriteId.TILE_GRASS_2, TextureId.ATLAS, 16, 80, 16, 16);
+  loadSprite(SpriteId.TILE_GRASS_3, TextureId.ATLAS, 32, 80, 16, 16);
 
-  loadRenderTexture("grass", 1024, 1024, (ctx, w, h) => {
+  loadRenderTexture(TextureId.GRASS, 1024, 1024, (ctx, w, h) => {
     for (let x = 0; x < w; x += 16) {
       for (let y = 0; y < h; y += 16) {
         const tile = pick(GRASS_TILES);
@@ -23,7 +44,7 @@ export async function loadAssets() {
     }
   });
 
-  await loadFont("default", "fonts/pixelmix.ttf", "pixelmix", 8);
+  await loadFont(FontId.DEFAULT, "fonts/pixelmix.ttf", "pixelmix", 8);
 
-  setFont("default");
+  setFont(FontId.DEFAULT);
 }
