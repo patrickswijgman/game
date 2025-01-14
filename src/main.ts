@@ -4,7 +4,7 @@ import { newPineTree } from "@/entities/tree-pine.js";
 import { EntityType, renderEntity, updatePhysics } from "@/entity.js";
 import { addScene, game, getScene } from "@/game.js";
 import { getEntity, sortEntitiesOnDepth } from "@/scene.js";
-import { applyCameraTransform, drawTexture, run } from "ridder";
+import { applyCameraTransform, drawTexture, InputCode, isInputPressed, run } from "ridder";
 
 run({
   width: 320,
@@ -23,6 +23,10 @@ run({
   },
 
   update: () => {
+    if (isInputPressed(InputCode.KEY_R)) {
+      document.location.reload();
+    }
+
     const scene = getScene(game.sceneId);
 
     for (const id of scene.update) {
