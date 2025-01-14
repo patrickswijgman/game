@@ -6,6 +6,7 @@ import { addVectorScaled, applyCameraTransform, drawSprite, getDelta, resetTrans
 export const enum EntityType {
   NONE,
   PLAYER,
+  TREE_PINE,
 }
 
 export type Entity = {
@@ -30,12 +31,15 @@ export type Entity = {
 
   // Relation
   sceneId: SceneId;
+
+  // Player
+  isPlayer: boolean;
 };
 
-export function newEntity(): Entity {
+export function newEntity(id: number): Entity {
   return {
     // Memory allocation
-    id: 0,
+    id,
     isAssigned: false,
 
     // Archetype
@@ -55,6 +59,9 @@ export function newEntity(): Entity {
 
     // Relation
     sceneId: 0,
+
+    // Player
+    isPlayer: false,
   };
 }
 
@@ -66,11 +73,6 @@ export function setSprite(e: Entity, id: SpriteId, pivotX: number, pivotY: numbe
 export function setShadow(e: Entity, id: SpriteId, offsetX: number, offsetY: number) {
   e.shadowId = id;
   setVector(e.shadowOffset, offsetX, offsetY);
-}
-
-export function setPhysics(e: Entity, x: number, y: number, isEnabled: boolean) {
-  setVector(e.position, x, y);
-  e.isPhysicsEnabled = isEnabled;
 }
 
 export function updatePhysics(e: Entity) {

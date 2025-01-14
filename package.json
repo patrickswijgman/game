@@ -9,12 +9,13 @@
     "start": "vite",
     "build": "vite build --base=./",
     "compile": "tsc",
-    "test": "vitest run"
+    "test": "vitest run --passWithNoTests"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "husky": "^9.1.7",
+    "prettier": "^3.4.2",
     "prettier-plugin-organize-imports": "^4.1.0",
     "typescript": "^5.5.4",
     "vite": "^5.4.0",

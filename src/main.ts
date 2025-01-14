@@ -1,10 +1,10 @@
 import { loadAssets, TextureId } from "@/assets.js";
-import { newPlayer, updatePlayer } from "@/entities/player.js";
-import { newPineTree } from "@/entities/tree-pine.js";
+import { updatePlayer } from "@/entities/player.js";
 import { EntityType, renderEntity, updatePhysics } from "@/entity.js";
-import { addScene, game, getScene } from "@/game.js";
+import { addEntity } from "@/factory.js";
+import { game, getScene, SceneId, switchScene, transitionToNextScene } from "@/game.js";
 import { cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth } from "@/scene.js";
-import { applyCameraTransform, drawTexture, InputCode, isInputPressed, run } from "ridder";
+import { applyCameraTransform, drawText, drawTexture, getFramePerSecond, InputCode, isInputPressed, random, resetTransform, run, scaleTransform, updateCamera } from "ridder";
 
 run({
   width: 320,
@@ -13,11 +13,17 @@ run({
   setup: async () => {
     await loadAssets();
 
-    const scene = addScene();
+    const scene = getScene(SceneId.TEST);
     scene.backgroundId = TextureId.GRASS;
+    scene.camera.smoothing = 0.1;
 
-    newPlayer(scene, 20, 20);
-    newPineTree(scene, 50, 50);
+    addEntity(EntityType.PLAYER, scene.id, 20, 20);
+
+    for (let i = 0; i < 100; i++) {
+      addEntity(EntityType.TREE_PINE, scene.id, random(0, 320), random(0, 180));
+    }
+
+    switchScene(scene.id);
 
     console.log(game);
   },
@@ -26,6 +32,8 @@ run({
     if (isInputPressed(InputCode.KEY_R)) {
       document.location.reload();
     }
+
+    transitionToNextScene();
 
     const scene = getScene(game.sceneId);
 
@@ -39,9 +47,14 @@ run({
       }
 
       updatePhysics(e);
+
+      if (e.isPlayer) {
+        updateCamera(scene.camera, e.position.x, e.position.y);
+      }
     }
 
     cleanupDestroyedEntities(scene);
+    sortEntitiesOnDepth(scene);
   },
 
   render: () => {
@@ -52,12 +65,13 @@ run({
       drawTexture(scene.backgroundId, 0, 0);
     }
 
-    sortEntitiesOnDepth(scene);
-
     for (const id of scene.render) {
       const e = getEntity(scene, id);
-
       renderEntity(e, scene);
     }
+
+    resetTransform();
+    scaleTransform(0.5, 0.5);
+    drawText(getFramePerSecond().toString(), 1, 1, "lime");
   },
 });

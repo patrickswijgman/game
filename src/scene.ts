@@ -1,13 +1,10 @@
 import { TextureId } from "@/assets.js";
-import { zero } from "@/engine/mem.js";
-import { Table, table } from "@/engine/table.js";
 import { Entity, newEntity } from "@/entity.js";
-import { camera, Camera, remove } from "ridder";
+import { camera, Camera, remove, Table, table, zero } from "ridder";
 
 export type Scene = {
   // Memory allocation
   id: number;
-  isAssigned: boolean;
 
   // Tables
   entities: Table<Entity>;
@@ -22,11 +19,10 @@ export type Scene = {
   backgroundId: TextureId;
 };
 
-export function newScene(): Scene {
+export function newScene(id: number): Scene {
   return {
     // Memory allocation
-    id: 0,
-    isAssigned: false,
+    id,
 
     // Tables
     entities: table(1024, newEntity),
@@ -42,16 +38,16 @@ export function newScene(): Scene {
   };
 }
 
-export function addEntity(scene: Scene) {
-  const idx = scene.entities.findIndex((e) => !e.isAssigned);
+export function nextEntity(scene: Scene) {
+  const id = scene.entities.findIndex((e) => !e.isAssigned);
 
-  if (idx === -1) {
+  if (id === -1) {
     throw new Error("Out of entities :(");
   }
 
-  const e = scene.entities[idx];
+  const e = scene.entities[id];
 
-  e.id = idx;
+  e.id = id;
   e.isAssigned = true;
   e.sceneId = scene.id;
 

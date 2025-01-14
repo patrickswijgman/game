@@ -1,9 +1,5 @@
 import { getSprite, getTexture, loadFont, loadRenderTexture, loadSprite, loadTexture, pick, setFont } from "ridder";
 
-/*
- * TODO tables and enums for resources? (requires engine update)
- */
-
 export const enum TextureId {
   NONE,
   ATLAS,

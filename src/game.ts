@@ -1,8 +1,9 @@
-import { Table, table } from "@/engine/table.js";
 import { newScene, Scene } from "@/scene.js";
+import { Table, table } from "ridder";
 
 export const enum SceneId {
   NONE,
+  TEST,
 }
 
 export type Game = {
@@ -21,19 +22,12 @@ export function newGame(): Game {
 
 export const game = newGame();
 
-export function addScene() {
-  const idx = game.scenes.findIndex((scene) => !scene.isAssigned);
+export function switchScene(id: number) {
+  game.sceneNextId = id;
+}
 
-  if (idx === -1) {
-    throw new Error("Out of scenes :(");
-  }
-
-  const scene = game.scenes[idx];
-
-  scene.id = idx;
-  scene.isAssigned = true;
-
-  return scene;
+export function transitionToNextScene() {
+  game.sceneId = game.sceneNextId;
 }
 
 export function getScene(id: number) {
