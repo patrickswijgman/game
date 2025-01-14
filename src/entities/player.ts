@@ -1,5 +1,5 @@
 import { SpriteId } from "@/assets.js";
-import { Entity, EntityType } from "@/entity.js";
+import { Entity, EntityType, setShadow, setSprite } from "@/entity.js";
 import { addEntity, Scene } from "@/scene.js";
 import { InputCode, isInputDown, normalizeVector, resetVector, scaleVector, setVector } from "ridder";
 
@@ -10,8 +10,8 @@ export function newPlayer(scene: Scene, x: number, y: number) {
 
   setVector(e.position, x, y);
 
-  e.spriteId = SpriteId.PLAYER;
-  setVector(e.pivot, 8, 15);
+  setSprite(e, SpriteId.PLAYER, 8, 15);
+  setShadow(e, SpriteId.PLAYER_SHADOW, 0, 2);
 
   return e;
 }

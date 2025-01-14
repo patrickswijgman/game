@@ -1,6 +1,10 @@
+/**
+ * Zero out all values in an object, recursively.
+ */
 export function zero(obj: object) {
   for (const key in obj) {
-    const type = typeof obj[key];
+    const value = obj[key];
+    const type = typeof value;
 
     switch (type) {
       case "object":
@@ -16,7 +20,7 @@ export function zero(obj: object) {
         obj[key] = false;
         break;
       default:
-        throw new Error(`Cannot zero value of type ${type}`);
+        throw new Error(`Cannot zero property of type '${type}' with value '${value}'`);
     }
   }
 }
