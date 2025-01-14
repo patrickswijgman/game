@@ -1,3 +1,4 @@
+import { TextureId } from "@/assets.js";
 import { zero } from "@/engine/mem.js";
 import { Table, table } from "@/engine/table.js";
 import { Entity, newEntity } from "@/entity.js";
@@ -18,7 +19,7 @@ export type Scene = {
 
   // World
   camera: Camera;
-  backgroundId: string;
+  backgroundId: TextureId;
 };
 
 export function newScene(): Scene {
@@ -37,7 +38,7 @@ export function newScene(): Scene {
 
     // World
     camera: camera(),
-    backgroundId: "",
+    backgroundId: TextureId.NONE,
   };
 }
 

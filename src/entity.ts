@@ -1,10 +1,11 @@
 import { SpriteId } from "@/assets.js";
+import { SceneId } from "@/game.js";
 import { Scene } from "@/scene.js";
 import { addVectorScaled, applyCameraTransform, drawSprite, getDelta, resetTransform, scaleTransform, setVector, translateTransform, vec, Vector } from "ridder";
 
 export const enum EntityType {
-  NONE = 0,
-  PLAYER = 1,
+  NONE,
+  PLAYER,
 }
 
 export type Entity = {
@@ -21,14 +22,14 @@ export type Entity = {
   isPhysicsEnabled: boolean;
 
   // Render
-  spriteId: string;
+  spriteId: SpriteId;
   pivot: Vector;
-  shadowId: string;
+  shadowId: SpriteId;
   shadowOffset: Vector;
   isFlipped: boolean;
 
   // Relation
-  sceneId: number;
+  sceneId: SceneId;
 };
 
 export function newEntity(): Entity {
@@ -46,9 +47,9 @@ export function newEntity(): Entity {
     isPhysicsEnabled: false,
 
     // Render
-    spriteId: "",
+    spriteId: SpriteId.NONE,
     pivot: vec(),
-    shadowId: "",
+    shadowId: SpriteId.NONE,
     shadowOffset: vec(),
     isFlipped: false,
 

@@ -1,6 +1,10 @@
 import { Table, table } from "@/engine/table.js";
 import { newScene, Scene } from "@/scene.js";
 
+export const enum SceneId {
+  NONE,
+}
+
 export type Game = {
   scenes: Table<Scene>;
   sceneId: number;

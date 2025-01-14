@@ -5,22 +5,24 @@ import { getSprite, getTexture, loadFont, loadRenderTexture, loadSprite, loadTex
  */
 
 export const enum TextureId {
-  ATLAS = "atlas",
-  GRASS = "grass",
+  NONE,
+  ATLAS,
+  GRASS,
 }
 
 export const enum SpriteId {
-  PLAYER = "player",
-  PLAYER_SHADOW = "player_shadow",
-  TREE_PINE = "tree_pine",
-  TREE_SHADOW = "tree_shadow",
-  TILE_GRASS_1 = "tile_grass_1",
-  TILE_GRASS_2 = "tile_grass_2",
-  TILE_GRASS_3 = "tile_grass_3",
+  NONE,
+  PLAYER,
+  PLAYER_SHADOW,
+  TREE_PINE,
+  TREE_SHADOW,
+  TILE_GRASS_1,
+  TILE_GRASS_2,
+  TILE_GRASS_3,
 }
 
 export const enum FontId {
-  DEFAULT = "default",
+  DEFAULT,
 }
 
 const GRASS_TILES = [SpriteId.TILE_GRASS_1, SpriteId.TILE_GRASS_2, SpriteId.TILE_GRASS_3];
