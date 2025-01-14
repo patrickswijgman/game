@@ -3,7 +3,7 @@ import { newPlayer, updatePlayer } from "@/entities/player.js";
 import { newPineTree } from "@/entities/tree-pine.js";
 import { EntityType, renderEntity, updatePhysics } from "@/entity.js";
 import { addScene, game, getScene } from "@/game.js";
-import { getEntity, sortEntitiesOnDepth } from "@/scene.js";
+import { cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth } from "@/scene.js";
 import { applyCameraTransform, drawTexture, InputCode, isInputPressed, run } from "ridder";
 
 run({
@@ -40,6 +40,8 @@ run({
 
       updatePhysics(e);
     }
+
+    cleanupDestroyedEntities(scene);
   },
 
   render: () => {
