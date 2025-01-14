@@ -1,49 +1,29 @@
-import { COLOR_BG, COLOR_DANGER } from "consts.js";
-import { loadFlashTexture, loadFont, loadOutlineTexture, loadRenderTexture, loadSprite, loadTexture, setFont } from "ridder";
+import { getSprite, getTexture, loadFont, loadRenderTexture, loadSprite, loadTexture, pick, setFont } from "ridder";
+
+const GRASS_TILES = ["tile_grass_1", "tile_grass_2", "tile_grass_3"];
 
 export async function loadAssets() {
   await loadTexture("atlas", "textures/atlas.png");
-  await loadFlashTexture("atlas_flash", "textures/atlas.png", "white");
-  await loadOutlineTexture("atlas_outline", "textures/atlas.png", "square", "white");
-  await loadOutlineTexture("atlas_outline_danger", "textures/atlas.png", "square", COLOR_DANGER);
 
-  loadSprites("player", "atlas", 0, 0, 32, 32);
-  loadSprites("bandit", "atlas", 32, 0, 32, 32);
-  loadSprites("wolf", "atlas", 64, 0, 32, 32);
-  loadSprites("goblin", "atlas", 96, 0, 32, 32);
+  loadSprite("player", "atlas", 0, 16, 16, 16);
+  loadSprite("tree_pine", "atlas", 0, 64, 16, 16);
 
-  loadSprites("tree_pine", "atlas", 0, 96, 32, 32);
-  loadSprites("experience_orb", "atlas", 64, 96, 16, 16);
+  loadSprite("tile_grass_1", "atlas", 0, 80, 16, 16);
+  loadSprite("tile_grass_2", "atlas", 16, 80, 16, 16);
+  loadSprite("tile_grass_3", "atlas", 32, 80, 16, 16);
 
-  loadSprites("longsword", "atlas", 0, 64, 32, 32);
-  loadSprites("bite", "atlas", 32, 64, 32, 32);
-  loadSprites("crossbow", "atlas", 64, 64, 32, 32);
-  loadSprites("arrow", "atlas", 96, 64, 32, 32);
-
-  loadSprites("icon_experience", "atlas", 0, 192, 16, 16);
-
-  loadSprite("tab_weapon", "atlas", 0, 176, 16, 16);
-  loadSprite("tab_armor", "atlas", 16, 176, 16, 16);
-
-  loadRenderTexture("menu_bg", 1024, 1024, (ctx, w, h) => {
-    ctx.fillStyle = COLOR_BG;
-    ctx.fillRect(0, 0, w, h);
-  });
-
-  loadRenderTexture("forest_bg", 2048, 2048, (ctx, w, h) => {
-    ctx.fillStyle = "#3d6556";
-    ctx.fillRect(0, 0, w, h);
+  loadRenderTexture("grass", 1024, 1024, (ctx, w, h) => {
+    for (let x = 0; x < w; x += 16) {
+      for (let y = 0; y < h; y += 16) {
+        const tile = pick(GRASS_TILES);
+        const sprite = getSprite(tile);
+        const texture = getTexture(sprite.textureId);
+        ctx.drawImage(texture, sprite.x, sprite.y, sprite.w, sprite.h, x, y, 16, 16);
+      }
+    }
   });
 
   await loadFont("default", "fonts/pixelmix.ttf", "pixelmix", 8);
 
   setFont("default");
-}
-
-function loadSprites(id: string, textureId: string, x: number, y: number, w: number, h: number) {
-  loadSprite(id, textureId, x, y, w, h);
-  loadSprite(`${id}_shadow`, textureId, x, y + h, w, h);
-  loadSprite(`${id}_flash`, `${textureId}_flash`, x, y, w, h);
-  loadSprite(`${id}_outline`, `${textureId}_outline`, x, y, w, h);
-  loadSprite(`${id}_outline_danger`, `${textureId}_outline_danger`, x, y, w, h);
 }

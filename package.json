@@ -8,7 +8,8 @@
     "prepare": "husky",
     "start": "vite",
     "build": "vite build --base=./",
-    "compile": "tsc"
+    "compile": "tsc",
+    "test": "vitest run"
   },
   "author": "",
   "license": "ISC",
@@ -17,7 +18,8 @@
     "prettier-plugin-organize-imports": "^4.1.0",
     "typescript": "^5.5.4",
     "vite": "^5.4.0",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^2.1.8"
   },
   "dependencies": {
     "ridder": "^3.7.1"

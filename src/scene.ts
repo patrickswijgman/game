@@ -1,114 +1,89 @@
-import { Entity } from "entity.js";
-import { addScene } from "game.js";
-import { camera, Camera, rect, Rectangle, remove, timer, Timer, uuid } from "ridder";
+import { zero } from "@/engine/mem.js";
+import { Table, table } from "@/engine/table.js";
+import { Entity, newEntity } from "@/entity.js";
+import { camera, Camera, remove } from "ridder";
 
 export type Scene = {
-  id: string;
-  type: string;
-  entities: Record<string, Entity>;
-  update: Array<string>;
-  render: Array<string>;
-  enemies: Array<string>;
-  allies: Array<string>;
-  destroyed: Array<string>;
-  bodies: Array<Rectangle>;
+  // Memory allocation
+  id: number;
+  isAssigned: boolean;
+
+  // Tables
+  entities: Table<Entity>;
+
+  // Table support lists
+  update: Array<number>;
+  render: Array<number>;
+  destroyed: Array<number>;
+
+  // World
   camera: Camera;
-  bounds: Rectangle;
-  safeArea: Rectangle;
-  backgroundTextureId: string;
-  enemySpawnDuration: number;
-  enemySpawnTimer: Timer;
-  playerId: string;
-  buildTab: string;
+  backgroundId: string;
 };
 
-export function newScene(type: string): Scene {
-  return addScene({
-    id: uuid(),
-    type,
-    entities: {},
+export function newScene(): Scene {
+  return {
+    // Memory allocation
+    id: 0,
+    isAssigned: false,
+
+    // Tables
+    entities: table(1024, newEntity),
+
+    // Table support lists
     update: [],
     render: [],
-    enemies: [],
-    allies: [],
     destroyed: [],
-    bodies: [],
+
+    // World
     camera: camera(),
-    bounds: rect(),
-    safeArea: rect(),
-    backgroundTextureId: "",
-    enemySpawnDuration: 3000,
-    enemySpawnTimer: timer(),
-    playerId: "",
-    buildTab: "",
-  });
+    backgroundId: "",
+  };
 }
 
-export function cleanupDestroyedEntities(scene: Scene) {
-  if (scene.destroyed.length) {
-    for (const id of scene.destroyed) {
-      const e = scene.entities[id];
-      remove(scene.update, id);
-      remove(scene.render, id);
-      remove(scene.enemies, id);
-      remove(scene.allies, id);
-      remove(scene.bodies, e.body);
-    }
+export function addEntity(scene: Scene) {
+  const idx = scene.entities.findIndex((e) => !e.isAssigned);
 
-    scene.destroyed.length = 0;
+  if (idx === -1) {
+    throw new Error("Out of entities :(");
   }
+
+  const e = scene.entities[idx];
+
+  e.id = idx;
+  e.isAssigned = true;
+  e.sceneId = scene.id;
+
+  scene.update.push(e.id);
+  scene.render.push(e.id);
+
+  return e;
+}
+
+export function getEntity(scene: Scene, id: number) {
+  return scene.entities[id];
+}
+
+export function destroyEntity(scene: Scene, e: Entity) {
+  scene.destroyed.push(e.id);
 }
 
 export function sortEntitiesOnDepth(scene: Scene) {
   scene.render.sort((idA, idB) => {
     const a = scene.entities[idA];
     const b = scene.entities[idB];
-    return a.position.y + a.depth - b.position.y + b.depth;
+    return a.position.y - b.position.y;
   });
 }
 
-export function initCamera(scene: Scene) {
-  scene.camera.smoothing = 0.05;
-  scene.camera.shakeReduction = 0.01;
-  scene.camera.bounds = scene.bounds;
-}
+export function cleanupDestroyedEntities(scene: Scene) {
+  if (scene.destroyed.length) {
+    for (const id of scene.destroyed) {
+      remove(scene.update, id);
+      remove(scene.render, id);
+      zero(scene.entities[id]);
+    }
 
-export function addEntity(scene: Scene, e: Entity) {
-  scene.entities[e.id] = e;
-  scene.update.push(e.id);
-  scene.render.push(e.id);
-  return e;
-}
-
-export function addPlayer(scene: Scene, e: Entity) {
-  scene.playerId = e.id;
-  scene.allies.push(e.id);
-  return e;
-}
-
-export function addEnemy(scene: Scene, e: Entity) {
-  scene.enemies.push(e.id);
-  return e;
-}
-
-export function addBody(scene: Scene, body: Rectangle) {
-  scene.bodies.push(body);
-}
-
-export function destroyEntity(scene: Scene, e: Entity) {
-  e.isDestroyed = true;
-  scene.destroyed.push(e.id);
-}
-
-export function getEntity(scene: Scene, id: string) {
-  return scene.entities[id];
-}
-
-export function getPlayer(scene: Scene) {
-  return scene.entities[scene.playerId];
-}
-
-export function destroyScene(scene: Scene) {
-  delete scene.entities;
-  scene.bodies.length = 0;
+    scene.destroyed.length = 0;
+  }
 }

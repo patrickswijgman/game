@@ -1,13 +1,13 @@
-import { newEntity, setSprites } from "entity.js";
-import { random } from "ridder";
-import { Scene } from "scene.js";
+import { addEntity, Scene } from "@/scene.js";
+import { setVector } from "ridder";
 
 export function newPineTree(scene: Scene, x: number, y: number) {
-  const e = newEntity(scene, "tree", x, y);
+  const e = addEntity(scene);
 
-  setSprites(e, "tree_pine", 16, 31, 0, 0, true, 0, 6);
+  setVector(e.position, x, y);
 
-  e.tweenDuration = random(15, 20) * 100;
+  e.spriteId = "tree_pine";
+  setVector(e.pivot, 8, 15);
 
   return e;
 }
