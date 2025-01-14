@@ -1,15 +1,14 @@
 import { SpriteId } from "@/assets.js";
-import { Entity, EntityType, setShadow, setSprite } from "@/entity.js";
+import { Entity, EntityType, setPhysics, setShadow, setSprite } from "@/entity.js";
 import { addEntity, Scene } from "@/scene.js";
-import { InputCode, isInputDown, normalizeVector, resetVector, scaleVector, setVector } from "ridder";
+import { InputCode, isInputDown, normalizeVector, resetVector, scaleVector } from "ridder";
 
 export function newPlayer(scene: Scene, x: number, y: number) {
   const e = addEntity(scene);
 
   e.type = EntityType.PLAYER;
 
-  setVector(e.position, x, y);
-
+  setPhysics(e, x, y, true);
   setSprite(e, SpriteId.PLAYER, 8, 15);
   setShadow(e, SpriteId.PLAYER_SHADOW, 0, 2);
 

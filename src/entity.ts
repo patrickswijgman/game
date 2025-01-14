@@ -18,6 +18,7 @@ export type Entity = {
   // Physics
   position: Vector;
   velocity: Vector;
+  isPhysicsEnabled: boolean;
 
   // Render
   spriteId: string;
@@ -42,6 +43,7 @@ export function newEntity(): Entity {
     // Physics
     position: vec(),
     velocity: vec(),
+    isPhysicsEnabled: false,
 
     // Render
     spriteId: "",
@@ -65,8 +67,15 @@ export function setShadow(e: Entity, id: SpriteId, offsetX: number, offsetY: num
   setVector(e.shadowOffset, offsetX, offsetY);
 }
 
+export function setPhysics(e: Entity, x: number, y: number, isEnabled: boolean) {
+  setVector(e.position, x, y);
+  e.isPhysicsEnabled = isEnabled;
+}
+
 export function updatePhysics(e: Entity) {
-  addVectorScaled(e.position, e.velocity, getDelta());
+  if (e.isPhysicsEnabled) {
+    addVectorScaled(e.position, e.velocity, getDelta());
+  }
 }
 
 export function renderEntity(e: Entity, scene: Scene) {

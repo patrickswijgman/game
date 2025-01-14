@@ -1,4 +1,4 @@
-import { loadAssets } from "@/assets.js";
+import { loadAssets, TextureId } from "@/assets.js";
 import { newPlayer, updatePlayer } from "@/entities/player.js";
 import { newPineTree } from "@/entities/tree-pine.js";
 import { EntityType, renderEntity, updatePhysics } from "@/entity.js";
@@ -14,7 +14,7 @@ run({
     await loadAssets();
 
     const scene = addScene();
-    scene.backgroundId = "grass";
+    scene.backgroundId = TextureId.GRASS;
 
     newPlayer(scene, 20, 20);
     newPineTree(scene, 50, 50);
