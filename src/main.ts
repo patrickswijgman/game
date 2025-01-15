@@ -1,11 +1,12 @@
-import { loadAssets, TextureId } from "@/assets.js";
+import { loadAssets } from "@/assets.js";
 import { EntityType } from "@/data/entity.js";
 import { game } from "@/data/game.js";
+import { TileId } from "@/data/tile.js";
 import { updatePlayer } from "@/entities/player.js";
 import { addEntity, renderEntity, updatePhysics } from "@/usecases/entity.js";
 import { getScene, switchScene, transitionToNextScene } from "@/usecases/game.js";
-import { addScene, cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth } from "@/usecases/scene.js";
-import { applyCameraTransform, drawText, drawTexture, getFramePerSecond, InputCode, isInputPressed, random, resetTransform, run, scaleTransform, updateCamera } from "ridder";
+import { addScene, cleanupDestroyedEntities, getEntity, renderTiles, sortEntitiesOnDepth } from "@/usecases/scene.js";
+import { drawText, getFramePerSecond, getGridHeight, getGridWidth, InputCode, isInputPressed, resetTransform, run, scaleTransform, setGridValue, updateCamera } from "ridder";
 
 run({
   width: 320,
@@ -14,13 +15,17 @@ run({
   setup: async () => {
     await loadAssets();
 
-    const scene = addScene(480, 270, TextureId.GRASS);
+    const scene = addScene(30, 20);
 
-    addEntity(EntityType.PLAYER, scene.id, 240, 135);
-
-    for (let i = 0; i < 100; i++) {
-      addEntity(EntityType.TREE_PINE, scene.id, random(0, 480), random(0, 270));
+    const w = getGridWidth(scene.tiles);
+    const h = getGridHeight(scene.tiles);
+    for (let x = 0; x < w; x++) {
+      for (let y = 0; y < h; y++) {
+        setGridValue(scene.tiles, x, y, TileId.GRASS);
+      }
     }
+
+    addEntity(EntityType.PLAYER, scene.id, scene.bounds.w / 2, scene.bounds.h / 2);
 
     switchScene(scene.id);
 
@@ -59,10 +64,7 @@ run({
   render: () => {
     const scene = getScene(game.sceneId);
 
-    if (scene.backgroundId) {
-      applyCameraTransform(scene.camera);
-      drawTexture(scene.backgroundId, 0, 0);
-    }
+    renderTiles(scene);
 
     for (const id of scene.render) {
       const e = getEntity(scene, id);

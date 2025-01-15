@@ -1,15 +1,17 @@
-import { TextureId } from "@/assets.js";
+import { SpriteId } from "@/assets.js";
+import { TILE_SIZE } from "@/consts.js";
 import { Entity } from "@/data/entity.js";
 import { Scene } from "@/data/scene.js";
+import { TileId } from "@/data/tile.js";
 import { nextScene } from "@/usecases/game.js";
-import { copyRectangle, remove, setRectangle, zero } from "ridder";
+import { applyCameraTransform, copyRectangle, drawSprite, getGridHeight, getGridValue, getGridWidth, grid, isGridValid, remove, resetTransform, setRectangle, zero } from "ridder";
 
-export function addScene(w: number, h: number, bg: TextureId) {
+export function addScene(w: number, h: number) {
   const scene = nextScene();
-  scene.backgroundId = bg;
   scene.camera.smoothing = 0.1;
   scene.camera.shakeReduction = 0.1;
-  setRectangle(scene.bounds, 0, 0, w, h);
+  scene.tiles = grid(w, h, () => TileId.NONE);
+  setRectangle(scene.bounds, 0, 0, w * TILE_SIZE, h * TILE_SIZE);
   copyRectangle(scene.camera.bounds, scene.bounds);
   return scene;
 }
@@ -54,5 +56,26 @@ export function cleanupDestroyedEntities(scene: Scene) {
       zero(scene.entities[id]);
     }
     scene.destroyed.length = 0;
+  }
+}
+
+export function renderTiles(scene: Scene) {
+  if (isGridValid(scene.tiles)) {
+    resetTransform();
+    applyCameraTransform(scene.camera);
+    const w = getGridWidth(scene.tiles);
+    const h = getGridHeight(scene.tiles);
+    for (let x = 0; x < w; x++) {
+      for (let y = 0; y < h; y++) {
+        const tile = getGridValue(scene.tiles, x, y);
+        const worldX = x * TILE_SIZE;
+        const worldY = y * TILE_SIZE;
+        switch (tile) {
+          case TileId.GRASS:
+            drawSprite(SpriteId.TILE_GRASS_1, worldX, worldY);
+            break;
+        }
+      }
+    }
   }
 }

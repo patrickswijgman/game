@@ -1,9 +1,8 @@
-import { getSprite, getTexture, loadFont, loadRenderTexture, loadSprite, loadTexture, pick, setFont } from "ridder";
+import { loadFont, loadSprite, loadTexture, setFont } from "ridder";
 
 export const enum TextureId {
   NONE,
   ATLAS,
-  GRASS,
 }
 
 export const enum SpriteId {
@@ -21,8 +20,6 @@ export const enum FontId {
   DEFAULT,
 }
 
-const GRASS_TILES = [SpriteId.TILE_GRASS_1, SpriteId.TILE_GRASS_2, SpriteId.TILE_GRASS_3];
-
 export async function loadAssets() {
   await loadTexture(TextureId.ATLAS, "textures/atlas.png");
 
@@ -35,17 +32,6 @@ export async function loadAssets() {
   loadSprite(SpriteId.TILE_GRASS_1, TextureId.ATLAS, 0, 96, 16, 16);
   loadSprite(SpriteId.TILE_GRASS_2, TextureId.ATLAS, 16, 96, 16, 16);
   loadSprite(SpriteId.TILE_GRASS_3, TextureId.ATLAS, 32, 96, 16, 16);
-
-  loadRenderTexture(TextureId.GRASS, 1024, 1024, (ctx, w, h) => {
-    for (let x = 0; x < w; x += 16) {
-      for (let y = 0; y < h; y += 16) {
-        const tile = pick(GRASS_TILES);
-        const sprite = getSprite(tile);
-        const texture = getTexture(sprite.textureId);
-        ctx.drawImage(texture, sprite.x, sprite.y, sprite.w, sprite.h, x, y, 16, 16);
-      }
-    }
-  });
 
   await loadFont(FontId.DEFAULT, "fonts/pixelmix.ttf", "pixelmix", 8);
 

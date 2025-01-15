@@ -1,6 +1,6 @@
-import { TextureId } from "@/assets.js";
 import { Entity, newEntity } from "@/data/entity.js";
-import { Camera, camera, rect, Rectangle, table, Table } from "ridder";
+import { TileId } from "@/data/tile.js";
+import { Camera, camera, grid, Grid, rect, Rectangle, table, Table } from "ridder";
 
 export type Scene = {
   // Memory allocation
@@ -18,7 +18,7 @@ export type Scene = {
   // World
   camera: Camera;
   bounds: Rectangle;
-  backgroundId: TextureId;
+  tiles: Grid<TileId>;
 };
 
 export function newScene(): Scene {
@@ -38,6 +38,6 @@ export function newScene(): Scene {
     // World
     camera: camera(),
     bounds: rect(),
-    backgroundId: TextureId.NONE,
+    tiles: grid(0, 0, () => TileId.NONE),
   };
 }
