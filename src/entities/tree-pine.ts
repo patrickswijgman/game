@@ -1,5 +1,6 @@
 import { SpriteId } from "@/assets.js";
-import { Entity, setShadow, setSprite } from "@/entity.js";
+import { Entity } from "@/data/entity.js";
+import { setShadow, setSprite } from "@/usecases/entity.js";
 
 export function setupPineTree(e: Entity) {
   setSprite(e, SpriteId.TREE_PINE, 8, 15);

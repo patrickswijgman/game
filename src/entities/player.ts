@@ -1,6 +1,7 @@
 import { SpriteId } from "@/assets.js";
-import { Entity, setShadow, setSprite } from "@/entity.js";
-import { getScene } from "@/game.js";
+import { Entity } from "@/data/entity.js";
+import { setShadow, setSprite } from "@/usecases/entity.js";
+import { getScene } from "@/usecases/game.js";
 import { InputCode, isInputDown, normalizeVector, resetVector, scaleVector, setCameraPosition } from "ridder";
 
 export function setupPlayer(e: Entity) {
@@ -16,18 +17,18 @@ export function setupPlayer(e: Entity) {
 export function updatePlayer(e: Entity) {
   resetVector(e.velocity);
 
-  if (isInputDown(InputCode.KEY_LEFT)) {
+  if (isInputDown(InputCode.KEY_LEFT) || isInputDown(InputCode.KEY_A)) {
     e.velocity.x -= 1;
     e.isFlipped = true;
   }
-  if (isInputDown(InputCode.KEY_RIGHT)) {
+  if (isInputDown(InputCode.KEY_RIGHT) || isInputDown(InputCode.KEY_D)) {
     e.velocity.x += 1;
     e.isFlipped = false;
   }
-  if (isInputDown(InputCode.KEY_UP)) {
+  if (isInputDown(InputCode.KEY_UP) || isInputDown(InputCode.KEY_W)) {
     e.velocity.y -= 1;
   }
-  if (isInputDown(InputCode.KEY_DOWN)) {
+  if (isInputDown(InputCode.KEY_DOWN) || isInputDown(InputCode.KEY_S)) {
     e.velocity.y += 1;
   }
 

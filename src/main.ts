@@ -1,9 +1,10 @@
 import { loadAssets, TextureId } from "@/assets.js";
+import { EntityType } from "@/data/entity.js";
+import { game } from "@/data/game.js";
 import { updatePlayer } from "@/entities/player.js";
-import { EntityType, renderEntity, updatePhysics } from "@/entity.js";
-import { addEntity } from "@/factory.js";
-import { game, getScene, SceneId, switchScene, transitionToNextScene } from "@/game.js";
-import { cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth } from "@/scene.js";
+import { addEntity, renderEntity, updatePhysics } from "@/usecases/entity.js";
+import { getScene, switchScene, transitionToNextScene } from "@/usecases/game.js";
+import { addScene, cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth } from "@/usecases/scene.js";
 import { applyCameraTransform, drawText, drawTexture, getFramePerSecond, InputCode, isInputPressed, random, resetTransform, run, scaleTransform, updateCamera } from "ridder";
 
 run({
@@ -13,14 +14,12 @@ run({
   setup: async () => {
     await loadAssets();
 
-    const scene = getScene(SceneId.TEST);
-    scene.backgroundId = TextureId.GRASS;
-    scene.camera.smoothing = 0.1;
+    const scene = addScene(480, 270, TextureId.GRASS);
 
-    addEntity(EntityType.PLAYER, scene.id, 20, 20);
+    addEntity(EntityType.PLAYER, scene.id, 240, 135);
 
     for (let i = 0; i < 100; i++) {
-      addEntity(EntityType.TREE_PINE, scene.id, random(0, 320), random(0, 180));
+      addEntity(EntityType.TREE_PINE, scene.id, random(0, 480), random(0, 270));
     }
 
     switchScene(scene.id);

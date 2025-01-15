@@ -1,41 +1,17 @@
 import { TextureId } from "@/assets.js";
-import { Entity, newEntity } from "@/entity.js";
-import { camera, Camera, remove, Table, table, zero } from "ridder";
+import { Entity } from "@/data/entity.js";
+import { Scene } from "@/data/scene.js";
+import { nextScene } from "@/usecases/game.js";
+import { copyRectangle, remove, setRectangle, zero } from "ridder";
 
-export type Scene = {
-  // Memory allocation
-  id: number;
-
-  // Tables
-  entities: Table<Entity>;
-
-  // Table support lists
-  update: Array<number>;
-  render: Array<number>;
-  destroyed: Array<number>;
-
-  // World
-  camera: Camera;
-  backgroundId: TextureId;
-};
-
-export function newScene(id: number): Scene {
-  return {
-    // Memory allocation
-    id,
-
-    // Tables
-    entities: table(1024, newEntity),
-
-    // Table support lists
-    update: [],
-    render: [],
-    destroyed: [],
-
-    // World
-    camera: camera(),
-    backgroundId: TextureId.NONE,
-  };
+export function addScene(w: number, h: number, bg: TextureId) {
+  const scene = nextScene();
+  scene.backgroundId = bg;
+  scene.camera.smoothing = 0.1;
+  scene.camera.shakeReduction = 0.1;
+  setRectangle(scene.bounds, 0, 0, w, h);
+  copyRectangle(scene.camera.bounds, scene.bounds);
+  return scene;
 }
 
 export function nextEntity(scene: Scene) {
@@ -46,14 +22,11 @@ export function nextEntity(scene: Scene) {
   }
 
   const e = scene.entities[id];
-
   e.id = id;
   e.isAssigned = true;
   e.sceneId = scene.id;
-
   scene.update.push(e.id);
   scene.render.push(e.id);
-
   return e;
 }
 
@@ -80,7 +53,6 @@ export function cleanupDestroyedEntities(scene: Scene) {
       remove(scene.render, id);
       zero(scene.entities[id]);
     }
-
     scene.destroyed.length = 0;
   }
 }
