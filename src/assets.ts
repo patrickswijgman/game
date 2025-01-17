@@ -1,24 +1,7 @@
+import { FontId } from "@/enum/font.js";
+import { SpriteId } from "@/enum/sprite.js";
+import { TextureId } from "@/enum/texture.js";
 import { loadFont, loadSprite, loadTexture, setFont } from "ridder";
-
-export const enum TextureId {
-  NONE,
-  ATLAS,
-}
-
-export const enum SpriteId {
-  NONE,
-  PLAYER,
-  PLAYER_SHADOW,
-  TREE_PINE,
-  TREE_SHADOW,
-  TILE_GRASS_1,
-  TILE_GRASS_2,
-  TILE_GRASS_3,
-}
-
-export const enum FontId {
-  DEFAULT,
-}
 
 export async function loadAssets() {
   await loadTexture(TextureId.ATLAS, "textures/atlas.png");

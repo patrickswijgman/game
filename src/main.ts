@@ -1,11 +1,12 @@
 import { loadAssets } from "@/assets.js";
-import { EntityType } from "@/data/entity.js";
 import { game } from "@/data/game.js";
-import { TileId } from "@/data/tile.js";
 import { updatePlayer } from "@/entities/player.js";
+import { updateTree } from "@/entities/tree.js";
+import { EntityType } from "@/enum/entity.js";
+import { TileId } from "@/enum/tile.js";
 import { addEntity, renderEntity, updatePhysics } from "@/usecases/entity.js";
 import { getScene, switchScene, transitionToNextScene } from "@/usecases/game.js";
-import { addScene, cleanupDestroyedEntities, getEntity, renderTiles, sortEntitiesOnDepth } from "@/usecases/scene.js";
+import { addScene, cleanupDestroyedEntities, getEntity, populateTiles, renderTiles, sortEntitiesOnDepth } from "@/usecases/scene.js";
 import { drawText, getFramePerSecond, getGridHeight, getGridWidth, InputCode, isInputPressed, resetTransform, run, scaleTransform, setGridValue, updateCamera } from "ridder";
 
 run({
@@ -27,6 +28,8 @@ run({
 
     addEntity(EntityType.PLAYER, scene.id, scene.bounds.w / 2, scene.bounds.h / 2);
 
+    populateTiles(scene);
+
     switchScene(scene.id);
 
     console.log(game);
@@ -47,6 +50,9 @@ run({
       switch (e.type) {
         case EntityType.PLAYER:
           updatePlayer(e);
+          break;
+        case EntityType.TREE:
+          updateTree(e);
           break;
       }
 

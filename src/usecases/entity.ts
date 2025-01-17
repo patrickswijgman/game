@@ -1,11 +1,12 @@
-import { SpriteId } from "@/assets.js";
-import { Entity, EntityType } from "@/data/entity.js";
+import { Entity } from "@/data/entity.js";
 import { Scene } from "@/data/scene.js";
 import { setupPlayer } from "@/entities/player.js";
-import { setupPineTree } from "@/entities/tree-pine.js";
+import { setupTree } from "@/entities/tree.js";
+import { EntityType } from "@/enum/entity.js";
+import { SpriteId } from "@/enum/sprite.js";
 import { getScene } from "@/usecases/game.js";
 import { nextEntity } from "@/usecases/scene.js";
-import { addVectorScaled, applyCameraTransform, drawSprite, getDelta, resetTransform, scaleTransform, setVector, translateTransform } from "ridder";
+import { addVectorScaled, applyCameraTransform, drawSprite, getDelta, resetTransform, rotateTransform, scaleTransform, setVector, translateTransform } from "ridder";
 
 export function addEntity(type: EntityType, sceneId: number, x: number, y: number) {
   const scene = getScene(sceneId);
@@ -18,8 +19,8 @@ export function addEntity(type: EntityType, sceneId: number, x: number, y: numbe
     case EntityType.PLAYER:
       setupPlayer(e);
       break;
-    case EntityType.TREE_PINE:
-      setupPineTree(e);
+    case EntityType.TREE:
+      setupTree(e);
       break;
   }
 
@@ -31,9 +32,9 @@ export function setSprite(e: Entity, id: SpriteId, pivotX: number, pivotY: numbe
   setVector(e.pivot, pivotX, pivotY);
 }
 
-export function setShadow(e: Entity, id: SpriteId, offsetX: number, offsetY: number) {
+export function setShadow(e: Entity, id: SpriteId, pivotX: number, pivotY: number) {
   e.shadowId = id;
-  setVector(e.shadowOffset, offsetX, offsetY);
+  setVector(e.shadowPivot, pivotX, pivotY);
 }
 
 export function updatePhysics(e: Entity) {
@@ -51,8 +52,12 @@ export function renderEntity(e: Entity, scene: Scene) {
     scaleTransform(-1, 1);
   }
 
+  translateTransform(e.tweenPosition.x, e.tweenPosition.y);
+  scaleTransform(e.tweenScale.x, e.tweenScale.y);
+  rotateTransform(e.tweenAngle);
+
   if (e.shadowId) {
-    drawSprite(e.shadowId, -e.pivot.x + e.shadowOffset.x, -e.pivot.y + e.shadowOffset.y);
+    drawSprite(e.shadowId, -e.shadowPivot.x, -e.shadowPivot.y);
   }
 
   if (e.spriteId) {

@@ -1,11 +1,6 @@
-import { SpriteId } from "@/assets.js";
-import { vec, Vector } from "ridder";
-
-export const enum EntityType {
-  NONE,
-  PLAYER,
-  TREE_PINE,
-}
+import { EntityType } from "@/enum/entity.js";
+import { SpriteId } from "@/enum/sprite.js";
+import { setVector, timer, Timer, vec, Vector, zero } from "ridder";
 
 export type Entity = {
   // Memory allocation
@@ -24,8 +19,15 @@ export type Entity = {
   spriteId: SpriteId;
   pivot: Vector;
   shadowId: SpriteId;
-  shadowOffset: Vector;
+  shadowPivot: Vector;
   isFlipped: boolean;
+
+  // Animation
+  tweenPosition: Vector;
+  tweenScale: Vector;
+  tweenAngle: number;
+  tweenTime: number;
+  tweenTimer: Timer;
 
   // Relation
   sceneId: number;
@@ -52,8 +54,15 @@ export function newEntity(): Entity {
     spriteId: SpriteId.NONE,
     pivot: vec(),
     shadowId: SpriteId.NONE,
-    shadowOffset: vec(),
+    shadowPivot: vec(),
     isFlipped: false,
+
+    // Animation
+    tweenPosition: vec(),
+    tweenScale: vec(1, 1),
+    tweenAngle: 0,
+    tweenTime: 0,
+    tweenTimer: timer(),
 
     // Relation
     sceneId: 0,
@@ -61,4 +70,9 @@ export function newEntity(): Entity {
     // Player
     isPlayer: false,
   };
+}
+
+export function zeroEntity(e: Entity) {
+  zero(e);
+  setVector(e.tweenScale, 1, 1);
 }

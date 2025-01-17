@@ -1,0 +1,10 @@
+export const enum SpriteId {
+  NONE,
+  PLAYER,
+  PLAYER_SHADOW,
+  TREE_PINE,
+  TREE_SHADOW,
+  TILE_GRASS_1,
+  TILE_GRASS_2,
+  TILE_GRASS_3,
+}
