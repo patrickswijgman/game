@@ -1,5 +1,5 @@
 import { Entity } from "@/data/entity.js";
-import { SpriteId } from "@/enum/assets.js";
+import { SpriteId } from "@/enums/assets.js";
 import { setShadow, setSprite } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";
 import { InputCode, isInputDown, normalizeVector, resetVector, scaleVector, setCameraPosition } from "ridder";

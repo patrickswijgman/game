@@ -1,13 +1,16 @@
 import { game } from "@/data/game.js";
 import { updatePlayer } from "@/entities/player.js";
 import { updateTree } from "@/entities/tree.js";
-import { EntityType } from "@/enum/entity.js";
-import { TileId } from "@/enum/tiles.js";
+import { EntityType } from "@/enums/entity.js";
+import { ItemId } from "@/enums/item.js";
+import { TileId } from "@/enums/tile.js";
 import { loadAssets } from "@/usecases/assets.js";
 import { debugSceneTiles } from "@/usecases/debug.js";
+import { drawCard, initDeck, updateDeck } from "@/usecases/deck.js";
 import { addEntity, renderEntity, updatePhysics } from "@/usecases/entity.js";
 import { getScene, switchScene, transitionToNextScene } from "@/usecases/game.js";
 import { addScene, cleanupDestroyedEntities, getEntity, populateTiles, renderTiles, sortEntitiesOnDepth } from "@/usecases/scene.js";
+import { updateSheet } from "@/usecases/sheet.js";
 import { drawText, getFramePerSecond, getGridHeight, getGridWidth, InputCode, isInputPressed, resetTransform, run, scaleTransform, setGridValue, updateCamera } from "ridder";
 
 let isDebugging = false;
@@ -32,6 +35,13 @@ run({
     addEntity(EntityType.PLAYER, scene.id, scene.bounds.w / 2, scene.bounds.h / 2);
 
     populateTiles(scene);
+
+    game.sheet.equipment.push(ItemId.LONGSWORD);
+    updateSheet(game.sheet);
+    updateDeck(game.sheet.deck);
+    initDeck(game.sheet.deck);
+    console.log(game.sheet.deck);
+    drawCard(game.sheet.deck, 3);
 
     switchScene(scene.id);
 

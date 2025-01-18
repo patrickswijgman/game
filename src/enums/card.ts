@@ -1,5 +1,5 @@
 export const enum CardId {
-  SLASH_1,
+  SLASH,
 }
 
 export const enum CardEffectId {

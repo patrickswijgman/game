@@ -1,5 +1,5 @@
-import { SpriteId } from "@/enum/assets.js";
-import { EntityType } from "@/enum/entity.js";
+import { SpriteId } from "@/enums/assets.js";
+import { EntityType } from "@/enums/entity.js";
 import { setVector, timer, Timer, vec, Vector, zero } from "ridder";
 
 export type Entity = {

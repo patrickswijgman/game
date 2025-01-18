@@ -1,5 +1,5 @@
 import { Entity, newEntity } from "@/data/entity.js";
-import { TileId } from "@/enum/tiles.js";
+import { TileId } from "@/enums/tile.js";
 import { Camera, camera, grid, Grid, rect, Rectangle, table, Table } from "ridder";
 
 export type Scene = {

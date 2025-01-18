@@ -1,4 +1,4 @@
-import { FontId, SpriteId, TextureId } from "@/enum/assets.js";
+import { FontId, SpriteId, TextureId } from "@/enums/assets.js";
 import { loadFont, loadSprite, loadTexture, setFont } from "ridder";
 
 export async function loadAssets() {

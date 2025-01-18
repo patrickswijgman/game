@@ -1,9 +1,9 @@
 import { TILE_SIZE } from "@/consts.js";
 import { Entity, zeroEntity } from "@/data/entity.js";
 import { Scene } from "@/data/scene.js";
-import { SpriteId } from "@/enum/assets.js";
-import { EntityType } from "@/enum/entity.js";
-import { TileId } from "@/enum/tiles.js";
+import { SpriteId } from "@/enums/assets.js";
+import { EntityType } from "@/enums/entity.js";
+import { TileId } from "@/enums/tile.js";
 import { addEntity } from "@/usecases/entity.js";
 import { nextScene } from "@/usecases/game.js";
 import { applyCameraTransform, copyRectangle, drawSprite, getGridHeight, getGridValue, getGridWidth, grid, isGridValid, remove, resetTransform, roll, setRectangle } from "ridder";
