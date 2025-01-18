@@ -4,8 +4,8 @@ import { Camera, camera, grid, Grid, rect, Rectangle, table, Table } from "ridde
 
 export type Scene = {
   // Memory allocation
+  isAllocated: boolean;
   id: number;
-  isAssigned: boolean;
 
   // Tables
   entities: Table<Entity>;
@@ -24,8 +24,8 @@ export type Scene = {
 export function newScene(): Scene {
   return {
     // Memory allocation
+    isAllocated: false,
     id: 0,
-    isAssigned: false,
 
     // Tables
     entities: table(1024, newEntity),

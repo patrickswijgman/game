@@ -5,8 +5,8 @@ import { setVector, timer, Timer, vec, Vector, zero } from "ridder";
 
 export type Entity = {
   // Memory allocation
+  isAllocated: boolean;
   id: number;
-  isAssigned: boolean;
 
   // Archetype
   type: EntityType;
@@ -44,8 +44,8 @@ export type Entity = {
 export function newEntity(): Entity {
   return {
     // Memory allocation
+    isAllocated: false,
     id: 0,
-    isAssigned: false,
 
     // Archetype
     type: EntityType.NONE,

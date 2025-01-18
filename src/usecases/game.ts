@@ -1,15 +1,15 @@
 import { game } from "@/data/game.js";
 
 export function nextScene() {
-  const id = game.scenes.findIndex((scene) => !scene.isAssigned);
+  const id = game.scenes.findIndex((scene) => !scene.isAllocated);
 
   if (id === -1) {
     throw new Error("Out of scenes :(");
   }
 
   const scene = game.scenes[id];
+  scene.isAllocated = true;
   scene.id = id;
-  scene.isAssigned = true;
   return scene;
 }
 
