@@ -1,9 +1,9 @@
 import { TILE_SIZE } from "@/consts.js";
 import { Entity, zeroEntity } from "@/data/entity.js";
 import { Scene } from "@/data/scene.js";
+import { SpriteId } from "@/enum/assets.js";
 import { EntityType } from "@/enum/entity.js";
-import { SpriteId } from "@/enum/sprite.js";
-import { TileId } from "@/enum/tile.js";
+import { TileId } from "@/enum/tiles.js";
 import { addEntity } from "@/usecases/entity.js";
 import { nextScene } from "@/usecases/game.js";
 import { applyCameraTransform, copyRectangle, drawSprite, getGridHeight, getGridValue, getGridWidth, grid, isGridValid, remove, resetTransform, roll, setRectangle } from "ridder";
@@ -73,9 +73,9 @@ export function populateTiles(scene: Scene) {
         const centerX = worldX + TILE_SIZE / 2;
         const centerY = worldY + TILE_SIZE / 2;
         switch (tile) {
-          case TileId.GRASS:
+          case TileId.FOREST:
             if (roll(0.8)) {
-              addEntity(EntityType.TREE, scene.id, centerX, centerY);
+              addEntity(EntityType.TREE, scene.id, centerX, centerY + 4);
             }
             break;
         }
@@ -96,8 +96,8 @@ export function renderTiles(scene: Scene) {
         const worldX = x * TILE_SIZE;
         const worldY = y * TILE_SIZE;
         switch (tile) {
-          case TileId.GRASS:
-            drawSprite(SpriteId.TILE_GRASS_1, worldX, worldY);
+          case TileId.FOREST:
+            drawSprite(SpriteId.TILE_GRASS, worldX, worldY);
             break;
         }
       }

@@ -1,13 +1,16 @@
-import { loadAssets } from "@/assets.js";
 import { game } from "@/data/game.js";
 import { updatePlayer } from "@/entities/player.js";
 import { updateTree } from "@/entities/tree.js";
 import { EntityType } from "@/enum/entity.js";
-import { TileId } from "@/enum/tile.js";
+import { TileId } from "@/enum/tiles.js";
+import { loadAssets } from "@/usecases/assets.js";
+import { debugSceneTiles } from "@/usecases/debug.js";
 import { addEntity, renderEntity, updatePhysics } from "@/usecases/entity.js";
 import { getScene, switchScene, transitionToNextScene } from "@/usecases/game.js";
 import { addScene, cleanupDestroyedEntities, getEntity, populateTiles, renderTiles, sortEntitiesOnDepth } from "@/usecases/scene.js";
 import { drawText, getFramePerSecond, getGridHeight, getGridWidth, InputCode, isInputPressed, resetTransform, run, scaleTransform, setGridValue, updateCamera } from "ridder";
+
+let isDebugging = false;
 
 run({
   width: 320,
@@ -22,7 +25,7 @@ run({
     const h = getGridHeight(scene.tiles);
     for (let x = 0; x < w; x++) {
       for (let y = 0; y < h; y++) {
-        setGridValue(scene.tiles, x, y, TileId.GRASS);
+        setGridValue(scene.tiles, x, y, TileId.FOREST);
       }
     }
 
@@ -38,6 +41,9 @@ run({
   update: () => {
     if (isInputPressed(InputCode.KEY_R)) {
       document.location.reload();
+    }
+    if (isInputPressed(InputCode.KEY_H)) {
+      isDebugging = !isDebugging;
     }
 
     transitionToNextScene();
@@ -75,6 +81,10 @@ run({
     for (const id of scene.render) {
       const e = getEntity(scene, id);
       renderEntity(e, scene);
+    }
+
+    if (isDebugging) {
+      debugSceneTiles(scene);
     }
 
     resetTransform();
