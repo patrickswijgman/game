@@ -1,17 +1,19 @@
 import { game } from "@/data/game.js";
-import { updatePlayer } from "@/entities/player.js";
+import { addPlayer, updatePlayer } from "@/entities/player.js";
 import { updateTree } from "@/entities/tree.js";
+import { addCard, renderCard } from "@/entities/ui/card.js";
+import { CardId } from "@/enums/card.js";
 import { EntityType } from "@/enums/entity.js";
 import { ItemId } from "@/enums/item.js";
 import { TileId } from "@/enums/tile.js";
 import { loadAssets } from "@/usecases/assets.js";
 import { debugSceneTiles } from "@/usecases/debug.js";
 import { drawCard, initDeck, updateDeck } from "@/usecases/deck.js";
-import { addEntity, renderEntity, updatePhysics } from "@/usecases/entity.js";
+import { applyEntityAnimationTransform, applyEntityTransform, renderEntityShadow, renderEntitySprite, updatePhysics } from "@/usecases/entity.js";
 import { getScene, switchScene, transitionToNextScene } from "@/usecases/game.js";
 import { addScene, cleanupDestroyedEntities, getEntity, populateTiles, renderTiles, sortEntitiesOnDepth } from "@/usecases/scene.js";
 import { updateSheet } from "@/usecases/sheet.js";
-import { drawText, getFramePerSecond, getGridHeight, getGridWidth, InputCode, isInputPressed, resetTransform, run, scaleTransform, setGridValue, updateCamera } from "ridder";
+import { drawText, getFramePerSecond, getGridHeight, getGridWidth, InputCode, isInputPressed, resetTransform, run, setGridValue, updateCamera } from "ridder";
 
 let isDebugging = false;
 
@@ -32,16 +34,17 @@ run({
       }
     }
 
-    addEntity(EntityType.PLAYER, scene.id, scene.bounds.w / 2, scene.bounds.h / 2);
+    addPlayer(scene.id, scene.bounds.w / 2, scene.bounds.h / 2);
 
     populateTiles(scene);
 
-    game.sheet.equipment.push(ItemId.LONGSWORD);
+    game.sheet.weaponId = ItemId.LONGSWORD;
     updateSheet(game.sheet);
     updateDeck(game.sheet.deck);
     initDeck(game.sheet.deck);
-    console.log(game.sheet.deck);
     drawCard(game.sheet.deck, 3);
+
+    addCard(scene.id, 16, 16, CardId.SLASH);
 
     switchScene(scene.id);
 
@@ -90,7 +93,18 @@ run({
 
     for (const id of scene.render) {
       const e = getEntity(scene, id);
-      renderEntity(e, scene);
+
+      resetTransform();
+      applyEntityTransform(e, scene);
+      renderEntityShadow(e);
+      applyEntityAnimationTransform(e);
+      renderEntitySprite(e);
+
+      switch (e.type) {
+        case EntityType.CARD:
+          renderCard(e);
+          break;
+      }
     }
 
     if (isDebugging) {
@@ -98,7 +112,6 @@ run({
     }
 
     resetTransform();
-    scaleTransform(0.5, 0.5);
     drawText(getFramePerSecond().toString(), 1, 1, "lime");
   },
 });

@@ -20,12 +20,14 @@ export function shuffleDeck(deck: Deck) {
 
 export function drawCard(deck: Deck, amount = 1) {
   for (let i = 0; i < amount; i++) {
-    if (deck.draw.length) {
-      const card = deck.draw.pop();
-      deck.hand.push(card);
-    } else if (deck.discard.length) {
+    if (deck.draw.length === 0 && deck.discard.length) {
       shuffleDeck(deck);
-      drawCard(deck);
+    }
+
+    const card = deck.draw.pop();
+
+    if (card) {
+      deck.hand.push(card);
     }
   }
 }

@@ -1,16 +1,21 @@
 import { Entity } from "@/data/entity.js";
 import { SpriteId } from "@/enums/assets.js";
-import { setShadow, setSprite } from "@/usecases/entity.js";
+import { EntityType } from "@/enums/entity.js";
+import { addEntity, setShadow, setSprite } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";
 import { InputCode, isInputDown, normalizeVector, resetVector, scaleVector, setCameraPosition } from "ridder";
 
-export function setupPlayer(e: Entity) {
+export function addPlayer(sceneId: number, x: number, y: number) {
+  const e = addEntity(EntityType.PLAYER, sceneId, x, y);
   const scene = getScene(e.sceneId);
+
   setSprite(e, SpriteId.PLAYER, 8, 15);
   setShadow(e, SpriteId.PLAYER_SHADOW, 8, 13);
   e.isPlayer = true;
   e.isPhysicsEnabled = true;
+
   setCameraPosition(scene.camera, e.position.x, e.position.y);
+
   return e;
 }
 

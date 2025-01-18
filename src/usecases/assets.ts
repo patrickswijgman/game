@@ -12,7 +12,12 @@ export async function loadAssets() {
 
   loadSprite(SpriteId.TILE_GRASS, TextureId.ATLAS, 0, 96, 16, 16);
 
-  await loadFont(FontId.DEFAULT, "fonts/pixelmix.ttf", "pixelmix", 8);
+  loadSprite(SpriteId.CARD, TextureId.ATLAS, 0, 224, 32, 32);
+  loadSprite(SpriteId.CARD_SHADOW, TextureId.ATLAS, 32, 224, 32, 32);
+
+  loadSprite(SpriteId.LONGSWORD, TextureId.ATLAS, 0, 192, 32, 32);
+
+  await loadFont(FontId.DEFAULT, "fonts/pixelmix.ttf", "pixelmix", 4);
 
   setFont(FontId.DEFAULT);
 }

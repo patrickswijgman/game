@@ -15,12 +15,18 @@ export type Game = {
 export function newGame(): Game {
   return {
     // Scene management
-    scenes: table(16, newScene),
+    scenes: table(4, newScene),
     sceneId: 0,
     sceneNextId: 0,
 
     // Player
-    sheet: newSheet(),
+    sheet: newSheet("Player", {
+      health: 10,
+      healthMax: 10,
+      mana: 2,
+      manaMax: 2,
+      damage: 0,
+    }),
   };
 }
 

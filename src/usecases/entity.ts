@@ -1,29 +1,17 @@
+import { SHADOW_ALPHA } from "@/consts.js";
 import { Entity } from "@/data/entity.js";
 import { Scene } from "@/data/scene.js";
-import { setupPlayer } from "@/entities/player.js";
-import { setupTree } from "@/entities/tree.js";
 import { SpriteId } from "@/enums/assets.js";
 import { EntityType } from "@/enums/entity.js";
 import { getScene } from "@/usecases/game.js";
 import { nextEntity } from "@/usecases/scene.js";
-import { addVectorScaled, applyCameraTransform, drawSprite, getDelta, resetTransform, rotateTransform, scaleTransform, setVector, translateTransform } from "ridder";
+import { addVectorScaled, applyCameraTransform, drawSprite, getDelta, rotateTransform, scaleTransform, setAlpha, setVector, translateTransform } from "ridder";
 
 export function addEntity(type: EntityType, sceneId: number, x: number, y: number) {
   const scene = getScene(sceneId);
   const e = nextEntity(scene);
-
   e.type = type;
   setVector(e.position, x, y);
-
-  switch (type) {
-    case EntityType.PLAYER:
-      setupPlayer(e);
-      break;
-    case EntityType.TREE:
-      setupTree(e);
-      break;
-  }
-
   return e;
 }
 
@@ -43,24 +31,34 @@ export function updatePhysics(e: Entity) {
   }
 }
 
-export function renderEntity(e: Entity, scene: Scene) {
-  resetTransform();
-  applyCameraTransform(scene.camera);
+export function applyEntityTransform(e: Entity, scene: Scene) {
+  if (!e.isOverlay) {
+    applyCameraTransform(scene.camera);
+  }
+
   translateTransform(e.position.x, e.position.y);
 
   if (e.isFlipped) {
     scaleTransform(-1, 1);
   }
+}
 
+export function applyEntityAnimationTransform(e: Entity) {
   translateTransform(e.tweenPosition.x, e.tweenPosition.y);
   scaleTransform(e.tweenScale.x, e.tweenScale.y);
   rotateTransform(e.tweenAngle);
+}
 
-  if (e.shadowId) {
-    drawSprite(e.shadowId, -e.shadowPivot.x, -e.shadowPivot.y);
-  }
-
+export function renderEntitySprite(e: Entity) {
   if (e.spriteId) {
     drawSprite(e.spriteId, -e.pivot.x, -e.pivot.y);
+  }
+}
+
+export function renderEntityShadow(e: Entity) {
+  if (e.shadowId) {
+    setAlpha(SHADOW_ALPHA);
+    drawSprite(e.shadowId, -e.shadowPivot.x, -e.shadowPivot.y);
+    setAlpha(1);
   }
 }

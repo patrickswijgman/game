@@ -1,4 +1,5 @@
 import { SpriteId } from "@/enums/assets.js";
+import { CardId } from "@/enums/card.js";
 import { EntityType } from "@/enums/entity.js";
 import { setVector, timer, Timer, vec, Vector, zero } from "ridder";
 
@@ -11,9 +12,9 @@ export type Entity = {
   type: EntityType;
 
   // Physics
+  isPhysicsEnabled: boolean;
   position: Vector;
   velocity: Vector;
-  isPhysicsEnabled: boolean;
 
   // Render
   spriteId: SpriteId;
@@ -32,6 +33,10 @@ export type Entity = {
   // Relation
   sceneId: number;
 
+  // Overlay (UI)
+  isOverlay: boolean;
+  cardId: CardId;
+
   // Player
   isPlayer: boolean;
 };
@@ -46,9 +51,9 @@ export function newEntity(): Entity {
     type: EntityType.NONE,
 
     // Physics
+    isPhysicsEnabled: false,
     position: vec(),
     velocity: vec(),
-    isPhysicsEnabled: false,
 
     // Render
     spriteId: SpriteId.NONE,
@@ -66,6 +71,10 @@ export function newEntity(): Entity {
 
     // Relation
     sceneId: 0,
+
+    // Overlay (UI)
+    isOverlay: false,
+    cardId: CardId.NONE,
 
     // Player
     isPlayer: false,

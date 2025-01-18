@@ -1,10 +1,9 @@
 import { TILE_SIZE } from "@/consts.js";
 import { Entity, zeroEntity } from "@/data/entity.js";
 import { Scene } from "@/data/scene.js";
+import { addTree } from "@/entities/tree.js";
 import { SpriteId } from "@/enums/assets.js";
-import { EntityType } from "@/enums/entity.js";
 import { TileId } from "@/enums/tile.js";
-import { addEntity } from "@/usecases/entity.js";
 import { nextScene } from "@/usecases/game.js";
 import { applyCameraTransform, copyRectangle, drawSprite, getGridHeight, getGridValue, getGridWidth, grid, isGridValid, remove, resetTransform, roll, setRectangle } from "ridder";
 
@@ -46,6 +45,14 @@ export function sortEntitiesOnDepth(scene: Scene) {
   scene.render.sort((idA, idB) => {
     const a = scene.entities[idA];
     const b = scene.entities[idB];
+
+    if (a.isOverlay) {
+      return 1;
+    }
+    if (b.isOverlay) {
+      return -1;
+    }
+
     return a.position.y - b.position.y;
   });
 }
@@ -75,7 +82,7 @@ export function populateTiles(scene: Scene) {
         switch (tile) {
           case TileId.FOREST:
             if (roll(0.8)) {
-              addEntity(EntityType.TREE, scene.id, centerX, centerY + 4);
+              addTree(scene.id, centerX, centerY + 4);
             }
             break;
         }
