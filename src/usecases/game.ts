@@ -1,19 +1,7 @@
 import { game } from "@/data/game.js";
+import { SceneId } from "@/enums/scene.js";
 
-export function nextScene() {
-  const id = game.scenes.findIndex((scene) => !scene.isAllocated);
-
-  if (id === -1) {
-    throw new Error("Out of scenes :(");
-  }
-
-  const scene = game.scenes[id];
-  scene.isAllocated = true;
-  scene.id = id;
-  return scene;
-}
-
-export function switchScene(id: number) {
+export function switchScene(id: SceneId) {
   game.sceneNextId = id;
 }
 
@@ -21,6 +9,6 @@ export function transitionToNextScene() {
   game.sceneId = game.sceneNextId;
 }
 
-export function getScene(id: number) {
+export function getScene(id: SceneId) {
   return game.scenes[id];
 }

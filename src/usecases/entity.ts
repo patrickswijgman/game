@@ -3,11 +3,12 @@ import { Entity } from "@/data/entity.js";
 import { Scene } from "@/data/scene.js";
 import { SpriteId } from "@/enums/assets.js";
 import { EntityType } from "@/enums/entity.js";
+import { SceneId } from "@/enums/scene.js";
 import { getScene } from "@/usecases/game.js";
 import { nextEntity } from "@/usecases/scene.js";
 import { addVectorScaled, applyCameraTransform, drawSprite, getDelta, rotateTransform, scaleTransform, setAlpha, setVector, translateTransform } from "ridder";
 
-export function addEntity(type: EntityType, sceneId: number, x: number, y: number) {
+export function addEntity(type: EntityType, sceneId: SceneId, x: number, y: number) {
   const scene = getScene(sceneId);
   const e = nextEntity(scene);
   e.type = type;

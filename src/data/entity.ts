@@ -1,6 +1,7 @@
 import { SpriteId } from "@/enums/assets.js";
 import { CardId } from "@/enums/card.js";
 import { EntityType } from "@/enums/entity.js";
+import { SceneId } from "@/enums/scene.js";
 import { setVector, timer, Timer, vec, Vector, zero } from "ridder";
 
 export type Entity = {
@@ -31,7 +32,7 @@ export type Entity = {
   tweenTimer: Timer;
 
   // Relation
-  sceneId: number;
+  sceneId: SceneId;
 
   // Overlay (UI)
   isOverlay: boolean;
@@ -70,7 +71,7 @@ export function newEntity(): Entity {
     tweenTimer: timer(),
 
     // Relation
-    sceneId: 0,
+    sceneId: SceneId.NONE,
 
     // Overlay (UI)
     isOverlay: false,

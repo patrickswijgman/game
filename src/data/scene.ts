@@ -1,11 +1,10 @@
 import { Entity, newEntity } from "@/data/entity.js";
+import { SceneId } from "@/enums/scene.js";
 import { TileId } from "@/enums/tile.js";
 import { Camera, camera, grid, Grid, rect, Rectangle, table, Table } from "ridder";
 
 export type Scene = {
-  // Memory allocation
-  isAllocated: boolean;
-  id: number;
+  id: SceneId;
 
   // Tables
   entities: Table<Entity>;
@@ -21,14 +20,12 @@ export type Scene = {
   tiles: Grid<TileId>;
 };
 
-export function newScene(): Scene {
+export function newScene(id: SceneId, maxEntityCount: number): Scene {
   return {
-    // Memory allocation
-    isAllocated: false,
-    id: 0,
+    id,
 
     // Tables
-    entities: table(1024, newEntity),
+    entities: table(maxEntityCount, newEntity),
 
     // Table support lists
     update: [],

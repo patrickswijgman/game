@@ -1,7 +1,6 @@
 export const enum TextureId {
   NONE,
   ATLAS,
-  SHADOWS,
 }
 
 export const enum SpriteId {

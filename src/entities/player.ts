@@ -1,11 +1,12 @@
 import { Entity } from "@/data/entity.js";
 import { SpriteId } from "@/enums/assets.js";
 import { EntityType } from "@/enums/entity.js";
+import { SceneId } from "@/enums/scene.js";
 import { addEntity, setShadow, setSprite } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";
 import { InputCode, isInputDown, normalizeVector, resetVector, scaleVector, setCameraPosition } from "ridder";
 
-export function addPlayer(sceneId: number, x: number, y: number) {
+export function addPlayer(sceneId: SceneId, x: number, y: number) {
   const e = addEntity(EntityType.PLAYER, sceneId, x, y);
   const scene = getScene(e.sceneId);
 

@@ -5,13 +5,14 @@ import { addCard, renderCard } from "@/entities/ui/card.js";
 import { CardId } from "@/enums/card.js";
 import { EntityType } from "@/enums/entity.js";
 import { ItemId } from "@/enums/item.js";
+import { SceneId } from "@/enums/scene.js";
 import { TileId } from "@/enums/tile.js";
 import { loadAssets } from "@/usecases/assets.js";
 import { debugSceneTiles } from "@/usecases/debug.js";
 import { drawCard, initDeck, updateDeck } from "@/usecases/deck.js";
 import { applyEntityAnimationTransform, applyEntityTransform, renderEntityShadow, renderEntitySprite, updatePhysics } from "@/usecases/entity.js";
 import { getScene, switchScene, transitionToNextScene } from "@/usecases/game.js";
-import { addScene, cleanupDestroyedEntities, getEntity, populateTiles, renderTiles, sortEntitiesOnDepth } from "@/usecases/scene.js";
+import { cleanupDestroyedEntities, getEntity, populateTiles, renderTiles, setupScene, sortEntitiesOnDepth } from "@/usecases/scene.js";
 import { updateSheet } from "@/usecases/sheet.js";
 import { drawText, getFramePerSecond, getGridHeight, getGridWidth, InputCode, isInputPressed, resetTransform, run, setGridValue, updateCamera } from "ridder";
 
@@ -24,7 +25,7 @@ run({
   setup: async () => {
     await loadAssets();
 
-    const scene = addScene(30, 20);
+    const scene = setupScene(SceneId.WORLD, 64, 64);
 
     const w = getGridWidth(scene.tiles);
     const h = getGridHeight(scene.tiles);
@@ -48,7 +49,8 @@ run({
 
     switchScene(scene.id);
 
-    console.log(game);
+    const count = scene.entities.reduce((prev, e) => (e.isAllocated ? ++prev : prev), 0);
+    console.log(count);
   },
 
   update: () => {
