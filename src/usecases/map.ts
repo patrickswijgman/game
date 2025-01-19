@@ -3,8 +3,8 @@ import { addPlayer } from "@/entities/player.js";
 import { addTree } from "@/entities/tree.js";
 import { TextureId } from "@/enums/assets.js";
 import { EntityType } from "@/enums/entity.js";
+import { COLOR_TO_ENTITY, COLOR_TO_TILE, TILE_TO_SPRITE, TileId } from "@/enums/map.js";
 import { SceneId } from "@/enums/scene.js";
-import { COLOR_TO_ENTITY, COLOR_TO_TILE, TILE_TO_SPRITE, TileId } from "@/enums/tile.js";
 import { getSprite, getTexture, loadRenderTexture, roll, toHex } from "ridder";
 
 export function populateTiles(sceneId: SceneId) {

@@ -11,9 +11,9 @@ import { loadAssets } from "@/usecases/assets.js";
 import { drawCard, initDeck, updateDeck } from "@/usecases/deck.js";
 import { applyEntityAnimationTransform, applyEntityTransform, renderEntityShadow, renderEntitySprite, updatePhysics } from "@/usecases/entity.js";
 import { getScene, switchScene, transitionToNextScene } from "@/usecases/game.js";
+import { loadFloorTexture, populateTiles } from "@/usecases/map.js";
 import { cleanupDestroyedEntities, getEntity, setupScene, sortEntitiesOnDepth } from "@/usecases/scene.js";
 import { updateSheet } from "@/usecases/sheet.js";
-import { loadFloorTexture, populateTiles } from "@/usecases/tile.js";
 import { applyCameraTransform, drawText, drawTexture, getFramePerSecond, InputCode, isInputPressed, resetTransform, run, updateCamera } from "ridder";
 
 let isDebugging = false;
