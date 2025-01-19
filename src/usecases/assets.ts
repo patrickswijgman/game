@@ -3,6 +3,8 @@ import { loadFont, loadSprite, loadTexture, setFont } from "ridder";
 
 export async function loadAssets() {
   await loadTexture(TextureId.ATLAS, "textures/atlas.png");
+  await loadTexture(TextureId.MAP_TILES, "textures/tiles.png");
+  await loadTexture(TextureId.MAP_OBJECTS, "textures/objects.png");
 
   loadSprite(SpriteId.PLAYER, TextureId.ATLAS, 0, 16, 16, 16);
   loadSprite(SpriteId.PLAYER_SHADOW, TextureId.ATLAS, 0, 32, 16, 16);

@@ -1,20 +1,20 @@
 import { game } from "@/data/game.js";
-import { addPlayer, updatePlayer } from "@/entities/player.js";
+import { updatePlayer } from "@/entities/player.js";
 import { updateTree } from "@/entities/tree.js";
 import { addCard, renderCard } from "@/entities/ui/card.js";
+import { TextureId } from "@/enums/assets.js";
 import { CardId } from "@/enums/card.js";
 import { EntityType } from "@/enums/entity.js";
 import { ItemId } from "@/enums/item.js";
 import { SceneId } from "@/enums/scene.js";
-import { TileId } from "@/enums/tile.js";
 import { loadAssets } from "@/usecases/assets.js";
-import { debugSceneTiles } from "@/usecases/debug.js";
 import { drawCard, initDeck, updateDeck } from "@/usecases/deck.js";
 import { applyEntityAnimationTransform, applyEntityTransform, renderEntityShadow, renderEntitySprite, updatePhysics } from "@/usecases/entity.js";
 import { getScene, switchScene, transitionToNextScene } from "@/usecases/game.js";
-import { cleanupDestroyedEntities, getEntity, populateTiles, renderTiles, setupScene, sortEntitiesOnDepth } from "@/usecases/scene.js";
+import { cleanupDestroyedEntities, getEntity, setupScene, sortEntitiesOnDepth } from "@/usecases/scene.js";
 import { updateSheet } from "@/usecases/sheet.js";
-import { drawText, getFramePerSecond, getGridHeight, getGridWidth, InputCode, isInputPressed, resetTransform, run, setGridValue, updateCamera } from "ridder";
+import { loadFloorTexture, populateTiles } from "@/usecases/tile.js";
+import { applyCameraTransform, drawText, drawTexture, getFramePerSecond, InputCode, isInputPressed, resetTransform, run, updateCamera } from "ridder";
 
 let isDebugging = false;
 
@@ -25,19 +25,11 @@ run({
   setup: async () => {
     await loadAssets();
 
+    loadFloorTexture();
+
     const scene = setupScene(SceneId.WORLD, 64, 64);
 
-    const w = getGridWidth(scene.tiles);
-    const h = getGridHeight(scene.tiles);
-    for (let x = 0; x < w; x++) {
-      for (let y = 0; y < h; y++) {
-        setGridValue(scene.tiles, x, y, TileId.FOREST);
-      }
-    }
-
-    addPlayer(scene.id, scene.bounds.w / 2, scene.bounds.h / 2);
-
-    populateTiles(scene);
+    populateTiles(scene.id);
 
     game.sheet.weaponId = ItemId.LONGSWORD;
     updateSheet(game.sheet);
@@ -50,6 +42,7 @@ run({
     switchScene(scene.id);
 
     const count = scene.entities.reduce((prev, e) => (e.isAllocated ? ++prev : prev), 0);
+    console.log(game);
     console.log(count);
   },
 
@@ -91,7 +84,8 @@ run({
   render: () => {
     const scene = getScene(game.sceneId);
 
-    renderTiles(scene);
+    applyCameraTransform(scene.camera);
+    drawTexture(TextureId.FLOOR, 0, 0);
 
     for (const id of scene.render) {
       const e = getEntity(scene, id);
@@ -110,7 +104,6 @@ run({
     }
 
     if (isDebugging) {
-      debugSceneTiles(scene);
     }
 
     resetTransform();

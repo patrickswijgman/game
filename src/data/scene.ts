@@ -1,7 +1,6 @@
 import { Entity, newEntity } from "@/data/entity.js";
 import { SceneId } from "@/enums/scene.js";
-import { TileId } from "@/enums/tile.js";
-import { Camera, camera, grid, Grid, rect, Rectangle, table, Table } from "ridder";
+import { Camera, camera, rect, Rectangle, table, Table } from "ridder";
 
 export type Scene = {
   id: SceneId;
@@ -17,7 +16,6 @@ export type Scene = {
   // World
   camera: Camera;
   bounds: Rectangle;
-  tiles: Grid<TileId>;
 };
 
 export function newScene(id: SceneId, maxEntityCount: number): Scene {
@@ -35,6 +33,5 @@ export function newScene(id: SceneId, maxEntityCount: number): Scene {
     // World
     camera: camera(),
     bounds: rect(),
-    tiles: grid(0, 0, () => TileId.NONE),
   };
 }

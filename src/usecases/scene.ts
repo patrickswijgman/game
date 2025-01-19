@@ -2,16 +2,13 @@ import { TILE_SIZE } from "@/consts.js";
 import { Entity, zeroEntity } from "@/data/entity.js";
 import { Scene } from "@/data/scene.js";
 import { SceneId } from "@/enums/scene.js";
-import { TileId } from "@/enums/tile.js";
 import { getScene } from "@/usecases/game.js";
-import { populateTile, renderTile } from "@/usecases/tile.js";
-import { applyCameraTransform, copyRectangle, getGridHeight, getGridValue, getGridWidth, grid, isGridValid, remove, resetTransform, setRectangle } from "ridder";
+import { copyRectangle, remove, setRectangle } from "ridder";
 
 export function setupScene(id: SceneId, w: number, h: number) {
   const scene = getScene(id);
   scene.camera.smoothing = 0.1;
   scene.camera.shakeReduction = 0.1;
-  scene.tiles = grid(w, h, () => TileId.NONE);
   setRectangle(scene.bounds, 0, 0, w * TILE_SIZE, h * TILE_SIZE);
   copyRectangle(scene.camera.bounds, scene.bounds);
   return scene;
@@ -63,31 +60,5 @@ export function cleanupDestroyedEntities(scene: Scene) {
       zeroEntity(scene.entities[id]);
     }
     scene.destroyed.length = 0;
-  }
-}
-
-export function populateTiles(scene: Scene) {
-  if (isGridValid(scene.tiles)) {
-    const w = getGridWidth(scene.tiles);
-    const h = getGridHeight(scene.tiles);
-    for (let x = 0; x < w; x++) {
-      for (let y = 0; y < h; y++) {
-        populateTile(getGridValue(scene.tiles, x, y), scene.id, x, y);
-      }
-    }
-  }
-}
-
-export function renderTiles(scene: Scene) {
-  if (isGridValid(scene.tiles)) {
-    resetTransform();
-    applyCameraTransform(scene.camera);
-    const w = getGridWidth(scene.tiles);
-    const h = getGridHeight(scene.tiles);
-    for (let x = 0; x < w; x++) {
-      for (let y = 0; y < h; y++) {
-        renderTile(getGridValue(scene.tiles, x, y), x, y);
-      }
-    }
   }
 }
