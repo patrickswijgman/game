@@ -14,6 +14,7 @@ export const COLOR_TO_TILE: Readonly<Record<string, TileId>> = {
 
 export const COLOR_TO_ENTITY: Readonly<Record<string, EntityType>> = {
   "#ffffff": EntityType.PLAYER,
+  "#ff0000": EntityType.ENEMY,
 };
 
 export const TILE_TO_SPRITE: Readonly<Record<TileId, SpriteId>> = {

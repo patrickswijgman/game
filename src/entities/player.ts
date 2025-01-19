@@ -1,4 +1,5 @@
 import { Entity } from "@/data/entity.js";
+import { game } from "@/data/game.js";
 import { SpriteId } from "@/enums/assets.js";
 import { EntityType } from "@/enums/entity.js";
 import { SceneId } from "@/enums/scene.js";
@@ -8,13 +9,14 @@ import { InputCode, isInputDown, normalizeVector, resetVector, scaleVector, setC
 
 export function addPlayer(sceneId: SceneId, x: number, y: number) {
   const e = addEntity(EntityType.PLAYER, sceneId, x, y);
-  const scene = getScene(e.sceneId);
-
   setSprite(e, SpriteId.PLAYER, 8, 15);
   setShadow(e, SpriteId.PLAYER_SHADOW, 8, 13);
   e.isPlayer = true;
+  e.sheet = game.sheet;
   e.isPhysicsEnabled = true;
 
+  const scene = getScene(e.sceneId);
+  scene.playerId = e.id;
   setCameraPosition(scene.camera, e.position.x, e.position.y);
 
   return e;

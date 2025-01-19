@@ -1,18 +1,6 @@
-import { TILE_SIZE } from "@/consts.js";
 import { Entity, zeroEntity } from "@/data/entity.js";
 import { Scene } from "@/data/scene.js";
-import { SceneId } from "@/enums/scene.js";
-import { getScene } from "@/usecases/game.js";
-import { copyRectangle, remove, setRectangle } from "ridder";
-
-export function setupScene(id: SceneId, w: number, h: number) {
-  const scene = getScene(id);
-  scene.camera.smoothing = 0.1;
-  scene.camera.shakeReduction = 0.1;
-  setRectangle(scene.bounds, 0, 0, w * TILE_SIZE, h * TILE_SIZE);
-  copyRectangle(scene.camera.bounds, scene.bounds);
-  return scene;
-}
+import { remove } from "ridder";
 
 export function nextEntity(scene: Scene) {
   const id = scene.entities.findIndex((e) => !e.isAllocated);
@@ -28,6 +16,21 @@ export function nextEntity(scene: Scene) {
   scene.update.push(e.id);
   scene.render.push(e.id);
   return e;
+}
+
+type SceneStateLifecycleHook = (scene: Scene) => void;
+
+export function updateSceneState(scene: Scene, onEnter: SceneStateLifecycleHook, onUpdate: SceneStateLifecycleHook, onExit: SceneStateLifecycleHook) {
+  if (scene.stateNextId !== scene.stateId) {
+    onExit(scene);
+    scene.stateId = scene.stateNextId;
+    onEnter(scene);
+  }
+  onUpdate(scene);
+}
+
+export function setSceneState(scene: Scene, stateId: number) {
+  scene.stateNextId = stateId;
 }
 
 export function getEntity(scene: Scene, id: number) {

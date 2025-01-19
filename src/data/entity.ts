@@ -1,3 +1,4 @@
+import { newSheet, Sheet } from "@/data/sheet.js";
 import { SpriteId } from "@/enums/assets.js";
 import { CardId } from "@/enums/card.js";
 import { EntityType } from "@/enums/entity.js";
@@ -38,8 +39,14 @@ export type Entity = {
   isOverlay: boolean;
   cardId: CardId;
 
+  // Combat
+  sheet: Sheet;
+
   // Player
   isPlayer: boolean;
+
+  // Enemy
+  isEnemy: boolean;
 };
 
 export function newEntity(): Entity {
@@ -77,8 +84,14 @@ export function newEntity(): Entity {
     isOverlay: false,
     cardId: CardId.NONE,
 
+    // Combat
+    sheet: newSheet(),
+
     // Player
     isPlayer: false,
+
+    // Enemy
+    isEnemy: false,
   };
 }
 

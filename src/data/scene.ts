@@ -1,5 +1,5 @@
 import { Entity, newEntity } from "@/data/entity.js";
-import { SceneId } from "@/enums/scene.js";
+import { SceneId, SceneStateId } from "@/enums/scene.js";
 import { Camera, camera, rect, Rectangle, table, Table } from "ridder";
 
 export type Scene = {
@@ -16,6 +16,14 @@ export type Scene = {
   // World
   camera: Camera;
   bounds: Rectangle;
+
+  // Combat
+  playerId: number;
+  enemyId: number;
+
+  // State management
+  stateId: SceneStateId;
+  stateNextId: SceneStateId;
 };
 
 export function newScene(id: SceneId, maxEntityCount: number): Scene {
@@ -33,5 +41,13 @@ export function newScene(id: SceneId, maxEntityCount: number): Scene {
     // World
     camera: camera(),
     bounds: rect(),
+
+    // Combat
+    playerId: 0,
+    enemyId: 0,
+
+    // State management
+    stateId: SceneStateId.NONE,
+    stateNextId: SceneStateId.NONE,
   };
 }

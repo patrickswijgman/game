@@ -10,12 +10,19 @@ export type Sheet = {
   armorId: ItemId;
 };
 
-export function newSheet(name: string, stats: Partial<Stats>): Sheet {
+export type SheetOptions = {
+  name: string;
+  stats: Partial<Stats>;
+  weaponId: ItemId;
+  armorId: ItemId;
+};
+
+export function newSheet({ name = "", stats = {}, weaponId = ItemId.NONE, armorId = ItemId.NONE }: Partial<SheetOptions> = {}): Sheet {
   return {
     name,
     deck: newDeck(),
     stats: newStats(stats),
-    weaponId: ItemId.NONE,
-    armorId: ItemId.NONE,
+    weaponId,
+    armorId,
   };
 }

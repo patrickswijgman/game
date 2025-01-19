@@ -1,4 +1,5 @@
 import { TILE_SIZE } from "@/consts.js";
+import { addEnemy } from "@/entities/enemy.js";
 import { addPlayer } from "@/entities/player.js";
 import { addTree } from "@/entities/tree.js";
 import { TextureId } from "@/enums/assets.js";
@@ -7,53 +8,50 @@ import { COLOR_TO_ENTITY, COLOR_TO_TILE, TILE_TO_SPRITE, TileId } from "@/enums/
 import { SceneId } from "@/enums/scene.js";
 import { getSprite, getTexture, loadRenderTexture, roll, toHex } from "ridder";
 
-export function populateTiles(sceneId: SceneId) {
-  readMapTexture(TextureId.MAP_TILES, (color, x, y) => {
-    const worldX = x * TILE_SIZE;
-    const worldY = y * TILE_SIZE;
-    const centerX = worldX + TILE_SIZE / 2;
-    const centerY = worldY + TILE_SIZE / 2;
+export function populateMap(sceneId: SceneId) {
+  readMapTexture(TextureId.MAP_TILES, (color, x, y, worldX, worldY, worldCenterX, worldCenterY) => {
     const id = COLOR_TO_TILE[color];
     switch (id) {
       case TileId.FOREST:
         if (roll(0.8)) {
-          addTree(sceneId, centerX, centerY + 4);
+          addTree(sceneId, worldCenterX, worldCenterY + 4);
         }
         break;
     }
   });
 
-  readMapTexture(TextureId.MAP_OBJECTS, (color, x, y) => {
-    const worldX = x * TILE_SIZE;
-    const worldY = y * TILE_SIZE;
-    const centerX = worldX + TILE_SIZE / 2;
-    const centerY = worldY + TILE_SIZE / 2;
+  readMapTexture(TextureId.MAP_OBJECTS, (color, x, y, worldX, worldY, worldCenterX, worldCenterY) => {
     const type = COLOR_TO_ENTITY[color];
     switch (type) {
       case EntityType.PLAYER:
-        addPlayer(sceneId, centerX, centerY);
+        addPlayer(sceneId, worldCenterX, worldCenterY);
+        break;
+      case EntityType.ENEMY:
+        addEnemy(sceneId, worldCenterX, worldCenterY);
         break;
     }
   });
 }
 
-export function loadFloorTexture() {
+export function loadMapFloorTexture() {
   const texture = getTexture(TextureId.MAP_TILES);
   const w = texture.width * TILE_SIZE;
   const h = texture.height * TILE_SIZE;
 
   loadRenderTexture(TextureId.FLOOR, w, h, (ctx) => {
-    readMapTexture(TextureId.MAP_TILES, (color, x, y) => {
+    readMapTexture(TextureId.MAP_TILES, (color, x, y, worldX, worldY) => {
       const id = COLOR_TO_TILE[color];
       const spriteId = TILE_TO_SPRITE[id];
       const sprite = getSprite(spriteId);
       const texture = getTexture(sprite.textureId);
-      ctx.drawImage(texture, sprite.x, sprite.y, sprite.w, sprite.h, x * TILE_SIZE, y * TILE_SIZE, sprite.w, sprite.h);
+      ctx.drawImage(texture, sprite.x, sprite.y, sprite.w, sprite.h, worldX, worldY, sprite.w, sprite.h);
     });
   });
+
+  return [w, h] as const;
 }
 
-export function readMapTexture(textureId: TextureId, callback: (color: string, x: number, y: number) => void) {
+export function readMapTexture(textureId: TextureId, callback: (color: string, x: number, y: number, worldX: number, worldY: number, worldCenterX: number, worldCenterY: number) => void) {
   const texture = getTexture(textureId);
   const ctx = texture.getContext("2d");
   const w = texture.width;
@@ -67,6 +65,10 @@ export function readMapTexture(textureId: TextureId, callback: (color: string, x
     const color = `#${toHex(r)}${toHex(g)}${toHex(b)}`;
     const x = (i / 4) % w;
     const y = Math.floor(i / 4 / h);
-    callback(color, x, y);
+    const worldX = x * TILE_SIZE;
+    const worldY = y * TILE_SIZE;
+    const worldCenterX = worldX + TILE_SIZE / 2;
+    const worldCenterY = worldY + TILE_SIZE / 2;
+    callback(color, x, y, worldX, worldY, worldCenterX, worldCenterY);
   }
 }
