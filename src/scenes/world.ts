@@ -52,7 +52,7 @@ export function onWorldSceneStateEnter(scene: Scene) {
         drawCard(enemy.sheet.deck, 3);
         const cardId = pick(enemy.sheet.deck.hand);
         const card = addCard(scene.id, enemy.position.x, enemy.position.y - 40, cardId, ActionId.NONE);
-        scene.enemyChosenCard = card.id;
+        scene.enemyChosenCardEntityId = card.id;
         scene.enemyChosenCardId = cardId;
         setSceneState(scene, SceneStateId.PLAYER_PICK_CARD);
       }
@@ -65,7 +65,7 @@ export function onWorldSceneStateEnter(scene: Scene) {
         for (let i = 0; i < player.sheet.deck.hand.length; i++) {
           const cardId = player.sheet.deck.hand[i];
           const card = addCard(scene.id, player.position.x + i * 24, player.position.y + 30, cardId, ActionId.PLAYER_PICK_CARD);
-          scene.playerHandCards.push(card.id);
+          scene.playerHandCardEntityIds.push(card.id);
         }
       }
       break;
@@ -78,10 +78,10 @@ export function onWorldSceneStateExit(scene: Scene) {
   switch (scene.stateId) {
     case SceneStateId.PLAYER_PICK_CARD:
       {
-        for (const id of scene.playerHandCards) {
+        for (const id of scene.playerHandCardEntityIds) {
           destroyEntity(scene, id);
         }
-        scene.playerHandCards.length = 0;
+        scene.playerHandCardEntityIds.length = 0;
       }
       break;
   }

@@ -21,10 +21,10 @@ export type Scene = {
   // Combat
   playerId: number;
   playerChosenCardId: CardId;
-  playerHandCards: Array<number>;
+  playerHandCardEntityIds: Array<number>;
 
   enemyId: number;
-  enemyChosenCard: number;
+  enemyChosenCardEntityId: number;
   enemyChosenCardId: CardId;
 
   // State management
@@ -51,10 +51,10 @@ export function newScene(id: SceneId, maxEntityCount: number): Scene {
     // Combat
     playerId: 0,
     playerChosenCardId: CardId.NONE,
-    playerHandCards: [],
+    playerHandCardEntityIds: [],
 
     enemyId: 0,
-    enemyChosenCard: 0,
+    enemyChosenCardEntityId: 0,
     enemyChosenCardId: CardId.NONE,
 
     // State management
