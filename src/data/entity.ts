@@ -1,9 +1,10 @@
 import { newSheet, Sheet } from "@/data/sheet.js";
+import { ActionId } from "@/enums/action.js";
 import { SpriteId } from "@/enums/assets.js";
 import { CardId } from "@/enums/card.js";
 import { EntityType } from "@/enums/entity.js";
 import { SceneId } from "@/enums/scene.js";
-import { setVector, timer, Timer, vec, Vector, zero } from "ridder";
+import { rect, Rectangle, setVector, timer, Timer, vec, Vector, zero } from "ridder";
 
 export type Entity = {
   // Memory allocation
@@ -23,7 +24,10 @@ export type Entity = {
   pivot: Vector;
   shadowId: SpriteId;
   shadowPivot: Vector;
+  outlineId: SpriteId;
+  isOutlineVisible: boolean;
   isFlipped: boolean;
+  isOverlay: boolean;
 
   // Animation
   tweenPosition: Vector;
@@ -35,9 +39,10 @@ export type Entity = {
   // Relation
   sceneId: SceneId;
 
-  // Overlay (UI)
-  isOverlay: boolean;
+  // UI
   cardId: CardId;
+  actionId: ActionId;
+  hitarea: Rectangle;
 
   // Combat
   sheet: Sheet;
@@ -68,7 +73,10 @@ export function newEntity(): Entity {
     pivot: vec(),
     shadowId: SpriteId.NONE,
     shadowPivot: vec(),
+    outlineId: SpriteId.NONE,
+    isOutlineVisible: false,
     isFlipped: false,
+    isOverlay: false,
 
     // Animation
     tweenPosition: vec(),
@@ -80,9 +88,10 @@ export function newEntity(): Entity {
     // Relation
     sceneId: SceneId.NONE,
 
-    // Overlay (UI)
-    isOverlay: false,
+    // UI
     cardId: CardId.NONE,
+    actionId: ActionId.NONE,
+    hitarea: rect(),
 
     // Combat
     sheet: newSheet(),

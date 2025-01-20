@@ -1,12 +1,13 @@
 import { game } from "@/data/game.js";
+import { renderCard } from "@/entities/card.js";
 import { updatePlayer } from "@/entities/player.js";
 import { updateTree } from "@/entities/tree.js";
-import { renderCard } from "@/entities/ui/card.js";
 import { EntityType } from "@/enums/entity.js";
 import { SceneId, SceneStateId } from "@/enums/scene.js";
 import { onWorldSceneStateEnter, onWorldSceneStateExit, onWorldSceneStateUpdate, renderWorldScene, setupWorldScene } from "@/scenes/world.js";
+import { performAction } from "@/usecases/action.js";
 import { loadAssets } from "@/usecases/assets.js";
-import { applyEntityAnimationTransform, applyEntityTransform, renderEntityShadow, renderEntitySprite, updatePhysics } from "@/usecases/entity.js";
+import { applyEntityAnimationTransform, applyEntityTransform, renderEntityOutline, renderEntityShadow, renderEntitySprite, updatePhysics } from "@/usecases/entity.js";
 import { getScene, switchScene, transitionToNextScene } from "@/usecases/game.js";
 import { cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth, updateSceneState } from "@/usecases/scene.js";
 import { drawText, getFramePerSecond, InputCode, isInputPressed, resetTransform, run, updateCamera } from "ridder";
@@ -68,6 +69,11 @@ run({
 
     cleanupDestroyedEntities(scene);
     sortEntitiesOnDepth(scene);
+
+    for (const id of scene.render) {
+      const e = getEntity(scene, id);
+      performAction(scene, e);
+    }
   },
 
   render: () => {
@@ -87,6 +93,7 @@ run({
       renderEntityShadow(e);
       applyEntityAnimationTransform(e);
       renderEntitySprite(e);
+      renderEntityOutline(e);
 
       switch (e.type) {
         case EntityType.CARD:

@@ -14,6 +14,7 @@ export function addEnemy(sceneId: SceneId, x: number, y: number) {
   e.sheet.weaponId = ItemId.LONGSWORD;
   e.isEnemy = true;
   e.isPhysicsEnabled = true;
+  e.isFlipped = true;
   console.log(e);
   return e;
 }

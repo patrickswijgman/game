@@ -1,4 +1,5 @@
 import { Entity, newEntity } from "@/data/entity.js";
+import { CardId } from "@/enums/card.js";
 import { SceneId, SceneStateId } from "@/enums/scene.js";
 import { Camera, camera, rect, Rectangle, table, Table } from "ridder";
 
@@ -19,7 +20,12 @@ export type Scene = {
 
   // Combat
   playerId: number;
+  playerChosenCardId: CardId;
+  playerHandCards: Array<number>;
+
   enemyId: number;
+  enemyChosenCard: number;
+  enemyChosenCardId: CardId;
 
   // State management
   stateId: SceneStateId;
@@ -44,7 +50,12 @@ export function newScene(id: SceneId, maxEntityCount: number): Scene {
 
     // Combat
     playerId: 0,
+    playerChosenCardId: CardId.NONE,
+    playerHandCards: [],
+
     enemyId: 0,
+    enemyChosenCard: 0,
+    enemyChosenCardId: CardId.NONE,
 
     // State management
     stateId: SceneStateId.NONE,

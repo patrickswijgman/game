@@ -1,4 +1,4 @@
-import { Entity, zeroEntity } from "@/data/entity.js";
+import { zeroEntity } from "@/data/entity.js";
 import { Scene } from "@/data/scene.js";
 import { remove } from "ridder";
 
@@ -18,6 +18,14 @@ export function nextEntity(scene: Scene) {
   return e;
 }
 
+export function getEntity(scene: Scene, id: number) {
+  return scene.entities[id];
+}
+
+export function destroyEntity(scene: Scene, id: number) {
+  scene.destroyed.push(id);
+}
+
 type SceneStateLifecycleHook = (scene: Scene) => void;
 
 export function updateSceneState(scene: Scene, onEnter: SceneStateLifecycleHook, onUpdate: SceneStateLifecycleHook, onExit: SceneStateLifecycleHook) {
@@ -31,14 +39,6 @@ export function updateSceneState(scene: Scene, onEnter: SceneStateLifecycleHook,
 
 export function setSceneState(scene: Scene, stateId: number) {
   scene.stateNextId = stateId;
-}
-
-export function getEntity(scene: Scene, id: number) {
-  return scene.entities[id];
-}
-
-export function destroyEntity(scene: Scene, e: Entity) {
-  scene.destroyed.push(e.id);
 }
 
 export function sortEntitiesOnDepth(scene: Scene) {

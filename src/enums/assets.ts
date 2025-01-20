@@ -1,6 +1,7 @@
 export const enum TextureId {
   NONE,
   ATLAS,
+  ATLAS_OUTLINE,
   MAP_TILES,
   MAP_OBJECTS,
   FLOOR,
@@ -15,6 +16,7 @@ export const enum SpriteId {
   TILE_GRASS,
   CARD,
   CARD_SHADOW,
+  CARD_OUTLINE,
   LONGSWORD,
 }
 

@@ -6,7 +6,7 @@ import { EntityType } from "@/enums/entity.js";
 import { SceneId } from "@/enums/scene.js";
 import { getScene } from "@/usecases/game.js";
 import { nextEntity } from "@/usecases/scene.js";
-import { addVectorScaled, applyCameraTransform, drawSprite, getDelta, rotateTransform, scaleTransform, setAlpha, setVector, translateTransform } from "ridder";
+import { addVectorScaled, applyCameraTransform, drawSprite, getDelta, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, translateTransform } from "ridder";
 
 export function addEntity(type: EntityType, sceneId: SceneId, x: number, y: number) {
   const scene = getScene(sceneId);
@@ -26,6 +26,14 @@ export function setShadow(e: Entity, id: SpriteId, pivotX: number, pivotY: numbe
   setVector(e.shadowPivot, pivotX, pivotY);
 }
 
+export function setOutline(e: Entity, id: SpriteId) {
+  e.outlineId = id;
+}
+
+export function setHitarea(e: Entity, x: number, y: number, w: number, h: number) {
+  setRectangle(e.hitarea, e.position.x + x, e.position.y + y, w, h);
+}
+
 export function updatePhysics(e: Entity) {
   if (e.isPhysicsEnabled) {
     addVectorScaled(e.position, e.velocity, getDelta());
@@ -33,10 +41,7 @@ export function updatePhysics(e: Entity) {
 }
 
 export function applyEntityTransform(e: Entity, scene: Scene) {
-  if (!e.isOverlay) {
-    applyCameraTransform(scene.camera);
-  }
-
+  applyCameraTransform(scene.camera);
   translateTransform(e.position.x, e.position.y);
 
   if (e.isFlipped) {
@@ -53,6 +58,12 @@ export function applyEntityAnimationTransform(e: Entity) {
 export function renderEntitySprite(e: Entity) {
   if (e.spriteId) {
     drawSprite(e.spriteId, -e.pivot.x, -e.pivot.y);
+  }
+}
+
+export function renderEntityOutline(e: Entity) {
+  if (e.outlineId && e.isOutlineVisible) {
+    drawSprite(e.outlineId, -e.pivot.x, -e.pivot.y);
   }
 }
 
