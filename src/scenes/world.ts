@@ -2,9 +2,12 @@ import { Entity } from "@/data/entity.js";
 import { Scene } from "@/data/scene.js";
 import { addCard } from "@/entities/card.js";
 import { TextureId } from "@/enums/assets.js";
+import { CardId } from "@/enums/card.js";
 import { InteractionId } from "@/enums/interaction.js";
 import { SceneId, SceneStateId } from "@/enums/scene.js";
-import { drawCard, initDeck, updateDeck } from "@/usecases/deck.js";
+import { doActions } from "@/usecases/action.js";
+import { getCard } from "@/usecases/card.js";
+import { drawCard, initDeck } from "@/usecases/deck.js";
 import { getScene } from "@/usecases/game.js";
 import { loadMapFloorTexture, populateMap } from "@/usecases/map.js";
 import { destroyEntity, getEntity, setSceneState } from "@/usecases/scene.js";
@@ -36,12 +39,16 @@ export function onWorldSceneStateEnter(scene: Scene) {
       {
         const player = getEntity(scene, scene.playerId);
         updateSheet(player.sheet);
-        updateDeck(player.sheet.deck);
         initDeck(player.sheet.deck);
         const enemy = getEntity(scene, scene.enemyId);
         updateSheet(enemy.sheet);
-        updateDeck(enemy.sheet.deck);
         initDeck(enemy.sheet.deck);
+        setSceneState(scene, SceneStateId.ENEMY_PICK_CARD);
+      }
+      break;
+
+    case SceneStateId.START_ROUND:
+      {
         setSceneState(scene, SceneStateId.ENEMY_PICK_CARD);
       }
       break;
@@ -73,6 +80,64 @@ export function onWorldSceneStateEnter(scene: Scene) {
         }
       }
       break;
+
+    case SceneStateId.DECIDE_TURN_ORDER:
+      {
+        setSceneState(scene, SceneStateId.PLAYER_RESOLVE_CARD);
+      }
+      break;
+
+    case SceneStateId.PLAYER_RESOLVE_CARD:
+      {
+        if (scene.playerChosenCardId) {
+          const player = getEntity(scene, scene.playerId);
+          const enemy = getEntity(scene, scene.enemyId);
+          const card = getCard(scene.playerChosenCardId);
+          doActions(player, enemy, card);
+          scene.playerChosenCardId = CardId.NONE;
+          setSceneState(scene, SceneStateId.ENEMY_RESOLVE_CARD);
+        } else {
+          setSceneState(scene, SceneStateId.RESOLVE_OUTCOME);
+        }
+      }
+      break;
+
+    case SceneStateId.ENEMY_RESOLVE_CARD:
+      {
+        if (scene.enemyChosenCardId) {
+          const player = getEntity(scene, scene.playerId);
+          const enemy = getEntity(scene, scene.enemyId);
+          const card = getCard(scene.enemyChosenCardId);
+          doActions(enemy, player, card);
+          scene.enemyChosenCardId = CardId.NONE;
+          setSceneState(scene, SceneStateId.PLAYER_RESOLVE_CARD);
+        } else {
+          setSceneState(scene, SceneStateId.RESOLVE_OUTCOME);
+        }
+      }
+      break;
+
+    case SceneStateId.RESOLVE_OUTCOME:
+      {
+        const player = getEntity(scene, scene.playerId);
+        const enemy = getEntity(scene, scene.enemyId);
+        if (player.sheet.stats.health === 0) {
+          destroyEntity(scene, player.id);
+          setSceneState(scene, SceneStateId.DEFEAT);
+        } else if (enemy.sheet.stats.health === 0) {
+          destroyEntity(scene, enemy.id);
+          setSceneState(scene, SceneStateId.VICTORY);
+        } else {
+          setSceneState(scene, SceneStateId.START_ROUND);
+        }
+      }
+      break;
+
+    case SceneStateId.VICTORY:
+      {
+        setSceneState(scene, SceneStateId.NONE);
+      }
+      break;
   }
 }
 
@@ -88,12 +153,18 @@ export function onWorldSceneStateExit(scene: Scene) {
         scene.playerHandCardEntityIds.length = 0;
       }
       break;
+
+    case SceneStateId.ENEMY_RESOLVE_CARD:
+      {
+        destroyEntity(scene, scene.enemyChosenCardEntityId);
+      }
+      break;
   }
 }
 
 export function doPlayerPickCardInteraction(scene: Scene, e: Entity) {
   scene.playerChosenCardId = e.cardId;
-  setSceneState(scene, SceneStateId.RESOLVE_CARDS);
+  setSceneState(scene, SceneStateId.DECIDE_TURN_ORDER);
 }
 
 export function renderWorldScene(scene: Scene) {

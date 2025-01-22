@@ -1,16 +1,23 @@
 import { Sheet } from "@/data/sheet.js";
+import { addEquipmentCards, resetDeck, updateDeck } from "@/usecases/deck.js";
 import { getItem } from "@/usecases/item.js";
+import { addStats, copyStats } from "@/usecases/stats.js";
 
 export function updateSheet(sheet: Sheet) {
-  sheet.deck.equipment.length = 0;
+  copyStats(sheet.stats, sheet.statsBase);
+  resetDeck(sheet.deck);
 
   if (sheet.weaponId) {
     const item = getItem(sheet.weaponId);
-    sheet.deck.equipment.push(...item.cards);
+    addStats(sheet.stats, item.stats);
+    addEquipmentCards(sheet.deck, item);
   }
 
   if (sheet.armorId) {
     const item = getItem(sheet.armorId);
-    sheet.deck.equipment.push(...item.cards);
+    addStats(sheet.stats, item.stats);
+    addEquipmentCards(sheet.deck, item);
   }
+
+  updateDeck(sheet.deck);
 }

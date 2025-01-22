@@ -6,6 +6,7 @@ export type Sheet = {
   name: string;
   deck: Deck;
   stats: Stats;
+  statsBase: Stats;
   weaponId: ItemId;
   armorId: ItemId;
 };
@@ -21,7 +22,8 @@ export function newSheet({ name = "", stats = {}, weaponId = ItemId.NONE, armorI
   return {
     name,
     deck: newDeck(),
-    stats: newStats(stats),
+    stats: newStats(),
+    statsBase: newStats(stats),
     weaponId,
     armorId,
   };

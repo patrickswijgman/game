@@ -15,6 +15,5 @@ export function addEnemy(sceneId: SceneId, x: number, y: number) {
   e.isEnemy = true;
   e.isPhysicsEnabled = true;
   e.isFlipped = true;
-  console.log(e);
   return e;
 }
