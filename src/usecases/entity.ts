@@ -41,7 +41,10 @@ export function updatePhysics(e: Entity) {
 }
 
 export function applyEntityTransform(e: Entity, scene: Scene) {
-  applyCameraTransform(scene.camera);
+  if (!e.isOverlay) {
+    applyCameraTransform(scene.camera);
+  }
+
   translateTransform(e.position.x, e.position.y);
 
   if (e.isFlipped) {

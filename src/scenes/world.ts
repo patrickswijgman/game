@@ -1,15 +1,15 @@
 import { Entity } from "@/data/entity.js";
 import { Scene } from "@/data/scene.js";
 import { addCard } from "@/entities/card.js";
-import { ActionId } from "@/enums/action.js";
 import { TextureId } from "@/enums/assets.js";
+import { InteractionId } from "@/enums/interaction.js";
 import { SceneId, SceneStateId } from "@/enums/scene.js";
 import { drawCard, initDeck, updateDeck } from "@/usecases/deck.js";
 import { getScene } from "@/usecases/game.js";
 import { loadMapFloorTexture, populateMap } from "@/usecases/map.js";
 import { destroyEntity, getEntity, setSceneState } from "@/usecases/scene.js";
 import { updateSheet } from "@/usecases/sheet.js";
-import { applyCameraTransform, copyRectangle, drawTexture, pick, resetTransform, setRectangle } from "ridder";
+import { applyCameraTransform, copyRectangle, drawTexture, getHeight, getWidth, pick, resetTransform, setRectangle } from "ridder";
 
 export function setupWorldScene() {
   const scene = getScene(SceneId.WORLD);
@@ -51,8 +51,10 @@ export function onWorldSceneStateEnter(scene: Scene) {
         const enemy = getEntity(scene, scene.enemyId);
         drawCard(enemy.sheet.deck, 3);
         const cardId = pick(enemy.sheet.deck.hand);
-        const card = addCard(scene.id, enemy.position.x, enemy.position.y - 40, cardId, ActionId.NONE);
-        scene.enemyChosenCardEntityId = card.id;
+        const x = getWidth() - 40;
+        const y = getHeight() / 2 - 10;
+        const e = addCard(scene.id, x, y, cardId, InteractionId.NONE);
+        scene.enemyChosenCardEntityId = e.id;
         scene.enemyChosenCardId = cardId;
         setSceneState(scene, SceneStateId.PLAYER_PICK_CARD);
       }
@@ -64,8 +66,10 @@ export function onWorldSceneStateEnter(scene: Scene) {
         drawCard(player.sheet.deck, 3);
         for (let i = 0; i < player.sheet.deck.hand.length; i++) {
           const cardId = player.sheet.deck.hand[i];
-          const card = addCard(scene.id, player.position.x + i * 24, player.position.y + 30, cardId, ActionId.PLAYER_PICK_CARD);
-          scene.playerHandCardEntityIds.push(card.id);
+          const x = getWidth() / 2 + i * 24 - Math.floor(player.sheet.deck.hand.length / 2) * 24;
+          const y = getHeight() - 40;
+          const e = addCard(scene.id, x, y, cardId, InteractionId.PLAYER_PICK_CARD);
+          scene.playerHandCardEntityIds.push(e.id);
         }
       }
       break;
@@ -87,7 +91,7 @@ export function onWorldSceneStateExit(scene: Scene) {
   }
 }
 
-export function performPlayerPickCardAction(scene: Scene, e: Entity) {
+export function doPlayerPickCardInteraction(scene: Scene, e: Entity) {
   scene.playerChosenCardId = e.cardId;
   setSceneState(scene, SceneStateId.RESOLVE_CARDS);
 }

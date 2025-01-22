@@ -5,10 +5,11 @@ import { updateTree } from "@/entities/tree.js";
 import { EntityType } from "@/enums/entity.js";
 import { SceneId, SceneStateId } from "@/enums/scene.js";
 import { onWorldSceneStateEnter, onWorldSceneStateExit, onWorldSceneStateUpdate, renderWorldScene, setupWorldScene } from "@/scenes/world.js";
-import { performAction } from "@/usecases/action.js";
 import { loadAssets } from "@/usecases/assets.js";
+import { debugHitareas } from "@/usecases/debug.js";
 import { applyEntityAnimationTransform, applyEntityTransform, renderEntityOutline, renderEntityShadow, renderEntitySprite, updatePhysics } from "@/usecases/entity.js";
 import { getScene, switchScene, transitionToNextScene } from "@/usecases/game.js";
+import { onClick } from "@/usecases/interaction.js";
 import { cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth, updateSceneState } from "@/usecases/scene.js";
 import { drawText, getFramePerSecond, InputCode, isInputPressed, resetTransform, run, updateCamera } from "ridder";
 
@@ -68,12 +69,14 @@ run({
     }
 
     cleanupDestroyedEntities(scene);
-    sortEntitiesOnDepth(scene);
 
-    for (const id of scene.render) {
+    for (let i = scene.render.length - 1; i >= 0; i--) {
+      const id = scene.render[i];
       const e = getEntity(scene, id);
-      performAction(scene, e);
+      onClick(scene, e);
     }
+
+    sortEntitiesOnDepth(scene);
   },
 
   render: () => {
@@ -103,6 +106,7 @@ run({
     }
 
     if (isDebugging) {
+      debugHitareas(scene);
     }
 
     resetTransform();

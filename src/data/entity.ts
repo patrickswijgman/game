@@ -1,8 +1,8 @@
 import { newSheet, Sheet } from "@/data/sheet.js";
-import { ActionId } from "@/enums/action.js";
 import { SpriteId } from "@/enums/assets.js";
 import { CardId } from "@/enums/card.js";
 import { EntityType } from "@/enums/entity.js";
+import { InteractionId } from "@/enums/interaction.js";
 import { SceneId } from "@/enums/scene.js";
 import { rect, Rectangle, setVector, timer, Timer, vec, Vector, zero } from "ridder";
 
@@ -41,16 +41,12 @@ export type Entity = {
 
   // UI
   cardId: CardId;
-  actionId: ActionId;
+  interactionId: InteractionId;
   hitarea: Rectangle;
 
   // Combat
   sheet: Sheet;
-
-  // Player
   isPlayer: boolean;
-
-  // Enemy
   isEnemy: boolean;
 };
 
@@ -90,16 +86,12 @@ export function newEntity(): Entity {
 
     // UI
     cardId: CardId.NONE,
-    actionId: ActionId.NONE,
+    interactionId: InteractionId.NONE,
     hitarea: rect(),
 
     // Combat
     sheet: newSheet(),
-
-    // Player
     isPlayer: false,
-
-    // Enemy
     isEnemy: false,
   };
 }
