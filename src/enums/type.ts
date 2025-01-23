@@ -3,4 +3,5 @@ export const enum Type {
   PLAYER,
   ENEMY,
   TREE,
+  ATTACK,
 }

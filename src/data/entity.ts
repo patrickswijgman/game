@@ -3,7 +3,7 @@ import { SpriteId } from "@/enums/assets.js";
 import { SceneId } from "@/enums/scene.js";
 import { StateId } from "@/enums/state.js";
 import { Type } from "@/enums/type.js";
-import { setVector, timer, Timer, vec, Vector, zero } from "ridder";
+import { rect, Rectangle, setVector, timer, Timer, vec, Vector, zero } from "ridder";
 
 export type Entity = {
   // Memory allocation
@@ -17,6 +17,7 @@ export type Entity = {
   isPhysicsEnabled: boolean;
   position: Vector;
   velocity: Vector;
+  direction: Vector;
 
   // Render
   spriteId: SpriteId;
@@ -26,7 +27,6 @@ export type Entity = {
   outlineId: SpriteId;
   isOutlineVisible: boolean;
   isFlipped: boolean;
-  isOverlay: boolean;
 
   // Animation
   tweenPosition: Vector;
@@ -38,11 +38,19 @@ export type Entity = {
   // Relation
   sceneId: SceneId;
 
-  // State management;
+  // State management
   stateId: StateId;
   stateNextId: StateId;
 
+  // Misc
+  lifeTime: number;
+  lifeTimer: Timer;
+
   // Combat
+  center: Vector;
+  centerOffset: Vector;
+  hitbox: Rectangle;
+  hitboxOffset: Vector;
   sheet: Sheet;
   isPlayer: boolean;
   isEnemy: boolean;
@@ -61,6 +69,7 @@ export function newEntity(): Entity {
     isPhysicsEnabled: false,
     position: vec(),
     velocity: vec(),
+    direction: vec(),
 
     // Render
     spriteId: SpriteId.NONE,
@@ -70,7 +79,6 @@ export function newEntity(): Entity {
     outlineId: SpriteId.NONE,
     isOutlineVisible: false,
     isFlipped: false,
-    isOverlay: false,
 
     // Animation
     tweenPosition: vec(),
@@ -86,7 +94,15 @@ export function newEntity(): Entity {
     stateId: StateId.NONE,
     stateNextId: StateId.NONE,
 
+    // Misc
+    lifeTime: 0,
+    lifeTimer: timer(),
+
     // Combat
+    center: vec(),
+    centerOffset: vec(),
+    hitbox: rect(),
+    hitboxOffset: vec(),
     sheet: newSheet(),
     isPlayer: false,
     isEnemy: false,

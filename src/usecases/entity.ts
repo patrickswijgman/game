@@ -6,7 +6,7 @@ import { SceneId } from "@/enums/scene.js";
 import { Type } from "@/enums/type.js";
 import { getScene } from "@/usecases/game.js";
 import { nextEntity } from "@/usecases/scene.js";
-import { addVectorScaled, applyCameraTransform, drawSprite, getDelta, rotateTransform, scaleTransform, setAlpha, setVector, translateTransform } from "ridder";
+import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, getDelta, resetTimer, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, translateTransform } from "ridder";
 
 export function addEntity(type: Type, sceneId: SceneId, x: number, y: number) {
   const scene = getScene(sceneId);
@@ -30,32 +30,60 @@ export function setOutline(e: Entity, id: SpriteId) {
   e.outlineId = id;
 }
 
-type StateLifecycleHook = (e: Entity) => void;
+export function setCenter(e: Entity, x: number, y: number) {
+  setVector(e.centerOffset, x, y);
+  updateCenter(e);
+}
 
-export function updateState(e: Entity, onEnter: StateLifecycleHook, onUpdate: StateLifecycleHook, onExit: StateLifecycleHook) {
-  if (e.stateNextId !== e.stateId) {
-    onExit(e);
-    e.stateId = e.stateNextId;
-    onEnter(e);
-  }
-  onUpdate(e);
+export function setHitbox(e: Entity, x: number, y: number, w: number, h: number) {
+  setVector(e.hitboxOffset, x, y);
+  setRectangle(e.hitbox, 0, 0, w, h);
+  updateHitbox(e);
 }
 
 export function setState(e: Entity, stateId: number) {
   e.stateNextId = stateId;
 }
 
+export function updateState(e: Entity, onEnter: (e: Entity) => void, onUpdate: (e: Entity) => void, onExit: (e: Entity) => void) {
+  if (e.stateNextId !== e.stateId) {
+    onExit(e);
+    resetVector(e.velocity);
+    resetTween(e);
+    e.stateId = e.stateNextId;
+    onEnter(e);
+  }
+  onUpdate(e);
+}
+
 export function updatePhysics(e: Entity) {
   if (e.isPhysicsEnabled) {
     addVectorScaled(e.position, e.velocity, getDelta());
+    updateCenter(e);
+    updateHitbox(e);
   }
 }
 
-export function applyEntityTransform(e: Entity, scene: Scene) {
-  if (!e.isOverlay) {
-    applyCameraTransform(scene.camera);
-  }
+export function updateCenter(e: Entity) {
+  copyVector(e.center, e.position);
+  addVector(e.center, e.centerOffset);
+}
 
+export function updateHitbox(e: Entity) {
+  copyVector(e.hitbox, e.position);
+  addVector(e.hitbox, e.hitboxOffset);
+}
+
+export function resetTween(e: Entity) {
+  resetVector(e.tweenPosition);
+  setVector(e.tweenScale, 1, 1);
+  e.tweenAngle = 0;
+  e.tweenTime = 0;
+  resetTimer(e.tweenTimer);
+}
+
+export function applyEntityTransform(e: Entity, scene: Scene) {
+  applyCameraTransform(scene.camera);
   translateTransform(e.position.x, e.position.y);
 
   if (e.isFlipped) {
@@ -63,7 +91,7 @@ export function applyEntityTransform(e: Entity, scene: Scene) {
   }
 }
 
-export function applyEntityAnimationTransform(e: Entity) {
+export function applyEntityTweenTransform(e: Entity) {
   translateTransform(e.tweenPosition.x, e.tweenPosition.y);
   scaleTransform(e.tweenScale.x, e.tweenScale.y);
   rotateTransform(e.tweenAngle);

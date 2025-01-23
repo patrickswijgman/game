@@ -7,13 +7,16 @@ export type Item = {
 };
 
 export const items: Readonly<Record<ItemId, Item>> = {
-  [ItemId.NONE]: {} as Item,
+  [ItemId.NONE]: {
+    name: "",
+    stats: newStats(),
+  },
 
   [ItemId.LONGSWORD]: {
     name: "Longsword",
     stats: newStats({
       damage: 3,
-      manaCost: 1,
+      damageScaling: 1,
     }),
   },
 };

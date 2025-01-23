@@ -5,10 +5,11 @@ import { SceneId } from "@/enums/scene.js";
 import { Type } from "@/enums/type.js";
 import { renderWorldScene, setupWorldScene } from "@/scenes/world.js";
 import { loadAssets } from "@/usecases/assets.js";
-import { applyEntityAnimationTransform, applyEntityTransform, renderEntityOutline, renderEntityShadow, renderEntitySprite, updatePhysics } from "@/usecases/entity.js";
+import { debugHitboxes } from "@/usecases/debug.js";
+import { applyEntityTransform, applyEntityTweenTransform, renderEntityOutline, renderEntityShadow, renderEntitySprite, updatePhysics } from "@/usecases/entity.js";
 import { getScene, switchScene, transitionToNextScene } from "@/usecases/game.js";
-import { cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth } from "@/usecases/scene.js";
-import { drawText, getFramePerSecond, InputCode, isInputPressed, resetTransform, run, updateCamera } from "ridder";
+import { cleanupDestroyedEntities, destroyEntity, getEntity, sortEntitiesOnDepth } from "@/usecases/scene.js";
+import { drawText, getFramePerSecond, InputCode, isInputPressed, resetTransform, run, tickTimer, updateCamera } from "ridder";
 
 let isDebugging = false;
 
@@ -40,6 +41,11 @@ run({
 
     for (const id of scene.update) {
       const e = getEntity(scene, id);
+
+      if (e.lifeTime && tickTimer(e.lifeTimer, e.lifeTime)) {
+        destroyEntity(scene, id);
+        continue;
+      }
 
       switch (e.type) {
         case Type.PLAYER:
@@ -76,12 +82,13 @@ run({
       resetTransform();
       applyEntityTransform(e, scene);
       renderEntityShadow(e);
-      applyEntityAnimationTransform(e);
+      applyEntityTweenTransform(e);
       renderEntitySprite(e);
       renderEntityOutline(e);
     }
 
     if (isDebugging) {
+      debugHitboxes(scene);
     }
 
     resetTransform();

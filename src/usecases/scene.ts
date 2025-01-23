@@ -30,12 +30,6 @@ export function sortEntitiesOnDepth(scene: Scene) {
   scene.render.sort((idA, idB) => {
     const a = scene.entities[idA];
     const b = scene.entities[idB];
-    if (a.isOverlay) {
-      return 1;
-    }
-    if (b.isOverlay) {
-      return -1;
-    }
     return a.position.y - b.position.y;
   });
 }
