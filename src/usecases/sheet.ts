@@ -1,10 +1,15 @@
 import { Sheet } from "@/data/sheet.js";
 import { addEquipmentCards, resetDeck, updateDeck } from "@/usecases/deck.js";
 import { getItem } from "@/usecases/item.js";
-import { addStats, copyStats } from "@/usecases/stats.js";
+import { addStats, clampStats, copyStats } from "@/usecases/stats.js";
 
 export function updateSheet(sheet: Sheet) {
+  const health = sheet.stats.health;
+
   copyStats(sheet.stats, sheet.statsBase);
+
+  sheet.stats.health = health;
+
   resetDeck(sheet.deck);
 
   if (sheet.weaponId) {
@@ -19,5 +24,6 @@ export function updateSheet(sheet: Sheet) {
     addEquipmentCards(sheet.deck, item);
   }
 
+  clampStats(sheet.stats);
   updateDeck(sheet.deck);
 }

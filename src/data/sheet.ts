@@ -22,7 +22,7 @@ export function newSheet({ name = "", stats = {}, weaponId = ItemId.NONE, armorI
   return {
     name,
     deck: newDeck(),
-    stats: newStats(),
+    stats: newStats(stats),
     statsBase: newStats(stats),
     weaponId,
     armorId,

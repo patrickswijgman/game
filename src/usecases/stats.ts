@@ -17,6 +17,6 @@ export function copyStats(a: Stats, b: Stats) {
   }
 }
 
-export function getStatsTotal(key: keyof Stats, ...list: Array<Stats>) {
-  return list.reduce((prev, stats) => (prev += stats[key]), 0);
+export function getStatsTotal(key: keyof Stats, a: Stats, b: Stats) {
+  return a[key] + b[key];
 }

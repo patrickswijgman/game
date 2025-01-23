@@ -89,11 +89,9 @@ export function onWorldSceneStateEnter(scene: Scene) {
 
     case SceneStateId.PLAYER_RESOLVE_CARD:
       {
-        if (scene.playerChosenCardId) {
-          const player = getEntity(scene, scene.playerId);
-          const enemy = getEntity(scene, scene.enemyId);
-          const card = getCard(scene.playerChosenCardId);
-          doActions(player, enemy, card);
+        const player = getEntity(scene, scene.playerId);
+        const enemy = getEntity(scene, scene.enemyId);
+        if (resolveCard(player, enemy, scene.playerChosenCardId)) {
           scene.playerChosenCardId = CardId.NONE;
           setSceneState(scene, SceneStateId.ENEMY_RESOLVE_CARD);
         } else {
@@ -104,11 +102,9 @@ export function onWorldSceneStateEnter(scene: Scene) {
 
     case SceneStateId.ENEMY_RESOLVE_CARD:
       {
-        if (scene.enemyChosenCardId) {
-          const player = getEntity(scene, scene.playerId);
-          const enemy = getEntity(scene, scene.enemyId);
-          const card = getCard(scene.enemyChosenCardId);
-          doActions(enemy, player, card);
+        const player = getEntity(scene, scene.playerId);
+        const enemy = getEntity(scene, scene.enemyId);
+        if (resolveCard(enemy, player, scene.enemyChosenCardId)) {
           scene.enemyChosenCardId = CardId.NONE;
           setSceneState(scene, SceneStateId.PLAYER_RESOLVE_CARD);
         } else {
@@ -138,6 +134,16 @@ export function onWorldSceneStateEnter(scene: Scene) {
         setSceneState(scene, SceneStateId.NONE);
       }
       break;
+  }
+}
+
+function resolveCard(caster: Entity, target: Entity, cardId: CardId) {
+  if (caster.sheet.stats.health && cardId) {
+    const card = getCard(cardId);
+    doActions(caster, target, card);
+    return true;
+  } else {
+    return false;
   }
 }
 
