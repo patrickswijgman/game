@@ -3,9 +3,9 @@ import { addEnemy } from "@/entities/enemy.js";
 import { addPlayer } from "@/entities/player.js";
 import { addTree } from "@/entities/tree.js";
 import { TextureId } from "@/enums/assets.js";
-import { EntityType } from "@/enums/entity.js";
 import { COLOR_TO_ENTITY, COLOR_TO_TILE, TILE_TO_SPRITE, TileId } from "@/enums/map.js";
 import { SceneId } from "@/enums/scene.js";
+import { Type } from "@/enums/type.js";
 import { getSprite, getTexture, loadRenderTexture, roll, toHex } from "ridder";
 
 export function populateMap(sceneId: SceneId) {
@@ -23,10 +23,10 @@ export function populateMap(sceneId: SceneId) {
   readMapTexture(TextureId.MAP_OBJECTS, (color, x, y, worldX, worldY, worldCenterX, worldCenterY) => {
     const type = COLOR_TO_ENTITY[color];
     switch (type) {
-      case EntityType.PLAYER:
+      case Type.PLAYER:
         addPlayer(sceneId, worldCenterX, worldCenterY);
         break;
-      case EntityType.ENEMY:
+      case Type.ENEMY:
         addEnemy(sceneId, worldCenterX, worldCenterY);
         break;
     }

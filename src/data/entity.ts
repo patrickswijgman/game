@@ -1,10 +1,9 @@
 import { newSheet, Sheet } from "@/data/sheet.js";
 import { SpriteId } from "@/enums/assets.js";
-import { CardId } from "@/enums/card.js";
-import { EntityType } from "@/enums/entity.js";
-import { InteractionId } from "@/enums/interaction.js";
 import { SceneId } from "@/enums/scene.js";
-import { rect, Rectangle, setVector, timer, Timer, vec, Vector, zero } from "ridder";
+import { StateId } from "@/enums/state.js";
+import { Type } from "@/enums/type.js";
+import { setVector, timer, Timer, vec, Vector, zero } from "ridder";
 
 export type Entity = {
   // Memory allocation
@@ -12,7 +11,7 @@ export type Entity = {
   id: number;
 
   // Archetype
-  type: EntityType;
+  type: Type;
 
   // Physics
   isPhysicsEnabled: boolean;
@@ -39,10 +38,9 @@ export type Entity = {
   // Relation
   sceneId: SceneId;
 
-  // UI
-  cardId: CardId;
-  interactionId: InteractionId;
-  hitarea: Rectangle;
+  // State management;
+  stateId: StateId;
+  stateNextId: StateId;
 
   // Combat
   sheet: Sheet;
@@ -57,7 +55,7 @@ export function newEntity(): Entity {
     id: 0,
 
     // Archetype
-    type: EntityType.NONE,
+    type: Type.NONE,
 
     // Physics
     isPhysicsEnabled: false,
@@ -84,10 +82,9 @@ export function newEntity(): Entity {
     // Relation
     sceneId: SceneId.NONE,
 
-    // UI
-    cardId: CardId.NONE,
-    interactionId: InteractionId.NONE,
-    hitarea: rect(),
+    // State management
+    stateId: StateId.NONE,
+    stateNextId: StateId.NONE,
 
     // Combat
     sheet: newSheet(),

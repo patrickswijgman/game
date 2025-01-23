@@ -1,16 +1,13 @@
 import { game } from "@/data/game.js";
-import { renderCard } from "@/entities/card.js";
 import { updatePlayer } from "@/entities/player.js";
 import { updateTree } from "@/entities/tree.js";
-import { EntityType } from "@/enums/entity.js";
-import { SceneId, SceneStateId } from "@/enums/scene.js";
-import { onWorldSceneStateEnter, onWorldSceneStateExit, onWorldSceneStateUpdate, renderWorldScene, setupWorldScene } from "@/scenes/world.js";
+import { SceneId } from "@/enums/scene.js";
+import { Type } from "@/enums/type.js";
+import { renderWorldScene, setupWorldScene } from "@/scenes/world.js";
 import { loadAssets } from "@/usecases/assets.js";
-import { debugHitareas } from "@/usecases/debug.js";
 import { applyEntityAnimationTransform, applyEntityTransform, renderEntityOutline, renderEntityShadow, renderEntitySprite, updatePhysics } from "@/usecases/entity.js";
 import { getScene, switchScene, transitionToNextScene } from "@/usecases/game.js";
-import { onClick } from "@/usecases/interaction.js";
-import { cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth, updateSceneState } from "@/usecases/scene.js";
+import { cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth } from "@/usecases/scene.js";
 import { drawText, getFramePerSecond, InputCode, isInputPressed, resetTransform, run, updateCamera } from "ridder";
 
 let isDebugging = false;
@@ -41,24 +38,16 @@ run({
 
     const scene = getScene(game.sceneId);
 
-    switch (scene.id) {
-      case SceneId.WORLD:
-        updateSceneState(scene, onWorldSceneStateEnter, onWorldSceneStateUpdate, onWorldSceneStateExit);
-        break;
-    }
-
     for (const id of scene.update) {
       const e = getEntity(scene, id);
 
-      if (scene.stateId === SceneStateId.NONE) {
-        switch (e.type) {
-          case EntityType.PLAYER:
-            updatePlayer(e);
-            break;
-          case EntityType.TREE:
-            updateTree(e);
-            break;
-        }
+      switch (e.type) {
+        case Type.PLAYER:
+          updatePlayer(e);
+          break;
+        case Type.TREE:
+          updateTree(e);
+          break;
       }
 
       updatePhysics(e);
@@ -69,13 +58,6 @@ run({
     }
 
     cleanupDestroyedEntities(scene);
-
-    for (let i = scene.render.length - 1; i >= 0; i--) {
-      const id = scene.render[i];
-      const e = getEntity(scene, id);
-      onClick(scene, e);
-    }
-
     sortEntitiesOnDepth(scene);
   },
 
@@ -97,16 +79,9 @@ run({
       applyEntityAnimationTransform(e);
       renderEntitySprite(e);
       renderEntityOutline(e);
-
-      switch (e.type) {
-        case EntityType.CARD:
-          renderCard(e);
-          break;
-      }
     }
 
     if (isDebugging) {
-      debugHitareas(scene);
     }
 
     resetTransform();

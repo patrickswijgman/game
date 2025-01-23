@@ -26,21 +26,6 @@ export function destroyEntity(scene: Scene, id: number) {
   scene.destroyed.push(id);
 }
 
-type SceneStateLifecycleHook = (scene: Scene) => void;
-
-export function updateSceneState(scene: Scene, onEnter: SceneStateLifecycleHook, onUpdate: SceneStateLifecycleHook, onExit: SceneStateLifecycleHook) {
-  if (scene.stateNextId !== scene.stateId) {
-    onExit(scene);
-    scene.stateId = scene.stateNextId;
-    onEnter(scene);
-  }
-  onUpdate(scene);
-}
-
-export function setSceneState(scene: Scene, stateId: number) {
-  scene.stateNextId = stateId;
-}
-
 export function sortEntitiesOnDepth(scene: Scene) {
   scene.render.sort((idA, idB) => {
     const a = scene.entities[idA];

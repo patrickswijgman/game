@@ -1,10 +1,8 @@
-import { Deck, newDeck } from "@/data/deck.js";
 import { newStats, Stats } from "@/data/stats.js";
 import { ItemId } from "@/enums/item.js";
 
 export type Sheet = {
   name: string;
-  deck: Deck;
   stats: Stats;
   statsBase: Stats;
   weaponId: ItemId;
@@ -21,7 +19,6 @@ export type SheetOptions = {
 export function newSheet({ name = "", stats = {}, weaponId = ItemId.NONE, armorId = ItemId.NONE }: Partial<SheetOptions> = {}): Sheet {
   return {
     name,
-    deck: newDeck(),
     stats: newStats(stats),
     statsBase: newStats(stats),
     weaponId,

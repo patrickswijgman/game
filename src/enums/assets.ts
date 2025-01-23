@@ -14,9 +14,6 @@ export const enum SpriteId {
   TREE_PINE,
   TREE_SHADOW,
   TILE_GRASS,
-  CARD,
-  CARD_SHADOW,
-  CARD_OUTLINE,
   LONGSWORD,
 }
 

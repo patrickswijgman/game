@@ -1,5 +1,5 @@
 import { SpriteId } from "@/enums/assets.js";
-import { EntityType } from "@/enums/entity.js";
+import { Type } from "@/enums/type.js";
 
 export const enum TileId {
   NONE,
@@ -12,9 +12,9 @@ export const COLOR_TO_TILE: Readonly<Record<string, TileId>> = {
   "#4b7b5b": TileId.PLAIN,
 };
 
-export const COLOR_TO_ENTITY: Readonly<Record<string, EntityType>> = {
-  "#ffffff": EntityType.PLAYER,
-  "#ff0000": EntityType.ENEMY,
+export const COLOR_TO_ENTITY: Readonly<Record<string, Type>> = {
+  "#ffffff": Type.PLAYER,
+  "#ff0000": Type.ENEMY,
 };
 
 export const TILE_TO_SPRITE: Readonly<Record<TileId, SpriteId>> = {

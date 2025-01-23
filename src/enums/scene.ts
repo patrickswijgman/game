@@ -3,17 +3,3 @@ export const enum SceneId {
   WORLD,
   MAX,
 }
-
-export const enum SceneStateId {
-  NONE,
-  INIT_COMBAT,
-  START_ROUND,
-  ENEMY_PICK_CARD,
-  PLAYER_PICK_CARD,
-  DECIDE_TURN_ORDER,
-  PLAYER_RESOLVE_CARD,
-  ENEMY_RESOLVE_CARD,
-  RESOLVE_OUTCOME,
-  VICTORY,
-  DEFEAT,
-}

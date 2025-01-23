@@ -2,13 +2,13 @@ import { SHADOW_ALPHA } from "@/consts.js";
 import { Entity } from "@/data/entity.js";
 import { Scene } from "@/data/scene.js";
 import { SpriteId } from "@/enums/assets.js";
-import { EntityType } from "@/enums/entity.js";
 import { SceneId } from "@/enums/scene.js";
+import { Type } from "@/enums/type.js";
 import { getScene } from "@/usecases/game.js";
 import { nextEntity } from "@/usecases/scene.js";
-import { addVectorScaled, applyCameraTransform, drawSprite, getDelta, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, translateTransform } from "ridder";
+import { addVectorScaled, applyCameraTransform, drawSprite, getDelta, rotateTransform, scaleTransform, setAlpha, setVector, translateTransform } from "ridder";
 
-export function addEntity(type: EntityType, sceneId: SceneId, x: number, y: number) {
+export function addEntity(type: Type, sceneId: SceneId, x: number, y: number) {
   const scene = getScene(sceneId);
   const e = nextEntity(scene);
   e.type = type;
@@ -30,8 +30,19 @@ export function setOutline(e: Entity, id: SpriteId) {
   e.outlineId = id;
 }
 
-export function setHitarea(e: Entity, x: number, y: number, w: number, h: number) {
-  setRectangle(e.hitarea, e.position.x + x, e.position.y + y, w, h);
+type StateLifecycleHook = (e: Entity) => void;
+
+export function updateState(e: Entity, onEnter: StateLifecycleHook, onUpdate: StateLifecycleHook, onExit: StateLifecycleHook) {
+  if (e.stateNextId !== e.stateId) {
+    onExit(e);
+    e.stateId = e.stateNextId;
+    onEnter(e);
+  }
+  onUpdate(e);
+}
+
+export function setState(e: Entity, stateId: number) {
+  e.stateNextId = stateId;
 }
 
 export function updatePhysics(e: Entity) {
