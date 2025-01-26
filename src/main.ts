@@ -1,4 +1,3 @@
-import { COLOR_HEALTH } from "@/consts.js";
 import { game } from "@/data/game.js";
 import { updateAttack } from "@/entities/attack.js";
 import { updatePlayer } from "@/entities/player.js";
@@ -11,9 +10,9 @@ import { debugFps, debugHitboxes } from "@/usecases/debug.js";
 import { renderHealthBar } from "@/usecases/enemy.js";
 import { destroyEntity, renderCombatLog, renderEntity, updateCombatLog, updateFlash, updatePhysics } from "@/usecases/entity.js";
 import { getScene, switchScene, transitionToNextScene } from "@/usecases/game.js";
+import { renderHud } from "@/usecases/hud.js";
 import { cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth } from "@/usecases/scene.js";
-import { drawBar } from "@/usecases/ui.js";
-import { InputCode, isInputPressed, resetTransform, run, tickTimer, translateTransform, updateCamera } from "ridder";
+import { InputCode, isInputPressed, run, tickTimer, updateCamera } from "ridder";
 
 let isDebugging = false;
 
@@ -99,9 +98,7 @@ run({
 
     const player = getEntity(scene, scene.playerId);
     if (player) {
-      resetTransform();
-      translateTransform(10, 10);
-      drawBar(0, 0, player.sheet.stats.health, player.sheet.stats.healthMax, COLOR_HEALTH, player.sheet.stats.healthMax, 5);
+      renderHud(player);
     }
 
     if (isDebugging) {
