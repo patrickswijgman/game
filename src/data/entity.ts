@@ -24,11 +24,18 @@ export type Entity = {
   pivot: Vector;
   angle: number;
   depth: number;
+  isFlipped: boolean;
+
   shadowId: SpriteId;
   shadowPivot: Vector;
+
   outlineId: SpriteId;
   isOutlineVisible: boolean;
-  isFlipped: boolean;
+
+  // Flash
+  flashId: SpriteId;
+  flashTimer: Timer;
+  isFlashing: boolean;
 
   // Animation
   tweenPosition: Vector;
@@ -49,6 +56,11 @@ export type Entity = {
   lifeTime: number;
   lifeTimer: Timer;
 
+  // Steering
+  ahead: Vector;
+  avoid: Vector;
+  radius: number;
+
   // Combat
   center: Vector;
   centerOffset: Vector;
@@ -57,6 +69,11 @@ export type Entity = {
   sheet: Sheet;
   isPlayer: boolean;
   isEnemy: boolean;
+
+  // Combat log
+  isLogEnabled: boolean;
+  log: Array<string>;
+  logTimer: Timer;
 
   // Attack
   casterId: number;
@@ -83,11 +100,18 @@ export function newEntity(): Entity {
     pivot: vec(),
     angle: 0,
     depth: 0,
+    isFlipped: false,
+
     shadowId: SpriteId.NONE,
     shadowPivot: vec(),
+
     outlineId: SpriteId.NONE,
     isOutlineVisible: false,
-    isFlipped: false,
+
+    // Flash
+    flashId: SpriteId.NONE,
+    flashTimer: timer(),
+    isFlashing: false,
 
     // Animation
     tweenPosition: vec(),
@@ -108,6 +132,11 @@ export function newEntity(): Entity {
     lifeTime: 0,
     lifeTimer: timer(),
 
+    // Steering
+    ahead: vec(),
+    avoid: vec(),
+    radius: 0,
+
     // Combat
     center: vec(),
     centerOffset: vec(),
@@ -116,6 +145,11 @@ export function newEntity(): Entity {
     sheet: newSheet(),
     isPlayer: false,
     isEnemy: false,
+
+    // Combat log
+    isLogEnabled: false,
+    log: [],
+    logTimer: timer(),
 
     // Attack
     casterId: 0,
@@ -127,4 +161,5 @@ export function zeroEntity(e: Entity) {
   zero(e);
   setVector(e.tweenScale, 1, 1);
   e.blacklist.length = 0;
+  e.log.length = 0;
 }

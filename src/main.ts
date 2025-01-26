@@ -8,11 +8,12 @@ import { Type } from "@/enums/type.js";
 import { renderWorldScene, setupWorldScene } from "@/scenes/world.js";
 import { loadAssets } from "@/usecases/assets.js";
 import { debugHitboxes } from "@/usecases/debug.js";
-import { destroyEntity, renderEntity, updatePhysics } from "@/usecases/entity.js";
+import { renderHealthBar } from "@/usecases/enemy.js";
+import { destroyEntity, renderCombatLog, renderEntity, updateCombatLog, updateFlash, updatePhysics } from "@/usecases/entity.js";
 import { getScene, switchScene, transitionToNextScene } from "@/usecases/game.js";
 import { cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth } from "@/usecases/scene.js";
 import { drawBar } from "@/usecases/ui.js";
-import { applyCameraTransform, drawText, getFramePerSecond, InputCode, isInputPressed, resetTransform, run, tickTimer, translateTransform, updateCamera } from "ridder";
+import { drawText, getFramePerSecond, InputCode, isInputPressed, resetTransform, run, scaleTransform, tickTimer, translateTransform, updateCamera } from "ridder";
 
 let isDebugging = false;
 
@@ -68,6 +69,8 @@ run({
       }
 
       updatePhysics(e);
+      updateFlash(e);
+      updateCombatLog(e);
 
       if (e.isPlayer) {
         updateCamera(scene.camera, e.position.x, e.position.y);
@@ -89,15 +92,9 @@ run({
 
     for (const id of scene.render) {
       const e = getEntity(scene, id);
-      renderEntity(e, scene);
-
-      // if (e.isEnemy && e.sheet.stats.health < e.sheet.stats.healthMax) {
-      if (e.isEnemy) {
-        resetTransform();
-        applyCameraTransform(scene.camera);
-        translateTransform(e.position.x, e.position.y - e.hitbox.h - 5);
-        drawBar(-5, 0, e.sheet.stats.health, e.sheet.stats.healthMax, COLOR_HEALTH, 10, 3);
-      }
+      renderEntity(e);
+      renderHealthBar(e);
+      renderCombatLog(e);
     }
 
     if (isDebugging) {
@@ -112,6 +109,7 @@ run({
     }
 
     resetTransform();
+    scaleTransform(0.5, 0.5);
     drawText(getFramePerSecond().toString(), 1, 1, "lime");
   },
 });

@@ -10,7 +10,7 @@ export function addTree(sceneId: SceneId, x: number, y: number) {
   const e = addEntity(Type.TREE, sceneId, x, y);
   setSprite(e, SpriteId.TREE_PINE, 8, 15);
   setShadow(e, SpriteId.TREE_SHADOW, 8, 12);
-  e.tweenTime = random(1500, 2000);
+  e.tweenTime = random(2000, 3000);
   return e;
 }
 

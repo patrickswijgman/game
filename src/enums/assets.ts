@@ -12,6 +12,7 @@ export const enum SpriteId {
   NONE,
   PLAYER,
   PLAYER_SHADOW,
+  PLAYER_FLASH,
   TREE_PINE,
   TREE_SHADOW,
   TILE_GRASS,

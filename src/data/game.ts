@@ -38,7 +38,7 @@ function newScenes() {
   return table(SceneId.MAX, (id) => {
     switch (id) {
       case SceneId.WORLD:
-        return newScene(id, 2048);
+        return newScene(id, 4096);
       default:
         return newScene(id, 0);
     }

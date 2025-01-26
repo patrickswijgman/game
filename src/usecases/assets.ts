@@ -1,3 +1,4 @@
+import { FONT_SIZE } from "@/consts.js";
 import { FontId, SpriteId, TextureId } from "@/enums/assets.js";
 import { loadFlashTexture, loadFont, loadOutlineTexture, loadSprite, loadTexture, setFont } from "ridder";
 
@@ -11,6 +12,7 @@ export async function loadAssets() {
 
   loadSprite(SpriteId.PLAYER, TextureId.ATLAS, 0, 16, 16, 16);
   loadSprite(SpriteId.PLAYER_SHADOW, TextureId.ATLAS, 0, 32, 16, 16);
+  loadSprite(SpriteId.PLAYER_FLASH, TextureId.ATLAS_FLASH, 0, 16, 16, 16);
 
   loadSprite(SpriteId.EQUIP_LONGSWORD, TextureId.ATLAS, 16, 16, 16, 16);
 
@@ -21,7 +23,7 @@ export async function loadAssets() {
 
   loadSprite(SpriteId.TILE_GRASS, TextureId.ATLAS, 0, 96, 16, 16);
 
-  await loadFont(FontId.DEFAULT, "fonts/pixelmix.ttf", "pixelmix", 4);
+  await loadFont(FontId.DEFAULT, "fonts/pixelmix.ttf", "pixelmix", FONT_SIZE);
 
   setFont(FontId.DEFAULT);
 }
