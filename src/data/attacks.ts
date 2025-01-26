@@ -11,7 +11,7 @@ export type Attack = {
   recovery: number;
 };
 
-export const attacks: Readonly<Record<number, Attack>> = {
+export const ATTACKS: Readonly<Record<number, Attack>> = {
   [ItemId.LONGSWORD]: {
     spriteId: SpriteId.ATTACK_LONGSWORD,
     hitbox: rect(-4, -4, 8, 8),

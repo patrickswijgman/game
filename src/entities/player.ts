@@ -10,8 +10,8 @@ import { Type } from "@/enums/type.js";
 import { getAttack } from "@/usecases/attack.js";
 import { addEntity, setCenter, setHitbox, setShadow, setSprite, setState, updateState } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";
-import { updateSheet } from "@/usecases/sheet.js";
-import { copyVector, getVectorLength, InputCode, isInputDown, isInputPressed, normalizeVector, resetVector, scaleVector, setCameraPosition, tickTimer } from "ridder";
+import { initSheet } from "@/usecases/sheet.js";
+import { copyVector, getVectorLength, InputCode, isInputDown, normalizeVector, resetVector, scaleVector, setCameraPosition, tickTimer } from "ridder";
 
 export function addPlayer(sceneId: SceneId, x: number, y: number) {
   const e = addEntity(Type.PLAYER, sceneId, x, y);
@@ -19,16 +19,18 @@ export function addPlayer(sceneId: SceneId, x: number, y: number) {
   setShadow(e, SpriteId.PLAYER_SHADOW, 8, 13);
   setHitbox(e, -3, -8, 6, 8);
   setCenter(e, 0, -3);
+
   e.sheet = game.sheet;
+  initSheet(e.sheet);
+
   e.isPlayer = true;
   e.isPhysicsEnabled = true;
+
   setState(e, StateId.PLAYER_IDLE);
 
   const scene = getScene(e.sceneId);
   scene.playerId = e.id;
   setCameraPosition(scene.camera, e.position.x, e.position.y);
-
-  updateSheet(e.sheet);
 
   return e;
 }
@@ -103,16 +105,16 @@ function move(e: Entity) {
     e.velocity.y += 1;
   }
   const isMoving = !!getVectorLength(e.velocity);
-  normalizeVector(e.velocity);
   if (isMoving) {
+    normalizeVector(e.velocity);
     copyVector(e.direction, e.velocity);
+    scaleVector(e.velocity, 1);
   }
-  scaleVector(e.velocity, 1);
   return isMoving;
 }
 
 function attack(e: Entity) {
-  if (isInputPressed(InputCode.KEY_Z)) {
+  if (isInputDown(InputCode.KEY_Z)) {
     return true;
   } else {
     return false;

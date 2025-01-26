@@ -19,7 +19,7 @@ export type SheetOptions = {
 export function newSheet({ name = "", stats = {}, weaponId = ItemId.NONE, armorId = ItemId.NONE }: Partial<SheetOptions> = {}): Sheet {
   return {
     name,
-    stats: newStats(stats),
+    stats: newStats(),
     statsBase: newStats(stats),
     weaponId,
     armorId,

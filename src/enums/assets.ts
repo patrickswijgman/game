@@ -16,6 +16,7 @@ export const enum SpriteId {
   TREE_SHADOW,
   TILE_GRASS,
   ATTACK_LONGSWORD,
+  EQUIP_LONGSWORD,
 }
 
 export const enum FontId {

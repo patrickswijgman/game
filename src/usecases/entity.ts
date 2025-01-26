@@ -5,6 +5,7 @@ import { SpriteId } from "@/enums/assets.js";
 import { SceneId } from "@/enums/scene.js";
 import { Type } from "@/enums/type.js";
 import { getScene } from "@/usecases/game.js";
+import { getItem } from "@/usecases/item.js";
 import { nextEntity } from "@/usecases/scene.js";
 import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, getDelta, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, translateTransform } from "ridder";
 
@@ -76,11 +77,11 @@ export function updateHitbox(e: Entity) {
 }
 
 export function resetTween(e: Entity) {
+  resetTimer(e.tweenTimer);
   resetVector(e.tweenPosition);
   setVector(e.tweenScale, 1, 1);
   e.tweenAngle = 0;
   e.tweenTime = 0;
-  resetTimer(e.tweenTimer);
 }
 
 export function renderEntity(e: Entity, scene: Scene) {
@@ -105,6 +106,11 @@ export function renderEntity(e: Entity, scene: Scene) {
 
   if (e.spriteId) {
     drawSprite(e.spriteId, -e.pivot.x, -e.pivot.y);
+  }
+
+  if (e.sheet.weaponId) {
+    const item = getItem(e.sheet.weaponId);
+    drawSprite(item.spriteId, -e.pivot.x, -e.pivot.y);
   }
 
   if (e.outlineId && e.isOutlineVisible) {

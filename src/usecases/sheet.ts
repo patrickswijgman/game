@@ -2,6 +2,11 @@ import { Sheet } from "@/data/sheet.js";
 import { getItem } from "@/usecases/item.js";
 import { addStats, clampStats, copyStats } from "@/usecases/stats.js";
 
+export function initSheet(sheet: Sheet) {
+  copyStats(sheet.stats, sheet.statsBase);
+  updateSheet(sheet);
+}
+
 export function updateSheet(sheet: Sheet) {
   const health = sheet.stats.health;
 
