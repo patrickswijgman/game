@@ -11,7 +11,7 @@ import { getAttack } from "@/usecases/attack.js";
 import { addEntity, setCenter, setHitbox, setShadow, setSprite, setState, updateState } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";
 import { initSheet } from "@/usecases/sheet.js";
-import { copyVector, getVectorLength, InputCode, isInputDown, normalizeVector, resetVector, scaleVector, setCameraPosition, tickTimer } from "ridder";
+import { copyVector, getVectorLength, InputCode, isInputDown, normalizeVector, resetVector, scaleVector, setCameraPosition, setVector, tickTimer, tween } from "ridder";
 
 export function addPlayer(sceneId: SceneId, x: number, y: number) {
   const e = addEntity(Type.PLAYER, sceneId, x, y);
@@ -19,6 +19,7 @@ export function addPlayer(sceneId: SceneId, x: number, y: number) {
   setShadow(e, SpriteId.PLAYER_SHADOW, 8, 13);
   setHitbox(e, -3, -8, 6, 8);
   setCenter(e, 0, -3);
+  setVector(e.direction, 1, 0);
 
   e.sheet = game.sheet;
   initSheet(e.sheet);
@@ -36,10 +37,10 @@ export function addPlayer(sceneId: SceneId, x: number, y: number) {
 }
 
 export function updatePlayer(e: Entity) {
-  updateState(e, onEnter, onUpdate, onExit);
+  updateState(e, onStateEnter, onStateUpdate, onStateExit);
 }
 
-function onEnter(e: Entity) {
+function onStateEnter(e: Entity) {
   switch (e.stateId) {
     case StateId.NONE:
       setState(e, StateId.PLAYER_IDLE);
@@ -51,7 +52,7 @@ function onEnter(e: Entity) {
   }
 }
 
-function onUpdate(e: Entity) {
+function onStateUpdate(e: Entity) {
   switch (e.stateId) {
     case StateId.PLAYER_IDLE:
       {
@@ -80,7 +81,11 @@ function onUpdate(e: Entity) {
     case StateId.ATTACK:
       {
         const attack = getAttack(e.sheet.weaponId);
-        if (tickTimer(e.stateTimer, attack.recovery)) {
+        const duration = attack.recovery;
+        tickTimer(e.tweenTimer, duration);
+        e.tweenScale.x = tween(1, 1.1, duration / 2, "easeInOutSine", e.tweenTimer.elapsed);
+        e.tweenScale.y = tween(1, 1.1, duration / 2, "easeInOutSine", e.tweenTimer.elapsed);
+        if (tickTimer(e.stateTimer, duration)) {
           setState(e, StateId.PLAYER_IDLE);
         }
       }
@@ -121,4 +126,4 @@ function attack(e: Entity) {
   }
 }
 
-function onExit(e: Entity) {}
+function onStateExit(e: Entity) {}
