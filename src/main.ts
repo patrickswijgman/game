@@ -7,13 +7,13 @@ import { SceneId } from "@/enums/scene.js";
 import { Type } from "@/enums/type.js";
 import { renderWorldScene, setupWorldScene } from "@/scenes/world.js";
 import { loadAssets } from "@/usecases/assets.js";
-import { debugHitboxes } from "@/usecases/debug.js";
+import { debugFps, debugHitboxes } from "@/usecases/debug.js";
 import { renderHealthBar } from "@/usecases/enemy.js";
 import { destroyEntity, renderCombatLog, renderEntity, updateCombatLog, updateFlash, updatePhysics } from "@/usecases/entity.js";
 import { getScene, switchScene, transitionToNextScene } from "@/usecases/game.js";
 import { cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth } from "@/usecases/scene.js";
 import { drawBar } from "@/usecases/ui.js";
-import { drawText, getFramePerSecond, InputCode, isInputPressed, resetTransform, run, scaleTransform, tickTimer, translateTransform, updateCamera } from "ridder";
+import { InputCode, isInputPressed, resetTransform, run, tickTimer, translateTransform, updateCamera } from "ridder";
 
 let isDebugging = false;
 
@@ -97,10 +97,6 @@ run({
       renderCombatLog(e);
     }
 
-    if (isDebugging) {
-      debugHitboxes(scene);
-    }
-
     const player = getEntity(scene, scene.playerId);
     if (player) {
       resetTransform();
@@ -108,8 +104,9 @@ run({
       drawBar(0, 0, player.sheet.stats.health, player.sheet.stats.healthMax, COLOR_HEALTH, player.sheet.stats.healthMax, 5);
     }
 
-    resetTransform();
-    scaleTransform(0.5, 0.5);
-    drawText(getFramePerSecond().toString(), 1, 1, "lime");
+    if (isDebugging) {
+      debugHitboxes(scene);
+      debugFps();
+    }
   },
 });

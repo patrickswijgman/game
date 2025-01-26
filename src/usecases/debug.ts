@@ -1,6 +1,6 @@
 import { Scene } from "@/data/scene.js";
 import { getEntity } from "@/usecases/scene.js";
-import { applyCameraTransform, drawRectInstance, isRectangleValid, resetTransform } from "ridder";
+import { applyCameraTransform, drawRectInstance, drawText, getFramePerSecond, isRectangleValid, resetTransform, scaleTransform } from "ridder";
 
 export function debugHitboxes(scene: Scene) {
   resetTransform();
@@ -11,4 +11,10 @@ export function debugHitboxes(scene: Scene) {
       drawRectInstance(e.hitbox, "yellow", false);
     }
   }
+}
+
+export function debugFps() {
+  resetTransform();
+  scaleTransform(0.5, 0.5);
+  drawText(getFramePerSecond().toString(), 1, 1, "lime");
 }
