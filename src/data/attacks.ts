@@ -7,7 +7,8 @@ export type Attack = {
   hitbox: Rectangle;
   range: number;
   speed: number;
-  time: number;
+  duration: number;
+  recovery: number;
 };
 
 export const attacks: Readonly<Record<number, Attack>> = {
@@ -16,6 +17,7 @@ export const attacks: Readonly<Record<number, Attack>> = {
     hitbox: rect(-4, -4, 8, 8),
     range: 0,
     speed: 0,
-    time: 0,
+    duration: 100,
+    recovery: 250,
   },
 };

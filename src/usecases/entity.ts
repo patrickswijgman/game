@@ -6,7 +6,7 @@ import { SceneId } from "@/enums/scene.js";
 import { Type } from "@/enums/type.js";
 import { getScene } from "@/usecases/game.js";
 import { nextEntity } from "@/usecases/scene.js";
-import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, getDelta, resetTimer, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, translateTransform } from "ridder";
+import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, getDelta, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, translateTransform } from "ridder";
 
 export function addEntity(type: Type, sceneId: SceneId, x: number, y: number) {
   const scene = getScene(sceneId);
@@ -48,6 +48,7 @@ export function setState(e: Entity, stateId: number) {
 export function updateState(e: Entity, onEnter: (e: Entity) => void, onUpdate: (e: Entity) => void, onExit: (e: Entity) => void) {
   if (e.stateNextId !== e.stateId) {
     onExit(e);
+    resetTimer(e.stateTimer);
     resetVector(e.velocity);
     resetTween(e);
     e.stateId = e.stateNextId;
@@ -82,37 +83,36 @@ export function resetTween(e: Entity) {
   resetTimer(e.tweenTimer);
 }
 
-export function applyEntityTransform(e: Entity, scene: Scene) {
+export function renderEntity(e: Entity, scene: Scene) {
+  resetTransform();
   applyCameraTransform(scene.camera);
   translateTransform(e.position.x, e.position.y);
+  rotateTransform(e.angle);
 
   if (e.isFlipped) {
     scaleTransform(-1, 1);
   }
-}
 
-export function applyEntityTweenTransform(e: Entity) {
   translateTransform(e.tweenPosition.x, e.tweenPosition.y);
   scaleTransform(e.tweenScale.x, e.tweenScale.y);
   rotateTransform(e.tweenAngle);
-}
 
-export function renderEntitySprite(e: Entity) {
-  if (e.spriteId) {
-    drawSprite(e.spriteId, -e.pivot.x, -e.pivot.y);
-  }
-}
-
-export function renderEntityOutline(e: Entity) {
-  if (e.outlineId && e.isOutlineVisible) {
-    drawSprite(e.outlineId, -e.pivot.x, -e.pivot.y);
-  }
-}
-
-export function renderEntityShadow(e: Entity) {
   if (e.shadowId) {
     setAlpha(SHADOW_ALPHA);
     drawSprite(e.shadowId, -e.shadowPivot.x, -e.shadowPivot.y);
     setAlpha(1);
   }
+
+  if (e.spriteId) {
+    drawSprite(e.spriteId, -e.pivot.x, -e.pivot.y);
+  }
+
+  if (e.outlineId && e.isOutlineVisible) {
+    drawSprite(e.outlineId, -e.pivot.x, -e.pivot.y);
+  }
+}
+
+export function destroyEntity(e: Entity) {
+  const scene = getScene(e.sceneId);
+  scene.destroyed.push(e.id);
 }

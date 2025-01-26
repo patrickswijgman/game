@@ -22,6 +22,8 @@ export type Entity = {
   // Render
   spriteId: SpriteId;
   pivot: Vector;
+  angle: number;
+  depth: number;
   shadowId: SpriteId;
   shadowPivot: Vector;
   outlineId: SpriteId;
@@ -41,6 +43,7 @@ export type Entity = {
   // State management
   stateId: StateId;
   stateNextId: StateId;
+  stateTimer: Timer;
 
   // Misc
   lifeTime: number;
@@ -54,6 +57,10 @@ export type Entity = {
   sheet: Sheet;
   isPlayer: boolean;
   isEnemy: boolean;
+
+  // Attack
+  casterId: number;
+  blacklist: Array<number>;
 };
 
 export function newEntity(): Entity {
@@ -74,6 +81,8 @@ export function newEntity(): Entity {
     // Render
     spriteId: SpriteId.NONE,
     pivot: vec(),
+    angle: 0,
+    depth: 0,
     shadowId: SpriteId.NONE,
     shadowPivot: vec(),
     outlineId: SpriteId.NONE,
@@ -93,6 +102,7 @@ export function newEntity(): Entity {
     // State management
     stateId: StateId.NONE,
     stateNextId: StateId.NONE,
+    stateTimer: timer(),
 
     // Misc
     lifeTime: 0,
@@ -106,10 +116,15 @@ export function newEntity(): Entity {
     sheet: newSheet(),
     isPlayer: false,
     isEnemy: false,
+
+    // Attack
+    casterId: 0,
+    blacklist: [],
   };
 }
 
 export function zeroEntity(e: Entity) {
   zero(e);
   setVector(e.tweenScale, 1, 1);
+  e.blacklist.length = 0;
 }

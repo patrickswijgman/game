@@ -22,15 +22,11 @@ export function getEntity(scene: Scene, id: number) {
   return scene.entities[id];
 }
 
-export function destroyEntity(scene: Scene, id: number) {
-  scene.destroyed.push(id);
-}
-
 export function sortEntitiesOnDepth(scene: Scene) {
   scene.render.sort((idA, idB) => {
     const a = scene.entities[idA];
     const b = scene.entities[idB];
-    return a.position.y - b.position.y;
+    return a.position.y + a.depth - b.position.y + b.depth;
   });
 }
 

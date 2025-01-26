@@ -6,15 +6,15 @@ import { TextureId } from "@/enums/assets.js";
 import { COLOR_TO_ENTITY, COLOR_TO_TILE, TILE_TO_SPRITE, TileId } from "@/enums/map.js";
 import { SceneId } from "@/enums/scene.js";
 import { Type } from "@/enums/type.js";
-import { getSprite, getTexture, loadRenderTexture, roll, toHex } from "ridder";
+import { getSprite, getTexture, loadRenderTexture, random, roll, toHex } from "ridder";
 
 export function populateMap(sceneId: SceneId) {
   readMapTexture(TextureId.MAP_TILES, (color, x, y, worldX, worldY, worldCenterX, worldCenterY) => {
     const id = COLOR_TO_TILE[color];
     switch (id) {
       case TileId.FOREST:
-        if (roll(0.8)) {
-          addTree(sceneId, worldCenterX, worldCenterY + 4);
+        if (roll(0.9)) {
+          addTree(sceneId, worldCenterX + random(-4, 4), worldCenterY + random(-4, 4));
         }
         break;
     }

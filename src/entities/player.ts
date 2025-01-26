@@ -7,16 +7,18 @@ import { SpriteId } from "@/enums/assets.js";
 import { SceneId } from "@/enums/scene.js";
 import { StateId } from "@/enums/state.js";
 import { Type } from "@/enums/type.js";
+import { getAttack } from "@/usecases/attack.js";
 import { addEntity, setCenter, setHitbox, setShadow, setSprite, setState, updateState } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";
-import { copyVector, getVectorLength, InputCode, isInputDown, isInputPressed, normalizeVector, resetVector, scaleVector, setCameraPosition } from "ridder";
+import { updateSheet } from "@/usecases/sheet.js";
+import { copyVector, getVectorLength, InputCode, isInputDown, isInputPressed, normalizeVector, resetVector, scaleVector, setCameraPosition, tickTimer } from "ridder";
 
 export function addPlayer(sceneId: SceneId, x: number, y: number) {
   const e = addEntity(Type.PLAYER, sceneId, x, y);
   setSprite(e, SpriteId.PLAYER, 8, 15);
   setShadow(e, SpriteId.PLAYER_SHADOW, 8, 13);
   setHitbox(e, -3, -8, 6, 8);
-  setCenter(e, 0, -4);
+  setCenter(e, 0, -3);
   e.sheet = game.sheet;
   e.isPlayer = true;
   e.isPhysicsEnabled = true;
@@ -25,6 +27,8 @@ export function addPlayer(sceneId: SceneId, x: number, y: number) {
   const scene = getScene(e.sceneId);
   scene.playerId = e.id;
   setCameraPosition(scene.camera, e.position.x, e.position.y);
+
+  updateSheet(e.sheet);
 
   return e;
 }
@@ -35,10 +39,12 @@ export function updatePlayer(e: Entity) {
 
 function onEnter(e: Entity) {
   switch (e.stateId) {
+    case StateId.NONE:
+      setState(e, StateId.PLAYER_IDLE);
+      break;
+
     case StateId.ATTACK:
-      {
-        addAttack(e.sceneId, e.center.x, e.center.y, e.sheet.weaponId);
-      }
+      addAttack(e.sceneId, e, e.sheet.weaponId);
       break;
   }
 }
@@ -68,6 +74,15 @@ function onUpdate(e: Entity) {
         }
       }
       break;
+
+    case StateId.ATTACK:
+      {
+        const attack = getAttack(e.sheet.weaponId);
+        if (tickTimer(e.stateTimer, attack.recovery)) {
+          setState(e, StateId.PLAYER_IDLE);
+        }
+      }
+      break;
   }
 }
 
@@ -87,10 +102,13 @@ function move(e: Entity) {
   if (isInputDown(InputCode.KEY_DOWN)) {
     e.velocity.y += 1;
   }
+  const isMoving = !!getVectorLength(e.velocity);
   normalizeVector(e.velocity);
-  copyVector(e.direction, e.velocity);
+  if (isMoving) {
+    copyVector(e.direction, e.velocity);
+  }
   scaleVector(e.velocity, 1);
-  return !!getVectorLength(e.velocity);
+  return isMoving;
 }
 
 function attack(e: Entity) {
