@@ -15,6 +15,7 @@ export type Entity = {
 
   // Physics
   isPhysicsEnabled: boolean;
+  start: Vector;
   position: Vector;
   velocity: Vector;
   direction: Vector;
@@ -32,9 +33,7 @@ export type Entity = {
   outlineId: SpriteId;
   isOutlineVisible: boolean;
 
-  // Flash
   flashId: SpriteId;
-  flashTimer: Timer;
   isFlashing: boolean;
 
   // Animation
@@ -67,6 +66,7 @@ export type Entity = {
   hitbox: Rectangle;
   hitboxOffset: Vector;
   sheet: Sheet;
+  attackId: number;
   isPlayer: boolean;
   isEnemy: boolean;
 
@@ -91,6 +91,7 @@ export function newEntity(): Entity {
 
     // Physics
     isPhysicsEnabled: false,
+    start: vec(),
     position: vec(),
     velocity: vec(),
     direction: vec(),
@@ -108,9 +109,7 @@ export function newEntity(): Entity {
     outlineId: SpriteId.NONE,
     isOutlineVisible: false,
 
-    // Flash
     flashId: SpriteId.NONE,
-    flashTimer: timer(),
     isFlashing: false,
 
     // Animation
@@ -143,6 +142,7 @@ export function newEntity(): Entity {
     hitbox: rect(),
     hitboxOffset: vec(),
     sheet: newSheet(),
+    attackId: 0,
     isPlayer: false,
     isEnemy: false,
 

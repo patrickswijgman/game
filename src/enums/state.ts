@@ -1,6 +1,14 @@
 export const enum StateId {
   NONE,
+
   PLAYER_IDLE,
   PLAYER_WALK,
+
+  ENEMY_IDLE,
+  ENEMY_WANDER,
+  ENEMY_SEEK,
+  ENEMY_DELAY,
+
+  STAGGER,
   ATTACK,
 }

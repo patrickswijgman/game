@@ -2,7 +2,10 @@ import { COMBAT_LOG_DURATION, LINE_HEIGHT, SHADOW_ALPHA } from "@/consts.js";
 import { Entity } from "@/data/entity.js";
 import { SpriteId } from "@/enums/assets.js";
 import { SceneId } from "@/enums/scene.js";
+import { StateId } from "@/enums/state.js";
 import { Type } from "@/enums/type.js";
+import { onAttackEnter, onAttackExit, onAttackUpdate } from "@/states/attack.js";
+import { onStaggerEnter, onStaggerExit, onStaggerUpdate } from "@/states/stagger.js";
 import { getScene } from "@/usecases/game.js";
 import { getItem } from "@/usecases/item.js";
 import { nextEntity } from "@/usecases/scene.js";
@@ -13,6 +16,7 @@ export function addEntity(type: Type, sceneId: SceneId, x: number, y: number) {
   const scene = getScene(sceneId);
   const e = nextEntity(scene);
   e.type = type;
+  setVector(e.start, x, y);
   setVector(e.position, x, y);
   return e;
 }
@@ -52,14 +56,48 @@ export function setState(e: Entity, stateId: number) {
 
 export function updateState(e: Entity, onEnter: (e: Entity) => void, onUpdate: (e: Entity) => void, onExit: (e: Entity) => void) {
   if (e.stateNextId !== e.stateId) {
-    onExit(e);
+    switch (e.stateId) {
+      case StateId.ATTACK:
+        onAttackExit(e);
+        break;
+      case StateId.STAGGER:
+        onStaggerExit(e);
+        break;
+      default:
+        onExit(e);
+        break;
+    }
+
     resetTimer(e.stateTimer);
     resetVector(e.velocity);
     resetTween(e);
+
     e.stateId = e.stateNextId;
-    onEnter(e);
+
+    switch (e.stateId) {
+      case StateId.ATTACK:
+        onAttackEnter(e);
+        break;
+      case StateId.STAGGER:
+        onStaggerEnter(e);
+        break;
+      default:
+        onEnter(e);
+        break;
+    }
   }
-  onUpdate(e);
+
+  switch (e.stateId) {
+    case StateId.ATTACK:
+      onAttackUpdate(e);
+      break;
+    case StateId.STAGGER:
+      onStaggerUpdate(e);
+      break;
+    default:
+      onUpdate(e);
+      break;
+  }
 }
 
 export function updatePhysics(e: Entity) {
@@ -80,21 +118,10 @@ export function updateHitbox(e: Entity) {
   addVector(e.hitbox, e.hitboxOffset);
 }
 
-export function updateFlash(e: Entity) {
-  if (e.isFlashing && tickTimer(e.flashTimer, 150)) {
-    e.isFlashing = false;
-  }
-}
-
 export function updateCombatLog(e: Entity) {
   if (e.isLogEnabled && tickTimer(e.logTimer, COMBAT_LOG_DURATION)) {
     e.log.length = 0;
   }
-}
-
-export function flash(e: Entity) {
-  e.isFlashing = true;
-  resetTimer(e.flashTimer);
 }
 
 export function addToCombatLog(e: Entity, message: string) {
@@ -145,7 +172,7 @@ export function renderEntity(e: Entity) {
     }
   }
 
-  if (e.outlineId && e.isOutlineVisible) {
+  if (e.isOutlineVisible && e.outlineId) {
     drawSprite(e.outlineId, -e.pivot.x, -e.pivot.y);
   }
 }
@@ -153,16 +180,19 @@ export function renderEntity(e: Entity) {
 export function renderCombatLog(e: Entity) {
   if (e.isLogEnabled) {
     const scene = getScene(e.sceneId);
+
     resetTransform();
     applyCameraTransform(scene.camera);
     translateTransform(e.position.x, e.position.y - e.hitbox.h - 12);
     scaleTransform(0.5, 0.5);
     setAlpha(1 - tween(0, 1, COMBAT_LOG_DURATION, "easeInCirc", e.logTimer.elapsed));
+
     for (const log of e.log) {
       const color = log.startsWith("+") ? "lime" : e.isPlayer ? "red" : "white";
       drawTextOutlined(log, 0, 0, color, "center");
       translateTransform(0, -LINE_HEIGHT);
     }
+
     setAlpha(1);
   }
 }

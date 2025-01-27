@@ -4,7 +4,7 @@ import { getScene } from "@/usecases/game.js";
 import { drawBar } from "@/usecases/ui.js";
 import { applyCameraTransform, resetTransform, translateTransform } from "ridder";
 
-export function renderHealthBar(e: Entity) {
+export function renderEnemyStatus(e: Entity) {
   if (e.isEnemy && e.sheet.stats.health < e.sheet.stats.healthMax) {
     const scene = getScene(e.sceneId);
     resetTransform();

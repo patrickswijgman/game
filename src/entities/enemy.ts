@@ -1,8 +1,11 @@
+import { Entity } from "@/data/entity.js";
 import { SpriteId } from "@/enums/assets.js";
 import { ItemId } from "@/enums/item.js";
 import { SceneId } from "@/enums/scene.js";
+import { StateId } from "@/enums/state.js";
 import { Type } from "@/enums/type.js";
-import { addEntity, setCenter, setFlash, setHitbox, setShadow, setSprite } from "@/usecases/entity.js";
+import { onEnemyStateEnter, onEnemyStateExit, onEnemyStateUpdate } from "@/states/enemy.js";
+import { addEntity, setCenter, setFlash, setHitbox, setShadow, setSprite, setState, updateState } from "@/usecases/entity.js";
 import { initSheet } from "@/usecases/sheet.js";
 
 export function addEnemy(sceneId: SceneId, x: number, y: number) {
@@ -23,5 +26,11 @@ export function addEnemy(sceneId: SceneId, x: number, y: number) {
   e.isPhysicsEnabled = true;
   e.isLogEnabled = true;
 
+  setState(e, StateId.ENEMY_IDLE);
+
   return e;
+}
+
+export function updateEnemy(e: Entity) {
+  updateState(e, onEnemyStateEnter, onEnemyStateUpdate, onEnemyStateExit);
 }

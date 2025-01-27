@@ -16,7 +16,7 @@ export const ATTACKS: Readonly<Record<number, Attack>> = {
   [ItemId.LONGSWORD]: {
     spriteId: SpriteId.ATTACK_LONGSWORD,
     hitbox: rect(-4, -4, 8, 8),
-    range: 0,
+    range: 12,
     reach: 8,
     speed: 0,
     duration: 100,
