@@ -44,7 +44,6 @@ export function onEnemyStateUpdate(e: Entity) {
       {
         lookAtPlayer(e);
         if (tickTimer(e.stateTimer, 500)) {
-          setupAttack(e);
           setState(e, StateId.ATTACK);
         }
       }
@@ -91,14 +90,8 @@ function isPlayerInAttackRange(e: Entity) {
 function lookAtPlayer(e: Entity) {
   const scene = getScene(e.sceneId);
   const player = getEntity(scene, scene.playerId);
-  e.isFlipped = player.position.x < e.position.x;
-}
-
-function setupAttack(e: Entity) {
-  const scene = getScene(e.sceneId);
-  const player = getEntity(scene, scene.playerId);
   copyVector(e.direction, player.position);
   subtractVector(e.direction, e.position);
   normalizeVector(e.direction);
-  e.attackId = e.sheet.weaponId;
+  e.isFlipped = player.position.x < e.position.x;
 }
