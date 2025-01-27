@@ -1,4 +1,4 @@
-import { TILE_SIZE } from "@/consts.js";
+import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE } from "@/consts.js";
 import { addEnemy } from "@/entities/enemy.js";
 import { addPlayer } from "@/entities/player.js";
 import { addTree } from "@/entities/tree.js";
@@ -34,11 +34,7 @@ export function populateMap(sceneId: SceneId) {
 }
 
 export function loadMapFloorTexture() {
-  const texture = getTexture(TextureId.MAP_TILES);
-  const w = texture.width * TILE_SIZE;
-  const h = texture.height * TILE_SIZE;
-
-  loadRenderTexture(TextureId.FLOOR, w, h, (ctx) => {
+  loadRenderTexture(TextureId.FLOOR, 2048, 2048, (ctx) => {
     readMapTexture(TextureId.MAP_TILES, (color, x, y, worldX, worldY) => {
       const id = COLOR_TO_TILE[color];
       const spriteId = TILE_TO_SPRITE[id];
@@ -47,24 +43,20 @@ export function loadMapFloorTexture() {
       ctx.drawImage(texture, sprite.x, sprite.y, sprite.w, sprite.h, worldX, worldY, sprite.w, sprite.h);
     });
   });
-
-  return [w, h] as const;
 }
 
 export function readMapTexture(textureId: TextureId, callback: (color: string, x: number, y: number, worldX: number, worldY: number, worldCenterX: number, worldCenterY: number) => void) {
   const texture = getTexture(textureId);
   const ctx = texture.getContext("2d");
-  const w = texture.width;
-  const h = texture.height;
-  const { data } = ctx.getImageData(0, 0, w, h);
+  const { data } = ctx.getImageData(0, 0, MAP_WIDTH, MAP_HEIGHT);
 
   for (let i = 0; i < data.length; i += 4) {
     const r = data[i];
     const g = data[i + 1];
     const b = data[i + 2];
     const color = `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-    const x = (i / 4) % w;
-    const y = Math.floor(i / 4 / h);
+    const x = (i / 4) % MAP_WIDTH;
+    const y = Math.floor(i / 4 / MAP_HEIGHT);
     const worldX = x * TILE_SIZE;
     const worldY = y * TILE_SIZE;
     const worldCenterX = worldX + TILE_SIZE / 2;

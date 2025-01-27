@@ -159,7 +159,7 @@ export function renderEntity(e: Entity) {
   scaleTransform(e.tweenScale.x, e.tweenScale.y);
   rotateTransform(e.tweenAngle);
 
-  if (e.isFlashing && e.flashId) {
+  if (e.isFlashing) {
     drawSprite(e.flashId, -e.pivot.x, -e.pivot.y);
   } else {
     if (e.spriteId) {
@@ -172,13 +172,13 @@ export function renderEntity(e: Entity) {
     }
   }
 
-  if (e.isOutlineVisible && e.outlineId) {
+  if (e.isOutlineVisible) {
     drawSprite(e.outlineId, -e.pivot.x, -e.pivot.y);
   }
 }
 
 export function renderCombatLog(e: Entity) {
-  if (e.isLogEnabled) {
+  if (e.isLogEnabled && e.log.length) {
     const scene = getScene(e.sceneId);
 
     resetTransform();

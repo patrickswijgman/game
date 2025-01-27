@@ -1,6 +1,6 @@
 import { Entity, newEntity } from "@/data/entity.js";
 import { SceneId } from "@/enums/scene.js";
-import { Camera, camera, rect, Rectangle, table, Table } from "ridder";
+import { Camera, camera, grid, Grid, rect, Rectangle, table, Table } from "ridder";
 
 export type Scene = {
   id: SceneId;
@@ -16,10 +16,11 @@ export type Scene = {
   // World
   camera: Camera;
   bounds: Rectangle;
+  grid: Grid<number>;
   playerId: number;
 };
 
-export function newScene(id: SceneId, maxEntityCount: number): Scene {
+export function newScene(id: SceneId, maxEntityCount: number, gridWidth: number, gridHeight: number): Scene {
   return {
     id,
 
@@ -34,6 +35,7 @@ export function newScene(id: SceneId, maxEntityCount: number): Scene {
     // World
     camera: camera(),
     bounds: rect(),
+    grid: grid(gridWidth, gridHeight, () => 0),
     playerId: 0,
   };
 }

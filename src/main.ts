@@ -1,3 +1,4 @@
+import { LINE_HEIGHT } from "@/consts.js";
 import { game } from "@/data/game.js";
 import { updateAttack } from "@/entities/attack.js";
 import { updateEnemy } from "@/entities/enemy.js";
@@ -7,13 +8,13 @@ import { SceneId } from "@/enums/scene.js";
 import { Type } from "@/enums/type.js";
 import { renderWorldScene, setupWorldScene } from "@/scenes/world.js";
 import { loadAssets } from "@/usecases/assets.js";
-import { debugFps, debugHitboxes } from "@/usecases/debug.js";
+import { debugEntities, debugFps, debugGrid, debugHitboxes } from "@/usecases/debug.js";
 import { renderEnemyStatus } from "@/usecases/enemy.js";
 import { destroyEntity, renderCombatLog, renderEntity, updateCombatLog, updatePhysics } from "@/usecases/entity.js";
 import { getScene, switchScene, transitionToNextScene } from "@/usecases/game.js";
 import { renderHud } from "@/usecases/hud.js";
 import { cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth } from "@/usecases/scene.js";
-import { InputCode, isInputPressed, run, tickTimer, updateCamera } from "ridder";
+import { InputCode, isInputPressed, resetTransform, run, scaleTransform, tickTimer, translateTransform, updateCamera } from "ridder";
 
 let isDebugging = false;
 
@@ -105,8 +106,14 @@ run({
     }
 
     if (isDebugging) {
+      debugGrid(scene);
       debugHitboxes(scene);
+
+      resetTransform();
+      scaleTransform(0.5, 0.5);
       debugFps();
+      translateTransform(0, LINE_HEIGHT);
+      debugEntities(scene);
     }
   },
 });

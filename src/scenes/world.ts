@@ -1,3 +1,4 @@
+import { MAP_WORLD_HEIGHT, MAP_WORLD_WIDTH } from "@/consts.js";
 import { Scene } from "@/data/scene.js";
 import { TextureId } from "@/enums/assets.js";
 import { SceneId } from "@/enums/scene.js";
@@ -8,9 +9,9 @@ import { applyCameraTransform, copyRectangle, drawTexture, resetTransform, setRe
 export function setupWorldScene() {
   const scene = getScene(SceneId.WORLD);
 
-  const [width, height] = loadMapFloorTexture();
+  loadMapFloorTexture();
 
-  setRectangle(scene.bounds, 0, 0, width, height);
+  setRectangle(scene.bounds, 0, 0, MAP_WORLD_WIDTH, MAP_WORLD_HEIGHT);
 
   scene.camera.smoothing = 0.1;
   scene.camera.shakeReduction = 0.1;
