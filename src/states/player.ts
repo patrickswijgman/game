@@ -41,8 +41,11 @@ export function onPlayerStateUpdate(e: Entity) {
   }
 }
 
+export function onPlayerStateExit(e: Entity) {}
+
 function move(e: Entity) {
   resetVector(e.velocity);
+
   if (isInputDown(InputCode.KEY_LEFT)) {
     e.velocity.x -= 1;
     e.isFlipped = true;
@@ -57,12 +60,15 @@ function move(e: Entity) {
   if (isInputDown(InputCode.KEY_DOWN)) {
     e.velocity.y += 1;
   }
+
   const isMoving = !!getVectorLength(e.velocity);
+
   if (isMoving) {
     normalizeVector(e.velocity);
     copyVector(e.direction, e.velocity);
-    scaleVector(e.velocity, 1);
+    scaleVector(e.velocity, e.sheet.stats.movementSpeed);
   }
+
   return isMoving;
 }
 
@@ -74,5 +80,3 @@ function attack(e: Entity) {
 
   return false;
 }
-
-export function onPlayerStateExit(e: Entity) {}

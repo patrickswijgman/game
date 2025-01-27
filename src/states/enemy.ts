@@ -52,10 +52,12 @@ export function onEnemyStateUpdate(e: Entity) {
   }
 }
 
+export function onEnemyStateExit(e: Entity) {}
+
 function moveTowardsPlayer(e: Entity) {
   const scene = getScene(e.sceneId);
   const player = getEntity(scene, scene.playerId);
-  seek(e, player.position, 0.5);
+  seek(e, player.position, e.sheet.stats.movementSpeed);
 }
 
 function isPlayerWithinRange(e: Entity) {
@@ -100,5 +102,3 @@ function setupAttack(e: Entity) {
   normalizeVector(e.direction);
   e.attackId = e.sheet.weaponId;
 }
-
-export function onEnemyStateExit(e: Entity) {}

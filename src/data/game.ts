@@ -27,6 +27,7 @@ export function newGame(): Game {
       stats: {
         health: 10,
         healthMax: 10,
+        movementSpeed: 1,
         damage: 0,
       },
       weaponId: ItemId.LONGSWORD,
