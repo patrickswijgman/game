@@ -1,5 +1,6 @@
-import { COMBAT_LOG_DURATION, LINE_HEIGHT, SHADOW_ALPHA } from "@/consts.js";
 import { SpriteId } from "@/consts/assets.js";
+import { COMBAT_LOG_DURATION } from "@/consts/combat.js";
+import { LINE_HEIGHT, SHADOW_ALPHA } from "@/consts/render.js";
 import { SceneId } from "@/consts/scene.js";
 import { StateId } from "@/consts/state.js";
 import { Type } from "@/consts/type.js";

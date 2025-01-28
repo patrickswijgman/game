@@ -1,4 +1,4 @@
-import { COLOR_HEALTH } from "@/consts.js";
+import { COLOR_HEALTH } from "@/consts/colors.js";
 import { Entity } from "@/data/entity.js";
 import { drawBar } from "@/usecases/ui.js";
 import { resetTransform, translateTransform } from "ridder";

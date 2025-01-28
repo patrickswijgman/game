@@ -1,5 +1,5 @@
-import { MAP_WORLD_HEIGHT, MAP_WORLD_WIDTH } from "@/consts.js";
 import { TextureId } from "@/consts/assets.js";
+import { MAP_WORLD_HEIGHT, MAP_WORLD_WIDTH } from "@/consts/map.js";
 import { SceneId } from "@/consts/scene.js";
 import { Scene } from "@/data/scene.js";
 import { getScene } from "@/usecases/game.js";

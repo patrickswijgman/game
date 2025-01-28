@@ -1,4 +1,4 @@
-import { LINE_HEIGHT } from "@/consts.js";
+import { LINE_HEIGHT } from "@/consts/render.js";
 import { SceneId } from "@/consts/scene.js";
 import { Type } from "@/consts/type.js";
 import { game } from "@/data/game.js";

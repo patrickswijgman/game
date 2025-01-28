@@ -1,6 +1,6 @@
-import { MAP_HEIGHT, MAP_WIDTH, MAX_WORLD_ENTITIES } from "@/consts.js";
 import { ItemId } from "@/consts/item.js";
-import { SceneId } from "@/consts/scene.js";
+import { MAP_HEIGHT, MAP_WIDTH } from "@/consts/map.js";
+import { MAX_WORLD_ENTITIES, SceneId } from "@/consts/scene.js";
 import { newScene, Scene } from "@/data/scene.js";
 import { newSheet, Sheet } from "@/data/sheet.js";
 import { table, Table } from "ridder";

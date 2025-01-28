@@ -3,3 +3,5 @@ export const enum SceneId {
   WORLD,
   MAX,
 }
+
+export const MAX_WORLD_ENTITIES = 4096;

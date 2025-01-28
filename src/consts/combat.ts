@@ -1,0 +1,1 @@
+export const COMBAT_LOG_DURATION = 1000;

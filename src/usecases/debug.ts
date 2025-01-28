@@ -1,4 +1,4 @@
-import { TILE_SIZE } from "@/consts.js";
+import { TILE_SIZE } from "@/consts/map.js";
 import { Scene } from "@/data/scene.js";
 import { getEntity } from "@/usecases/scene.js";
 import { applyCameraTransform, drawLine, drawRect, drawRectInstance, drawText, getFramePerSecond, getGridHeight, getGridValue, getGridWidth, isRectangleValid, resetTransform } from "ridder";

@@ -1,4 +1,4 @@
-import { COLOR_HEALTH } from "@/consts.js";
+import { COLOR_HEALTH } from "@/consts/colors.js";
 import { Entity } from "@/data/entity.js";
 import { getScene } from "@/usecases/game.js";
 import { drawBar } from "@/usecases/ui.js";

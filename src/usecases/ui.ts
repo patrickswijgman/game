@@ -1,4 +1,4 @@
-import { COLOR_BG, COLOR_OUTLINE } from "@/consts.js";
+import { COLOR_BG, COLOR_OUTLINE } from "@/consts/colors.js";
 import { drawRect, drawText, TextAlign, TextBaseline } from "ridder";
 
 export function drawBar(x: number, y: number, value: number, max: number, color: string, width: number, height: number) {

@@ -7,6 +7,12 @@ export const enum TileId {
   PLAIN,
 }
 
+export const TILE_SIZE = 16;
+export const MAP_WIDTH = 64;
+export const MAP_HEIGHT = 64;
+export const MAP_WORLD_WIDTH = MAP_WIDTH * TILE_SIZE;
+export const MAP_WORLD_HEIGHT = MAP_HEIGHT * TILE_SIZE;
+
 export const COLOR_TO_TILE: Readonly<Record<string, TileId>> = {
   "#273d41": TileId.FOREST,
   "#4b7b5b": TileId.PLAIN,
