@@ -1,5 +1,5 @@
-import { ATTACKS } from "@/data/attacks.js";
+import { attacks } from "@/data/attacks.js";
 
 export function getAttack(id: number) {
-  return ATTACKS[id];
+  return attacks[id];
 }

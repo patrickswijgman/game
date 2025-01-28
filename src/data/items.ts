@@ -9,7 +9,7 @@ export type Item = {
   stats: Stats;
 };
 
-export const ITEMS = table<Item>(ItemId.MAX, (id) => {
+export const items = table<Item>(ItemId.MAX, (id) => {
   switch (id) {
     case ItemId.LONGSWORD:
       return {

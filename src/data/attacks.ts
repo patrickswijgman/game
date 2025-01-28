@@ -12,7 +12,7 @@ export type Attack = {
   recovery: number;
 };
 
-export const ATTACKS = table<Attack>(16, (id) => {
+export const attacks = table<Attack>(16, (id) => {
   switch (id) {
     case ItemId.LONGSWORD:
       return {
