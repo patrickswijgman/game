@@ -1,5 +1,5 @@
+import { SceneId } from "@/consts/scene.js";
 import { game } from "@/data/game.js";
-import { SceneId } from "@/enums/scene.js";
 
 export function switchScene(id: SceneId) {
   game.sceneNextId = id;

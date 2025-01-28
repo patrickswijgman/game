@@ -1,7 +1,7 @@
 import { MAP_WORLD_HEIGHT, MAP_WORLD_WIDTH } from "@/consts.js";
+import { TextureId } from "@/consts/assets.js";
+import { SceneId } from "@/consts/scene.js";
 import { Scene } from "@/data/scene.js";
-import { TextureId } from "@/enums/assets.js";
-import { SceneId } from "@/enums/scene.js";
 import { getScene } from "@/usecases/game.js";
 import { loadMapFloorTexture, populateMap } from "@/usecases/map.js";
 import { applyCameraTransform, copyRectangle, drawTexture, resetTransform, setRectangle } from "ridder";

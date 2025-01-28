@@ -1,5 +1,5 @@
+import { ItemId } from "@/consts/item.js";
 import { newStats, Stats } from "@/data/stats.js";
-import { ItemId } from "@/enums/item.js";
 
 export type Sheet = {
   name: string;

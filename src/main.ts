@@ -1,11 +1,11 @@
 import { LINE_HEIGHT } from "@/consts.js";
+import { SceneId } from "@/consts/scene.js";
+import { Type } from "@/consts/type.js";
 import { game } from "@/data/game.js";
 import { updateAttack } from "@/entities/attack.js";
 import { updateEnemy } from "@/entities/enemy.js";
 import { updatePlayer } from "@/entities/player.js";
 import { updateTree } from "@/entities/tree.js";
-import { SceneId } from "@/enums/scene.js";
-import { Type } from "@/enums/type.js";
 import { renderWorldScene, setupWorldScene } from "@/scenes/world.js";
 import { loadAssets } from "@/usecases/assets.js";
 import { debugEntities, debugFps, debugGrid, debugHitboxes } from "@/usecases/debug.js";

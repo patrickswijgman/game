@@ -1,8 +1,8 @@
 import { MAP_HEIGHT, MAP_WIDTH, MAX_WORLD_ENTITIES } from "@/consts.js";
+import { ItemId } from "@/consts/item.js";
+import { SceneId } from "@/consts/scene.js";
 import { newScene, Scene } from "@/data/scene.js";
 import { newSheet, Sheet } from "@/data/sheet.js";
-import { ItemId } from "@/enums/item.js";
-import { SceneId } from "@/enums/scene.js";
 import { table, Table } from "ridder";
 
 export type Game = {

@@ -1,5 +1,5 @@
+import { SceneId } from "@/consts/scene.js";
 import { Entity, newEntity } from "@/data/entity.js";
-import { SceneId } from "@/enums/scene.js";
 import { Camera, camera, grid, Grid, rect, Rectangle, table, Table } from "ridder";
 
 export type Scene = {

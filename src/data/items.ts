@@ -1,26 +1,30 @@
+import { SpriteId } from "@/consts/assets.js";
+import { ItemId } from "@/consts/item.js";
 import { newStats, Stats } from "@/data/stats.js";
-import { SpriteId } from "@/enums/assets.js";
-import { ItemId } from "@/enums/item.js";
+import { table } from "ridder";
 
 export type Item = {
   name: string;
-  stats: Stats;
   spriteId: SpriteId;
+  stats: Stats;
 };
 
-export const ITEMS: Readonly<Record<ItemId, Item>> = {
-  [ItemId.NONE]: {
-    name: "",
-    stats: newStats(),
-    spriteId: SpriteId.NONE,
-  },
+export const ITEMS = table<Item>(ItemId.MAX, (id) => {
+  switch (id) {
+    case ItemId.LONGSWORD:
+      return {
+        name: "Longsword",
+        spriteId: SpriteId.EQUIP_LONGSWORD,
+        stats: newStats({
+          damage: 3,
+        }),
+      };
 
-  [ItemId.LONGSWORD]: {
-    name: "Longsword",
-    spriteId: SpriteId.EQUIP_LONGSWORD,
-    stats: newStats({
-      damage: 3,
-      damageScaling: 1,
-    }),
-  },
-};
+    default:
+      return {
+        name: "",
+        spriteId: SpriteId.NONE,
+        stats: newStats(),
+      };
+  }
+});

@@ -1,7 +1,7 @@
+import { SceneId } from "@/consts/scene.js";
+import { StateId } from "@/consts/state.js";
+import { Type } from "@/consts/type.js";
 import { Entity } from "@/data/entity.js";
-import { SceneId } from "@/enums/scene.js";
-import { StateId } from "@/enums/state.js";
-import { Type } from "@/enums/type.js";
 import { getAttack } from "@/usecases/attack.js";
 import { addEntity, addToCombatLog, setHitbox, setSprite, setState } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";

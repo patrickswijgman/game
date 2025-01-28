@@ -1,9 +1,9 @@
+import { SpriteId } from "@/consts/assets.js";
+import { SceneId } from "@/consts/scene.js";
+import { StateId } from "@/consts/state.js";
+import { Type } from "@/consts/type.js";
 import { Entity } from "@/data/entity.js";
 import { game } from "@/data/game.js";
-import { SpriteId } from "@/enums/assets.js";
-import { SceneId } from "@/enums/scene.js";
-import { StateId } from "@/enums/state.js";
-import { Type } from "@/enums/type.js";
 import { onPlayerStateEnter, onPlayerStateExit, onPlayerStateUpdate } from "@/states/player.js";
 import { addEntity, setCenter, setFlash, setHitbox, setShadow, setSprite, setState, updateState } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";

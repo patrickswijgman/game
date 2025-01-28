@@ -1,5 +1,5 @@
 import { FONT_SIZE } from "@/consts.js";
-import { FontId, SpriteId, TextureId } from "@/enums/assets.js";
+import { FontId, SpriteId, TextureId } from "@/consts/assets.js";
 import { loadFlashTexture, loadFont, loadOutlineTexture, loadSprite, loadTexture, setFont } from "ridder";
 
 export async function loadAssets() {

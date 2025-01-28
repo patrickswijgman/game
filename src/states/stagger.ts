@@ -1,5 +1,5 @@
+import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
-import { StateId } from "@/enums/state.js";
 import { setState } from "@/usecases/entity.js";
 import { tickTimer, tween } from "ridder";
 

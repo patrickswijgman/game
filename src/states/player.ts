@@ -1,7 +1,7 @@
 import { updateBreathAnimation } from "@/anims/breath.js";
 import { updateWalkAnimation } from "@/anims/walk.js";
+import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
-import { StateId } from "@/enums/state.js";
 import { setState } from "@/usecases/entity.js";
 import { InputCode, copyVector, getVectorLength, isInputDown, normalizeVector, resetVector, scaleVector } from "ridder";
 
