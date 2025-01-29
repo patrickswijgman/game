@@ -167,6 +167,11 @@ export function renderEntity(e: Entity) {
       drawSprite(e.spriteId, -e.pivot.x, -e.pivot.y);
     }
 
+    if (e.sheet.armorId) {
+      const item = getItem(e.sheet.armorId);
+      drawSprite(item.spriteId, -e.pivot.x, -e.pivot.y);
+    }
+
     if (e.sheet.weaponId) {
       const item = getItem(e.sheet.weaponId);
       drawSprite(item.spriteId, -e.pivot.x, -e.pivot.y);

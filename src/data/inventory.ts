@@ -1,29 +1,33 @@
 import { ItemId } from "@/consts/item.js";
 import { table, Table } from "ridder";
 
-export type InventoryItem = {
-  id: ItemId;
+export type InventorySlot = {
+  id: number;
+  itemId: ItemId;
   amount: number;
-  level: number;
 };
 
-function newInventoryItem(): InventoryItem {
+function newInventorySlot(id: number): InventorySlot {
   return {
-    id: ItemId.NONE,
+    id,
+    itemId: ItemId.NONE,
     amount: 0,
-    level: 0,
   };
 }
 
 export type Inventory = {
-  all: Table<InventoryItem>;
+  all: Table<InventorySlot>;
+
+  // Filters
   weapons: Array<number>;
   armors: Array<number>;
 };
 
 export function newInventory(): Inventory {
   return {
-    all: table(99, newInventoryItem),
+    all: table(99, newInventorySlot),
+
+    // Filters
     weapons: [],
     armors: [],
   };

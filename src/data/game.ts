@@ -1,5 +1,6 @@
 import { MAP_HEIGHT, MAP_WIDTH } from "@/consts/map.js";
 import { MAX_WORLD_ENTITIES, SceneId } from "@/consts/scene.js";
+import { Equipment, newEquipment } from "@/data/equipment.js";
 import { Inventory, newInventory } from "@/data/inventory.js";
 import { newScene, Scene } from "@/data/scene.js";
 import { newSheet, Sheet } from "@/data/sheet.js";
@@ -14,6 +15,7 @@ export type Game = {
   // Player
   sheet: Sheet;
   inventory: Inventory;
+  equipment: Equipment;
 };
 
 export function newGame(): Game {
@@ -26,6 +28,7 @@ export function newGame(): Game {
     // Player
     sheet: newSheet(),
     inventory: newInventory(),
+    equipment: newEquipment(),
   };
 }
 

@@ -3,3 +3,9 @@ export const enum ItemId {
   LONGSWORD,
   MAX,
 }
+
+export const enum ItemType {
+  NONE,
+  WEAPON,
+  ARMOR,
+}
