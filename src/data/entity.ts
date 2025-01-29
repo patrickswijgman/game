@@ -1,4 +1,5 @@
 import { SpriteId } from "@/consts/assets.js";
+import { AttackId } from "@/consts/attack.js";
 import { SceneId } from "@/consts/scene.js";
 import { StateId } from "@/consts/state.js";
 import { Type } from "@/consts/type.js";
@@ -66,7 +67,7 @@ export type Entity = {
   hitbox: Rectangle;
   hitboxOffset: Vector;
   sheet: Sheet;
-  attackId: number;
+  attackId: AttackId;
   isPlayer: boolean;
   isEnemy: boolean;
 
@@ -142,7 +143,7 @@ export function newEntity(): Entity {
     hitbox: rect(),
     hitboxOffset: vec(),
     sheet: newSheet(),
-    attackId: 0,
+    attackId: AttackId.NONE,
     isPlayer: false,
     isEnemy: false,
 

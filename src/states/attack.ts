@@ -3,6 +3,7 @@ import { Entity } from "@/data/entity.js";
 import { addAttack } from "@/entities/attack.js";
 import { getAttack } from "@/usecases/attack.js";
 import { setState } from "@/usecases/entity.js";
+import { getItem } from "@/usecases/item.js";
 import { tickTimer, tween } from "ridder";
 
 export function onAttackEnter(e: Entity) {
@@ -10,7 +11,8 @@ export function onAttackEnter(e: Entity) {
 }
 
 export function onAttackUpdate(e: Entity) {
-  const attack = getAttack(e.sheet.weaponId);
+  const weapon = getItem(e.sheet.weaponId);
+  const attack = getAttack(weapon.attackId);
   const duration = attack.recovery;
 
   tickTimer(e.tweenTimer, duration);

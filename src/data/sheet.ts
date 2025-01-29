@@ -16,12 +16,12 @@ export type SheetOptions = {
   armorId: ItemId;
 };
 
-export function newSheet({ name = "", stats = {}, weaponId = ItemId.NONE, armorId = ItemId.NONE }: Partial<SheetOptions> = {}): Sheet {
+export function newSheet(): Sheet {
   return {
-    name,
+    name: "",
     stats: newStats(),
-    statsBase: newStats(stats),
-    weaponId,
-    armorId,
+    statsBase: newStats(),
+    weaponId: ItemId.NONE,
+    armorId: ItemId.NONE,
   };
 }

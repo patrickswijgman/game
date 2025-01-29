@@ -1,6 +1,6 @@
 import { SpriteId } from "@/consts/assets.js";
 import { COMBAT_LOG_DURATION } from "@/consts/combat.js";
-import { LINE_HEIGHT, SHADOW_ALPHA } from "@/consts/render.js";
+import { FONT_HEIGHT, SHADOW_ALPHA } from "@/consts/render.js";
 import { SceneId } from "@/consts/scene.js";
 import { StateId } from "@/consts/state.js";
 import { Type } from "@/consts/type.js";
@@ -191,7 +191,7 @@ export function renderCombatLog(e: Entity) {
     for (const log of e.log) {
       const color = log.startsWith("+") ? "lime" : e.isPlayer ? "red" : "white";
       drawTextOutlined(log, 0, 0, color, "center");
-      translateTransform(0, -LINE_HEIGHT);
+      translateTransform(0, -FONT_HEIGHT);
     }
 
     setAlpha(1);

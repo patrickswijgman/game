@@ -3,6 +3,7 @@ import { updateWalkAnimation } from "@/anims/walk.js";
 import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
 import { setState } from "@/usecases/entity.js";
+import { getItem } from "@/usecases/item.js";
 import { InputCode, copyVector, getVectorLength, isInputDown, normalizeVector, resetVector, scaleVector } from "ridder";
 
 export function onPlayerStateEnter(e: Entity) {
@@ -74,7 +75,8 @@ function move(e: Entity) {
 
 function attack(e: Entity) {
   if (isInputDown(InputCode.KEY_Z)) {
-    e.attackId = e.sheet.weaponId;
+    const weapon = getItem(e.sheet.weaponId);
+    e.attackId = weapon.attackId;
     return true;
   }
 

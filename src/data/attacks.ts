@@ -1,5 +1,5 @@
 import { SpriteId } from "@/consts/assets.js";
-import { ItemId } from "@/consts/item.js";
+import { AttackId } from "@/consts/attack.js";
 import { rect, Rectangle, table } from "ridder";
 
 export type Attack = {
@@ -12,9 +12,9 @@ export type Attack = {
   recovery: number;
 };
 
-export const attacks = table<Attack>(16, (id) => {
+export const attacks = table<Attack>(AttackId.MAX, (id) => {
   switch (id) {
-    case ItemId.LONGSWORD:
+    case AttackId.LONGSWORD:
       return {
         spriteId: SpriteId.ATTACK_LONGSWORD,
         hitbox: rect(-4, -4, 8, 8),

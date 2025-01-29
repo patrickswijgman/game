@@ -5,6 +5,7 @@ import { Entity } from "@/data/entity.js";
 import { getAttack } from "@/usecases/attack.js";
 import { setState } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";
+import { getItem } from "@/usecases/item.js";
 import { getEntity } from "@/usecases/scene.js";
 import { seek } from "@/usecases/steering.js";
 import { copyVector, getVectorDistance, normalizeVector, subtractVector, tickTimer } from "ridder";
@@ -76,10 +77,11 @@ function isPlayerInAttackRange(e: Entity) {
 
   if (player.sheet.stats.health) {
     const distance = getVectorDistance(e.position, player.position);
-    const attack = getAttack(e.sheet.weaponId);
+    const weapon = getItem(e.sheet.weaponId);
+    const attack = getAttack(weapon.attackId);
 
     if (attack && distance < attack.range) {
-      e.attackId = e.sheet.weaponId;
+      e.attackId = weapon.attackId;
       return true;
     }
   }

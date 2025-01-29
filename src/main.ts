@@ -1,4 +1,4 @@
-import { LINE_HEIGHT } from "@/consts/render.js";
+import { FONT_HEIGHT } from "@/consts/render.js";
 import { SceneId } from "@/consts/scene.js";
 import { Type } from "@/consts/type.js";
 import { game } from "@/data/game.js";
@@ -11,7 +11,7 @@ import { loadAssets } from "@/usecases/assets.js";
 import { debugEntities, debugFps, debugGrid, debugHitboxes } from "@/usecases/debug.js";
 import { renderEnemyStatus } from "@/usecases/enemy.js";
 import { destroyEntity, renderCombatLog, renderEntity, updateCombatLog, updatePhysics } from "@/usecases/entity.js";
-import { getScene, switchScene, transitionToNextScene } from "@/usecases/game.js";
+import { getScene, setupPlayer, switchScene, transitionToNextScene } from "@/usecases/game.js";
 import { renderHud } from "@/usecases/hud.js";
 import { cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth } from "@/usecases/scene.js";
 import { InputCode, isInputPressed, resetTransform, run, scaleTransform, tickTimer, translateTransform, updateCamera } from "ridder";
@@ -24,6 +24,8 @@ run({
 
   setup: async () => {
     await loadAssets();
+
+    setupPlayer();
 
     setupWorldScene();
 
@@ -112,7 +114,7 @@ run({
       resetTransform();
       scaleTransform(0.5, 0.5);
       debugFps();
-      translateTransform(0, LINE_HEIGHT);
+      translateTransform(0, FONT_HEIGHT);
       debugEntities(scene);
     }
   },
