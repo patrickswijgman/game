@@ -7,7 +7,6 @@ import { game } from "@/data/game.js";
 import { onPlayerStateEnter, onPlayerStateExit, onPlayerStateUpdate } from "@/states/player.js";
 import { addEntity, setCenter, setFlash, setHitbox, setShadow, setSprite, setState, updateState } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";
-import { initSheet } from "@/usecases/sheet.js";
 import { setCameraPosition, setVector } from "ridder";
 
 export function addPlayer(sceneId: SceneId, x: number, y: number) {
@@ -20,7 +19,6 @@ export function addPlayer(sceneId: SceneId, x: number, y: number) {
   setVector(e.direction, 1, 0);
 
   e.sheet = game.sheet;
-  initSheet(e.sheet);
 
   e.isPlayer = true;
   e.isPhysicsEnabled = true;

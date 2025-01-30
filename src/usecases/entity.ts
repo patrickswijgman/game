@@ -1,5 +1,5 @@
 import { SpriteId } from "@/consts/assets.js";
-import { COMBAT_LOG_DURATION } from "@/consts/combat.js";
+import { COMBAT_LOG_DURATION } from "@/consts/entity.js";
 import { FONT_HEIGHT, SHADOW_ALPHA } from "@/consts/render.js";
 import { SceneId } from "@/consts/scene.js";
 import { StateId } from "@/consts/state.js";
@@ -169,12 +169,12 @@ export function renderEntity(e: Entity) {
 
     if (e.sheet.armorId) {
       const item = getItem(e.sheet.armorId);
-      drawSprite(item.spriteId, -e.pivot.x, -e.pivot.y);
+      drawSprite(item.equipSpriteId, -e.pivot.x, -e.pivot.y);
     }
 
     if (e.sheet.weaponId) {
       const item = getItem(e.sheet.weaponId);
-      drawSprite(item.spriteId, -e.pivot.x, -e.pivot.y);
+      drawSprite(item.equipSpriteId, -e.pivot.x, -e.pivot.y);
     }
   }
 

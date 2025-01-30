@@ -7,9 +7,11 @@ import { table } from "ridder";
 export type Item = {
   name: string;
   type: ItemType;
-  spriteId: SpriteId;
+  itemSpriteId: SpriteId;
+  equipSpriteId: SpriteId;
   attackId: AttackId;
   stats: Stats;
+  isStackable: boolean;
 };
 
 export const items = table<Item>(ItemId.MAX, (id) => {
@@ -18,20 +20,24 @@ export const items = table<Item>(ItemId.MAX, (id) => {
       return {
         name: "Longsword",
         type: ItemType.WEAPON,
-        spriteId: SpriteId.EQUIP_LONGSWORD,
+        itemSpriteId: SpriteId.ITEM_LONGSWORD,
+        equipSpriteId: SpriteId.EQUIP_LONGSWORD,
         attackId: AttackId.LONGSWORD,
         stats: newStats({
           damage: 3,
         }),
+        isStackable: false,
       };
 
     default:
       return {
         name: "",
         type: ItemType.NONE,
-        spriteId: SpriteId.NONE,
+        itemSpriteId: SpriteId.NONE,
+        equipSpriteId: SpriteId.NONE,
         attackId: AttackId.NONE,
         stats: newStats(),
+        isStackable: false,
       };
   }
 });

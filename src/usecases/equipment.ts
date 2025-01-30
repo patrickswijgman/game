@@ -1,7 +1,10 @@
+import { SpriteId } from "@/consts/assets.js";
 import { ItemType } from "@/consts/item.js";
 import { game } from "@/data/game.js";
-import { getInventorySlot } from "@/usecases/inventory.js";
 import { getItem } from "@/usecases/item.js";
+import { updateSheet } from "@/usecases/sheet.js";
+import { drawTextOutlined } from "@/usecases/ui.js";
+import { drawSprite, getHeight, getWidth, resetTransform, scaleTransform, translateTransform } from "ridder";
 
 export function getEquipmentSlot(id: number) {
   return game.equipment.slots[id];
@@ -19,12 +22,11 @@ export function unlockEquipmentSlot() {
   }
 }
 
-export function assignEquipmentSlot(id: number, inventoryId: number) {
+export function assignEquipmentSlot(id: number, itemId: number) {
   const slot = getEquipmentSlot(id);
-  const item = getInventorySlot(inventoryId);
 
   if (slot.isUnlocked) {
-    slot.itemId = item.itemId;
+    slot.itemId = itemId;
   }
 }
 
@@ -36,10 +38,16 @@ export function useEquipmentSlot(id: number) {
 
     switch (item.type) {
       case ItemType.WEAPON:
-        game.sheet.weaponId = slot.itemId;
+        {
+          game.sheet.weaponId = slot.itemId;
+          updateSheet(game.sheet);
+        }
         break;
       case ItemType.ARMOR:
-        game.sheet.armorId = slot.itemId;
+        {
+          game.sheet.armorId = slot.itemId;
+          updateSheet(game.sheet);
+        }
         break;
     }
   }
@@ -60,4 +68,30 @@ export function isEquipmentSlotActive(id: number) {
   }
 
   return false;
+}
+
+export function renderEquipmentSlots() {
+  const count = countUnlockedEquipmentSlots();
+
+  resetTransform();
+  translateTransform(getWidth() / 2 - (18 * count) / 2, getHeight() - 25);
+
+  for (let i = 0; i < count; i++) {
+    const slot = getEquipmentSlot(i);
+
+    drawSprite(SpriteId.SLOT, i * 18, 0);
+
+    if (slot.itemId) {
+      const item = getItem(slot.itemId);
+      drawSprite(item.itemSpriteId, i * 18, 0);
+
+      if (isEquipmentSlotActive(i)) {
+        drawSprite(SpriteId.SLOT_ACTIVE, i * 18, 0);
+      }
+    }
+
+    scaleTransform(0.5, 0.5);
+    drawTextOutlined((i + 1).toString(), i * 36 + 16, 36, "white", "center");
+    scaleTransform(2, 2);
+  }
 }

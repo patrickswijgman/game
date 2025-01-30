@@ -3,6 +3,7 @@ import { SceneId } from "@/consts/scene.js";
 import { game } from "@/data/game.js";
 import { assignEquipmentSlot, unlockEquipmentSlot, useEquipmentSlot } from "@/usecases/equipment.js";
 import { addItemToInventory } from "@/usecases/inventory.js";
+import { initSheet } from "@/usecases/sheet.js";
 
 export function switchScene(id: SceneId) {
   game.sceneNextId = id;
@@ -18,16 +19,16 @@ export function getScene(id: SceneId) {
 
 export function setupPlayer() {
   game.sheet.name = "Player";
-
   game.sheet.statsBase.health = 10;
   game.sheet.statsBase.healthMax = 10;
   game.sheet.statsBase.movementSpeed = 0.75;
   game.sheet.statsBase.damage = 0;
+  initSheet(game.sheet);
 
-  const weaponInventoryId = addItemToInventory(ItemId.LONGSWORD);
+  addItemToInventory(ItemId.LONGSWORD);
 
   unlockEquipmentSlot();
   unlockEquipmentSlot();
-  assignEquipmentSlot(0, weaponInventoryId);
+  assignEquipmentSlot(0, ItemId.LONGSWORD);
   useEquipmentSlot(0);
 }

@@ -11,6 +11,7 @@ import { loadAssets } from "@/usecases/assets.js";
 import { debugEntities, debugFps, debugGrid, debugHitboxes } from "@/usecases/debug.js";
 import { renderEnemyStatus } from "@/usecases/enemy.js";
 import { destroyEntity, renderCombatLog, renderEntity, updateCombatLog, updatePhysics } from "@/usecases/entity.js";
+import { renderEquipmentSlots } from "@/usecases/equipment.js";
 import { getScene, setupPlayer, switchScene, transitionToNextScene } from "@/usecases/game.js";
 import { renderHud } from "@/usecases/hud.js";
 import { cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth } from "@/usecases/scene.js";
@@ -103,8 +104,9 @@ run({
     }
 
     const player = getEntity(scene, scene.playerId);
-    if (player) {
-      renderHud(player);
+    if (player.isPlayer) {
+      renderHud();
+      renderEquipmentSlots();
     }
 
     if (isDebugging) {

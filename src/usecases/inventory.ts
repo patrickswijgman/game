@@ -1,27 +1,18 @@
 import { ItemId } from "@/consts/item.js";
 import { game } from "@/data/game.js";
-import { InventorySlot } from "@/data/inventory.js";
+import { getItem } from "@/usecases/item.js";
 
-export function getInventorySlot(id: number) {
-  return game.inventory.all[id];
+export function getInventorySlot(id: ItemId) {
+  return game.inventory.slots[id];
 }
 
 export function addItemToInventory(itemId: ItemId, amount = 1) {
-  let slot: InventorySlot;
+  const item = getItem(itemId);
+  const slot = getInventorySlot(itemId);
 
-  slot = game.inventory.all.find((slot) => slot.itemId === itemId);
-  if (slot) {
-    slot.itemId = itemId;
+  if (item.isStackable) {
     slot.amount += amount;
-    return slot.id;
+  } else {
+    slot.amount = 1;
   }
-
-  slot = game.inventory.all.find((slot) => slot.itemId === ItemId.NONE);
-  if (slot) {
-    slot.itemId = itemId;
-    slot.amount = amount;
-    return slot.id;
-  }
-
-  return -1;
 }

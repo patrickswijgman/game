@@ -8,6 +8,7 @@ export const enum TileId {
 }
 
 export const TILE_SIZE = 16;
+
 export const MAP_WIDTH = 64;
 export const MAP_HEIGHT = 64;
 export const MAP_WORLD_WIDTH = MAP_WIDTH * TILE_SIZE;

@@ -3,8 +3,9 @@ import { updateWalkAnimation } from "@/anims/walk.js";
 import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
 import { setState } from "@/usecases/entity.js";
+import { useEquipmentSlot } from "@/usecases/equipment.js";
 import { getItem } from "@/usecases/item.js";
-import { InputCode, copyVector, getVectorLength, isInputDown, normalizeVector, resetVector, scaleVector } from "ridder";
+import { InputCode, copyVector, getVectorLength, isInputDown, isInputPressed, normalizeVector, resetVector, scaleVector } from "ridder";
 
 export function onPlayerStateEnter(e: Entity) {
   switch (e.stateId) {
@@ -19,6 +20,7 @@ export function onPlayerStateUpdate(e: Entity) {
     case StateId.PLAYER_IDLE:
       {
         updateBreathAnimation(e);
+        useEquipment(e);
         if (move(e)) {
           setState(e, StateId.PLAYER_WALK);
         }
@@ -31,6 +33,7 @@ export function onPlayerStateUpdate(e: Entity) {
     case StateId.PLAYER_WALK:
       {
         updateWalkAnimation(e);
+        useEquipment(e);
         if (!move(e)) {
           setState(e, StateId.PLAYER_IDLE);
         }
@@ -81,4 +84,23 @@ function attack(e: Entity) {
   }
 
   return false;
+}
+
+function useEquipment(e: Entity) {
+  useEquipmentOnInput(0, InputCode.KEY_1);
+  useEquipmentOnInput(1, InputCode.KEY_2);
+  useEquipmentOnInput(2, InputCode.KEY_3);
+  useEquipmentOnInput(3, InputCode.KEY_4);
+  useEquipmentOnInput(4, InputCode.KEY_5);
+  useEquipmentOnInput(5, InputCode.KEY_6);
+  useEquipmentOnInput(6, InputCode.KEY_7);
+  useEquipmentOnInput(7, InputCode.KEY_8);
+  useEquipmentOnInput(8, InputCode.KEY_9);
+  useEquipmentOnInput(9, InputCode.KEY_0);
+}
+
+function useEquipmentOnInput(id: number, key: InputCode) {
+  if (isInputPressed(key)) {
+    useEquipmentSlot(id);
+  }
 }

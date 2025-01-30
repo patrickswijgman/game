@@ -2,14 +2,12 @@ import { ItemId } from "@/consts/item.js";
 import { table, Table } from "ridder";
 
 export type EquipmentSlot = {
-  id: number;
   itemId: ItemId;
   isUnlocked: boolean;
 };
 
-function newEquipmentSlot(id: number): EquipmentSlot {
+function newEquipmentSlot(): EquipmentSlot {
   return {
-    id,
     itemId: ItemId.NONE,
     isUnlocked: false,
   };
