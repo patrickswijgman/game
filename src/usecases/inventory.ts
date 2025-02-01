@@ -2,10 +2,10 @@ import { SpriteId } from "@/consts/assets.js";
 import { COLOR_OUTLINE, COLOR_SURFACE } from "@/consts/colors.js";
 import { INVENTORY_HEIGHT, INVENTORY_SIZE, INVENTORY_WIDTH } from "@/consts/inventory.js";
 import { ItemId } from "@/consts/item.js";
+import { PLAYER_MOVEMENT_SPEED } from "@/consts/player.js";
 import { FONT_HEIGHT, SLOT_SIZE } from "@/consts/render.js";
 import { game } from "@/data/game.js";
 import { Scene } from "@/data/scene.js";
-import { Stats } from "@/data/stats.js";
 import { getEquipmentSlotId, isEquipmentAssigned } from "@/usecases/equipment.js";
 import { getItem } from "@/usecases/item.js";
 import { drawTextOutlined } from "@/usecases/ui.js";
@@ -112,18 +112,23 @@ export function renderTooltip(scene: Scene) {
     translateTransform(0, 45);
     translateTransform(-40, 0);
     scaleTransform(0.5, 0.5);
-    renderStat(item.stats, "Health", "healthMax");
-    renderStat(item.stats, "Damage", "damage");
-    renderStat(item.stats, "Armor", "armor");
-    renderStat(item.stats, "Movement Speed", "movementSpeed");
+    renderStat("Health", item.stats.healthMax);
+    renderStat("Mana", item.stats.manaMax);
+    renderStat("Damage", item.stats.damage);
+    renderStat("Armor", item.stats.armor);
+    renderStat("Movement Speed", item.stats.movementSpeed, PLAYER_MOVEMENT_SPEED);
+    renderStat("Mana Cost", item.stats.manaCost);
   }
 }
 
-function renderStat(stats: Stats, label: string, key: keyof Stats) {
-  const value = stats[key];
+function renderStat(label: string, value: number, max = Infinity) {
   if (value) {
     drawText(label, 0, 0, "white");
-    drawText(value.toString(), 160, 0, "white", "right");
+    if (max !== Infinity) {
+      drawText(`${max / value}%`, 160, 0, "white", "right");
+    } else {
+      drawText(value.toString(), 160, 0, "white", "right");
+    }
     drawLine(0, FONT_HEIGHT, 160, FONT_HEIGHT + 1, COLOR_OUTLINE);
     translateTransform(0, FONT_HEIGHT + 5);
   }
