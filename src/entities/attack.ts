@@ -6,7 +6,7 @@ import { getAttack } from "@/usecases/attack.js";
 import { addEntity, addToCombatLog, destroyEntity, setHitbox, setSprite, setState } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";
 import { getEntity } from "@/usecases/scene.js";
-import { clampStats } from "@/usecases/stats.js";
+import { clampStats, copyStats } from "@/usecases/stats.js";
 import { addVector, copyVector, doRectanglesIntersect, getAngle, getVectorDistance, scaleVector } from "ridder";
 
 export function addAttack(sceneId: SceneId, caster: Entity) {
@@ -20,8 +20,10 @@ export function addAttack(sceneId: SceneId, caster: Entity) {
 
   copyVector(e.direction, caster.direction);
 
-  setSprite(e, attack.spriteId, 8, 8);
+  setSprite(e, attack.spriteId, attack.pivot.x, attack.pivot.y);
   setHitbox(e, attack.hitbox.x, attack.hitbox.y, attack.hitbox.w, attack.hitbox.h);
+
+  copyStats(e.sheet.stats, caster.sheet.stats);
 
   e.angle = getAngle(caster.center.x, caster.center.y, e.position.x, e.position.y);
   e.depth = attack.reach;
@@ -48,7 +50,7 @@ export function updateAttack(e: Entity) {
     const target = getEntity(scene, id);
 
     if (doRectanglesIntersect(e.hitbox, target.hitbox)) {
-      const damage = caster.sheet.stats.damage;
+      const damage = e.sheet.stats.damage;
       const armor = target.sheet.stats.armor;
       const actual = Math.max(1, damage - armor);
 

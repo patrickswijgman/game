@@ -10,7 +10,7 @@ export function drawBar(x: number, y: number, value: number, max: number, color:
   }
 }
 
-export function drawTextOutlined(text: string, x: number, y: number, color: string, align: TextAlign = "left", baseline: TextBaseline = "top") {
+export function drawTextOutlined(text: string, x: number, y: number, color = "white", align: TextAlign = "left", baseline: TextBaseline = "top") {
   drawText(text, x, y - 1, COLOR_OUTLINE, align, baseline);
   drawText(text, x + 1, y, COLOR_OUTLINE, align, baseline);
   drawText(text, x, y + 1, COLOR_OUTLINE, align, baseline);

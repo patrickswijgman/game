@@ -1,14 +1,15 @@
 import { SpriteId } from "@/consts/assets.js";
-import { COLOR_OUTLINE } from "@/consts/colors.js";
+import { COLOR_OUTLINE, COLOR_SURFACE } from "@/consts/colors.js";
 import { INVENTORY_HEIGHT, INVENTORY_SIZE, INVENTORY_WIDTH } from "@/consts/inventory.js";
 import { ItemId } from "@/consts/item.js";
-import { FONT_HEIGHT } from "@/consts/render.js";
+import { FONT_HEIGHT, SLOT_SIZE } from "@/consts/render.js";
 import { game } from "@/data/game.js";
 import { Scene } from "@/data/scene.js";
 import { Stats } from "@/data/stats.js";
+import { getEquipmentSlotId, isEquipmentAssigned } from "@/usecases/equipment.js";
 import { getItem } from "@/usecases/item.js";
 import { drawTextOutlined } from "@/usecases/ui.js";
-import { drawLine, drawRect, drawSprite, drawText, getWidth, resetTransform, scaleTransform, setAlpha, translateTransform } from "ridder";
+import { clamp, drawLine, drawRect, drawSprite, drawText, getWidth, InputCode, isInputPressed, resetTransform, scaleTransform, translateTransform } from "ridder";
 
 export function getInventorySlot(id: ItemId) {
   return game.inventory.slots[id];
@@ -25,10 +26,25 @@ export function addItemToInventory(itemId: ItemId, amount = 1) {
   }
 }
 
-export function renderInventory(scene: Scene) {
-  resetTransform();
-  translateTransform(20, 30);
+export function updateInventorySelect(scene: Scene) {
+  if (isInputPressed(InputCode.KEY_LEFT)) {
+    scene.selected.x -= 1;
+  }
+  if (isInputPressed(InputCode.KEY_RIGHT)) {
+    scene.selected.x += 1;
+  }
+  if (isInputPressed(InputCode.KEY_UP)) {
+    scene.selected.y -= 1;
+  }
+  if (isInputPressed(InputCode.KEY_DOWN)) {
+    scene.selected.y += 1;
+  }
 
+  scene.selected.x = clamp(scene.selected.x, 0, INVENTORY_WIDTH - 1);
+  scene.selected.y = clamp(scene.selected.y, 0, INVENTORY_HEIGHT - 1);
+}
+
+export function renderInventory(scene: Scene) {
   for (let i = 0; i < INVENTORY_SIZE; i++) {
     const x = i % INVENTORY_WIDTH;
     const y = Math.floor(i / INVENTORY_WIDTH);
@@ -36,34 +52,55 @@ export function renderInventory(scene: Scene) {
     const item = getItem(id);
     const slot = getInventorySlot(id);
 
-    drawSprite(SpriteId.SLOT, x * 18, y * 18);
+    resetTransform();
+    translateTransform(20, 30);
+    translateTransform(x * SLOT_SIZE, y * SLOT_SIZE);
+
+    if (isEquipmentAssigned(id)) {
+      drawSprite(SpriteId.SLOT, 0, 0);
+    } else {
+      drawSprite(SpriteId.SLOT_INVENTORY, 0, 0);
+    }
 
     if (slot && slot.amount > 0) {
-      drawSprite(item.itemSpriteId, x * 18, y * 18);
+      drawSprite(item.itemSpriteId, 0, 0);
 
       if (slot.amount > 1) {
-        drawTextOutlined(slot.amount.toString(), x * 18 - 2, y * 18 - 2, "white", "right", "bottom");
+        scaleTransform(0.5, 0.5);
+        drawTextOutlined(`x${slot.amount}`, (SLOT_SIZE - 4) * 2, (SLOT_SIZE - 4) * 2, "white", "right", "bottom");
+        scaleTransform(2, 2);
+      }
+
+      const slotId = getEquipmentSlotId(id);
+      if (slotId !== -1) {
+        scaleTransform(0.5, 0.5);
+        drawTextOutlined((slotId + 1).toString(), 2, 2);
+        scaleTransform(2, 2);
       }
     }
   }
 
-  drawSprite(SpriteId.SLOT_SELECT, scene.selected.x * 18 - 1, scene.selected.y * 18 - 1);
+  resetTransform();
+  translateTransform(20, 30);
+  drawSprite(SpriteId.SLOT_SELECT, scene.selected.x * SLOT_SIZE - 1, scene.selected.y * SLOT_SIZE - 1);
+}
+
+export function getSelectedSlotId(scene: Scene) {
+  return 1 + scene.selected.x + scene.selected.y * INVENTORY_WIDTH;
 }
 
 export function renderTooltip(scene: Scene) {
   resetTransform();
-  translateTransform(getWidth() - 140, 30);
+  translateTransform(getWidth() - 150, 30);
 
-  const id = 1 + scene.selected.x + scene.selected.y * INVENTORY_WIDTH;
+  const id = getSelectedSlotId(scene);
   const slot = getInventorySlot(id);
   const item = getItem(id);
 
   if (slot && slot.amount > 0) {
-    setAlpha(0.25);
-    drawRect(0, 0, 120, INVENTORY_HEIGHT * 18, "black", true);
-    setAlpha(1);
+    drawRect(0, 0, 100, INVENTORY_HEIGHT * SLOT_SIZE - 2, COLOR_SURFACE, true);
 
-    translateTransform(60, 10);
+    translateTransform(50, 10);
     scaleTransform(0.625, 0.625);
     drawText(item.name, 0, 0, "white", "center");
     scaleTransform(1.6, 1.6);
@@ -73,11 +110,12 @@ export function renderTooltip(scene: Scene) {
     scaleTransform(0.5, 0.5);
 
     translateTransform(0, 45);
-    translateTransform(-30, 0);
+    translateTransform(-40, 0);
     scaleTransform(0.5, 0.5);
     renderStat(item.stats, "Health", "healthMax");
     renderStat(item.stats, "Damage", "damage");
     renderStat(item.stats, "Armor", "armor");
+    renderStat(item.stats, "Movement Speed", "movementSpeed");
   }
 }
 
@@ -85,8 +123,8 @@ function renderStat(stats: Stats, label: string, key: keyof Stats) {
   const value = stats[key];
   if (value) {
     drawText(label, 0, 0, "white");
-    drawText(value.toString(), 120, 0, "white", "right");
-    drawLine(0, FONT_HEIGHT, 120, FONT_HEIGHT + 1, COLOR_OUTLINE);
-    translateTransform(0, FONT_HEIGHT + 1);
+    drawText(value.toString(), 160, 0, "white", "right");
+    drawLine(0, FONT_HEIGHT, 160, FONT_HEIGHT + 1, COLOR_OUTLINE);
+    translateTransform(0, FONT_HEIGHT + 5);
   }
 }

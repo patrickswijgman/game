@@ -28,8 +28,22 @@ export function assignEquipmentSlot(id: number, itemId: number) {
   if (slot.isUnlocked) {
     for (let id = 0; id < game.equipment.slots.length; id++) {
       const other = getEquipmentSlot(id);
+
       if (other.itemId === itemId) {
         other.itemId = ItemId.NONE;
+      }
+    }
+
+    if (slot.itemId) {
+      const item = getItem(slot.itemId);
+
+      switch (item.type) {
+        case ItemType.WEAPON:
+          game.sheet.weaponId = ItemId.NONE;
+          break;
+        case ItemType.ARMOR:
+          game.sheet.armorId = ItemId.NONE;
+          break;
       }
     }
 
@@ -75,6 +89,14 @@ export function isEquipmentSlotActive(id: number) {
   }
 
   return false;
+}
+
+export function isEquipmentAssigned(itemId: number) {
+  return game.equipment.slots.some((slot) => slot.itemId === itemId);
+}
+
+export function getEquipmentSlotId(itemId: number) {
+  return game.equipment.slots.findIndex((slot) => slot.itemId === itemId);
 }
 
 export function renderEquipment() {

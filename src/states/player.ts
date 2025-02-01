@@ -85,7 +85,7 @@ function move(e: Entity) {
 }
 
 function attack(e: Entity) {
-  if (isInputDown(InputCode.KEY_Z)) {
+  if (isInputDown(InputCode.KEY_Z) && e.sheet.weaponId) {
     const weapon = getItem(e.sheet.weaponId);
     e.attackId = weapon.attackId;
     return true;

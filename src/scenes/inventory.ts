@@ -1,11 +1,10 @@
 import { COLOR_BG } from "@/consts/colors.js";
-import { INVENTORY_HEIGHT, INVENTORY_WIDTH } from "@/consts/inventory.js";
 import { SceneId } from "@/consts/scene.js";
 import { Scene } from "@/data/scene.js";
 import { assignEquipmentSlot, renderEquipment } from "@/usecases/equipment.js";
 import { getScene, switchScene } from "@/usecases/game.js";
-import { getInventorySlot, renderInventory, renderTooltip } from "@/usecases/inventory.js";
-import { clamp, drawRect, drawText, getHeight, getWidth, InputCode, isInputPressed, resetTransform, resetVector, scaleTransform, translateTransform } from "ridder";
+import { getInventorySlot, getSelectedSlotId, renderInventory, renderTooltip, updateInventorySelect } from "@/usecases/inventory.js";
+import { drawRect, drawText, getHeight, getWidth, InputCode, isInputPressed, resetTransform, resetVector, scaleTransform, translateTransform } from "ridder";
 
 export function setupInventoryScene() {
   const scene = getScene(SceneId.INVENTORY);
@@ -23,21 +22,7 @@ export function updateInventoryScene(scene: Scene) {
     return;
   }
 
-  if (isInputPressed(InputCode.KEY_LEFT)) {
-    scene.selected.x -= 1;
-  }
-  if (isInputPressed(InputCode.KEY_RIGHT)) {
-    scene.selected.x += 1;
-  }
-  if (isInputPressed(InputCode.KEY_UP)) {
-    scene.selected.y -= 1;
-  }
-  if (isInputPressed(InputCode.KEY_DOWN)) {
-    scene.selected.y += 1;
-  }
-
-  scene.selected.x = clamp(scene.selected.x, 0, INVENTORY_WIDTH - 1);
-  scene.selected.y = clamp(scene.selected.y, 0, INVENTORY_HEIGHT - 1);
+  updateInventorySelect(scene);
 
   assignEquipmentSlotOnInput(scene, 0, InputCode.KEY_1);
   assignEquipmentSlotOnInput(scene, 1, InputCode.KEY_2);
@@ -53,7 +38,7 @@ export function updateInventoryScene(scene: Scene) {
 
 function assignEquipmentSlotOnInput(scene: Scene, slotId: number, input: InputCode) {
   if (isInputPressed(input)) {
-    const id = 1 + scene.selected.x + scene.selected.y * INVENTORY_WIDTH;
+    const id = getSelectedSlotId(scene);
     const slot = getInventorySlot(id);
 
     if (slot && slot.amount > 0) {
