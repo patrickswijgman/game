@@ -2,16 +2,13 @@ import { COLOR_BG } from "@/consts/colors.js";
 import { INVENTORY_HEIGHT, INVENTORY_WIDTH } from "@/consts/inventory.js";
 import { SceneId } from "@/consts/scene.js";
 import { Scene } from "@/data/scene.js";
-import { addPlayerPreview } from "@/entities/player-preview.js";
 import { assignEquipmentSlot, renderEquipment } from "@/usecases/equipment.js";
 import { getScene, switchScene } from "@/usecases/game.js";
-import { getInventorySlot, renderInventory } from "@/usecases/inventory.js";
+import { getInventorySlot, renderInventory, renderTooltip } from "@/usecases/inventory.js";
 import { clamp, drawRect, drawText, getHeight, getWidth, InputCode, isInputPressed, resetTransform, resetVector, scaleTransform, translateTransform } from "ridder";
 
 export function setupInventoryScene() {
   const scene = getScene(SceneId.INVENTORY);
-
-  addPlayerPreview(scene.id, getWidth() - 80, getHeight() / 2);
 
   return scene;
 }
@@ -72,6 +69,7 @@ export function renderInventoryScene(scene: Scene) {
 
   renderInventory(scene);
   renderEquipment();
+  renderTooltip(scene);
 
   resetTransform();
   translateTransform(20, getHeight() - 40);
