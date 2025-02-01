@@ -3,6 +3,7 @@ export const enum StateId {
 
   PLAYER_IDLE,
   PLAYER_WALK,
+  PLAYER_USE_ITEM,
 
   ENEMY_IDLE,
   ENEMY_WANDER,

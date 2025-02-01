@@ -5,7 +5,7 @@ import { Entity } from "@/data/entity.js";
 import { setState } from "@/usecases/entity.js";
 import { useEquipmentSlot } from "@/usecases/equipment.js";
 import { getItem } from "@/usecases/item.js";
-import { InputCode, copyVector, getVectorLength, isInputDown, isInputPressed, normalizeVector, resetVector, scaleVector } from "ridder";
+import { InputCode, copyVector, getVectorLength, isInputDown, isInputPressed, normalizeVector, resetVector, scaleVector, tickTimer } from "ridder";
 
 export function onPlayerStateEnter(e: Entity) {
   switch (e.stateId) {
@@ -20,7 +20,10 @@ export function onPlayerStateUpdate(e: Entity) {
     case StateId.PLAYER_IDLE:
       {
         updateBreathAnimation(e);
-        useEquipment(e);
+        if (useEquipment(e)) {
+          setState(e, StateId.PLAYER_USE_ITEM);
+          return;
+        }
         if (attack(e)) {
           setState(e, StateId.ATTACK);
           return;
@@ -35,7 +38,10 @@ export function onPlayerStateUpdate(e: Entity) {
     case StateId.PLAYER_WALK:
       {
         updateWalkAnimation(e);
-        useEquipment(e);
+        if (useEquipment(e)) {
+          setState(e, StateId.PLAYER_USE_ITEM);
+          return;
+        }
         if (attack(e)) {
           setState(e, StateId.ATTACK);
           return;
@@ -43,6 +49,14 @@ export function onPlayerStateUpdate(e: Entity) {
         if (!move(e)) {
           setState(e, StateId.PLAYER_IDLE);
           return;
+        }
+      }
+      break;
+
+    case StateId.PLAYER_USE_ITEM:
+      {
+        if (tickTimer(e.stateTimer, 100)) {
+          setState(e, StateId.PLAYER_IDLE);
         }
       }
       break;
@@ -91,20 +105,25 @@ function attack(e: Entity) {
 }
 
 function useEquipment(e: Entity) {
-  useEquipmentOnInput(0, InputCode.KEY_1);
-  useEquipmentOnInput(1, InputCode.KEY_2);
-  useEquipmentOnInput(2, InputCode.KEY_3);
-  useEquipmentOnInput(3, InputCode.KEY_4);
-  useEquipmentOnInput(4, InputCode.KEY_5);
-  useEquipmentOnInput(5, InputCode.KEY_6);
-  useEquipmentOnInput(6, InputCode.KEY_7);
-  useEquipmentOnInput(7, InputCode.KEY_8);
-  useEquipmentOnInput(8, InputCode.KEY_9);
-  useEquipmentOnInput(9, InputCode.KEY_0);
+  let used = false;
+  used ||= useEquipmentOnInput(0, InputCode.KEY_1);
+  used ||= useEquipmentOnInput(1, InputCode.KEY_2);
+  used ||= useEquipmentOnInput(2, InputCode.KEY_3);
+  used ||= useEquipmentOnInput(3, InputCode.KEY_4);
+  used ||= useEquipmentOnInput(4, InputCode.KEY_5);
+  used ||= useEquipmentOnInput(5, InputCode.KEY_6);
+  used ||= useEquipmentOnInput(6, InputCode.KEY_7);
+  used ||= useEquipmentOnInput(7, InputCode.KEY_8);
+  used ||= useEquipmentOnInput(8, InputCode.KEY_9);
+  used ||= useEquipmentOnInput(9, InputCode.KEY_0);
+  return used;
 }
 
 function useEquipmentOnInput(id: number, key: InputCode) {
   if (isInputPressed(key)) {
     useEquipmentSlot(id);
+    return true;
   }
+
+  return false;
 }
