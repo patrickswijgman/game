@@ -118,4 +118,8 @@ function openMenus() {
     switchScene(SceneId.INVENTORY);
     return;
   }
+  if (isInputPressed(InputCode.KEY_C)) {
+    switchScene(SceneId.CHARACTER);
+    return;
+  }
 }

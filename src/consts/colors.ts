@@ -1,7 +1,7 @@
 export const COLOR_BG = "#333333";
 export const COLOR_SURFACE = "#282828";
 export const COLOR_OUTLINE = "#1e1e1e";
-export const COLOR_PRIMARY = "#B98B82";
+export const COLOR_PRIMARY = "#a76d60";
 export const COLOR_DANGER = "#ff0000";
 export const COLOR_HEALTH = "#F24236";
 export const COLOR_MANA = "#4259c6";

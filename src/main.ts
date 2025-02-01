@@ -6,6 +6,7 @@ import { updateAttack } from "@/entities/attack.js";
 import { updateEnemy } from "@/entities/enemy.js";
 import { updatePlayer } from "@/entities/player.js";
 import { updateTree } from "@/entities/tree.js";
+import { renderCharacterScene, setupCharacterScene, updateCharacterScene } from "@/scenes/character.js";
 import { onInventorySceneEnter, renderInventoryScene, setupInventoryScene, updateInventoryScene } from "@/scenes/inventory.js";
 import { renderWorldScene, setupWorldScene } from "@/scenes/world.js";
 import { loadAssets } from "@/usecases/assets.js";
@@ -31,6 +32,7 @@ run({
 
     setupWorldScene();
     setupInventoryScene();
+    setupCharacterScene();
 
     switchScene(SceneId.WORLD);
 
@@ -60,6 +62,9 @@ run({
     switch (scene.id) {
       case SceneId.INVENTORY:
         updateInventoryScene(scene);
+        break;
+      case SceneId.CHARACTER:
+        updateCharacterScene(scene);
         break;
     }
 
@@ -112,6 +117,9 @@ run({
         break;
       case SceneId.INVENTORY:
         renderInventoryScene(scene);
+        break;
+      case SceneId.CHARACTER:
+        renderCharacterScene(scene);
         break;
     }
 

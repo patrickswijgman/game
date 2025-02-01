@@ -1,5 +1,5 @@
 import { SpriteId } from "@/consts/assets.js";
-import { COLOR_OUTLINE, COLOR_SURFACE } from "@/consts/colors.js";
+import { COLOR_OUTLINE, COLOR_PRIMARY, COLOR_SURFACE } from "@/consts/colors.js";
 import { INVENTORY_HEIGHT, INVENTORY_SIZE, INVENTORY_WIDTH } from "@/consts/inventory.js";
 import { ItemId } from "@/consts/item.js";
 import { PLAYER_MOVEMENT_SPEED } from "@/consts/player.js";
@@ -9,7 +9,7 @@ import { Scene } from "@/data/scene.js";
 import { getEquipmentSlotId, isEquipmentAssigned } from "@/usecases/equipment.js";
 import { getItem } from "@/usecases/item.js";
 import { drawTextOutlined } from "@/usecases/ui.js";
-import { clamp, drawLine, drawRect, drawSprite, drawText, getWidth, InputCode, isInputPressed, resetTransform, scaleTransform, translateTransform } from "ridder";
+import { clamp, drawRect, drawSprite, drawText, getWidth, InputCode, isInputPressed, resetTransform, scaleTransform, translateTransform } from "ridder";
 
 export function getInventorySlot(id: ItemId) {
   return game.inventory.slots[id];
@@ -99,6 +99,7 @@ export function renderTooltip(scene: Scene) {
 
   if (slot && slot.amount > 0) {
     drawRect(0, 0, 100, INVENTORY_HEIGHT * SLOT_SIZE - 2, COLOR_SURFACE, true);
+    drawRect(0, 0, 100, 1, COLOR_PRIMARY, true);
 
     translateTransform(50, 10);
     scaleTransform(0.625, 0.625);
@@ -109,8 +110,7 @@ export function renderTooltip(scene: Scene) {
     drawSprite(item.itemSpriteId, -8, 5);
     scaleTransform(0.5, 0.5);
 
-    translateTransform(0, 45);
-    translateTransform(-40, 0);
+    translateTransform(-40, 45);
     scaleTransform(0.5, 0.5);
     renderStat("Health", item.stats.healthMax);
     renderStat("Mana", item.stats.manaMax);
@@ -121,15 +121,15 @@ export function renderTooltip(scene: Scene) {
   }
 }
 
-function renderStat(label: string, value: number, max = Infinity) {
+function renderStat(label: string, value: number, max = 0) {
   if (value) {
     drawText(label, 0, 0, "white");
-    if (max !== Infinity) {
+    if (max) {
       drawText(`${max / value}%`, 160, 0, "white", "right");
     } else {
       drawText(value.toString(), 160, 0, "white", "right");
     }
-    drawLine(0, FONT_HEIGHT, 160, FONT_HEIGHT + 1, COLOR_OUTLINE);
+    drawRect(0, FONT_HEIGHT, 160, 2, COLOR_OUTLINE, true);
     translateTransform(0, FONT_HEIGHT + 5);
   }
 }
