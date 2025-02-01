@@ -1,5 +1,5 @@
 import { SpriteId } from "@/consts/assets.js";
-import { ItemType } from "@/consts/item.js";
+import { ItemId, ItemType } from "@/consts/item.js";
 import { game } from "@/data/game.js";
 import { getItem } from "@/usecases/item.js";
 import { updateSheet } from "@/usecases/sheet.js";
@@ -26,6 +26,13 @@ export function assignEquipmentSlot(id: number, itemId: number) {
   const slot = getEquipmentSlot(id);
 
   if (slot.isUnlocked) {
+    for (let id = 0; id < game.equipment.slots.length; id++) {
+      const other = getEquipmentSlot(id);
+      if (other.itemId === itemId) {
+        other.itemId = ItemId.NONE;
+      }
+    }
+
     slot.itemId = itemId;
   }
 }
@@ -70,7 +77,7 @@ export function isEquipmentSlotActive(id: number) {
   return false;
 }
 
-export function renderEquipmentSlots() {
+export function renderEquipment() {
   const count = countUnlockedEquipmentSlots();
 
   resetTransform();

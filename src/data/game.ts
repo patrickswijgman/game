@@ -38,7 +38,7 @@ function newScenes() {
       case SceneId.WORLD:
         return newScene(id, 4096, MAP_WIDTH, MAP_HEIGHT);
       default:
-        return newScene(id, 0, 0, 0);
+        return newScene(id, 32, 0, 0);
     }
   });
 }

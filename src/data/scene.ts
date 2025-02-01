@@ -1,6 +1,6 @@
 import { SceneId } from "@/consts/scene.js";
 import { Entity, newEntity } from "@/data/entity.js";
-import { Camera, camera, grid, Grid, rect, Rectangle, table, Table } from "ridder";
+import { Camera, camera, grid, Grid, rect, Rectangle, table, Table, vec, Vector } from "ridder";
 
 export type Scene = {
   id: SceneId;
@@ -18,6 +18,9 @@ export type Scene = {
   bounds: Rectangle;
   grid: Grid<number>;
   playerId: number;
+
+  // Inventory
+  selected: Vector;
 };
 
 export function newScene(id: SceneId, maxEntityCount: number, gridWidth: number, gridHeight: number): Scene {
@@ -37,5 +40,8 @@ export function newScene(id: SceneId, maxEntityCount: number, gridWidth: number,
     bounds: rect(),
     grid: grid(gridWidth, gridHeight, () => 0),
     playerId: 0,
+
+    // Inventory
+    selected: vec(),
   };
 }

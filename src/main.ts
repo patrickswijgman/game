@@ -6,12 +6,13 @@ import { updateAttack } from "@/entities/attack.js";
 import { updateEnemy } from "@/entities/enemy.js";
 import { updatePlayer } from "@/entities/player.js";
 import { updateTree } from "@/entities/tree.js";
+import { onInventorySceneEnter, renderInventoryScene, setupInventoryScene, updateInventoryScene } from "@/scenes/inventory.js";
 import { renderWorldScene, setupWorldScene } from "@/scenes/world.js";
 import { loadAssets } from "@/usecases/assets.js";
 import { debugEntities, debugFps, debugGrid, debugHitboxes } from "@/usecases/debug.js";
 import { renderEnemyStatus } from "@/usecases/enemy.js";
 import { destroyEntity, renderCombatLog, renderEntity, updateCombatLog, updatePhysics } from "@/usecases/entity.js";
-import { renderEquipmentSlots } from "@/usecases/equipment.js";
+import { renderEquipment } from "@/usecases/equipment.js";
 import { getScene, setupPlayer, switchScene, transitionToNextScene } from "@/usecases/game.js";
 import { renderHud } from "@/usecases/hud.js";
 import { cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth } from "@/usecases/scene.js";
@@ -29,6 +30,7 @@ run({
     setupPlayer();
 
     setupWorldScene();
+    setupInventoryScene();
 
     switchScene(SceneId.WORLD);
 
@@ -43,9 +45,23 @@ run({
       isDebugging = !isDebugging;
     }
 
-    transitionToNextScene();
+    if (transitionToNextScene()) {
+      const scene = getScene(game.sceneId);
+
+      switch (game.sceneId) {
+        case SceneId.INVENTORY:
+          onInventorySceneEnter(scene);
+          break;
+      }
+    }
 
     const scene = getScene(game.sceneId);
+
+    switch (scene.id) {
+      case SceneId.INVENTORY:
+        updateInventoryScene(scene);
+        break;
+    }
 
     for (const id of scene.update) {
       const e = getEntity(scene, id);
@@ -94,6 +110,9 @@ run({
       case SceneId.WORLD:
         renderWorldScene(scene);
         break;
+      case SceneId.INVENTORY:
+        renderInventoryScene(scene);
+        break;
     }
 
     for (const id of scene.render) {
@@ -106,7 +125,7 @@ run({
     const player = getEntity(scene, scene.playerId);
     if (player.isPlayer) {
       renderHud();
-      renderEquipmentSlots();
+      renderEquipment();
     }
 
     if (isDebugging) {

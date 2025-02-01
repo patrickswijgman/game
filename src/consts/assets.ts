@@ -36,6 +36,7 @@ export const enum SpriteId {
 
   SLOT,
   SLOT_ACTIVE,
+  SLOT_SELECT,
 }
 
 export const enum FontId {

@@ -144,6 +144,7 @@ export function renderEntity(e: Entity) {
   resetTransform();
   applyCameraTransform(scene.camera);
   translateTransform(e.position.x, e.position.y);
+  scaleTransform(e.scale.x, e.scale.y);
   rotateTransform(e.angle);
 
   if (e.isFlipped) {

@@ -1,0 +1,3 @@
+export const INVENTORY_WIDTH = 8;
+export const INVENTORY_HEIGHT = 6;
+export const INVENTORY_SIZE = INVENTORY_WIDTH * INVENTORY_HEIGHT;

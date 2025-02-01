@@ -24,6 +24,7 @@ export type Entity = {
   // Render
   spriteId: SpriteId;
   pivot: Vector;
+  scale: Vector;
   angle: number;
   depth: number;
   isFlipped: boolean;
@@ -100,6 +101,7 @@ export function newEntity(): Entity {
     // Render
     spriteId: SpriteId.NONE,
     pivot: vec(),
+    scale: vec(1, 1),
     angle: 0,
     depth: 0,
     isFlipped: false,
@@ -160,6 +162,7 @@ export function newEntity(): Entity {
 
 export function zeroEntity(e: Entity) {
   zero(e);
+  setVector(e.scale, 1, 1);
   setVector(e.tweenScale, 1, 1);
   e.blacklist.length = 0;
   e.log.length = 0;

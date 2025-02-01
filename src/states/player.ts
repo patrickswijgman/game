@@ -1,9 +1,11 @@
 import { updateBreathAnimation } from "@/anims/breath.js";
 import { updateWalkAnimation } from "@/anims/walk.js";
+import { SceneId } from "@/consts/scene.js";
 import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
 import { setState } from "@/usecases/entity.js";
 import { useEquipmentSlot } from "@/usecases/equipment.js";
+import { switchScene } from "@/usecases/game.js";
 import { getItem } from "@/usecases/item.js";
 import { InputCode, copyVector, getVectorLength, isInputDown, isInputPressed, normalizeVector, resetVector, scaleVector } from "ridder";
 
@@ -29,6 +31,7 @@ export function onPlayerStateUpdate(e: Entity) {
           setState(e, StateId.PLAYER_WALK);
           return;
         }
+        openMenus();
       }
       break;
 
@@ -44,6 +47,7 @@ export function onPlayerStateUpdate(e: Entity) {
           setState(e, StateId.PLAYER_IDLE);
           return;
         }
+        openMenus();
       }
       break;
   }
@@ -103,8 +107,15 @@ function useEquipment(e: Entity) {
   useEquipmentOnInput(9, InputCode.KEY_0);
 }
 
-function useEquipmentOnInput(id: number, key: InputCode) {
-  if (isInputPressed(key)) {
-    useEquipmentSlot(id);
+function useEquipmentOnInput(slotId: number, input: InputCode) {
+  if (isInputPressed(input)) {
+    useEquipmentSlot(slotId);
+  }
+}
+
+function openMenus() {
+  if (isInputPressed(InputCode.KEY_I)) {
+    switchScene(SceneId.INVENTORY);
+    return;
   }
 }

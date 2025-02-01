@@ -10,7 +10,12 @@ export function switchScene(id: SceneId) {
 }
 
 export function transitionToNextScene() {
-  game.sceneId = game.sceneNextId;
+  if (game.sceneNextId !== game.sceneId) {
+    game.sceneId = game.sceneNextId;
+    return true;
+  }
+
+  return false;
 }
 
 export function getScene(id: SceneId) {

@@ -1,8 +1,8 @@
-import { COLOR_BG, COLOR_OUTLINE } from "@/consts/colors.js";
+import { COLOR_OUTLINE } from "@/consts/colors.js";
 import { drawRect, drawText, TextAlign, TextBaseline } from "ridder";
 
 export function drawBar(x: number, y: number, value: number, max: number, color: string, width: number, height: number) {
-  drawRect(x, y, width, height, COLOR_BG, true);
+  drawRect(x, y, width, height, COLOR_OUTLINE, true);
   drawRect(x + 1, y + 1, (width - 2) * (value / max), height - 2, color, true);
 
   if (value > 0) {
