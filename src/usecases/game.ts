@@ -26,9 +26,11 @@ export function setupPlayer() {
   initSheet(game.sheet);
 
   addItemToInventory(ItemId.LONGSWORD);
+  addItemToInventory(ItemId.SHORTBOW);
 
   unlockEquipmentSlot();
   unlockEquipmentSlot();
   assignEquipmentSlot(0, ItemId.LONGSWORD);
+  assignEquipmentSlot(1, ItemId.SHORTBOW);
   useEquipmentSlot(0);
 }

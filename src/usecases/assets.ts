@@ -14,19 +14,22 @@ export async function loadAssets() {
   loadSprite(SpriteId.PLAYER_SHADOW, TextureId.ATLAS, 0, 32, 16, 16);
   loadSprite(SpriteId.PLAYER_FLASH, TextureId.ATLAS_FLASH, 0, 16, 16, 16);
 
-  loadSprite(SpriteId.ITEM_LONGSWORD, TextureId.ATLAS, 0, 112, 16, 16);
+  loadSprite(SpriteId.EQUIP_LONGSWORD, TextureId.ATLAS, 0, 48, 16, 16);
+  loadSprite(SpriteId.EQUIP_SHORTBOW, TextureId.ATLAS, 16, 48, 16, 16);
 
-  loadSprite(SpriteId.EQUIP_LONGSWORD, TextureId.ATLAS, 16, 16, 16, 16);
+  loadSprite(SpriteId.ATTACK_LONGSWORD, TextureId.ATLAS, 0, 64, 16, 16);
+  loadSprite(SpriteId.ATTACK_ARROW, TextureId.ATLAS, 16, 64, 16, 16);
 
-  loadSprite(SpriteId.ATTACK_LONGSWORD, TextureId.ATLAS, 32, 16, 16, 16);
+  loadSprite(SpriteId.TREE_PINE, TextureId.ATLAS, 0, 96, 16, 16);
+  loadSprite(SpriteId.TREE_SHADOW, TextureId.ATLAS, 0, 112, 16, 16);
 
-  loadSprite(SpriteId.TREE_PINE, TextureId.ATLAS, 0, 64, 16, 16);
-  loadSprite(SpriteId.TREE_SHADOW, TextureId.ATLAS, 0, 80, 16, 16);
+  loadSprite(SpriteId.TILE_GRASS, TextureId.ATLAS, 0, 128, 16, 16);
 
-  loadSprite(SpriteId.TILE_GRASS, TextureId.ATLAS, 0, 96, 16, 16);
+  loadSprite(SpriteId.ITEM_LONGSWORD, TextureId.ATLAS, 0, 144, 16, 16);
+  loadSprite(SpriteId.ITEM_SHORTBOW, TextureId.ATLAS, 16, 144, 16, 16);
 
-  loadSprite(SpriteId.SLOT, TextureId.ATLAS, 0, 128, 16, 16);
-  loadSprite(SpriteId.SLOT_ACTIVE, TextureId.ATLAS, 16, 128, 16, 16);
+  loadSprite(SpriteId.SLOT, TextureId.ATLAS, 0, 160, 16, 16);
+  loadSprite(SpriteId.SLOT_ACTIVE, TextureId.ATLAS, 16, 160, 16, 16);
 
   await loadFont(FontId.DEFAULT, "fonts/pixelmix.ttf", "pixelmix", FONT_SIZE);
 

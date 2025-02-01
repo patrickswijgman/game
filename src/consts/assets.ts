@@ -1,10 +1,13 @@
 export const enum TextureId {
   NONE,
+
   ATLAS,
   ATLAS_OUTLINE,
   ATLAS_FLASH,
+
   MAP_TILES,
   MAP_OBJECTS,
+
   FLOOR,
 }
 
@@ -21,10 +24,13 @@ export const enum SpriteId {
   TILE_GRASS,
 
   ITEM_LONGSWORD,
+  ITEM_SHORTBOW,
 
   ATTACK_LONGSWORD,
+  ATTACK_ARROW,
 
   EQUIP_LONGSWORD,
+  EQUIP_SHORTBOW,
 
   SLOT,
   SLOT_ACTIVE,

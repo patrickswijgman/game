@@ -1,5 +1,5 @@
 import { MAP_HEIGHT, MAP_WIDTH } from "@/consts/map.js";
-import { MAX_WORLD_ENTITIES, SceneId } from "@/consts/scene.js";
+import { SceneId } from "@/consts/scene.js";
 import { Equipment, newEquipment } from "@/data/equipment.js";
 import { Inventory, newInventory } from "@/data/inventory.js";
 import { newScene, Scene } from "@/data/scene.js";
@@ -36,7 +36,7 @@ function newScenes() {
   return table(SceneId.MAX, (id) => {
     switch (id) {
       case SceneId.WORLD:
-        return newScene(id, MAX_WORLD_ENTITIES, MAP_WIDTH, MAP_HEIGHT);
+        return newScene(id, 4096, MAP_WIDTH, MAP_HEIGHT);
       default:
         return newScene(id, 0, 0, 0);
     }

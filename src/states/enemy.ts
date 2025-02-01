@@ -33,11 +33,15 @@ export function onEnemyStateUpdate(e: Entity) {
       {
         updateWalkAnimation(e);
         lookAtPlayer(e);
+        if (isPlayerTooFarAway(e)) {
+          setState(e, StateId.ENEMY_IDLE);
+          return;
+        }
         if (isPlayerInAttackRange(e)) {
           setState(e, StateId.ENEMY_DELAY);
-        } else {
-          moveTowardsPlayer(e);
+          return;
         }
+        moveTowardsPlayer(e);
       }
       break;
 
@@ -84,6 +88,17 @@ function isPlayerInAttackRange(e: Entity) {
       e.attackId = weapon.attackId;
       return true;
     }
+  }
+
+  return false;
+}
+
+function isPlayerTooFarAway(e: Entity) {
+  const scene = getScene(e.sceneId);
+  const player = getEntity(scene, scene.playerId);
+
+  if (player.sheet.stats.health) {
+    return getVectorDistance(e.position, player.position) > 200;
   }
 
   return false;

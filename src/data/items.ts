@@ -29,6 +29,19 @@ export const items = table<Item>(ItemId.MAX, (id) => {
         isStackable: false,
       };
 
+    case ItemId.SHORTBOW:
+      return {
+        name: "Shortbow",
+        type: ItemType.WEAPON,
+        itemSpriteId: SpriteId.ITEM_SHORTBOW,
+        equipSpriteId: SpriteId.EQUIP_SHORTBOW,
+        attackId: AttackId.SHORTBOW,
+        stats: newStats({
+          damage: 2,
+        }),
+        isStackable: false,
+      };
+
     default:
       return {
         name: "",

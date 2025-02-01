@@ -21,11 +21,13 @@ export function onPlayerStateUpdate(e: Entity) {
       {
         updateBreathAnimation(e);
         useEquipment(e);
-        if (move(e)) {
-          setState(e, StateId.PLAYER_WALK);
-        }
         if (attack(e)) {
           setState(e, StateId.ATTACK);
+          return;
+        }
+        if (move(e)) {
+          setState(e, StateId.PLAYER_WALK);
+          return;
         }
       }
       break;
@@ -34,11 +36,13 @@ export function onPlayerStateUpdate(e: Entity) {
       {
         updateWalkAnimation(e);
         useEquipment(e);
-        if (!move(e)) {
-          setState(e, StateId.PLAYER_IDLE);
-        }
         if (attack(e)) {
           setState(e, StateId.ATTACK);
+          return;
+        }
+        if (!move(e)) {
+          setState(e, StateId.PLAYER_IDLE);
+          return;
         }
       }
       break;
