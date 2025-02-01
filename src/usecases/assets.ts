@@ -16,6 +16,7 @@ export async function loadAssets() {
 
   loadSprite(SpriteId.EQUIP_LONGSWORD, TextureId.ATLAS, 0, 48, 16, 16);
   loadSprite(SpriteId.EQUIP_SHORTBOW, TextureId.ATLAS, 16, 48, 16, 16);
+  loadSprite(SpriteId.EQUIP_LEATHER_ARMOR, TextureId.ATLAS, 32, 48, 16, 16);
 
   loadSprite(SpriteId.ATTACK_LONGSWORD, TextureId.ATLAS, 0, 64, 16, 16);
   loadSprite(SpriteId.ATTACK_ARROW, TextureId.ATLAS, 16, 64, 16, 16);
@@ -27,6 +28,7 @@ export async function loadAssets() {
 
   loadSprite(SpriteId.ITEM_LONGSWORD, TextureId.ATLAS, 0, 144, 16, 16);
   loadSprite(SpriteId.ITEM_SHORTBOW, TextureId.ATLAS, 16, 144, 16, 16);
+  loadSprite(SpriteId.ITEM_LEATHER_ARMOR, TextureId.ATLAS, 32, 144, 16, 16);
 
   loadSprite(SpriteId.SLOT, TextureId.ATLAS, 0, 160, 16, 16);
   loadSprite(SpriteId.SLOT_ACTIVE, TextureId.ATLAS, 16, 160, 16, 16);

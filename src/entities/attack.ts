@@ -49,13 +49,15 @@ export function updateAttack(e: Entity) {
 
     if (doRectanglesIntersect(e.hitbox, target.hitbox)) {
       const damage = caster.sheet.stats.damage;
+      const armor = target.sheet.stats.armor;
+      const actual = Math.max(1, damage - armor);
 
-      target.sheet.stats.health -= damage;
+      target.sheet.stats.health -= actual;
       clampStats(target.sheet.stats);
 
       setState(target, StateId.STAGGER);
 
-      addToCombatLog(target, damage.toString());
+      addToCombatLog(target, actual.toString());
 
       e.blacklist.push(target.id);
     }

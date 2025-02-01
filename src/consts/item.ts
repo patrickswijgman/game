@@ -2,6 +2,7 @@ export const enum ItemId {
   NONE,
   LONGSWORD,
   SHORTBOW,
+  LEATHER_ARMOR,
   MAX,
 }
 

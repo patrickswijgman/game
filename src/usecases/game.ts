@@ -27,10 +27,13 @@ export function setupPlayer() {
 
   addItemToInventory(ItemId.LONGSWORD);
   addItemToInventory(ItemId.SHORTBOW);
+  addItemToInventory(ItemId.LEATHER_ARMOR);
 
+  unlockEquipmentSlot();
   unlockEquipmentSlot();
   unlockEquipmentSlot();
   assignEquipmentSlot(0, ItemId.LONGSWORD);
   assignEquipmentSlot(1, ItemId.SHORTBOW);
+  assignEquipmentSlot(2, ItemId.LEATHER_ARMOR);
   useEquipmentSlot(0);
 }

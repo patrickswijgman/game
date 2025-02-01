@@ -15,8 +15,8 @@ export const MAP_WORLD_WIDTH = MAP_WIDTH * TILE_SIZE;
 export const MAP_WORLD_HEIGHT = MAP_HEIGHT * TILE_SIZE;
 
 export const COLOR_TO_TILE: Readonly<Record<string, TileId>> = {
-  "#273d41": TileId.FOREST,
-  "#4b7b5b": TileId.PLAIN,
+  "#283c2f": TileId.FOREST,
+  "#525f49": TileId.PLAIN,
 };
 
 export const COLOR_TO_ENTITY: Readonly<Record<string, Type>> = {

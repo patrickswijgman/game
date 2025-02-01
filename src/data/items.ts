@@ -42,6 +42,19 @@ export const items = table<Item>(ItemId.MAX, (id) => {
         isStackable: false,
       };
 
+    case ItemId.LEATHER_ARMOR:
+      return {
+        name: "Leather Armor",
+        type: ItemType.ARMOR,
+        itemSpriteId: SpriteId.ITEM_LEATHER_ARMOR,
+        equipSpriteId: SpriteId.EQUIP_LEATHER_ARMOR,
+        attackId: AttackId.NONE,
+        stats: newStats({
+          armor: 1,
+        }),
+        isStackable: false,
+      };
+
     default:
       return {
         name: "",
