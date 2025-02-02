@@ -2,11 +2,10 @@ import { SpriteId } from "@/consts/assets.js";
 import { COLOR_OUTLINE, COLOR_PRIMARY, COLOR_SURFACE } from "@/consts/colors.js";
 import { INVENTORY_HEIGHT, INVENTORY_SIZE, INVENTORY_WIDTH } from "@/consts/inventory.js";
 import { ItemId } from "@/consts/item.js";
-import { PLAYER_MOVEMENT_SPEED } from "@/consts/player.js";
 import { FONT_HEIGHT, SLOT_SIZE } from "@/consts/render.js";
 import { game } from "@/data/game.js";
 import { Scene } from "@/data/scene.js";
-import { getEquipmentSlotId, isEquipmentAssigned } from "@/usecases/equipment.js";
+import { getEquipmentSlotId } from "@/usecases/equipment.js";
 import { getItem } from "@/usecases/item.js";
 import { drawTextOutlined } from "@/usecases/ui.js";
 import { clamp, drawRect, drawSprite, drawText, getWidth, InputCode, isInputPressed, resetTransform, scaleTransform, translateTransform } from "ridder";
@@ -56,11 +55,7 @@ export function renderInventory(scene: Scene) {
     translateTransform(20, 30);
     translateTransform(x * SLOT_SIZE, y * SLOT_SIZE);
 
-    if (isEquipmentAssigned(id)) {
-      drawSprite(SpriteId.SLOT, 0, 0);
-    } else {
-      drawSprite(SpriteId.SLOT_INVENTORY, 0, 0);
-    }
+    drawSprite(SpriteId.SLOT, 0, 0);
 
     if (slot && slot.amount > 0) {
       drawSprite(item.itemSpriteId, 0, 0);
@@ -116,19 +111,15 @@ export function renderTooltip(scene: Scene) {
     renderStat("Mana", item.stats.manaMax);
     renderStat("Damage", item.stats.damage);
     renderStat("Armor", item.stats.armor);
-    renderStat("Movement Speed", item.stats.movementSpeed, PLAYER_MOVEMENT_SPEED);
+    renderStat("Movement Speed", `${item.stats.movementSpeed * 100}%`);
     renderStat("Mana Cost", item.stats.manaCost);
   }
 }
 
-function renderStat(label: string, value: number, max = 0) {
+function renderStat(label: string, value: string | number) {
   if (value) {
     drawText(label, 0, 0, "white");
-    if (max) {
-      drawText(`${max / value}%`, 160, 0, "white", "right");
-    } else {
-      drawText(value.toString(), 160, 0, "white", "right");
-    }
+    drawText(value.toString(), 160, 0, "white", "right");
     drawRect(0, FONT_HEIGHT, 160, 2, COLOR_OUTLINE, true);
     translateTransform(0, FONT_HEIGHT + 5);
   }

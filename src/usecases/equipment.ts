@@ -40,9 +40,11 @@ export function assignEquipmentSlot(id: number, itemId: number) {
       switch (item.type) {
         case ItemType.WEAPON:
           game.sheet.weaponId = ItemId.NONE;
+          updateSheet(game.sheet);
           break;
         case ItemType.ARMOR:
           game.sheet.armorId = ItemId.NONE;
+          updateSheet(game.sheet);
           break;
       }
     }

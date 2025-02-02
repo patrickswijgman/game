@@ -1,5 +1,4 @@
 import { COLOR_BG, COLOR_OUTLINE, COLOR_PRIMARY, COLOR_SURFACE } from "@/consts/colors.js";
-import { PLAYER_MOVEMENT_SPEED } from "@/consts/player.js";
 import { FONT_HEIGHT } from "@/consts/render.js";
 import { SceneId } from "@/consts/scene.js";
 import { game } from "@/data/game.js";
@@ -40,7 +39,7 @@ export function renderCharacterScene(scene: Scene) {
   renderStat("Mana", `${game.sheet.stats.mana} / ${game.sheet.stats.manaMax}`);
   renderStat("Damage", game.sheet.stats.damage);
   renderStat("Armor", game.sheet.stats.armor);
-  renderStat("Movement Speed", `${game.sheet.stats.movementSpeed} / ${PLAYER_MOVEMENT_SPEED}`);
+  renderStat("Movement Speed", `${(game.sheet.stats.movementSpeed / 1) * 100}%`);
   renderStat("Mana Cost", game.sheet.stats.manaCost);
 }
 

@@ -51,7 +51,7 @@ export const items = table<Item>(ItemId.MAX, (id) => {
         attackId: AttackId.NONE,
         stats: newStats({
           armor: 1,
-          movementSpeed: -0.075,
+          movementSpeed: -0.1,
         }),
         isStackable: false,
       };

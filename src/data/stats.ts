@@ -10,6 +10,7 @@ export type Stats = {
   armor: number;
 
   movementSpeed: number;
+  movementSpeedMax: number;
 };
 
 export function newStats(stats: Partial<Stats> = {}): Stats {
@@ -25,6 +26,7 @@ export function newStats(stats: Partial<Stats> = {}): Stats {
     armor: 0,
 
     movementSpeed: 0,
+    movementSpeedMax: 0,
 
     ...stats,
   };

@@ -74,7 +74,7 @@ function move(e: Entity) {
   if (isMoving) {
     normalizeVector(e.velocity);
     copyVector(e.direction, e.velocity);
-    scaleVector(e.velocity, e.sheet.stats.movementSpeed);
+    scaleVector(e.velocity, 0.75 * e.sheet.stats.movementSpeed);
   }
 
   return isMoving;

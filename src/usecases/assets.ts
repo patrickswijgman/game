@@ -46,7 +46,6 @@ export async function loadAssets() {
   loadSprite(SpriteId.SLOT, TextureId.ATLAS, 0, 160, 16, 16);
   loadSprite(SpriteId.SLOT_ACTIVE, TextureId.ATLAS, 16, 160, 16, 16);
   loadSprite(SpriteId.SLOT_SELECT, TextureId.ATLAS, 32, 160, 32, 32);
-  loadSprite(SpriteId.SLOT_INVENTORY, TextureId.ATLAS, 64, 160, 32, 32);
 
   await loadFont(FontId.DEFAULT, "fonts/pixelmix.ttf", "pixelmix", FONT_SIZE);
 

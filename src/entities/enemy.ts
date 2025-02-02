@@ -19,7 +19,8 @@ export function addEnemy(sceneId: SceneId, x: number, y: number) {
   e.sheet.name = "Enemy";
   e.sheet.statsBase.health = 10;
   e.sheet.statsBase.healthMax = 10;
-  e.sheet.statsBase.movementSpeed = 0.5;
+  e.sheet.statsBase.movementSpeed = 1;
+  e.sheet.statsBase.movementSpeedMax = 1.5;
   e.sheet.weaponId = ItemId.LONGSWORD;
   initSheet(e.sheet);
 

@@ -1,5 +1,4 @@
 import { ItemId } from "@/consts/item.js";
-import { PLAYER_HEALTH, PLAYER_MANA, PLAYER_MOVEMENT_SPEED } from "@/consts/player.js";
 import { SceneId } from "@/consts/scene.js";
 import { game } from "@/data/game.js";
 import { unlockEquipmentSlot } from "@/usecases/equipment.js";
@@ -25,11 +24,12 @@ export function getScene(id: SceneId) {
 
 export function setupPlayer() {
   game.sheet.name = "Hero";
-  game.sheet.statsBase.health = PLAYER_HEALTH;
-  game.sheet.statsBase.healthMax = PLAYER_HEALTH;
-  game.sheet.statsBase.mana = PLAYER_MANA;
-  game.sheet.statsBase.manaMax = PLAYER_MANA;
-  game.sheet.statsBase.movementSpeed = PLAYER_MOVEMENT_SPEED;
+  game.sheet.statsBase.health = 10;
+  game.sheet.statsBase.healthMax = 10;
+  game.sheet.statsBase.mana = 5;
+  game.sheet.statsBase.manaMax = 5;
+  game.sheet.statsBase.movementSpeed = 1;
+  game.sheet.statsBase.movementSpeedMax = 1.5;
   initSheet(game.sheet);
 
   addItemToInventory(ItemId.LONGSWORD);
