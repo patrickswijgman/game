@@ -1,14 +1,14 @@
 import { SpriteId } from "@/consts/assets.js";
-import { COLOR_OUTLINE, COLOR_PRIMARY, COLOR_SURFACE } from "@/consts/colors.js";
+import { COLOR_PRIMARY } from "@/consts/colors.js";
 import { INVENTORY_HEIGHT, INVENTORY_SIZE, INVENTORY_WIDTH } from "@/consts/inventory.js";
 import { ItemId } from "@/consts/item.js";
-import { FONT_HEIGHT, SLOT_SIZE } from "@/consts/render.js";
+import { FONT_HEIGHT, SLOT_SIZE, SURFACE_ALPHA } from "@/consts/render.js";
 import { game } from "@/data/game.js";
 import { Scene } from "@/data/scene.js";
 import { getEquipmentSlotId } from "@/usecases/equipment.js";
 import { getItem } from "@/usecases/item.js";
 import { drawTextOutlined } from "@/usecases/ui.js";
-import { clamp, drawRect, drawSprite, drawText, getWidth, InputCode, isInputPressed, resetTransform, scaleTransform, translateTransform } from "ridder";
+import { clamp, drawRect, drawSprite, drawText, getWidth, InputCode, isInputPressed, resetTransform, scaleTransform, setAlpha, translateTransform } from "ridder";
 
 export function getInventorySlot(id: ItemId) {
   return game.inventory.slots[id];
@@ -55,7 +55,9 @@ export function renderInventory(scene: Scene) {
     translateTransform(20, 30);
     translateTransform(x * SLOT_SIZE, y * SLOT_SIZE);
 
+    setAlpha(SURFACE_ALPHA);
     drawSprite(SpriteId.SLOT, 0, 0);
+    setAlpha(1);
 
     if (slot && slot.amount > 0) {
       drawSprite(item.itemSpriteId, 0, 0);
@@ -93,7 +95,9 @@ export function renderTooltip(scene: Scene) {
   const item = getItem(id);
 
   if (slot && slot.amount > 0) {
-    drawRect(0, 0, 100, INVENTORY_HEIGHT * SLOT_SIZE - 2, COLOR_SURFACE, true);
+    setAlpha(SURFACE_ALPHA);
+    drawRect(0, 0, 100, INVENTORY_HEIGHT * SLOT_SIZE - 2, "black", true);
+    setAlpha(1);
     drawRect(0, 0, 100, 1, COLOR_PRIMARY, true);
 
     translateTransform(50, 10);
@@ -124,7 +128,9 @@ function renderStat(label: string, value: number, percentile = false) {
     } else {
       drawText(value.toString(), 160, 0, "white", "right");
     }
-    drawRect(0, FONT_HEIGHT, 160, 2, COLOR_OUTLINE, true);
+    setAlpha(SURFACE_ALPHA);
+    drawRect(0, FONT_HEIGHT, 160, 2, "black", true);
+    setAlpha(1);
     translateTransform(0, FONT_HEIGHT + 5);
   }
 }

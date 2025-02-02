@@ -1,8 +1,6 @@
-export const COLOR_BG = "#333333";
-export const COLOR_SURFACE = "#282828";
+export const COLOR_BG = "#393E41";
 export const COLOR_OUTLINE = "#1e1e1e";
-export const COLOR_PRIMARY = "#a76d60";
+export const COLOR_PRIMARY = "#ffffff";
 export const COLOR_DANGER = "#ff0000";
-export const COLOR_HEALTH = "#F24236";
+export const COLOR_HEALTH = "#f24236";
 export const COLOR_MANA = "#4259c6";
-export const COLOR_STAMINA = "#4CB944";
