@@ -114,11 +114,12 @@ export function renderEquipment() {
 
     if (slot.itemId) {
       const item = getItem(slot.itemId);
-      drawSprite(item.itemSpriteId, i * 18, 0);
 
       if (isEquipmentSlotActive(i)) {
         drawSprite(SpriteId.SLOT_ACTIVE, i * 18, 0);
       }
+
+      drawSprite(item.itemSpriteId, i * 18, 0);
     }
 
     scaleTransform(0.5, 0.5);

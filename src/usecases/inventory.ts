@@ -111,15 +111,19 @@ export function renderTooltip(scene: Scene) {
     renderStat("Mana", item.stats.manaMax);
     renderStat("Damage", item.stats.damage);
     renderStat("Armor", item.stats.armor);
-    renderStat("Movement Speed", `${item.stats.movementSpeed * 100}%`);
+    renderStat("Movement Speed", item.stats.movementSpeed, true);
     renderStat("Mana Cost", item.stats.manaCost);
   }
 }
 
-function renderStat(label: string, value: string | number) {
+function renderStat(label: string, value: number, percentile = false) {
   if (value) {
     drawText(label, 0, 0, "white");
-    drawText(value.toString(), 160, 0, "white", "right");
+    if (percentile) {
+      drawText(`${value * 100}%`, 160, 0, "white", "right");
+    } else {
+      drawText(value.toString(), 160, 0, "white", "right");
+    }
     drawRect(0, FONT_HEIGHT, 160, 2, COLOR_OUTLINE, true);
     translateTransform(0, FONT_HEIGHT + 5);
   }
