@@ -1,4 +1,4 @@
-export const COLOR_BG = "#796465";
+export const COLOR_BG = "#665555";
 export const COLOR_OUTLINE = "#1e1e1e";
 export const COLOR_PRIMARY = "#ffffff";
 export const COLOR_DANGER = "#ff0000";
