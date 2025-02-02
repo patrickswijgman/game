@@ -5,6 +5,9 @@ import { Camera, camera, grid, Grid, rect, Rectangle, table, Table, timer, Timer
 export type Scene = {
   id: SceneId;
 
+  // Memory management
+  entityId: number;
+
   // Tables
   entities: Table<Entity>;
 
@@ -29,6 +32,9 @@ export type Scene = {
 export function newScene(id: SceneId, maxEntityCount: number, gridWidth: number, gridHeight: number): Scene {
   return {
     id,
+
+    // Memory management
+    entityId: 0,
 
     // Tables
     entities: table(maxEntityCount, newEntity),

@@ -3,17 +3,26 @@ import { Scene } from "@/data/scene.js";
 import { getVectorDistance, remove } from "ridder";
 
 export function nextEntity(scene: Scene) {
-  const id = scene.entities.findIndex((e) => !e.isAllocated);
+  let id = scene.entityId;
+  let e = scene.entities[id];
 
-  if (id === -1) {
-    throw new Error("Out of entities :(");
+  if (e.isAllocated) {
+    id = scene.entities.findIndex((e) => !e.isAllocated);
+    if (id === -1) {
+      throw new Error("Out of entities :(");
+    }
+
+    e = scene.entities[id];
+    scene.entityId = id + 1;
   }
 
-  const e = scene.entities[id];
-  e.isAllocated = true;
   e.id = id;
   e.sceneId = scene.id;
+  e.isAllocated = true;
+
   scene.all.push(e.id);
+  scene.active.push(e.id);
+
   return e;
 }
 

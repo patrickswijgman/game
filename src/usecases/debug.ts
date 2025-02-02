@@ -42,10 +42,10 @@ export function debugFps() {
 export function debugEntities(scene: Scene) {
   const all = scene.entities.reduce((prev, e) => (prev += e.isAllocated ? 1 : 0), 0);
   const max = scene.entities.length;
-  drawText(`${all} / ${max}`, 1, 1, "lime");
-
-  translateTransform(0, FONT_HEIGHT);
-
   const active = scene.active.length;
+  drawText(`${all} / ${max}`, 1, 1, "lime");
+  translateTransform(0, FONT_HEIGHT);
   drawText(`${active} / ${all} active`, 1, 1, "lime");
+  translateTransform(0, FONT_HEIGHT);
+  drawText(`entity ID: ${scene.entityId}`, 1, 1, "lime");
 }

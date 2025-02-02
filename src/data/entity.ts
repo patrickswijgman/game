@@ -164,6 +164,6 @@ export function zeroEntity(e: Entity) {
   zero(e);
   setVector(e.scale, 1, 1);
   setVector(e.tweenScale, 1, 1);
-  e.blacklist.length = 0;
   e.log.length = 0;
+  e.blacklist.length = 0;
 }
