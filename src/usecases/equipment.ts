@@ -1,11 +1,10 @@
 import { SpriteId } from "@/consts/assets.js";
 import { ItemId, ItemType } from "@/consts/item.js";
-import { SURFACE_ALPHA } from "@/consts/render.js";
 import { game } from "@/data/game.js";
 import { getItem } from "@/usecases/item.js";
 import { updateSheet } from "@/usecases/sheet.js";
 import { drawTextOutlined } from "@/usecases/ui.js";
-import { drawSprite, getHeight, getWidth, resetTransform, scaleTransform, setAlpha, translateTransform } from "ridder";
+import { drawSprite, getHeight, getWidth, resetTransform, scaleTransform, translateTransform } from "ridder";
 
 export function getEquipmentSlot(id: number) {
   return game.equipment.slots[id];
@@ -111,18 +110,15 @@ export function renderEquipment() {
   for (let i = 0; i < count; i++) {
     const slot = getEquipmentSlot(i);
 
-    setAlpha(SURFACE_ALPHA);
     drawSprite(SpriteId.SLOT, i * 18, 0);
-    setAlpha(1);
 
     if (slot.itemId) {
       const item = getItem(slot.itemId);
+      drawSprite(item.itemSpriteId, i * 18, 0);
 
       if (isEquipmentSlotActive(i)) {
         drawSprite(SpriteId.SLOT_ACTIVE, i * 18, 0);
       }
-
-      drawSprite(item.itemSpriteId, i * 18, 0);
     }
 
     scaleTransform(0.5, 0.5);

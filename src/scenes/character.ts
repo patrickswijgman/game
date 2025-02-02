@@ -1,11 +1,11 @@
 import { COLOR_BG, COLOR_PRIMARY } from "@/consts/colors.js";
-import { FONT_HEIGHT, SURFACE_ALPHA } from "@/consts/render.js";
+import { FONT_HEIGHT } from "@/consts/render.js";
 import { SceneId } from "@/consts/scene.js";
 import { game } from "@/data/game.js";
 import { Scene } from "@/data/scene.js";
 import { addPlayerPreview } from "@/entities/player-preview.js";
 import { getScene, switchScene } from "@/usecases/game.js";
-import { drawRect, drawText, getHeight, getWidth, InputCode, isInputPressed, resetTransform, scaleTransform, setAlpha, translateTransform } from "ridder";
+import { drawRect, drawText, getHeight, getWidth, InputCode, isInputPressed, resetTransform, scaleTransform, translateTransform } from "ridder";
 
 export function setupCharacterScene() {
   const scene = getScene(SceneId.CHARACTER);
@@ -30,9 +30,7 @@ export function renderCharacterScene(scene: Scene) {
   resetTransform();
   translateTransform((getWidth() / 3) * 2, 30);
 
-  setAlpha(SURFACE_ALPHA);
   drawRect(-60, 0, 120, getHeight() - 60, "black", true);
-  setAlpha(1);
   drawRect(-60, 0, 120, 1, COLOR_PRIMARY, true);
 
   translateTransform(-50, 5);
@@ -47,8 +45,6 @@ export function renderCharacterScene(scene: Scene) {
 function renderStat(label: string, value: string | number) {
   drawText(label, 0, 0, "white");
   drawText(value.toString(), 200, 0, "white", "right");
-  setAlpha(SURFACE_ALPHA);
-  drawRect(0, FONT_HEIGHT, 200, 2, "black", true);
-  setAlpha(1);
+  drawRect(0, FONT_HEIGHT, 200, 2, COLOR_BG, true);
   translateTransform(0, FONT_HEIGHT + 5);
 }
