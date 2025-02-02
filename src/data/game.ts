@@ -36,9 +36,9 @@ function newScenes() {
   return table(SceneId.MAX, (id) => {
     switch (id) {
       case SceneId.WORLD:
-        return newScene(id, 4096, MAP_WIDTH, MAP_HEIGHT);
+        return newScene(id, 20_000, MAP_WIDTH, MAP_HEIGHT);
       default:
-        return newScene(id, 32, 0, 0);
+        return newScene(id, 10, 0, 0);
     }
   });
 }

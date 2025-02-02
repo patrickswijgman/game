@@ -1,12 +1,13 @@
 import { TILE_SIZE } from "@/consts/map.js";
+import { FONT_HEIGHT } from "@/consts/render.js";
 import { Scene } from "@/data/scene.js";
 import { getEntity } from "@/usecases/scene.js";
-import { applyCameraTransform, drawLine, drawRect, drawRectInstance, drawText, getFramePerSecond, getGridHeight, getGridValue, getGridWidth, isRectangleValid, resetTransform } from "ridder";
+import { applyCameraTransform, drawLine, drawRect, drawRectInstance, drawText, getFramePerSecond, getGridHeight, getGridValue, getGridWidth, isRectangleValid, resetTransform, translateTransform } from "ridder";
 
 export function debugHitboxes(scene: Scene) {
   resetTransform();
   applyCameraTransform(scene.camera);
-  for (const id of scene.update) {
+  for (const id of scene.all) {
     const e = getEntity(scene, id);
     if (isRectangleValid(e.hitbox)) {
       drawRectInstance(e.hitbox, "yellow", false);
@@ -39,7 +40,12 @@ export function debugFps() {
 }
 
 export function debugEntities(scene: Scene) {
-  const count = scene.entities.reduce((prev, e) => (prev += e.isAllocated ? 1 : 0), 0);
+  const all = scene.entities.reduce((prev, e) => (prev += e.isAllocated ? 1 : 0), 0);
   const max = scene.entities.length;
-  drawText(`${count} / ${max} entities`, 1, 1, "lime");
+  drawText(`${all} / ${max}`, 1, 1, "lime");
+
+  translateTransform(0, FONT_HEIGHT);
+
+  const active = scene.active.length;
+  drawText(`${active} / ${all} active`, 1, 1, "lime");
 }

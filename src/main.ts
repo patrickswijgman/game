@@ -16,8 +16,8 @@ import { destroyEntity, renderCombatLog, renderEntity, updateCombatLog, updatePh
 import { renderEquipment } from "@/usecases/equipment.js";
 import { getScene, setupPlayer, switchScene, transitionToNextScene } from "@/usecases/game.js";
 import { renderHud } from "@/usecases/hud.js";
-import { cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth } from "@/usecases/scene.js";
-import { InputCode, isInputPressed, resetTransform, run, scaleTransform, tickTimer, translateTransform, updateCamera } from "ridder";
+import { cleanupDestroyedEntities, getEntity, setActiveEntities, sortEntitiesOnDepth } from "@/usecases/scene.js";
+import { InputCode, isInputPressed, resetTimer, resetTransform, run, scaleTransform, tickTimer, translateTransform, updateCamera } from "ridder";
 
 let isDebugging = false;
 
@@ -50,6 +50,8 @@ run({
     if (transitionToNextScene()) {
       const scene = getScene(game.sceneId);
 
+      setActiveEntities(scene);
+
       switch (game.sceneId) {
         case SceneId.INVENTORY:
           onInventorySceneEnter(scene);
@@ -58,6 +60,11 @@ run({
     }
 
     const scene = getScene(game.sceneId);
+
+    if (tickTimer(scene.activeTimer, 1000)) {
+      setActiveEntities(scene);
+      resetTimer(scene.activeTimer);
+    }
 
     switch (scene.id) {
       case SceneId.INVENTORY:
@@ -68,7 +75,7 @@ run({
         break;
     }
 
-    for (const id of scene.update) {
+    for (const id of scene.active) {
       const e = getEntity(scene, id);
 
       if (e.lifeTime && tickTimer(e.lifeTimer, e.lifeTime)) {
@@ -105,7 +112,7 @@ run({
     }
 
     cleanupDestroyedEntities(scene);
-    sortEntitiesOnDepth(scene);
+    sortEntitiesOnDepth(scene, scene.active);
   },
 
   render: () => {
@@ -123,7 +130,7 @@ run({
         break;
     }
 
-    for (const id of scene.render) {
+    for (const id of scene.active) {
       const e = getEntity(scene, id);
       renderEntity(e);
       renderEnemyStatus(e);

@@ -1,6 +1,6 @@
 import { SceneId } from "@/consts/scene.js";
 import { Entity, newEntity } from "@/data/entity.js";
-import { Camera, camera, grid, Grid, rect, Rectangle, table, Table, vec, Vector } from "ridder";
+import { Camera, camera, grid, Grid, rect, Rectangle, table, Table, timer, Timer, vec, Vector } from "ridder";
 
 export type Scene = {
   id: SceneId;
@@ -9,9 +9,12 @@ export type Scene = {
   entities: Table<Entity>;
 
   // Table support lists
-  update: Array<number>;
-  render: Array<number>;
+  all: Array<number>;
   destroyed: Array<number>;
+
+  // Active entities
+  active: Array<number>;
+  activeTimer: Timer;
 
   // World
   camera: Camera;
@@ -31,9 +34,12 @@ export function newScene(id: SceneId, maxEntityCount: number, gridWidth: number,
     entities: table(maxEntityCount, newEntity),
 
     // Table support lists
-    update: [],
-    render: [],
+    all: [],
     destroyed: [],
+
+    // Active entities
+    active: [],
+    activeTimer: timer(),
 
     // World
     camera: camera(),
