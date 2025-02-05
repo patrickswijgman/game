@@ -24,5 +24,10 @@ export function updateSheet(sheet: Sheet) {
     addStats(sheet.stats, item.stats);
   }
 
+  if (sheet.offhandId) {
+    const item = getItem(sheet.offhandId);
+    addStats(sheet.stats, item.stats);
+  }
+
   clampStats(sheet.stats);
 }
