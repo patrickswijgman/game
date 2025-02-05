@@ -53,7 +53,8 @@ export type Entity = {
   stateNextId: StateId;
   stateTimer: Timer;
 
-  // Misc
+  // Lifecycle
+  isDestroyed: boolean;
   lifeTime: number;
   lifeTimer: Timer;
 
@@ -130,7 +131,8 @@ export function newEntity(): Entity {
     stateNextId: StateId.NONE,
     stateTimer: timer(),
 
-    // Misc
+    // Lifecycle
+    isDestroyed: false,
     lifeTime: 0,
     lifeTimer: timer(),
 

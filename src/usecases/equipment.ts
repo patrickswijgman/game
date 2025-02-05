@@ -1,5 +1,6 @@
 import { SpriteId } from "@/consts/assets.js";
 import { ItemId, ItemType } from "@/consts/item.js";
+import { SLOT_SIZE } from "@/consts/render.js";
 import { game } from "@/data/game.js";
 import { getItem } from "@/usecases/item.js";
 import { updateSheet } from "@/usecases/sheet.js";
@@ -22,31 +23,31 @@ export function unlockEquipmentSlot() {
   }
 }
 
-export function assignEquipmentSlot(id: number, itemId: number) {
+export function assignEquipmentSlot(id: number, itemId: ItemId) {
   const slot = getEquipmentSlot(id);
 
   if (slot.isUnlocked) {
     for (let id = 0; id < game.equipment.slots.length; id++) {
       const other = getEquipmentSlot(id);
-
       if (other.itemId === itemId) {
         other.itemId = ItemId.NONE;
       }
     }
 
-    if (slot.itemId) {
-      const item = getItem(slot.itemId);
-
-      switch (item.type) {
-        case ItemType.WEAPON:
+    switch (slot.itemId) {
+      case game.sheet.weaponId:
+        {
           game.sheet.weaponId = ItemId.NONE;
           updateSheet(game.sheet);
-          break;
-        case ItemType.ARMOR:
+        }
+        break;
+
+      case game.sheet.armorId:
+        {
           game.sheet.armorId = ItemId.NONE;
           updateSheet(game.sheet);
-          break;
-      }
+        }
+        break;
     }
 
     slot.itemId = itemId;
@@ -93,11 +94,11 @@ export function isEquipmentSlotActive(id: number) {
   return false;
 }
 
-export function isEquipmentAssigned(itemId: number) {
+export function isEquipmentAssigned(itemId: ItemId) {
   return game.equipment.slots.some((slot) => slot.itemId === itemId);
 }
 
-export function getEquipmentSlotId(itemId: number) {
+export function getEquipmentSlotId(itemId: ItemId) {
   return game.equipment.slots.findIndex((slot) => slot.itemId === itemId);
 }
 
@@ -105,24 +106,24 @@ export function renderEquipment() {
   const count = countUnlockedEquipmentSlots();
 
   resetTransform();
-  translateTransform(getWidth() / 2 - (18 * count) / 2, getHeight() - 25);
+  translateTransform(getWidth() / 2 - (SLOT_SIZE * count) / 2, getHeight() - 25);
 
   for (let i = 0; i < count; i++) {
     const slot = getEquipmentSlot(i);
 
-    drawSprite(SpriteId.SLOT, i * 18, 0);
+    drawSprite(SpriteId.SLOT, i * SLOT_SIZE, 0);
 
     if (slot.itemId) {
       const item = getItem(slot.itemId);
-      drawSprite(item.itemSpriteId, i * 18, 0);
+      drawSprite(item.itemSpriteId, i * SLOT_SIZE, 0);
 
       if (isEquipmentSlotActive(i)) {
-        drawSprite(SpriteId.SLOT_ACTIVE, i * 18, 0);
+        drawSprite(SpriteId.SLOT_ACTIVE, i * SLOT_SIZE, 0);
       }
     }
 
     scaleTransform(0.5, 0.5);
-    drawTextOutlined((i + 1).toString(), i * 36 + 16, 36, "white", "center");
+    drawTextOutlined((i + 1).toString(), i * (SLOT_SIZE * 2) + 16, SLOT_SIZE * 2, "white", "center");
     scaleTransform(2, 2);
   }
 }

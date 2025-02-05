@@ -12,7 +12,7 @@ import { renderWorldScene, setupWorldScene } from "@/scenes/world.js";
 import { loadAssets } from "@/usecases/assets.js";
 import { debugEntities, debugFps, debugGrid, debugHitboxes } from "@/usecases/debug.js";
 import { renderEnemyStatus } from "@/usecases/enemy.js";
-import { destroyEntity, renderCombatLog, renderEntity, updateCombatLog, updatePhysics } from "@/usecases/entity.js";
+import { destroyIfDead, destroyIfExpired, renderCombatLog, renderEntity, updateCombatLog, updatePhysics } from "@/usecases/entity.js";
 import { renderEquipment } from "@/usecases/equipment.js";
 import { getScene, setupPlayer, switchScene, transitionToNextScene } from "@/usecases/game.js";
 import { renderHud } from "@/usecases/hud.js";
@@ -78,13 +78,10 @@ run({
     for (const id of scene.active) {
       const e = getEntity(scene, id);
 
-      if (e.lifeTime && tickTimer(e.lifeTimer, e.lifeTime)) {
-        destroyEntity(e);
-        continue;
-      }
+      destroyIfExpired(e);
+      destroyIfDead(e);
 
-      if (e.sheet.stats.healthMax && e.sheet.stats.health === 0) {
-        destroyEntity(e);
+      if (e.isDestroyed) {
         continue;
       }
 

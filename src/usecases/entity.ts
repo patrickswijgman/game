@@ -51,7 +51,7 @@ export function setHitbox(e: Entity, x: number, y: number, w: number, h: number)
   updateHitbox(e);
 }
 
-export function setState(e: Entity, stateId: number) {
+export function setState(e: Entity, stateId: StateId) {
   e.stateNextId = stateId;
 }
 
@@ -204,7 +204,21 @@ export function renderCombatLog(e: Entity) {
   }
 }
 
+export function destroyIfExpired(e: Entity) {
+  if (e.lifeTime && tickTimer(e.lifeTimer, e.lifeTime)) {
+    destroyEntity(e);
+  }
+}
+
+export function destroyIfDead(e: Entity) {
+  if (e.sheet.stats.healthMax && e.sheet.stats.health === 0) {
+    destroyEntity(e);
+  }
+}
+
 export function destroyEntity(e: Entity) {
+  e.isDestroyed = true;
+
   const scene = getScene(e.sceneId);
   scene.destroyed.push(e.id);
 }
