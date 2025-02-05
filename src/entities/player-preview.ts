@@ -7,8 +7,8 @@ import { setVector } from "ridder";
 
 export function addPlayerPreview(sceneId: SceneId, x: number, y: number) {
   const e = addEntity(Type.PLAYER_PREVIEW, sceneId, x, y);
-  setSprite(e, SpriteId.PLAYER, 8, 15);
-  setShadow(e, SpriteId.PLAYER_SHADOW, 8, 13);
+  setSprite(e, SpriteId.PLAYER);
+  setShadow(e, SpriteId.PLAYER_SHADOW);
   setVector(e.scale, 4, 4);
 
   e.sheet = game.sheet;

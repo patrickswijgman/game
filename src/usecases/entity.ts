@@ -10,6 +10,7 @@ import { onStaggerEnter, onStaggerExit, onStaggerUpdate } from "@/states/stagger
 import { getScene } from "@/usecases/game.js";
 import { getItem } from "@/usecases/item.js";
 import { nextEntity } from "@/usecases/scene.js";
+import { getSprite } from "@/usecases/sprite.js";
 import { drawTextOutlined } from "@/usecases/ui.js";
 import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, getDelta, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, tickTimer, translateTransform, tween } from "ridder";
 
@@ -22,14 +23,12 @@ export function addEntity(type: Type, sceneId: SceneId, x: number, y: number) {
   return e;
 }
 
-export function setSprite(e: Entity, id: SpriteId, pivotX: number, pivotY: number) {
+export function setSprite(e: Entity, id: SpriteId) {
   e.spriteId = id;
-  setVector(e.pivot, pivotX, pivotY);
 }
 
-export function setShadow(e: Entity, id: SpriteId, pivotX: number, pivotY: number) {
+export function setShadow(e: Entity, id: SpriteId) {
   e.shadowId = id;
-  setVector(e.shadowPivot, pivotX, pivotY);
 }
 
 export function setOutline(e: Entity, id: SpriteId) {
@@ -42,6 +41,11 @@ export function setFlash(e: Entity, id: SpriteId) {
 
 export function setCenter(e: Entity, x: number, y: number) {
   setVector(e.centerOffset, x, y);
+  updateCenter(e);
+}
+
+export function setCenterFromHitbox(e: Entity) {
+  setVector(e.centerOffset, 0, 1 - Math.ceil(e.hitbox.h / 2));
   updateCenter(e);
 }
 
@@ -152,8 +156,9 @@ export function renderEntity(e: Entity) {
   }
 
   if (e.shadowId) {
+    const sprite = getSprite(e.shadowId);
     setAlpha(SHADOW_ALPHA);
-    drawSprite(e.shadowId, -e.shadowPivot.x, -e.shadowPivot.y);
+    drawSprite(e.shadowId, -sprite.pivot.x, -sprite.pivot.y);
     setAlpha(1);
   }
 
@@ -161,26 +166,28 @@ export function renderEntity(e: Entity) {
   scaleTransform(e.tweenScale.x, e.tweenScale.y);
   rotateTransform(e.tweenAngle);
 
+  const sprite = getSprite(e.spriteId);
+
   if (e.isFlashing) {
-    drawSprite(e.flashId, -e.pivot.x, -e.pivot.y);
+    drawSprite(e.flashId, -sprite.pivot.x, -sprite.pivot.y);
   } else {
     if (e.spriteId) {
-      drawSprite(e.spriteId, -e.pivot.x, -e.pivot.y);
+      drawSprite(e.spriteId, -sprite.pivot.x, -sprite.pivot.y);
     }
 
     if (e.sheet.armorId) {
       const item = getItem(e.sheet.armorId);
-      drawSprite(item.equipSpriteId, -e.pivot.x, -e.pivot.y);
+      drawSprite(item.equipSpriteId, -sprite.pivot.x, -sprite.pivot.y);
     }
 
     if (e.sheet.weaponId) {
       const item = getItem(e.sheet.weaponId);
-      drawSprite(item.equipSpriteId, -e.pivot.x, -e.pivot.y);
+      drawSprite(item.equipSpriteId, -sprite.pivot.x, -sprite.pivot.y);
     }
   }
 
   if (e.isOutlineVisible) {
-    drawSprite(e.outlineId, -e.pivot.x, -e.pivot.y);
+    drawSprite(e.outlineId, -sprite.pivot.x, -sprite.pivot.y);
   }
 }
 

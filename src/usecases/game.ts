@@ -23,7 +23,6 @@ export function getScene(id: SceneId) {
 }
 
 export function setupPlayer() {
-  game.sheet.name = "Hero";
   game.sheet.statsBase.health = 10;
   game.sheet.statsBase.healthMax = 10;
   game.sheet.statsBase.mana = 5;

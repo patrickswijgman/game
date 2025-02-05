@@ -1,5 +1,6 @@
 import { SpriteId } from "@/consts/assets.js";
 import { AttackId } from "@/consts/attack.js";
+import { EnemyId } from "@/consts/enemy.js";
 import { SceneId } from "@/consts/scene.js";
 import { StateId } from "@/consts/state.js";
 import { Type } from "@/consts/type.js";
@@ -23,14 +24,11 @@ export type Entity = {
 
   // Render
   spriteId: SpriteId;
-  pivot: Vector;
+  shadowId: SpriteId;
   scale: Vector;
   angle: number;
   depth: number;
   isFlipped: boolean;
-
-  shadowId: SpriteId;
-  shadowPivot: Vector;
 
   outlineId: SpriteId;
   isOutlineVisible: boolean;
@@ -70,6 +68,7 @@ export type Entity = {
   hitboxOffset: Vector;
   sheet: Sheet;
   attackId: AttackId;
+  enemyId: EnemyId;
   isPlayer: boolean;
   isEnemy: boolean;
 
@@ -101,14 +100,11 @@ export function newEntity(): Entity {
 
     // Render
     spriteId: SpriteId.NONE,
-    pivot: vec(),
+    shadowId: SpriteId.NONE,
     scale: vec(1, 1),
     angle: 0,
     depth: 0,
     isFlipped: false,
-
-    shadowId: SpriteId.NONE,
-    shadowPivot: vec(),
 
     outlineId: SpriteId.NONE,
     isOutlineVisible: false,
@@ -148,6 +144,7 @@ export function newEntity(): Entity {
     hitboxOffset: vec(),
     sheet: newSheet(),
     attackId: AttackId.NONE,
+    enemyId: EnemyId.NONE,
     isPlayer: false,
     isEnemy: false,
 

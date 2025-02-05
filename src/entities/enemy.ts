@@ -1,29 +1,30 @@
-import { SpriteId } from "@/consts/assets.js";
-import { ItemId } from "@/consts/item.js";
+import { EnemyId } from "@/consts/enemy.js";
 import { SceneId } from "@/consts/scene.js";
 import { StateId } from "@/consts/state.js";
 import { Type } from "@/consts/type.js";
 import { Entity } from "@/data/entity.js";
 import { onEnemyStateEnter, onEnemyStateExit, onEnemyStateUpdate } from "@/states/enemy.js";
-import { addEntity, setCenter, setFlash, setHitbox, setShadow, setSprite, setState, updateState } from "@/usecases/entity.js";
+import { getEnemy } from "@/usecases/enemy.js";
+import { addEntity, setCenterFromHitbox, setFlash, setHitbox, setShadow, setSprite, setState, updateState } from "@/usecases/entity.js";
 import { initSheet } from "@/usecases/sheet.js";
+import { copyStats } from "@/usecases/stats.js";
 
-export function addEnemy(sceneId: SceneId, x: number, y: number) {
+export function addEnemy(sceneId: SceneId, x: number, y: number, enemyId: EnemyId) {
   const e = addEntity(Type.ENEMY, sceneId, x, y);
-  setSprite(e, SpriteId.PLAYER, 8, 15);
-  setShadow(e, SpriteId.PLAYER_SHADOW, 8, 13);
-  setFlash(e, SpriteId.PLAYER_FLASH);
-  setHitbox(e, -3, -8, 6, 8);
-  setCenter(e, 0, -3);
+  const enemy = getEnemy(enemyId);
 
-  e.sheet.name = "Enemy";
-  e.sheet.statsBase.health = 10;
-  e.sheet.statsBase.healthMax = 10;
-  e.sheet.statsBase.movementSpeed = 1;
-  e.sheet.statsBase.movementSpeedMax = 1.5;
-  e.sheet.weaponId = ItemId.LONGSWORD;
+  setSprite(e, enemy.spriteId);
+  setShadow(e, enemy.shadowId);
+  setFlash(e, enemy.flashId);
+  setHitbox(e, enemy.hitbox.x, enemy.hitbox.y, enemy.hitbox.w, enemy.hitbox.h);
+  setCenterFromHitbox(e);
+
+  e.sheet.weaponId = enemy.weaponId;
+  e.sheet.armorId = enemy.armorId;
+  copyStats(e.sheet.statsBase, enemy.stats);
   initSheet(e.sheet);
 
+  e.enemyId = enemyId;
   e.isEnemy = true;
   e.isPhysicsEnabled = true;
   e.isLogEnabled = true;

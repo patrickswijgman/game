@@ -25,7 +25,7 @@ export function updateCharacterScene(scene: Scene) {
 export function renderCharacterScene(scene: Scene) {
   resetTransform();
   drawRect(0, 0, getWidth(), getHeight(), COLOR_BG, true);
-  drawText(game.sheet.name, 10, 10);
+  drawText("Character", 10, 10);
 
   resetTransform();
   translateTransform((getWidth() / 3) * 2, 30);

@@ -5,17 +5,17 @@ import { Type } from "@/consts/type.js";
 import { Entity } from "@/data/entity.js";
 import { game } from "@/data/game.js";
 import { onPlayerStateEnter, onPlayerStateExit, onPlayerStateUpdate } from "@/states/player.js";
-import { addEntity, setCenter, setFlash, setHitbox, setShadow, setSprite, setState, updateState } from "@/usecases/entity.js";
+import { addEntity, setCenterFromHitbox, setFlash, setHitbox, setShadow, setSprite, setState, updateState } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";
 import { setCameraPosition, setVector } from "ridder";
 
 export function addPlayer(sceneId: SceneId, x: number, y: number) {
   const e = addEntity(Type.PLAYER, sceneId, x, y);
-  setSprite(e, SpriteId.PLAYER, 8, 15);
-  setShadow(e, SpriteId.PLAYER_SHADOW, 8, 13);
+  setSprite(e, SpriteId.PLAYER);
+  setShadow(e, SpriteId.PLAYER_SHADOW);
   setFlash(e, SpriteId.PLAYER_FLASH);
   setHitbox(e, -3, -8, 6, 8);
-  setCenter(e, 0, -3);
+  setCenterFromHitbox(e);
   setVector(e.direction, 1, 0);
 
   e.sheet = game.sheet;
