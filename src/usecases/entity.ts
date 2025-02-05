@@ -23,20 +23,11 @@ export function addEntity(type: Type, sceneId: SceneId, x: number, y: number) {
   return e;
 }
 
-export function setSprite(e: Entity, id: SpriteId) {
-  e.spriteId = id;
-}
-
-export function setShadow(e: Entity, id: SpriteId) {
-  e.shadowId = id;
-}
-
-export function setOutline(e: Entity, id: SpriteId) {
-  e.outlineId = id;
-}
-
-export function setFlash(e: Entity, id: SpriteId) {
-  e.flashId = id;
+export function setSprites(e: Entity, spriteId: SpriteId, shadowId = SpriteId.NONE, flashId = SpriteId.NONE, outlineId = SpriteId.NONE) {
+  e.spriteId = spriteId;
+  e.shadowId = shadowId;
+  e.flashId = flashId;
+  e.outlineId = outlineId;
 }
 
 export function setCenter(e: Entity, x: number, y: number) {

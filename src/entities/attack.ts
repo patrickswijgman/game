@@ -3,7 +3,7 @@ import { StateId } from "@/consts/state.js";
 import { Type } from "@/consts/type.js";
 import { Entity } from "@/data/entity.js";
 import { getAttack } from "@/usecases/attack.js";
-import { addEntity, addToCombatLog, destroyEntity, setHitbox, setSprite, setState } from "@/usecases/entity.js";
+import { addEntity, addToCombatLog, destroyEntity, setHitbox, setSprites, setState } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";
 import { getEntity } from "@/usecases/scene.js";
 import { clampStats, copyStats } from "@/usecases/stats.js";
@@ -20,7 +20,7 @@ export function addAttack(sceneId: SceneId, caster: Entity) {
 
   copyVector(e.direction, caster.direction);
 
-  setSprite(e, attack.spriteId);
+  setSprites(e, attack.spriteId);
   setHitbox(e, attack.hitbox.x, attack.hitbox.y, attack.hitbox.w, attack.hitbox.h);
 
   copyStats(e.sheet.stats, caster.sheet.stats);

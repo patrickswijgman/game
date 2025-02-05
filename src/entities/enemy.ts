@@ -5,7 +5,7 @@ import { Type } from "@/consts/type.js";
 import { Entity } from "@/data/entity.js";
 import { onEnemyStateEnter, onEnemyStateExit, onEnemyStateUpdate } from "@/states/enemy.js";
 import { getEnemy } from "@/usecases/enemy.js";
-import { addEntity, setCenterFromHitbox, setFlash, setHitbox, setShadow, setSprite, setState, updateState } from "@/usecases/entity.js";
+import { addEntity, setCenterFromHitbox, setHitbox, setSprites, setState, updateState } from "@/usecases/entity.js";
 import { initSheet } from "@/usecases/sheet.js";
 import { copyStats } from "@/usecases/stats.js";
 
@@ -13,9 +13,7 @@ export function addEnemy(sceneId: SceneId, x: number, y: number, enemyId: EnemyI
   const e = addEntity(Type.ENEMY, sceneId, x, y);
   const enemy = getEnemy(enemyId);
 
-  setSprite(e, enemy.spriteId);
-  setShadow(e, enemy.shadowId);
-  setFlash(e, enemy.flashId);
+  setSprites(e, enemy.spriteId, enemy.shadowId, enemy.flashId);
   setHitbox(e, enemy.hitbox.x, enemy.hitbox.y, enemy.hitbox.w, enemy.hitbox.h);
   setCenterFromHitbox(e);
 
