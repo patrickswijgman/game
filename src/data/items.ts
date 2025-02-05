@@ -49,8 +49,8 @@ export const items = table<Item>(ItemId.MAX, (id) => {
       return {
         name: "Wooden Shield",
         type: ItemType.OFFHAND,
-        itemSpriteId: SpriteId.ITEM_LEATHER_ARMOR,
-        equipSpriteId: SpriteId.EQUIP_LEATHER_ARMOR,
+        itemSpriteId: SpriteId.NONE,
+        equipSpriteId: SpriteId.NONE,
         attackId: AttackId.NONE,
         stats: newStats({
           armor: 1,
