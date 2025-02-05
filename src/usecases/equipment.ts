@@ -11,6 +11,10 @@ export function getEquipmentSlot(id: number) {
   return game.equipment.slots[id];
 }
 
+export function getEquipmentSlotId(itemId: ItemId) {
+  return game.equipment.slots.findIndex((slot) => slot.itemId === itemId);
+}
+
 export function countUnlockedEquipmentSlots() {
   return game.equipment.slots.reduce((prev, slot) => (prev += slot.isUnlocked ? 1 : 0), 0);
 }
@@ -48,6 +52,13 @@ export function assignEquipmentSlot(id: number, itemId: ItemId) {
           updateSheet(game.sheet);
         }
         break;
+
+      case game.sheet.offhandId:
+        {
+          game.sheet.offhandId = ItemId.NONE;
+          updateSheet(game.sheet);
+        }
+        break;
     }
 
     slot.itemId = itemId;
@@ -64,12 +75,29 @@ export function useEquipmentSlot(id: number) {
       case ItemType.WEAPON:
         {
           game.sheet.weaponId = slot.itemId;
+          if (item.isTwoHanded) {
+            game.sheet.offhandId = ItemId.NONE;
+          }
           updateSheet(game.sheet);
         }
         break;
+
       case ItemType.ARMOR:
         {
           game.sheet.armorId = slot.itemId;
+          updateSheet(game.sheet);
+        }
+        break;
+
+      case ItemType.OFFHAND:
+        {
+          game.sheet.offhandId = slot.itemId;
+          if (game.sheet.weaponId) {
+            const weapon = getItem(game.sheet.weaponId);
+            if (weapon.isTwoHanded) {
+              game.sheet.weaponId = ItemId.NONE;
+            }
+          }
           updateSheet(game.sheet);
         }
         break;
@@ -86,8 +114,12 @@ export function isEquipmentSlotActive(id: number) {
     switch (item.type) {
       case ItemType.WEAPON:
         return game.sheet.weaponId === slot.itemId;
+
       case ItemType.ARMOR:
         return game.sheet.armorId === slot.itemId;
+
+      case ItemType.OFFHAND:
+        return game.sheet.offhandId === slot.itemId;
     }
   }
 
@@ -96,10 +128,6 @@ export function isEquipmentSlotActive(id: number) {
 
 export function isEquipmentAssigned(itemId: ItemId) {
   return game.equipment.slots.some((slot) => slot.itemId === itemId);
-}
-
-export function getEquipmentSlotId(itemId: ItemId) {
-  return game.equipment.slots.findIndex((slot) => slot.itemId === itemId);
 }
 
 export function renderEquipment() {

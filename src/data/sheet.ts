@@ -6,12 +6,7 @@ export type Sheet = {
   statsBase: Stats;
   weaponId: ItemId;
   armorId: ItemId;
-};
-
-export type SheetOptions = {
-  stats: Partial<Stats>;
-  weaponId: ItemId;
-  armorId: ItemId;
+  offhandId: ItemId;
 };
 
 export function newSheet(): Sheet {
@@ -20,5 +15,6 @@ export function newSheet(): Sheet {
     statsBase: newStats(),
     weaponId: ItemId.NONE,
     armorId: ItemId.NONE,
+    offhandId: ItemId.NONE,
   };
 }

@@ -1,7 +1,7 @@
 import { SpriteId } from "@/consts/assets.js";
 import { COLOR_BG, COLOR_PRIMARY, COLOR_SURFACE } from "@/consts/colors.js";
 import { INVENTORY_HEIGHT, INVENTORY_SIZE, INVENTORY_WIDTH } from "@/consts/inventory.js";
-import { ItemId } from "@/consts/item.js";
+import { ItemId, ItemType } from "@/consts/item.js";
 import { FONT_HEIGHT, SLOT_SIZE } from "@/consts/render.js";
 import { game } from "@/data/game.js";
 import { Scene } from "@/data/scene.js";
@@ -107,6 +107,20 @@ export function renderTooltip(scene: Scene) {
 
     translateTransform(-40, 45);
     scaleTransform(0.5, 0.5);
+
+    switch (item.type) {
+      case ItemType.WEAPON:
+        drawText(item.isTwoHanded ? "Two-Handed Weapon" : "One-Handed Weapon", 80, 0, "white", "center");
+        break;
+      case ItemType.ARMOR:
+        drawText("Armor", 80, 0, "white", "center");
+        break;
+      case ItemType.OFFHAND:
+        drawText("Offhand", 80, 0, "white", "center");
+        break;
+    }
+    translateTransform(0, FONT_HEIGHT * 2);
+
     renderStat("Health", item.stats.healthMax);
     renderStat("Mana", item.stats.manaMax);
     renderStat("Damage", item.stats.damage);

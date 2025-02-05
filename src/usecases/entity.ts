@@ -175,6 +175,11 @@ export function renderEntity(e: Entity) {
       const item = getItem(e.sheet.weaponId);
       drawSprite(item.equipSpriteId, -sprite.pivot.x, -sprite.pivot.y);
     }
+
+    if (e.sheet.offhandId) {
+      const item = getItem(e.sheet.offhandId);
+      drawSprite(item.equipSpriteId, -sprite.pivot.x, -sprite.pivot.y);
+    }
   }
 
   if (e.isOutlineVisible) {

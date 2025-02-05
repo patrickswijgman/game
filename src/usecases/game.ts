@@ -34,7 +34,10 @@ export function setupPlayer() {
   addItemToInventory(ItemId.LONGSWORD);
   addItemToInventory(ItemId.SHORTBOW);
   addItemToInventory(ItemId.LEATHER_ARMOR);
+  addItemToInventory(ItemId.WOODEN_SHIELD);
 
+  unlockEquipmentSlot();
+  unlockEquipmentSlot();
   unlockEquipmentSlot();
   unlockEquipmentSlot();
 }

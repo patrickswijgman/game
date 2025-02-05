@@ -12,6 +12,7 @@ export type Item = {
   attackId: AttackId;
   stats: Stats;
   isStackable: boolean;
+  isTwoHanded: boolean;
 };
 
 export const items = table<Item>(ItemId.MAX, (id) => {
@@ -27,6 +28,7 @@ export const items = table<Item>(ItemId.MAX, (id) => {
           damage: 3,
         }),
         isStackable: false,
+        isTwoHanded: false,
       };
 
     case ItemId.SHORTBOW:
@@ -40,6 +42,22 @@ export const items = table<Item>(ItemId.MAX, (id) => {
           damage: 2,
         }),
         isStackable: false,
+        isTwoHanded: true,
+      };
+
+    case ItemId.WOODEN_SHIELD:
+      return {
+        name: "Wooden Shield",
+        type: ItemType.OFFHAND,
+        itemSpriteId: SpriteId.ITEM_LEATHER_ARMOR,
+        equipSpriteId: SpriteId.EQUIP_LEATHER_ARMOR,
+        attackId: AttackId.NONE,
+        stats: newStats({
+          armor: 1,
+          movementSpeed: -0.1,
+        }),
+        isStackable: false,
+        isTwoHanded: false,
       };
 
     case ItemId.LEATHER_ARMOR:
@@ -54,6 +72,7 @@ export const items = table<Item>(ItemId.MAX, (id) => {
           movementSpeed: -0.1,
         }),
         isStackable: false,
+        isTwoHanded: false,
       };
 
     default:
@@ -65,6 +84,7 @@ export const items = table<Item>(ItemId.MAX, (id) => {
         attackId: AttackId.NONE,
         stats: newStats(),
         isStackable: false,
+        isTwoHanded: false,
       };
   }
 });
