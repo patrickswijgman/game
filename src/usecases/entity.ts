@@ -147,9 +147,9 @@ export function renderEntity(e: Entity) {
   }
 
   if (e.shadowId) {
-    const sprite = getSprite(e.shadowId);
+    const shadow = getSprite(e.shadowId);
     setAlpha(SHADOW_ALPHA);
-    drawSprite(e.shadowId, -sprite.pivot.x, -sprite.pivot.y);
+    drawSprite(e.shadowId, -shadow.pivot.x, -shadow.pivot.y);
     setAlpha(1);
   }
 
