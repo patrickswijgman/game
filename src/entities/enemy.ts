@@ -19,6 +19,7 @@ export function addEnemy(sceneId: SceneId, x: number, y: number, enemyId: EnemyI
 
   e.sheet.weaponId = enemy.weaponId;
   e.sheet.armorId = enemy.armorId;
+  e.sheet.offhandId = enemy.offhandId;
   copyStats(e.sheet.statsBase, enemy.stats);
   initSheet(e.sheet);
 

@@ -11,6 +11,7 @@ export type Enemy = {
   stats: Stats;
   weaponId: ItemId;
   armorId: ItemId;
+  offhandId: ItemId;
   hitbox: Rectangle;
 };
 
@@ -29,6 +30,7 @@ export const enemies = table<Enemy>(EnemyId.MAX, (id) => {
         }),
         weaponId: ItemId.LONGSWORD,
         armorId: ItemId.NONE,
+        offhandId: ItemId.WOODEN_SHIELD,
         hitbox: rect(-3, -8, 6, 8),
       };
 
@@ -40,6 +42,7 @@ export const enemies = table<Enemy>(EnemyId.MAX, (id) => {
         stats: newStats(),
         weaponId: ItemId.NONE,
         armorId: ItemId.NONE,
+        offhandId: ItemId.NONE,
         hitbox: rect(),
       };
   }
