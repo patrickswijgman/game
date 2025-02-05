@@ -13,8 +13,8 @@ export function addEnemy(sceneId: SceneId, x: number, y: number, enemyId: EnemyI
   const e = addEntity(Type.ENEMY, sceneId, x, y);
   const enemy = getEnemy(enemyId);
 
-  setSprites(e, enemy.spriteId, enemy.shadowId, enemy.flashId);
-  setHitbox(e, enemy.hitbox.x, enemy.hitbox.y, enemy.hitbox.w, enemy.hitbox.h);
+  setSprites(e, ...enemy.sprites);
+  setHitbox(e, ...enemy.hitbox);
   setCenterFromHitbox(e);
 
   e.sheet.weaponId = enemy.weaponId;

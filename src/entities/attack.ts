@@ -21,7 +21,7 @@ export function addAttack(sceneId: SceneId, caster: Entity) {
   copyVector(e.direction, caster.direction);
 
   setSprites(e, attack.spriteId);
-  setHitbox(e, attack.hitbox.x, attack.hitbox.y, attack.hitbox.w, attack.hitbox.h);
+  setHitbox(e, ...attack.hitbox);
 
   copyStats(e.sheet.stats, caster.sheet.stats);
 
