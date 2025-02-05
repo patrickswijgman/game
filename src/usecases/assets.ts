@@ -4,7 +4,7 @@ import { loadFlashTexture, loadFont, loadOutlineTexture, loadRenderTexture, load
 
 export async function loadAssets() {
   loadRenderTexture(TextureId.NONE, 16, 16, (ctx, w, h) => {
-    ctx.fillStyle = "purple";
+    ctx.fillStyle = "magenta";
     ctx.fillRect(0, 0, w, h);
   });
 
