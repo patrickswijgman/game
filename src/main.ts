@@ -16,8 +16,8 @@ import { destroyIfDead, destroyIfExpired, renderCombatLog, renderEntity, updateC
 import { renderEquipment } from "@/usecases/equipment.js";
 import { getScene, setupPlayer, switchScene, transitionToNextScene } from "@/usecases/game.js";
 import { renderHud } from "@/usecases/hud.js";
-import { cleanupDestroyedEntities, getEntity, setActiveEntities, sortEntitiesOnDepth } from "@/usecases/scene.js";
-import { InputCode, isInputPressed, resetTimer, resetTransform, run, scaleTransform, tickTimer, translateTransform, updateCamera } from "ridder";
+import { cleanupDestroyedEntities, getEntity, revaluateActiveEntities, setActiveEntities, sortEntitiesOnDepth } from "@/usecases/scene.js";
+import { InputCode, isInputPressed, resetTransform, run, scaleTransform, translateTransform, updateCamera } from "ridder";
 
 let isDebugging = false;
 
@@ -61,10 +61,7 @@ run({
 
     const scene = getScene(game.sceneId);
 
-    if (tickTimer(scene.activeTimer, 1000)) {
-      setActiveEntities(scene);
-      resetTimer(scene.activeTimer);
-    }
+    revaluateActiveEntities(scene);
 
     switch (scene.id) {
       case SceneId.INVENTORY:

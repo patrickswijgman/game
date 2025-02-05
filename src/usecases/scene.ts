@@ -1,6 +1,6 @@
 import { zeroEntity } from "@/data/entity.js";
 import { Scene } from "@/data/scene.js";
-import { getVectorDistance, remove } from "ridder";
+import { getVectorDistance, remove, resetTimer, tickTimer } from "ridder";
 
 export function nextEntity(scene: Scene) {
   let id = scene.entityId;
@@ -46,6 +46,13 @@ export function cleanupDestroyedEntities(scene: Scene) {
       zeroEntity(scene.entities[id]);
     }
     scene.destroyed.length = 0;
+  }
+}
+
+export function revaluateActiveEntities(scene: Scene) {
+  if (tickTimer(scene.activeTimer, 1000)) {
+    setActiveEntities(scene);
+    resetTimer(scene.activeTimer);
   }
 }
 
