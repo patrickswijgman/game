@@ -21,8 +21,8 @@ export const attacks = table<Attack>(AttackId.MAX, (id) => {
         reach: 8,
         range: 12,
         speed: 0,
-        duration: 100,
-        recovery: 250,
+        duration: 150,
+        recovery: 400,
       };
 
     case AttackId.SHORTBOW:
@@ -33,7 +33,7 @@ export const attacks = table<Attack>(AttackId.MAX, (id) => {
         range: 50,
         speed: 2,
         duration: 0,
-        recovery: 400,
+        recovery: 500,
       };
 
     default:

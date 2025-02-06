@@ -1,5 +1,5 @@
 import { SpriteId } from "@/consts/assets.js";
-import { COLOR_BG, COLOR_PRIMARY, COLOR_SURFACE } from "@/consts/colors.js";
+import { COLOR_LINE, COLOR_PRIMARY, COLOR_SURFACE } from "@/consts/colors.js";
 import { INVENTORY_HEIGHT, INVENTORY_SIZE, INVENTORY_WIDTH } from "@/consts/inventory.js";
 import { ItemId, ItemType } from "@/consts/item.js";
 import { FONT_HEIGHT, SLOT_SIZE } from "@/consts/render.js";
@@ -138,7 +138,7 @@ function renderStat(label: string, value: number, percentile = false) {
     } else {
       drawText(value.toString(), 160, 0, "white", "right");
     }
-    drawRect(0, FONT_HEIGHT, 160, 2, COLOR_BG, true);
+    drawRect(0, FONT_HEIGHT, 160, 2, COLOR_LINE, true);
     translateTransform(0, FONT_HEIGHT + 5);
   }
 }

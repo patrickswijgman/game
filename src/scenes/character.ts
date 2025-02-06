@@ -1,4 +1,4 @@
-import { COLOR_BG, COLOR_PRIMARY } from "@/consts/colors.js";
+import { COLOR_BG, COLOR_LINE, COLOR_PRIMARY, COLOR_SURFACE } from "@/consts/colors.js";
 import { FONT_HEIGHT } from "@/consts/render.js";
 import { SceneId } from "@/consts/scene.js";
 import { game } from "@/data/game.js";
@@ -30,7 +30,7 @@ export function renderCharacterScene(scene: Scene) {
   resetTransform();
   translateTransform((getWidth() / 3) * 2, 30);
 
-  drawRect(-60, 0, 120, getHeight() - 60, "black", true);
+  drawRect(-60, 0, 120, getHeight() - 60, COLOR_SURFACE, true);
   drawRect(-60, 0, 120, 1, COLOR_PRIMARY, true);
 
   translateTransform(-50, 5);
@@ -45,6 +45,6 @@ export function renderCharacterScene(scene: Scene) {
 function renderStat(label: string, value: string | number) {
   drawText(label, 0, 0, "white");
   drawText(value.toString(), 200, 0, "white", "right");
-  drawRect(0, FONT_HEIGHT, 200, 2, COLOR_BG, true);
+  drawRect(0, FONT_HEIGHT, 200, 2, COLOR_LINE, true);
   translateTransform(0, FONT_HEIGHT + 5);
 }

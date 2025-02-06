@@ -72,26 +72,16 @@ export function equipItem(sheet: Sheet, itemId: ItemId) {
 export function unequipItem(sheet: Sheet, itemId: ItemId) {
   switch (itemId) {
     case sheet.weaponId:
-      {
-        sheet.weaponId = ItemId.NONE;
-        updateSheet(sheet);
-      }
+      sheet.weaponId = ItemId.NONE;
       break;
-
     case sheet.armorId:
-      {
-        sheet.armorId = ItemId.NONE;
-        updateSheet(sheet);
-      }
+      sheet.armorId = ItemId.NONE;
       break;
-
     case sheet.offhandId:
-      {
-        sheet.offhandId = ItemId.NONE;
-        updateSheet(sheet);
-      }
+      sheet.offhandId = ItemId.NONE;
       break;
   }
+  updateSheet(sheet);
 }
 
 export function isEquipped(sheet: Sheet, itemId: ItemId) {
@@ -100,10 +90,8 @@ export function isEquipped(sheet: Sheet, itemId: ItemId) {
   switch (item.type) {
     case ItemType.WEAPON:
       return sheet.weaponId === itemId;
-
     case ItemType.ARMOR:
       return sheet.armorId === itemId;
-
     case ItemType.OFFHAND:
       return sheet.offhandId === itemId;
   }
