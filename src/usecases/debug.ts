@@ -7,7 +7,7 @@ import { applyCameraTransform, drawLine, drawRect, drawRectInstance, drawText, g
 export function debugHitboxes(scene: Scene) {
   resetTransform();
   applyCameraTransform(scene.camera);
-  for (const id of scene.all) {
+  for (const id of scene.active) {
     const e = getEntity(scene, id);
     if (isRectangleValid(e.hitbox)) {
       drawRectInstance(e.hitbox, "yellow", false);
