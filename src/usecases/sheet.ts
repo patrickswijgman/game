@@ -1,3 +1,4 @@
+import { ItemId, ItemType } from "@/consts/item.js";
 import { Sheet } from "@/data/sheet.js";
 import { getItem } from "@/usecases/item.js";
 import { addStats, clampStats, copyStats } from "@/usecases/stats.js";
@@ -30,4 +31,80 @@ export function updateSheet(sheet: Sheet) {
   }
 
   clampStats(sheet.stats);
+}
+
+export function equipItem(sheet: Sheet, itemId: ItemId) {
+  const item = getItem(itemId);
+
+  switch (item.type) {
+    case ItemType.WEAPON:
+      {
+        sheet.weaponId = itemId;
+        if (item.isTwoHanded) {
+          sheet.offhandId = ItemId.NONE;
+        }
+        updateSheet(sheet);
+      }
+      break;
+
+    case ItemType.ARMOR:
+      {
+        sheet.armorId = itemId;
+        updateSheet(sheet);
+      }
+      break;
+
+    case ItemType.OFFHAND:
+      {
+        sheet.offhandId = itemId;
+        if (sheet.weaponId) {
+          const weapon = getItem(sheet.weaponId);
+          if (weapon.isTwoHanded) {
+            sheet.weaponId = ItemId.NONE;
+          }
+        }
+        updateSheet(sheet);
+      }
+      break;
+  }
+}
+
+export function unequipItem(sheet: Sheet, itemId: ItemId) {
+  switch (itemId) {
+    case sheet.weaponId:
+      {
+        sheet.weaponId = ItemId.NONE;
+        updateSheet(sheet);
+      }
+      break;
+
+    case sheet.armorId:
+      {
+        sheet.armorId = ItemId.NONE;
+        updateSheet(sheet);
+      }
+      break;
+
+    case sheet.offhandId:
+      {
+        sheet.offhandId = ItemId.NONE;
+        updateSheet(sheet);
+      }
+      break;
+  }
+}
+
+export function isEquipped(sheet: Sheet, itemId: ItemId) {
+  const item = getItem(itemId);
+
+  switch (item.type) {
+    case ItemType.WEAPON:
+      return sheet.weaponId === itemId;
+
+    case ItemType.ARMOR:
+      return sheet.armorId === itemId;
+
+    case ItemType.OFFHAND:
+      return sheet.offhandId === itemId;
+  }
 }

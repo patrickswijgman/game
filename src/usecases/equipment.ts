@@ -1,9 +1,9 @@
 import { SpriteId } from "@/consts/assets.js";
-import { ItemId, ItemType } from "@/consts/item.js";
+import { ItemId } from "@/consts/item.js";
 import { SLOT_SIZE } from "@/consts/render.js";
 import { game } from "@/data/game.js";
 import { getItem } from "@/usecases/item.js";
-import { updateSheet } from "@/usecases/sheet.js";
+import { equipItem, isEquipped, unequipItem } from "@/usecases/sheet.js";
 import { drawTextOutlined } from "@/usecases/ui.js";
 import { drawSprite, getHeight, getWidth, resetTransform, scaleTransform, translateTransform } from "ridder";
 
@@ -31,37 +31,19 @@ export function assignEquipmentSlot(id: number, itemId: ItemId) {
   const slot = getEquipmentSlot(id);
 
   if (slot.isUnlocked) {
-    for (let id = 0; id < game.equipment.slots.length; id++) {
-      const other = getEquipmentSlot(id);
-      if (other.itemId === itemId) {
-        other.itemId = ItemId.NONE;
-      }
-    }
-
-    switch (slot.itemId) {
-      case game.sheet.weaponId:
-        {
-          game.sheet.weaponId = ItemId.NONE;
-          updateSheet(game.sheet);
-        }
-        break;
-
-      case game.sheet.armorId:
-        {
-          game.sheet.armorId = ItemId.NONE;
-          updateSheet(game.sheet);
-        }
-        break;
-
-      case game.sheet.offhandId:
-        {
-          game.sheet.offhandId = ItemId.NONE;
-          updateSheet(game.sheet);
-        }
-        break;
-    }
-
+    removeItemFromEquipment(itemId);
+    unequipItem(game.sheet, slot.itemId);
     slot.itemId = itemId;
+  }
+}
+
+export function removeItemFromEquipment(itemId: ItemId) {
+  for (let id = 0; id < game.equipment.slots.length; id++) {
+    const slot = getEquipmentSlot(id);
+
+    if (slot.itemId === itemId) {
+      slot.itemId = ItemId.NONE;
+    }
   }
 }
 
@@ -69,39 +51,7 @@ export function useEquipmentSlot(id: number) {
   const slot = getEquipmentSlot(id);
 
   if (slot.itemId) {
-    const item = getItem(slot.itemId);
-
-    switch (item.type) {
-      case ItemType.WEAPON:
-        {
-          game.sheet.weaponId = slot.itemId;
-          if (item.isTwoHanded) {
-            game.sheet.offhandId = ItemId.NONE;
-          }
-          updateSheet(game.sheet);
-        }
-        break;
-
-      case ItemType.ARMOR:
-        {
-          game.sheet.armorId = slot.itemId;
-          updateSheet(game.sheet);
-        }
-        break;
-
-      case ItemType.OFFHAND:
-        {
-          game.sheet.offhandId = slot.itemId;
-          if (game.sheet.weaponId) {
-            const weapon = getItem(game.sheet.weaponId);
-            if (weapon.isTwoHanded) {
-              game.sheet.weaponId = ItemId.NONE;
-            }
-          }
-          updateSheet(game.sheet);
-        }
-        break;
-    }
+    equipItem(game.sheet, slot.itemId);
   }
 }
 
@@ -109,18 +59,7 @@ export function isEquipmentSlotActive(id: number) {
   const slot = getEquipmentSlot(id);
 
   if (slot.itemId) {
-    const item = getItem(slot.itemId);
-
-    switch (item.type) {
-      case ItemType.WEAPON:
-        return game.sheet.weaponId === slot.itemId;
-
-      case ItemType.ARMOR:
-        return game.sheet.armorId === slot.itemId;
-
-      case ItemType.OFFHAND:
-        return game.sheet.offhandId === slot.itemId;
-    }
+    return isEquipped(game.sheet, slot.itemId);
   }
 
   return false;

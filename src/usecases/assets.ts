@@ -28,15 +28,17 @@ export async function loadAssets() {
   // Tiles
   loadSprite(SpriteId.TILE_GRASS, TextureId.ATLAS, 0, 128, 16, 16);
 
-  // Items
-  loadSprite(SpriteId.ITEM_LONGSWORD, TextureId.ATLAS, 0, 144, 16, 16);
-  loadSprite(SpriteId.ITEM_SHORTBOW, TextureId.ATLAS, 16, 144, 16, 16);
-  loadSprite(SpriteId.ITEM_LEATHER_ARMOR, TextureId.ATLAS, 32, 144, 16, 16);
-
   // Equipment
   loadSprite(SpriteId.EQUIP_LONGSWORD, TextureId.ATLAS, 0, 48, 16, 16);
   loadSprite(SpriteId.EQUIP_SHORTBOW, TextureId.ATLAS, 16, 48, 16, 16);
   loadSprite(SpriteId.EQUIP_LEATHER_ARMOR, TextureId.ATLAS, 32, 48, 16, 16);
+  loadSprite(SpriteId.EQUIP_WOODEN_SHIELD, TextureId.ATLAS, 48, 48, 16, 16);
+
+  // Items
+  loadSprite(SpriteId.ITEM_LONGSWORD, TextureId.ATLAS, 0, 144, 16, 16);
+  loadSprite(SpriteId.ITEM_SHORTBOW, TextureId.ATLAS, 16, 144, 16, 16);
+  loadSprite(SpriteId.ITEM_LEATHER_ARMOR, TextureId.ATLAS, 32, 144, 16, 16);
+  loadSprite(SpriteId.ITEM_WOODEN_SHIELD, TextureId.ATLAS, 48, 144, 16, 16);
 
   // Attacks
   loadSprite(SpriteId.ATTACK_LONGSWORD, TextureId.ATLAS, 0, 64, 16, 16);
