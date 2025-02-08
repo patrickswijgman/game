@@ -27,6 +27,8 @@ export function setupPlayer() {
   game.sheet.statsBase.healthMax = 10;
   game.sheet.statsBase.mana = 5;
   game.sheet.statsBase.manaMax = 5;
+  game.sheet.statsBase.critChance = 0.05;
+  game.sheet.statsBase.critDamage = 2;
   game.sheet.statsBase.movementSpeed = 1;
   game.sheet.statsBase.movementSpeedMax = 1.5;
   initSheet(game.sheet);

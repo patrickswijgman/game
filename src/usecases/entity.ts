@@ -198,12 +198,24 @@ export function renderCombatLog(e: Entity) {
     setAlpha(1 - tween(0, 1, COMBAT_LOG_DURATION, "easeInCirc", e.logTimer.elapsed));
 
     for (const log of e.log) {
-      const color = log.startsWith("+") ? "lime" : e.isPlayer ? "red" : "white";
-      drawTextOutlined(log, 0, 0, color, "center");
+      drawTextOutlined(log, 0, 0, getCombatLogColor(e, log), "center");
       translateTransform(0, -FONT_HEIGHT);
     }
 
     setAlpha(1);
+  }
+}
+
+function getCombatLogColor(e: Entity, log: string) {
+  switch (true) {
+    case log.startsWith("+"):
+      return "lime";
+    case e.isPlayer:
+      return "red";
+    case log.endsWith("!"):
+      return "orange";
+    default:
+      return "white";
   }
 }
 

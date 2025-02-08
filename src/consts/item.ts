@@ -13,3 +13,9 @@ export const enum ItemType {
   ARMOR,
   OFFHAND,
 }
+
+export const enum ItemSubtype {
+  NONE,
+  ONE_HANDED,
+  TWO_HANDED,
+}

@@ -1,4 +1,4 @@
-import { ItemId, ItemType } from "@/consts/item.js";
+import { ItemId, ItemSubtype, ItemType } from "@/consts/item.js";
 import { Sheet } from "@/data/sheet.js";
 import { getItem } from "@/usecases/item.js";
 import { addStats, clampStats, copyStats } from "@/usecases/stats.js";
@@ -40,7 +40,7 @@ export function equipItem(sheet: Sheet, itemId: ItemId) {
     case ItemType.WEAPON:
       {
         sheet.weaponId = itemId;
-        if (item.isTwoHanded) {
+        if (item.subtype === ItemSubtype.TWO_HANDED) {
           sheet.offhandId = ItemId.NONE;
         }
         updateSheet(sheet);
@@ -59,7 +59,7 @@ export function equipItem(sheet: Sheet, itemId: ItemId) {
         sheet.offhandId = itemId;
         if (sheet.weaponId) {
           const weapon = getItem(sheet.weaponId);
-          if (weapon.isTwoHanded) {
+          if (weapon.subtype === ItemSubtype.TWO_HANDED) {
             sheet.weaponId = ItemId.NONE;
           }
         }

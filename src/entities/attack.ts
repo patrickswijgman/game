@@ -7,7 +7,7 @@ import { addEntity, addToCombatLog, destroyEntity, setHitbox, setSprites, setSta
 import { getScene } from "@/usecases/game.js";
 import { getEntity } from "@/usecases/scene.js";
 import { clampStats, copyStats } from "@/usecases/stats.js";
-import { addVector, copyVector, doRectanglesIntersect, getAngle, getVectorDistance, scaleVector } from "ridder";
+import { addVector, copyVector, doRectanglesIntersect, getAngle, getVectorDistance, roll, scaleVector } from "ridder";
 
 export function addAttack(sceneId: SceneId, caster: Entity) {
   const e = addEntity(Type.ATTACK, sceneId, 0, 0);
@@ -52,14 +52,21 @@ export function updateAttack(e: Entity) {
     if (doRectanglesIntersect(e.hitbox, target.hitbox)) {
       const damage = e.sheet.stats.damage;
       const armor = target.sheet.stats.armor;
-      const actual = Math.max(1, damage - armor);
+
+      let actual = Math.max(1, damage - armor);
+      let isCrit = false;
+
+      if (roll(e.sheet.stats.critChance)) {
+        actual *= e.sheet.stats.critDamage;
+        isCrit = true;
+      }
 
       target.sheet.stats.health -= actual;
       clampStats(target.sheet.stats);
 
       setState(target, StateId.STAGGER);
 
-      addToCombatLog(target, actual.toString());
+      addToCombatLog(target, isCrit ? `${actual}!` : actual.toString());
 
       e.blacklist.push(target.id);
     }

@@ -38,6 +38,8 @@ export function renderCharacterScene(scene: Scene) {
   renderStat("Health", `${game.sheet.stats.health} / ${game.sheet.stats.healthMax}`);
   renderStat("Mana", `${game.sheet.stats.mana} / ${game.sheet.stats.manaMax}`);
   renderStat("Damage", game.sheet.stats.damage);
+  renderStat("Critical chance", `${game.sheet.stats.critChance * 100}%`);
+  renderStat("Critical damage", `${game.sheet.stats.critDamage * 100}%`);
   renderStat("Armor", game.sheet.stats.armor);
   renderStat("Movement Speed", `${(game.sheet.stats.movementSpeed / 1) * 100}%`);
 }

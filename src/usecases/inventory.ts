@@ -1,7 +1,7 @@
 import { SpriteId } from "@/consts/assets.js";
 import { COLOR_LINE, COLOR_PRIMARY, COLOR_SURFACE } from "@/consts/colors.js";
 import { INVENTORY_HEIGHT, INVENTORY_SIZE, INVENTORY_WIDTH } from "@/consts/inventory.js";
-import { ItemId, ItemType } from "@/consts/item.js";
+import { ItemId, ItemSubtype, ItemType } from "@/consts/item.js";
 import { FONT_HEIGHT, SLOT_SIZE } from "@/consts/render.js";
 import { game } from "@/data/game.js";
 import { Scene } from "@/data/scene.js";
@@ -110,7 +110,14 @@ export function renderTooltip(scene: Scene) {
 
     switch (item.type) {
       case ItemType.WEAPON:
-        drawText(item.isTwoHanded ? "Two-Handed Weapon" : "One-Handed Weapon", 80, 0, "white", "center");
+        switch (item.subtype) {
+          case ItemSubtype.ONE_HANDED:
+            drawText("One-Handed Weapon", 80, 0, "white", "center");
+            break;
+          case ItemSubtype.TWO_HANDED:
+            drawText("Two-Handed Weapon", 80, 0, "white", "center");
+            break;
+        }
         break;
       case ItemType.ARMOR:
         drawText("Armor", 80, 0, "white", "center");
