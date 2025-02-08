@@ -43,6 +43,8 @@ export function cleanupDestroyedEntities(scene: Scene) {
     for (const id of scene.destroyed) {
       remove(scene.all, id);
       remove(scene.active, id);
+      remove(scene.allies, id);
+      remove(scene.enemies, id);
       zeroEntity(scene.entities[id]);
     }
     scene.destroyed.length = 0;

@@ -26,6 +26,7 @@ export function addPlayer(sceneId: SceneId, x: number, y: number) {
 
   const scene = getScene(e.sceneId);
   scene.playerId = e.id;
+  scene.allies.push(e.id);
   setCameraPosition(scene.camera, e.position.x, e.position.y);
 
   return e;

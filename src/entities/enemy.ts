@@ -6,6 +6,7 @@ import { Entity } from "@/data/entity.js";
 import { onEnemyStateEnter, onEnemyStateExit, onEnemyStateUpdate } from "@/states/enemy.js";
 import { getEnemy } from "@/usecases/enemy.js";
 import { addEntity, setCenterFromHitbox, setHitbox, setSprites, setState, updateState } from "@/usecases/entity.js";
+import { getScene } from "@/usecases/game.js";
 import { initSheet } from "@/usecases/sheet.js";
 import { copyStats } from "@/usecases/stats.js";
 
@@ -29,6 +30,9 @@ export function addEnemy(sceneId: SceneId, x: number, y: number, enemyId: EnemyI
   e.isLogEnabled = true;
 
   setState(e, StateId.ENEMY_IDLE);
+
+  const scene = getScene(e.sceneId);
+  scene.enemies.push(e.id);
 
   return e;
 }

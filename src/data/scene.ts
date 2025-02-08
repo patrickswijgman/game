@@ -11,9 +11,13 @@ export type Scene = {
   // Tables
   entities: Table<Entity>;
 
-  // Table support lists
+  // Entity support lists
   all: Array<number>;
   destroyed: Array<number>;
+
+  // Entity groups
+  allies: Array<number>;
+  enemies: Array<number>;
 
   // Active entities
   active: Array<number>;
@@ -39,9 +43,13 @@ export function newScene(id: SceneId, maxEntityCount: number, gridWidth: number,
     // Tables
     entities: table(maxEntityCount, newEntity),
 
-    // Table support lists
+    // Entity support lists
     all: [],
     destroyed: [],
+
+    // Entity groups
+    allies: [],
+    enemies: [],
 
     // Active entities
     active: [],

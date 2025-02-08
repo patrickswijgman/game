@@ -42,7 +42,9 @@ export function updateAttack(e: Entity) {
   copyVector(e.velocity, e.direction);
   scaleVector(e.velocity, attack.speed);
 
-  for (const id of scene.active) {
+  const targets = caster.isPlayer ? scene.enemies : scene.allies;
+
+  for (const id of targets) {
     if (id === e.id || id === caster.id || e.blacklist.includes(id)) {
       continue;
     }
