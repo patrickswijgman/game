@@ -1,6 +1,6 @@
 import { SpriteId } from "@/consts/assets.js";
+import { Type } from "@/consts/entity.js";
 import { SceneId } from "@/consts/scene.js";
-import { Type } from "@/consts/type.js";
 import { game } from "@/data/game.js";
 import { addEntity, setSprites } from "@/usecases/entity.js";
 import { setVector } from "ridder";

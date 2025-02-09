@@ -1,9 +1,8 @@
 import { SpriteId } from "@/consts/assets.js";
-import { COMBAT_LOG_DURATION } from "@/consts/entity.js";
+import { COMBAT_LOG_DURATION, Type } from "@/consts/entity.js";
 import { FONT_HEIGHT, SHADOW_ALPHA } from "@/consts/render.js";
 import { SceneId } from "@/consts/scene.js";
 import { StateId } from "@/consts/state.js";
-import { Type } from "@/consts/type.js";
 import { Entity } from "@/data/entity.js";
 import { onAttackEnter, onAttackExit, onAttackUpdate } from "@/states/attack.js";
 import { onStaggerEnter, onStaggerExit, onStaggerUpdate } from "@/states/stagger.js";

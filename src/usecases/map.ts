@@ -1,8 +1,8 @@
 import { TextureId } from "@/consts/assets.js";
 import { EnemyId } from "@/consts/enemy.js";
+import { Type } from "@/consts/entity.js";
 import { COLOR_TO_ENTITY, COLOR_TO_TILE, MAP_HEIGHT, MAP_WIDTH, MAP_WORLD_HEIGHT, MAP_WORLD_WIDTH, TILE_SIZE, TILE_TO_SPRITE, TileId } from "@/consts/map.js";
 import { SceneId } from "@/consts/scene.js";
-import { Type } from "@/consts/type.js";
 import { addEnemy } from "@/entities/enemy.js";
 import { addPlayer } from "@/entities/player.js";
 import { addTree } from "@/entities/tree.js";

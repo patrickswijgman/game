@@ -131,6 +131,8 @@ export function renderTooltip(scene: Scene) {
     renderStat("Health", item.stats.healthMax);
     renderStat("Mana", item.stats.manaMax);
     renderStat("Damage", item.stats.damage);
+    renderStat("Critical Chance", item.stats.critChance, true);
+    renderStat("Critical Damage", item.stats.critDamage, true);
     renderStat("Armor", item.stats.armor);
     renderStat("Movement Speed", item.stats.movementSpeed, true);
     renderStat("Mana Cost", item.stats.manaCost);

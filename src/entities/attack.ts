@@ -1,6 +1,6 @@
+import { Type } from "@/consts/entity.js";
 import { SceneId } from "@/consts/scene.js";
 import { StateId } from "@/consts/state.js";
-import { Type } from "@/consts/type.js";
 import { Entity } from "@/data/entity.js";
 import { getAttack } from "@/usecases/attack.js";
 import { addEntity, addToCombatLog, destroyEntity, setHitbox, setSprites, setState } from "@/usecases/entity.js";
@@ -52,23 +52,20 @@ export function updateAttack(e: Entity) {
     const target = getEntity(scene, id);
 
     if (doRectanglesIntersect(e.hitbox, target.hitbox)) {
-      const damage = e.sheet.stats.damage;
-      const armor = target.sheet.stats.armor;
-
-      let actual = Math.max(1, damage - armor);
+      let damage = Math.max(1, e.sheet.stats.damage - target.sheet.stats.armor);
       let isCrit = false;
 
       if (roll(e.sheet.stats.critChance)) {
-        actual *= e.sheet.stats.critDamage;
+        damage *= e.sheet.stats.critDamage;
         isCrit = true;
       }
 
-      target.sheet.stats.health -= actual;
+      target.sheet.stats.health -= damage;
       clampStats(target.sheet.stats);
 
       setState(target, StateId.STAGGER);
 
-      addToCombatLog(target, isCrit ? `${actual}!` : actual.toString());
+      addToCombatLog(target, isCrit ? `${damage}!` : damage.toString());
 
       e.blacklist.push(target.id);
     }

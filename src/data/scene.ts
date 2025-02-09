@@ -28,6 +28,7 @@ export type Scene = {
   bounds: Rectangle;
   grid: Grid<number>;
   playerId: number;
+  isPaused: boolean;
 
   // Inventory
   selected: Vector;
@@ -60,6 +61,7 @@ export function newScene(id: SceneId, maxEntityCount: number, gridWidth: number,
     bounds: rect(),
     grid: grid(gridWidth, gridHeight, () => 0),
     playerId: 0,
+    isPaused: false,
 
     // Inventory
     selected: vec(),

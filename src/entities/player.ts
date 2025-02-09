@@ -1,13 +1,13 @@
 import { SpriteId } from "@/consts/assets.js";
+import { Type } from "@/consts/entity.js";
 import { SceneId } from "@/consts/scene.js";
 import { StateId } from "@/consts/state.js";
-import { Type } from "@/consts/type.js";
 import { Entity } from "@/data/entity.js";
 import { game } from "@/data/game.js";
 import { onPlayerStateEnter, onPlayerStateExit, onPlayerStateUpdate } from "@/states/player.js";
 import { addEntity, setCenterFromHitbox, setHitbox, setSprites, setState, updateState } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";
-import { setCameraPosition, setVector } from "ridder";
+import { setVector } from "ridder";
 
 export function addPlayer(sceneId: SceneId, x: number, y: number) {
   const e = addEntity(Type.PLAYER, sceneId, x, y);
@@ -27,7 +27,6 @@ export function addPlayer(sceneId: SceneId, x: number, y: number) {
   const scene = getScene(e.sceneId);
   scene.playerId = e.id;
   scene.allies.push(e.id);
-  setCameraPosition(scene.camera, e.position.x, e.position.y);
 
   return e;
 }

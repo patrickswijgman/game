@@ -1,12 +1,13 @@
+import { Type } from "@/consts/entity.js";
 import { FONT_HEIGHT } from "@/consts/render.js";
 import { SceneId } from "@/consts/scene.js";
-import { Type } from "@/consts/type.js";
 import { game } from "@/data/game.js";
 import { updateAttack } from "@/entities/attack.js";
 import { updateEnemy } from "@/entities/enemy.js";
 import { updatePlayer } from "@/entities/player.js";
 import { updateTree } from "@/entities/tree.js";
 import { renderCharacterScene, setupCharacterScene, updateCharacterScene } from "@/scenes/character.js";
+import { renderEditorScene, setupEditorScene, updateEditorScene } from "@/scenes/editor.js";
 import { onInventorySceneEnter, renderInventoryScene, setupInventoryScene, updateInventoryScene } from "@/scenes/inventory.js";
 import { renderWorldScene, setupWorldScene } from "@/scenes/world.js";
 import { loadAssets } from "@/usecases/assets.js";
@@ -30,13 +31,12 @@ run({
 
     setupPlayer();
 
+    setupEditorScene();
     setupWorldScene();
     setupInventoryScene();
     setupCharacterScene();
 
-    switchScene(SceneId.WORLD);
-
-    console.log(game);
+    switchScene(SceneId.EDITOR);
   },
 
   update: () => {
@@ -64,6 +64,9 @@ run({
     revaluateActiveEntities(scene);
 
     switch (scene.id) {
+      case SceneId.EDITOR:
+        updateEditorScene(scene);
+        break;
       case SceneId.INVENTORY:
         updateInventoryScene(scene);
         break;
@@ -72,36 +75,38 @@ run({
         break;
     }
 
-    for (const id of scene.active) {
-      const e = getEntity(scene, id);
+    if (!scene.isPaused) {
+      for (const id of scene.active) {
+        const e = getEntity(scene, id);
 
-      destroyIfExpired(e);
-      destroyIfDead(e);
+        destroyIfExpired(e);
+        destroyIfDead(e);
 
-      if (e.isDestroyed) {
-        continue;
-      }
+        if (e.isDestroyed) {
+          continue;
+        }
 
-      switch (e.type) {
-        case Type.PLAYER:
-          updatePlayer(e);
-          break;
-        case Type.ENEMY:
-          updateEnemy(e);
-          break;
-        case Type.TREE:
-          updateTree(e);
-          break;
-        case Type.ATTACK:
-          updateAttack(e);
-          break;
-      }
+        switch (e.type) {
+          case Type.PLAYER:
+            updatePlayer(e);
+            break;
+          case Type.ENEMY:
+            updateEnemy(e);
+            break;
+          case Type.TREE:
+            updateTree(e);
+            break;
+          case Type.ATTACK:
+            updateAttack(e);
+            break;
+        }
 
-      updatePhysics(e);
-      updateCombatLog(e);
+        updatePhysics(e);
+        updateCombatLog(e);
 
-      if (e.isPlayer) {
-        updateCamera(scene.camera, e.position.x, e.position.y);
+        if (e.isPlayer) {
+          updateCamera(scene.camera, e.position.x, e.position.y);
+        }
       }
     }
 
@@ -113,6 +118,9 @@ run({
     const scene = getScene(game.sceneId);
 
     switch (scene.id) {
+      case SceneId.EDITOR:
+        renderEditorScene(scene);
+        break;
       case SceneId.WORLD:
         renderWorldScene(scene);
         break;
@@ -131,10 +139,11 @@ run({
       renderCombatLog(e);
     }
 
-    const player = getEntity(scene, scene.playerId);
-    if (player.isPlayer) {
-      renderHud();
-      renderEquipment();
+    switch (scene.id) {
+      case SceneId.WORLD:
+        renderHud();
+        renderEquipment();
+        break;
     }
 
     if (isDebugging) {

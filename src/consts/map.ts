@@ -1,5 +1,5 @@
 import { SpriteId } from "@/consts/assets.js";
-import { Type } from "@/consts/type.js";
+import { Type } from "@/consts/entity.js";
 
 export const enum TileId {
   NONE,

@@ -1,7 +1,7 @@
 import { updateWindAnimation } from "@/anims/wind.js";
 import { SpriteId } from "@/consts/assets.js";
+import { Type } from "@/consts/entity.js";
 import { SceneId } from "@/consts/scene.js";
-import { Type } from "@/consts/type.js";
 import { Entity } from "@/data/entity.js";
 import { addEntity, setSprites } from "@/usecases/entity.js";
 import { random } from "ridder";

@@ -1,9 +1,9 @@
 import { SpriteId } from "@/consts/assets.js";
 import { AttackId } from "@/consts/attack.js";
 import { EnemyId } from "@/consts/enemy.js";
+import { Type } from "@/consts/entity.js";
 import { SceneId } from "@/consts/scene.js";
 import { StateId } from "@/consts/state.js";
-import { Type } from "@/consts/type.js";
 import { newSheet, Sheet } from "@/data/sheet.js";
 import { rect, Rectangle, setVector, timer, Timer, vec, Vector, zero } from "ridder";
 

@@ -36,6 +36,7 @@ function newScenes() {
   return table(SceneId.MAX, (id) => {
     switch (id) {
       case SceneId.WORLD:
+      case SceneId.EDITOR:
         return newScene(id, 20_000, MAP_WIDTH, MAP_HEIGHT);
       default:
         return newScene(id, 10, 0, 0);
