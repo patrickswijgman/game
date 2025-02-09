@@ -8,9 +8,10 @@ import { Scene } from "@/data/scene.js";
 import { addEnemy } from "@/entities/enemy.js";
 import { addPlayer } from "@/entities/player.js";
 import { addTree } from "@/entities/tree.js";
+import { destroyEntity } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";
 import { getEntity } from "@/usecases/scene.js";
-import { addVectorScaled, applyCameraTransform, clamp, drawLine, drawText, getDelta, getGridHeight, getGridWidth, InputCode, isInputDown, isInputPressed, normalizeVector, resetTransform, resetVector, scaleTransform, scaleVector, setCameraPosition, setRectangle, setVector, translateTransform, updateCamera } from "ridder";
+import { addVectorScaled, applyCameraTransform, clamp, drawLine, drawRect, drawText, getDelta, getGridHeight, getGridWidth, InputCode, isInputDown, isInputPressed, normalizeVector, resetTransform, resetVector, scaleTransform, scaleVector, setCameraPosition, setRectangle, setVector, translateTransform, updateCamera } from "ridder";
 
 export function setupEditorScene() {
   const scene = getScene(SceneId.EDITOR);
@@ -52,33 +53,50 @@ export function updateEditorScene(scene: Scene) {
   updateCamera(scene.camera, editor.position.x, editor.position.y);
   updateMouseGridPosition(scene);
 
-  if (isInputPressed(InputCode.KEY_E, true)) {
+  if (isInputPressed(InputCode.KEY_ENTER, true)) {
     const input = prompt("Entity Index");
     if (input) {
       editor.selectedEntityIdx = Number(input);
     }
   }
 
-  if (isInputDown(InputCode.MOUSE_LEFT)) {
-    const entity = entities[editor.selectedEntityIdx];
+  if (isInputPressed(InputCode.KEY_Q)) {
+    scrollEntityList(-1);
+  }
+  if (isInputPressed(InputCode.KEY_E)) {
+    scrollEntityList(1);
+  }
 
+  if (isInputDown(InputCode.MOUSE_LEFT)) {
+    const entity = getSelectedEntity();
     if (!entity) {
       return;
     }
+
     if (getCount(scene, entity.type) >= entity.limit) {
       return;
     }
-    if (isOccupied(scene, editor.mouseGridPosition.x, editor.mouseGridPosition.y)) {
+
+    if (isOccupied(scene, editor.gridPosition.x, editor.gridPosition.y)) {
       return;
     }
 
-    const worldX = editor.mouseGridPosition.x * TILE_SIZE;
-    const worldY = editor.mouseGridPosition.y * TILE_SIZE;
+    const worldX = editor.gridPosition.x * TILE_SIZE;
+    const worldY = editor.gridPosition.y * TILE_SIZE;
     const offsetX = entity.offset.x < 1 ? Math.ceil(entity.offset.x * TILE_SIZE) : entity.offset.x;
     const offsetY = entity.offset.y < 1 ? Math.ceil(entity.offset.y * TILE_SIZE) : entity.offset.y;
     const x = worldX + offsetX;
     const y = worldY + offsetY;
     addEntityFromType(scene.id, entity.type, x, y);
+  }
+
+  if (isInputDown(InputCode.MOUSE_RIGHT)) {
+    const entity = getSelectedEntity();
+    if (!entity) {
+      return;
+    }
+
+    removeEntities(scene, editor.gridPosition.x, editor.gridPosition.y);
   }
 }
 
@@ -94,6 +112,10 @@ function addEntityFromType(sceneId: SceneId, type: Type, x: number, y: number) {
       addTree(sceneId, x, y);
       break;
   }
+}
+
+function getSelectedEntity() {
+  return entities[editor.selectedEntityIdx];
 }
 
 function getCount(scene: Scene, type: Type) {
@@ -114,30 +136,42 @@ function isOccupied(scene: Scene, gridX: number, gridY: number) {
   });
 }
 
+function removeEntities(scene: Scene, gridX: number, gridY: number) {
+  const x = gridX * TILE_SIZE;
+  const y = gridY * TILE_SIZE;
+  const w = x + TILE_SIZE;
+  const h = y + TILE_SIZE;
+  for (const id of scene.all) {
+    const e = getEntity(scene, id);
+    if (e.position.x > x && e.position.x < w && e.position.y > y && e.position.y < h) {
+      destroyEntity(e);
+    }
+  }
+}
+
 function scrollEntityList(scroll: number) {
   editor.selectedEntityIdx = clamp(editor.selectedEntityIdx + scroll, 0, entities.length - 1);
 }
 
 function updateMouseGridPosition(scene: Scene) {
-  editor.mouseGridPosition.x = Math.floor(scene.camera.mousePosition.x / TILE_SIZE);
-  editor.mouseGridPosition.y = Math.floor(scene.camera.mousePosition.y / TILE_SIZE);
+  editor.gridPosition.x = Math.floor(scene.camera.mousePosition.x / TILE_SIZE);
+  editor.gridPosition.y = Math.floor(scene.camera.mousePosition.y / TILE_SIZE);
 }
 
 export function renderEditorScene(scene: Scene) {
   resetTransform();
   applyCameraTransform(scene.camera);
   renderGrid(scene);
+  drawRect(editor.gridPosition.x * TILE_SIZE, editor.gridPosition.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
   resetTransform();
   translateTransform(5, 5);
   scaleTransform(0.5, 0.5);
-  drawText(`${editor.mouseGridPosition.x}, ${editor.mouseGridPosition.y}`, 0, 0);
-  translateTransform(0, FONT_HEIGHT);
+  drawText(`${editor.gridPosition.x}, ${editor.gridPosition.y}`, 0, 0);
 
-  const entity = entities[editor.selectedEntityIdx];
-  if (entity) {
-    drawText(entity.name, 0, 0);
-  }
+  const entity = getSelectedEntity();
+  translateTransform(0, FONT_HEIGHT);
+  drawText(entity ? `${editor.selectedEntityIdx} - ${entity.name}` : `${editor.selectedEntityIdx} - INVALID`, 0, 0, entity ? "white" : "red");
 }
 
 function renderGrid(scene: Scene) {

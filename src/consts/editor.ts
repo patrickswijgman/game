@@ -4,7 +4,7 @@ import { vec, Vector } from "ridder";
 type Editor = {
   position: Vector;
   velocity: Vector;
-  mouseGridPosition: Vector;
+  gridPosition: Vector;
   selectedEntityIdx: number;
 };
 
@@ -12,7 +12,7 @@ function newEditor(): Editor {
   return {
     position: vec(),
     velocity: vec(),
-    mouseGridPosition: vec(),
+    gridPosition: vec(),
     selectedEntityIdx: 0,
   };
 }
