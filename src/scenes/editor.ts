@@ -1,9 +1,9 @@
-import { editor, entities } from "@/consts/editor.js";
 import { EnemyId } from "@/consts/enemy.js";
 import { Type } from "@/consts/entity.js";
 import { TILE_SIZE } from "@/consts/map.js";
 import { FONT_HEIGHT } from "@/consts/render.js";
 import { SceneId } from "@/consts/scene.js";
+import { editor, entities } from "@/data/editor.js";
 import { Scene } from "@/data/scene.js";
 import { addEnemy } from "@/entities/enemy.js";
 import { addPlayer } from "@/entities/player.js";
@@ -11,7 +11,7 @@ import { addTree } from "@/entities/tree.js";
 import { destroyEntity } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";
 import { getEntity } from "@/usecases/scene.js";
-import { addVectorScaled, applyCameraTransform, clamp, drawLine, drawRect, drawText, getDelta, getGridHeight, getGridWidth, InputCode, isInputDown, isInputPressed, normalizeVector, resetTransform, resetVector, scaleTransform, scaleVector, setCameraPosition, setRectangle, setVector, translateTransform, updateCamera } from "ridder";
+import { addVectorScaled, applyCameraTransform, clamp, drawLine, drawRect, drawText, getDelta, getGridHeight, getGridWidth, InputCode, isInputDown, isInputPressed, isInsideGridBounds, normalizeVector, resetTransform, resetVector, scaleTransform, scaleVector, setCameraPosition, setVector, translateTransform, updateCamera } from "ridder";
 
 export function setupEditorScene() {
   const scene = getScene(SceneId.EDITOR);
@@ -21,8 +21,6 @@ export function setupEditorScene() {
   for (let i = 0; i < entities.length; i++) {
     console.log(`${i} - ${entities[i].name}`);
   }
-
-  setRectangle(scene.bounds, 0, 0, 2048, 2048);
 
   setVector(editor.position, scene.bounds.w / 2, scene.bounds.h / 2);
   setCameraPosition(scene.camera, editor.position.x, editor.position.y);
@@ -69,17 +67,11 @@ export function updateEditorScene(scene: Scene) {
 
   if (isInputDown(InputCode.MOUSE_LEFT)) {
     const entity = getSelectedEntity();
-    if (!entity) {
-      return;
-    }
 
-    if (getCount(scene, entity.type) >= entity.limit) {
-      return;
-    }
-
-    if (isOccupied(scene, editor.gridPosition.x, editor.gridPosition.y)) {
-      return;
-    }
+    if (!entity) return;
+    if (getCount(scene, entity.type) >= entity.limit) return;
+    if (isOccupied(scene, editor.gridPosition.x, editor.gridPosition.y)) return;
+    if (!isWithinBounds(scene, editor.gridPosition.x, editor.gridPosition.y)) return;
 
     const worldX = editor.gridPosition.x * TILE_SIZE;
     const worldY = editor.gridPosition.y * TILE_SIZE;
@@ -136,6 +128,10 @@ function isOccupied(scene: Scene, gridX: number, gridY: number) {
   });
 }
 
+function isWithinBounds(scene: Scene, gridX: number, gridY: number) {
+  return isInsideGridBounds(scene.grid, gridX, gridY);
+}
+
 function removeEntities(scene: Scene, gridX: number, gridY: number) {
   const x = gridX * TILE_SIZE;
   const y = gridY * TILE_SIZE;
@@ -162,7 +158,9 @@ export function renderEditorScene(scene: Scene) {
   resetTransform();
   applyCameraTransform(scene.camera);
   renderGrid(scene);
-  drawRect(editor.gridPosition.x * TILE_SIZE, editor.gridPosition.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+  if (isWithinBounds(scene, editor.gridPosition.x, editor.gridPosition.y)) {
+    drawRect(editor.gridPosition.x * TILE_SIZE, editor.gridPosition.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+  }
 
   resetTransform();
   translateTransform(5, 5);

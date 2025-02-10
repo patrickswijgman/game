@@ -1,3 +1,4 @@
+import { TILE_SIZE } from "@/consts/map.js";
 import { SceneId } from "@/consts/scene.js";
 import { Entity, newEntity } from "@/data/entity.js";
 import { Camera, camera, grid, Grid, rect, Rectangle, table, Table, timer, Timer, vec, Vector } from "ridder";
@@ -58,7 +59,7 @@ export function newScene(id: SceneId, maxEntityCount: number, gridWidth: number,
 
     // World
     camera: camera(),
-    bounds: rect(),
+    bounds: rect(0, 0, gridWidth * TILE_SIZE, gridHeight * TILE_SIZE),
     grid: grid(gridWidth, gridHeight, () => 0),
     playerId: 0,
     isPaused: false,

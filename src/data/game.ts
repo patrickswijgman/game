@@ -1,4 +1,3 @@
-import { MAP_HEIGHT, MAP_WIDTH } from "@/consts/map.js";
 import { SceneId } from "@/consts/scene.js";
 import { Equipment, newEquipment } from "@/data/equipment.js";
 import { Inventory, newInventory } from "@/data/inventory.js";
@@ -37,7 +36,7 @@ function newScenes() {
     switch (id) {
       case SceneId.WORLD:
       case SceneId.EDITOR:
-        return newScene(id, 20_000, MAP_WIDTH, MAP_HEIGHT);
+        return newScene(id, 20_000, 128, 128);
       default:
         return newScene(id, 10, 0, 0);
     }
