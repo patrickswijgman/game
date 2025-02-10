@@ -9,7 +9,7 @@ import { updateTree } from "@/entities/tree.js";
 import { renderCharacterScene, setupCharacterScene, updateCharacterScene } from "@/scenes/character.js";
 import { renderEditorScene, setupEditorScene, updateEditorScene } from "@/scenes/editor.js";
 import { onInventorySceneEnter, renderInventoryScene, setupInventoryScene, updateInventoryScene } from "@/scenes/inventory.js";
-import { renderWorldScene, setupWorldScene } from "@/scenes/world.js";
+import { onWorldSceneEnter, renderWorldScene, setupWorldScene, updateWorldScene } from "@/scenes/world.js";
 import { loadAssets } from "@/usecases/assets.js";
 import { debugEntities, debugFps, debugGrid, debugHitboxes } from "@/usecases/debug.js";
 import { renderEnemyStatus } from "@/usecases/enemy.js";
@@ -18,7 +18,7 @@ import { renderEquipment } from "@/usecases/equipment.js";
 import { getScene, setupPlayer, switchScene, transitionToNextScene } from "@/usecases/game.js";
 import { renderHud } from "@/usecases/hud.js";
 import { cleanupDestroyedEntities, getEntity, revaluateActiveEntities, setActiveEntities, sortEntitiesOnDepth } from "@/usecases/scene.js";
-import { InputCode, isInputPressed, resetTransform, run, scaleTransform, translateTransform, updateCamera } from "ridder";
+import { InputCode, isInputPressed, resetTransform, run, scaleTransform, translateTransform } from "ridder";
 
 let isDebugging = false;
 
@@ -53,6 +53,9 @@ run({
       setActiveEntities(scene);
 
       switch (game.sceneId) {
+        case SceneId.WORLD:
+          onWorldSceneEnter(scene);
+          break;
         case SceneId.INVENTORY:
           onInventorySceneEnter(scene);
           break;
@@ -66,6 +69,9 @@ run({
     switch (scene.id) {
       case SceneId.EDITOR:
         updateEditorScene(scene);
+        break;
+      case SceneId.WORLD:
+        updateWorldScene(scene);
         break;
       case SceneId.INVENTORY:
         updateInventoryScene(scene);
@@ -103,10 +109,6 @@ run({
 
         updatePhysics(e);
         updateCombatLog(e);
-
-        if (e.isPlayer) {
-          updateCamera(scene.camera, e.position.x, e.position.y);
-        }
       }
     }
 
