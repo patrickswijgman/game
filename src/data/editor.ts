@@ -40,3 +40,9 @@ export const entities: Array<EditorEntity> = [
     limit: Infinity,
   },
 ];
+
+export type SaveEntity = {
+  type: Type;
+  x: number;
+  y: number;
+};

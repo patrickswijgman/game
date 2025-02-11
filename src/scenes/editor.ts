@@ -3,7 +3,7 @@ import { Type } from "@/consts/entity.js";
 import { TILE_SIZE } from "@/consts/map.js";
 import { FONT_HEIGHT } from "@/consts/render.js";
 import { SceneId } from "@/consts/scene.js";
-import { editor, entities } from "@/data/editor.js";
+import { editor, entities, SaveEntity } from "@/data/editor.js";
 import { Scene } from "@/data/scene.js";
 import { addEnemy } from "@/entities/enemy.js";
 import { addPlayer } from "@/entities/player.js";
@@ -11,6 +11,7 @@ import { addTree } from "@/entities/tree.js";
 import { destroyEntity } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";
 import { getEntity } from "@/usecases/scene.js";
+import world from "@/world.json";
 import { addVectorScaled, applyCameraTransform, clamp, drawLine, drawRect, drawText, getDelta, getGridHeight, getGridWidth, InputCode, isInputDown, isInputPressed, isInsideGridBounds, normalizeVector, resetTransform, resetVector, scaleTransform, scaleVector, setCameraPosition, setVector, translateTransform, updateCamera } from "ridder";
 
 export function setupEditorScene() {
@@ -22,6 +23,10 @@ export function setupEditorScene() {
     console.log(`${i} - ${entities[i].name}`);
   }
 
+  for (const e of world) {
+    addEntityFromType(scene.id, e.type, e.x, e.y);
+  }
+
   setVector(editor.position, scene.bounds.w / 2, scene.bounds.h / 2);
   setCameraPosition(scene.camera, editor.position.x, editor.position.y);
 
@@ -29,6 +34,19 @@ export function setupEditorScene() {
 }
 
 export function updateEditorScene(scene: Scene) {
+  if (isInputDown(InputCode.KEY_CTRL_LEFT) && isInputPressed(InputCode.KEY_S, true)) {
+    const data = scene.all.map<SaveEntity>((id) => {
+      const e = getEntity(scene, id);
+      return {
+        type: e.type,
+        x: e.position.x,
+        y: e.position.y,
+      };
+    });
+
+    navigator.clipboard.writeText(JSON.stringify(data, null, 2));
+  }
+
   resetVector(editor.velocity);
 
   if (isInputDown(InputCode.KEY_W)) {
