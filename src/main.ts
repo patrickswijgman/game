@@ -120,9 +120,6 @@ run({
     const scene = getScene(game.sceneId);
 
     switch (scene.id) {
-      case SceneId.EDITOR:
-        renderEditorScene(scene);
-        break;
       case SceneId.WORLD:
         renderWorldScene(scene);
         break;
@@ -142,6 +139,9 @@ run({
     }
 
     switch (scene.id) {
+      case SceneId.EDITOR:
+        renderEditorScene(scene);
+        break;
       case SceneId.WORLD:
         renderHud();
         renderEquipment();

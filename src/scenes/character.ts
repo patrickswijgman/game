@@ -3,14 +3,11 @@ import { FONT_HEIGHT } from "@/consts/render.js";
 import { SceneId } from "@/consts/scene.js";
 import { game } from "@/data/game.js";
 import { Scene } from "@/data/scene.js";
-import { addPlayerPreview } from "@/entities/player-preview.js";
 import { getScene, switchScene } from "@/usecases/game.js";
 import { drawRect, drawText, getHeight, getWidth, InputCode, isInputPressed, resetTransform, scaleTransform, translateTransform } from "ridder";
 
 export function setupCharacterScene() {
   const scene = getScene(SceneId.CHARACTER);
-
-  addPlayerPreview(scene.id, getWidth() / 3, getHeight() / 2 + 10);
 
   return scene;
 }
