@@ -6,18 +6,13 @@ import { updateAttack } from "@/entities/attack.js";
 import { updateEnemy } from "@/entities/enemy.js";
 import { updatePlayer } from "@/entities/player.js";
 import { updateTree } from "@/entities/tree.js";
-import { renderCharacterScene, setupCharacterScene, updateCharacterScene } from "@/scenes/character.js";
-import { renderEditorScene, setupEditorScene, updateEditorScene } from "@/scenes/editor.js";
-import { onInventorySceneEnter, renderInventoryScene, setupInventoryScene, updateInventoryScene } from "@/scenes/inventory.js";
 import { onWorldSceneEnter, renderWorldScene, setupWorldScene, updateWorldScene } from "@/scenes/world.js";
 import { loadAssets } from "@/usecases/assets.js";
-import { debugEntities, debugFps, debugGrid, debugHitboxes } from "@/usecases/debug.js";
-import { renderEnemyStatus } from "@/usecases/enemy.js";
-import { destroyIfDead, destroyIfExpired, renderCombatLog, renderEntity, updateCombatLog, updatePhysics } from "@/usecases/entity.js";
-import { renderEquipment } from "@/usecases/equipment.js";
+import { debugEntities, debugFps, debugHitboxes } from "@/usecases/debug.js";
+import { destroyIfDead, destroyIfExpired, renderEntity, renderEntityStatus, updatePhysics } from "@/usecases/entity.js";
 import { getScene, setupPlayer, switchScene, transitionToNextScene } from "@/usecases/game.js";
 import { renderHud } from "@/usecases/hud.js";
-import { cleanupDestroyedEntities, getEntity, revaluateActiveEntities, setActiveEntities, sortEntitiesOnDepth } from "@/usecases/scene.js";
+import { cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth } from "@/usecases/scene.js";
 import { InputCode, isInputPressed, resetTransform, run, scaleTransform, translateTransform } from "ridder";
 
 let isDebugging = false;
@@ -31,12 +26,9 @@ run({
 
     setupPlayer();
 
-    setupEditorScene();
     setupWorldScene();
-    setupInventoryScene();
-    setupCharacterScene();
 
-    switchScene(SceneId.EDITOR);
+    switchScene(SceneId.WORLD);
   },
 
   update: () => {
@@ -50,70 +42,51 @@ run({
     if (transitionToNextScene()) {
       const scene = getScene(game.sceneId);
 
-      setActiveEntities(scene);
-
       switch (game.sceneId) {
         case SceneId.WORLD:
           onWorldSceneEnter(scene);
-          break;
-        case SceneId.INVENTORY:
-          onInventorySceneEnter(scene);
           break;
       }
     }
 
     const scene = getScene(game.sceneId);
 
-    revaluateActiveEntities(scene);
-
     switch (scene.id) {
-      case SceneId.EDITOR:
-        updateEditorScene(scene);
-        break;
       case SceneId.WORLD:
         updateWorldScene(scene);
         break;
-      case SceneId.INVENTORY:
-        updateInventoryScene(scene);
-        break;
-      case SceneId.CHARACTER:
-        updateCharacterScene(scene);
-        break;
     }
 
-    if (!scene.isPaused) {
-      for (const id of scene.active) {
-        const e = getEntity(scene, id);
+    for (const id of scene.update) {
+      const e = getEntity(scene, id);
 
-        destroyIfExpired(e);
-        destroyIfDead(e);
+      destroyIfExpired(e);
+      destroyIfDead(e);
 
-        if (e.isDestroyed) {
-          continue;
-        }
-
-        switch (e.type) {
-          case Type.PLAYER:
-            updatePlayer(e);
-            break;
-          case Type.ENEMY:
-            updateEnemy(e);
-            break;
-          case Type.TREE:
-            updateTree(e);
-            break;
-          case Type.ATTACK:
-            updateAttack(e);
-            break;
-        }
-
-        updatePhysics(e);
-        updateCombatLog(e);
+      if (e.isDestroyed) {
+        continue;
       }
+
+      switch (e.type) {
+        case Type.PLAYER:
+          updatePlayer(e);
+          break;
+        case Type.ENEMY:
+          updateEnemy(e);
+          break;
+        case Type.TREE:
+          updateTree(e);
+          break;
+        case Type.ATTACK:
+          updateAttack(e);
+          break;
+      }
+
+      updatePhysics(e);
     }
 
     cleanupDestroyedEntities(scene);
-    sortEntitiesOnDepth(scene, scene.active);
+    sortEntitiesOnDepth(scene);
   },
 
   render: () => {
@@ -123,33 +96,25 @@ run({
       case SceneId.WORLD:
         renderWorldScene(scene);
         break;
-      case SceneId.INVENTORY:
-        renderInventoryScene(scene);
-        break;
-      case SceneId.CHARACTER:
-        renderCharacterScene(scene);
-        break;
     }
 
-    for (const id of scene.active) {
+    for (const id of scene.render) {
       const e = getEntity(scene, id);
+
       renderEntity(e);
-      renderEnemyStatus(e);
-      renderCombatLog(e);
+
+      if (e.isEnemy) {
+        renderEntityStatus(e);
+      }
     }
 
     switch (scene.id) {
-      case SceneId.EDITOR:
-        renderEditorScene(scene);
-        break;
       case SceneId.WORLD:
         renderHud();
-        renderEquipment();
         break;
     }
 
     if (isDebugging) {
-      debugGrid(scene);
       debugHitboxes(scene);
 
       resetTransform();

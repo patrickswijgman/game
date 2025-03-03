@@ -3,7 +3,7 @@ import { SceneId } from "@/consts/scene.js";
 import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
 import { getAttack } from "@/usecases/attack.js";
-import { addEntity, addToCombatLog, destroyEntity, setHitbox, setSprites, setState } from "@/usecases/entity.js";
+import { addEntity, destroyEntity, setHitbox, setSprites, setState } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";
 import { getEntity } from "@/usecases/scene.js";
 import { clampStats, copyStats } from "@/usecases/stats.js";
@@ -21,7 +21,7 @@ export function addAttack(sceneId: SceneId, caster: Entity) {
   copyVector(e.direction, caster.direction);
 
   setSprites(e, attack.spriteId);
-  setHitbox(e, ...attack.hitbox);
+  setHitbox(e, attack.hitbox.x, attack.hitbox.y, attack.hitbox.w, attack.hitbox.h);
 
   copyStats(e.sheet.stats, caster.sheet.stats);
 
@@ -45,7 +45,7 @@ export function updateAttack(e: Entity) {
   const targets = caster.isPlayer ? scene.enemies : scene.allies;
 
   for (const id of targets) {
-    if (id === e.id || id === caster.id || e.blacklist.includes(id)) {
+    if (id === e.id || id === caster.id) {
       continue;
     }
 
@@ -65,10 +65,14 @@ export function updateAttack(e: Entity) {
 
       setState(target, StateId.STAGGER);
 
-      addToCombatLog(target, isCrit ? `${damage}!` : damage.toString());
+      //addToCombatLog(target, isCrit ? `${damage}!` : damage.toString());
 
-      e.blacklist.push(target.id);
+      destroyEntity(e);
     }
+  }
+
+  if (e.isDestroyed) {
+    return;
   }
 
   const traveled = getVectorDistance(e.start, e.position);

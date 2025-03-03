@@ -1,10 +1,10 @@
 import { SpriteId } from "@/consts/assets.js";
 import { AttackId } from "@/consts/attack.js";
-import { table } from "ridder";
+import { rect, Rectangle, table } from "ridder";
 
 export type Attack = {
   spriteId: SpriteId;
-  hitbox: [x: number, y: number, h: number, w: number];
+  hitbox: Rectangle;
   reach: number;
   range: number;
   speed: number;
@@ -17,7 +17,7 @@ export const attacks = table<Attack>(AttackId.MAX, (id) => {
     case AttackId.LONGSWORD:
       return {
         spriteId: SpriteId.ATTACK_LONGSWORD,
-        hitbox: [-4, -4, 8, 8],
+        hitbox: rect(-4, -4, 8, 8),
         reach: 8,
         range: 12,
         speed: 0,
@@ -28,7 +28,7 @@ export const attacks = table<Attack>(AttackId.MAX, (id) => {
     case AttackId.SHORTBOW:
       return {
         spriteId: SpriteId.ATTACK_ARROW,
-        hitbox: [-4, -1, 8, 2],
+        hitbox: rect(-4, -1, 8, 2),
         reach: 4,
         range: 50,
         speed: 2,
@@ -39,7 +39,7 @@ export const attacks = table<Attack>(AttackId.MAX, (id) => {
     default:
       return {
         spriteId: SpriteId.NONE,
-        hitbox: [0, 0, 0, 0],
+        hitbox: rect(0, 0, 0, 0),
         reach: 0,
         range: 0,
         speed: 0,

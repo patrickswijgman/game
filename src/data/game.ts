@@ -1,6 +1,4 @@
-import { SceneId } from "@/consts/scene.js";
-import { Equipment, newEquipment } from "@/data/equipment.js";
-import { Inventory, newInventory } from "@/data/inventory.js";
+import { MAX_ENTITIES, SceneId } from "@/consts/scene.js";
 import { newScene, Scene } from "@/data/scene.js";
 import { newSheet, Sheet } from "@/data/sheet.js";
 import { table, Table } from "ridder";
@@ -13,8 +11,6 @@ export type Game = {
 
   // Player
   sheet: Sheet;
-  inventory: Inventory;
-  equipment: Equipment;
 };
 
 export function newGame(): Game {
@@ -26,8 +22,6 @@ export function newGame(): Game {
 
     // Player
     sheet: newSheet(),
-    inventory: newInventory(),
-    equipment: newEquipment(),
   };
 }
 
@@ -35,10 +29,9 @@ function newScenes() {
   return table(SceneId.MAX, (id) => {
     switch (id) {
       case SceneId.WORLD:
-      case SceneId.EDITOR:
-        return newScene(id, 20_000, 128, 128);
+        return newScene(id, MAX_ENTITIES);
       default:
-        return newScene(id, 10, 0, 0);
+        return newScene(id, 0);
     }
   });
 }

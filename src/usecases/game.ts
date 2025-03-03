@@ -1,8 +1,5 @@
-import { ItemId } from "@/consts/item.js";
 import { SceneId } from "@/consts/scene.js";
 import { game } from "@/data/game.js";
-import { unlockEquipmentSlot } from "@/usecases/equipment.js";
-import { addItemToInventory } from "@/usecases/inventory.js";
 import { initSheet } from "@/usecases/sheet.js";
 
 export function switchScene(id: SceneId) {
@@ -32,14 +29,4 @@ export function setupPlayer() {
   game.sheet.statsBase.movementSpeed = 1;
   game.sheet.statsBase.movementSpeedMax = 1.5;
   initSheet(game.sheet);
-
-  addItemToInventory(ItemId.LONGSWORD);
-  addItemToInventory(ItemId.SHORTBOW);
-  addItemToInventory(ItemId.LEATHER_ARMOR);
-  addItemToInventory(ItemId.WOODEN_SHIELD);
-
-  unlockEquipmentSlot();
-  unlockEquipmentSlot();
-  unlockEquipmentSlot();
-  unlockEquipmentSlot();
 }

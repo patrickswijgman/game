@@ -6,5 +6,3 @@ export const enum Type {
   TREE = 4,
   ATTACK = 5,
 }
-
-export const COMBAT_LOG_DURATION = 1000;

@@ -1,8 +1,7 @@
 export const enum SceneId {
   NONE,
-  EDITOR,
   WORLD,
-  INVENTORY,
-  CHARACTER,
   MAX,
 }
+
+export const MAX_ENTITIES = 2048;

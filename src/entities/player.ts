@@ -7,6 +7,7 @@ import { game } from "@/data/game.js";
 import { onPlayerStateEnter, onPlayerStateExit, onPlayerStateUpdate } from "@/states/player.js";
 import { addEntity, setCenterFromHitbox, setHitbox, setSprites, setState, updateState } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";
+import { initSheet } from "@/usecases/sheet.js";
 import { setVector } from "ridder";
 
 export function addPlayer(sceneId: SceneId, x: number, y: number) {
@@ -17,10 +18,10 @@ export function addPlayer(sceneId: SceneId, x: number, y: number) {
   setVector(e.direction, 1, 0);
 
   e.sheet = game.sheet;
+  initSheet(e.sheet);
 
   e.isPlayer = true;
   e.isPhysicsEnabled = true;
-  e.isLogEnabled = true;
 
   setState(e, StateId.PLAYER_IDLE);
 

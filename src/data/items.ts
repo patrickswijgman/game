@@ -8,11 +8,9 @@ export type Item = {
   name: string;
   type: ItemType;
   subtype: ItemSubtype;
-  itemSpriteId: SpriteId;
-  equipSpriteId: SpriteId;
+  spriteId: SpriteId;
   attackId: AttackId;
   stats: Stats;
-  isStackable: boolean;
 };
 
 export const items = table<Item>(ItemId.MAX, (id) => {
@@ -22,13 +20,11 @@ export const items = table<Item>(ItemId.MAX, (id) => {
         name: "Longsword",
         type: ItemType.WEAPON,
         subtype: ItemSubtype.ONE_HANDED,
-        itemSpriteId: SpriteId.ITEM_LONGSWORD,
-        equipSpriteId: SpriteId.EQUIP_LONGSWORD,
+        spriteId: SpriteId.EQUIP_LONGSWORD,
         attackId: AttackId.LONGSWORD,
         stats: newStats({
           damage: 3,
         }),
-        isStackable: false,
       };
 
     case ItemId.SHORTBOW:
@@ -36,13 +32,11 @@ export const items = table<Item>(ItemId.MAX, (id) => {
         name: "Shortbow",
         type: ItemType.WEAPON,
         subtype: ItemSubtype.TWO_HANDED,
-        itemSpriteId: SpriteId.ITEM_SHORTBOW,
-        equipSpriteId: SpriteId.EQUIP_SHORTBOW,
+        spriteId: SpriteId.EQUIP_SHORTBOW,
         attackId: AttackId.SHORTBOW,
         stats: newStats({
           damage: 2,
         }),
-        isStackable: false,
       };
 
     case ItemId.WOODEN_SHIELD:
@@ -50,14 +44,12 @@ export const items = table<Item>(ItemId.MAX, (id) => {
         name: "Wooden Shield",
         type: ItemType.OFFHAND,
         subtype: ItemSubtype.NONE,
-        itemSpriteId: SpriteId.ITEM_WOODEN_SHIELD,
-        equipSpriteId: SpriteId.EQUIP_WOODEN_SHIELD,
+        spriteId: SpriteId.EQUIP_WOODEN_SHIELD,
         attackId: AttackId.NONE,
         stats: newStats({
           armor: 1,
           movementSpeed: -0.1,
         }),
-        isStackable: false,
       };
 
     case ItemId.LEATHER_ARMOR:
@@ -65,14 +57,12 @@ export const items = table<Item>(ItemId.MAX, (id) => {
         name: "Leather Armor",
         type: ItemType.ARMOR,
         subtype: ItemSubtype.NONE,
-        itemSpriteId: SpriteId.ITEM_LEATHER_ARMOR,
-        equipSpriteId: SpriteId.EQUIP_LEATHER_ARMOR,
+        spriteId: SpriteId.EQUIP_LEATHER_ARMOR,
         attackId: AttackId.NONE,
         stats: newStats({
           armor: 1,
           movementSpeed: -0.1,
         }),
-        isStackable: false,
       };
 
     default:
@@ -80,11 +70,9 @@ export const items = table<Item>(ItemId.MAX, (id) => {
         name: "",
         type: ItemType.NONE,
         subtype: ItemSubtype.NONE,
-        itemSpriteId: SpriteId.NONE,
-        equipSpriteId: SpriteId.NONE,
+        spriteId: SpriteId.NONE,
         attackId: AttackId.NONE,
         stats: newStats(),
-        isStackable: false,
       };
   }
 });

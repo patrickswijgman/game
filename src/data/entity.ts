@@ -1,6 +1,5 @@
 import { SpriteId } from "@/consts/assets.js";
 import { AttackId } from "@/consts/attack.js";
-import { EnemyId } from "@/consts/enemy.js";
 import { Type } from "@/consts/entity.js";
 import { SceneId } from "@/consts/scene.js";
 import { StateId } from "@/consts/state.js";
@@ -51,7 +50,7 @@ export type Entity = {
   stateNextId: StateId;
   stateTimer: Timer;
 
-  // Lifecycle
+  // Life cycle
   isDestroyed: boolean;
   lifeTime: number;
   lifeTimer: Timer;
@@ -68,18 +67,11 @@ export type Entity = {
   hitboxOffset: Vector;
   sheet: Sheet;
   attackId: AttackId;
-  enemyId: EnemyId;
   isPlayer: boolean;
   isEnemy: boolean;
 
-  // Combat log
-  isLogEnabled: boolean;
-  log: Array<string>;
-  logTimer: Timer;
-
   // Attack
   casterId: number;
-  blacklist: Array<number>;
 };
 
 export function newEntity(): Entity {
@@ -127,7 +119,7 @@ export function newEntity(): Entity {
     stateNextId: StateId.NONE,
     stateTimer: timer(),
 
-    // Lifecycle
+    // Life cycle
     isDestroyed: false,
     lifeTime: 0,
     lifeTimer: timer(),
@@ -144,18 +136,11 @@ export function newEntity(): Entity {
     hitboxOffset: vec(),
     sheet: newSheet(),
     attackId: AttackId.NONE,
-    enemyId: EnemyId.NONE,
     isPlayer: false,
     isEnemy: false,
 
-    // Combat log
-    isLogEnabled: false,
-    log: [],
-    logTimer: timer(),
-
     // Attack
     casterId: 0,
-    blacklist: [],
   };
 }
 
@@ -163,6 +148,4 @@ export function zeroEntity(e: Entity) {
   zero(e);
   setVector(e.scale, 1, 1);
   setVector(e.tweenScale, 1, 1);
-  e.log.length = 0;
-  e.blacklist.length = 0;
 }

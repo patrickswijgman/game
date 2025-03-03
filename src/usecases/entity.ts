@@ -1,6 +1,7 @@
 import { SpriteId } from "@/consts/assets.js";
-import { COMBAT_LOG_DURATION, Type } from "@/consts/entity.js";
-import { FONT_HEIGHT, SHADOW_ALPHA } from "@/consts/render.js";
+import { COLOR_HEALTH } from "@/consts/colors.js";
+import { Type } from "@/consts/entity.js";
+import { SHADOW_ALPHA } from "@/consts/render.js";
 import { SceneId } from "@/consts/scene.js";
 import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
@@ -10,8 +11,8 @@ import { getScene } from "@/usecases/game.js";
 import { getItem } from "@/usecases/item.js";
 import { nextEntity } from "@/usecases/scene.js";
 import { getSprite } from "@/usecases/sprite.js";
-import { drawTextOutlined } from "@/usecases/ui.js";
-import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, getDelta, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, tickTimer, translateTransform, tween } from "ridder";
+import { drawBar } from "@/usecases/ui.js";
+import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, getDelta, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, tickTimer, translateTransform } from "ridder";
 
 export function addEntity(type: Type, sceneId: SceneId, x: number, y: number) {
   const scene = getScene(sceneId);
@@ -113,17 +114,6 @@ export function updateHitbox(e: Entity) {
   addVector(e.hitbox, e.hitboxOffset);
 }
 
-export function updateCombatLog(e: Entity) {
-  if (e.isLogEnabled && tickTimer(e.logTimer, COMBAT_LOG_DURATION)) {
-    e.log.length = 0;
-  }
-}
-
-export function addToCombatLog(e: Entity, message: string) {
-  e.log.push(message);
-  resetTimer(e.logTimer);
-}
-
 export function resetTween(e: Entity) {
   resetTimer(e.tweenTimer);
   resetVector(e.tweenPosition);
@@ -167,17 +157,17 @@ export function renderEntity(e: Entity) {
 
     if (e.sheet.armorId) {
       const item = getItem(e.sheet.armorId);
-      drawSprite(item.equipSpriteId, -sprite.pivot.x, -sprite.pivot.y);
+      drawSprite(item.spriteId, -sprite.pivot.x, -sprite.pivot.y);
     }
 
     if (e.sheet.weaponId) {
       const item = getItem(e.sheet.weaponId);
-      drawSprite(item.equipSpriteId, -sprite.pivot.x, -sprite.pivot.y);
+      drawSprite(item.spriteId, -sprite.pivot.x, -sprite.pivot.y);
     }
 
     if (e.sheet.offhandId) {
       const item = getItem(e.sheet.offhandId);
-      drawSprite(item.equipSpriteId, -sprite.pivot.x, -sprite.pivot.y);
+      drawSprite(item.spriteId, -sprite.pivot.x, -sprite.pivot.y);
     }
   }
 
@@ -186,35 +176,13 @@ export function renderEntity(e: Entity) {
   }
 }
 
-export function renderCombatLog(e: Entity) {
-  if (e.isLogEnabled && e.log.length) {
+export function renderEntityStatus(e: Entity) {
+  if (e.sheet.stats.health < e.sheet.stats.healthMax) {
     const scene = getScene(e.sceneId);
-
     resetTransform();
     applyCameraTransform(scene.camera);
-    translateTransform(e.position.x, e.position.y - e.hitbox.h - 12);
-    scaleTransform(0.5, 0.5);
-    setAlpha(1 - tween(0, 1, COMBAT_LOG_DURATION, "easeInCirc", e.logTimer.elapsed));
-
-    for (const log of e.log) {
-      drawTextOutlined(log, 0, 0, getCombatLogColor(e, log), "center");
-      translateTransform(0, -FONT_HEIGHT);
-    }
-
-    setAlpha(1);
-  }
-}
-
-function getCombatLogColor(e: Entity, log: string) {
-  switch (true) {
-    case log.startsWith("+"):
-      return "lime";
-    case e.isPlayer:
-      return "red";
-    case log.endsWith("!"):
-      return "orange";
-    default:
-      return "white";
+    translateTransform(e.position.x, e.position.y - e.hitbox.h - 5);
+    drawBar(-5, 0, e.sheet.stats.health, e.sheet.stats.healthMax, COLOR_HEALTH, 10, 3);
   }
 }
 

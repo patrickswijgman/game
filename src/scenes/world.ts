@@ -1,24 +1,22 @@
-import { TextureId } from "@/consts/assets.js";
-import { MAP_WORLD_HEIGHT, MAP_WORLD_WIDTH } from "@/consts/map.js";
 import { SceneId } from "@/consts/scene.js";
 import { Scene } from "@/data/scene.js";
+import { addPlayer } from "@/entities/player.js";
 import { getScene } from "@/usecases/game.js";
-import { loadMapFloorTexture, populateMap } from "@/usecases/map.js";
 import { getEntity } from "@/usecases/scene.js";
-import { applyCameraTransform, copyRectangle, drawTexture, resetTransform, setCameraPosition, setRectangle, updateCamera } from "ridder";
+import { copyRectangle, setCameraPosition, setRectangle, updateCamera } from "ridder";
 
 export function setupWorldScene() {
   const scene = getScene(SceneId.WORLD);
 
-  loadMapFloorTexture();
-
-  setRectangle(scene.bounds, 0, 0, MAP_WORLD_WIDTH, MAP_WORLD_HEIGHT);
+  setRectangle(scene.bounds, 0, 0, 1024, 1024);
 
   scene.camera.smoothing = 0.1;
   scene.camera.shakeReduction = 0.1;
   copyRectangle(scene.camera.bounds, scene.bounds);
 
-  populateMap(scene.id);
+  addPlayer(scene.id, 512, 512);
+
+  setCameraPosition(scene.camera, 512, 512);
 
   return scene;
 }
@@ -38,7 +36,7 @@ export function updateWorldScene(scene: Scene) {
 }
 
 export function renderWorldScene(scene: Scene) {
-  resetTransform();
-  applyCameraTransform(scene.camera);
-  drawTexture(TextureId.FLOOR, 0, 0);
+  //resetTransform();
+  //applyCameraTransform(scene.camera);
+  //drawTexture(TextureId.FLOOR, 0, 0);
 }
