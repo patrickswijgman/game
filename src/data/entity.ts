@@ -3,7 +3,7 @@ import { AttackId } from "@/consts/attack.js";
 import { Type } from "@/consts/entity.js";
 import { SceneId } from "@/consts/scene.js";
 import { StateId } from "@/consts/state.js";
-import { newSheet, Sheet } from "@/data/sheet.js";
+import { newStats, Stats } from "@/data/stats.js";
 import { rect, Rectangle, setVector, timer, Timer, vec, Vector, zero } from "ridder";
 
 export type Entity = {
@@ -23,11 +23,14 @@ export type Entity = {
 
   // Render
   spriteId: SpriteId;
-  shadowId: SpriteId;
+  pivot: Vector;
   scale: Vector;
   angle: number;
   depth: number;
   isFlipped: boolean;
+
+  shadowId: SpriteId;
+  shadowOffset: Vector;
 
   outlineId: SpriteId;
   isOutlineVisible: boolean;
@@ -65,7 +68,7 @@ export type Entity = {
   centerOffset: Vector;
   hitbox: Rectangle;
   hitboxOffset: Vector;
-  sheet: Sheet;
+  stats: Stats;
   attackId: AttackId;
   isPlayer: boolean;
   isEnemy: boolean;
@@ -92,11 +95,14 @@ export function newEntity(): Entity {
 
     // Render
     spriteId: SpriteId.NONE,
-    shadowId: SpriteId.NONE,
+    pivot: vec(0, 0),
     scale: vec(1, 1),
     angle: 0,
     depth: 0,
     isFlipped: false,
+
+    shadowId: SpriteId.NONE,
+    shadowOffset: vec(),
 
     outlineId: SpriteId.NONE,
     isOutlineVisible: false,
@@ -134,7 +140,7 @@ export function newEntity(): Entity {
     centerOffset: vec(),
     hitbox: rect(),
     hitboxOffset: vec(),
-    sheet: newSheet(),
+    stats: newStats(),
     attackId: AttackId.NONE,
     isPlayer: false,
     isEnemy: false,

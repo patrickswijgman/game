@@ -1,12 +1,12 @@
 import { COLOR_HEALTH, COLOR_MANA } from "@/consts/colors.js";
-import { game } from "@/data/game.js";
+import { Entity } from "@/data/entity.js";
 import { drawBar } from "@/usecases/ui.js";
 import { resetTransform, translateTransform } from "ridder";
 
-export function renderHud() {
+export function renderHud(e: Entity) {
   resetTransform();
   translateTransform(10, 10);
-  drawBar(0, 0, game.sheet.stats.health, game.sheet.stats.healthMax, COLOR_HEALTH, game.sheet.stats.healthMax * 2, 5);
+  drawBar(0, 0, e.stats.health, e.stats.healthMax, COLOR_HEALTH, e.stats.healthMax * 10, 5);
   translateTransform(0, 6);
-  drawBar(0, 0, game.sheet.stats.mana, game.sheet.stats.manaMax, COLOR_MANA, game.sheet.stats.manaMax * 2, 5);
+  drawBar(0, 0, e.stats.mana, e.stats.manaMax, COLOR_MANA, e.stats.manaMax * 10, 5);
 }

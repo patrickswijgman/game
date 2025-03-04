@@ -1,27 +1,34 @@
 import { SpriteId } from "@/consts/assets.js";
+import { AttackId } from "@/consts/attack.js";
 import { Type } from "@/consts/entity.js";
 import { SceneId } from "@/consts/scene.js";
 import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
-import { game } from "@/data/game.js";
 import { onPlayerStateEnter, onPlayerStateExit, onPlayerStateUpdate } from "@/states/player.js";
-import { addEntity, setCenterFromHitbox, setHitbox, setSprites, setState, updateState } from "@/usecases/entity.js";
+import { addEntity, setCenterFromHitbox, setHitbox, setShadow, setSprite, setState, updateState } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";
-import { initSheet } from "@/usecases/sheet.js";
 import { setVector } from "ridder";
 
 export function addPlayer(sceneId: SceneId, x: number, y: number) {
   const e = addEntity(Type.PLAYER, sceneId, x, y);
-  setSprites(e, SpriteId.PLAYER, SpriteId.PLAYER_SHADOW, SpriteId.PLAYER_FLASH);
+
+  setSprite(e, SpriteId.PLAYER, 8, 15, SpriteId.PLAYER_FLASH);
+  setShadow(e, SpriteId.PLAYER_SHADOW, 0, 3);
   setHitbox(e, -3, -8, 6, 8);
   setCenterFromHitbox(e);
   setVector(e.direction, 1, 0);
 
-  e.sheet = game.sheet;
-  initSheet(e.sheet);
+  e.stats.health = 3;
+  e.stats.healthMax = 3;
+  e.stats.damage = 5;
+  e.stats.critChance = 0.05;
+  e.stats.critDamage = 2;
+  e.stats.movementSpeed = 1;
+  e.stats.movementSpeedMax = 1;
+  e.attackId = AttackId.PLAYER;
 
-  e.isPlayer = true;
   e.isPhysicsEnabled = true;
+  e.isPlayer = true;
 
   setState(e, StateId.PLAYER_IDLE);
 

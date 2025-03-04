@@ -1,6 +1,5 @@
 export const enum AttackId {
   NONE,
-  LONGSWORD,
-  SHORTBOW,
+  PLAYER,
   MAX,
 }

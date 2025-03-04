@@ -8,9 +8,7 @@ import { Entity } from "@/data/entity.js";
 import { onAttackEnter, onAttackExit, onAttackUpdate } from "@/states/attack.js";
 import { onStaggerEnter, onStaggerExit, onStaggerUpdate } from "@/states/stagger.js";
 import { getScene } from "@/usecases/game.js";
-import { getItem } from "@/usecases/item.js";
 import { nextEntity } from "@/usecases/scene.js";
-import { getSprite } from "@/usecases/sprite.js";
 import { drawBar } from "@/usecases/ui.js";
 import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, getDelta, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, tickTimer, translateTransform } from "ridder";
 
@@ -23,11 +21,16 @@ export function addEntity(type: Type, sceneId: SceneId, x: number, y: number) {
   return e;
 }
 
-export function setSprites(e: Entity, spriteId: SpriteId, shadowId = SpriteId.NONE, flashId = SpriteId.NONE, outlineId = SpriteId.NONE) {
+export function setSprite(e: Entity, spriteId: SpriteId, pivotX: number, pivotY: number, flashId = SpriteId.NONE, outlineId = SpriteId.NONE) {
   e.spriteId = spriteId;
-  e.shadowId = shadowId;
   e.flashId = flashId;
   e.outlineId = outlineId;
+  setVector(e.pivot, pivotX, pivotY);
+}
+
+export function setShadow(e: Entity, id: SpriteId, offsetX: number, offsetY: number) {
+  e.shadowId = id;
+  setVector(e.shadowOffset, offsetX, offsetY);
 }
 
 export function setCenter(e: Entity, x: number, y: number) {
@@ -136,9 +139,8 @@ export function renderEntity(e: Entity) {
   }
 
   if (e.shadowId) {
-    const shadow = getSprite(e.shadowId);
     setAlpha(SHADOW_ALPHA);
-    drawSprite(e.shadowId, -shadow.pivot.x, -shadow.pivot.y);
+    drawSprite(e.shadowId, -e.pivot.x + e.shadowOffset.x, -e.pivot.y + e.shadowOffset.y);
     setAlpha(1);
   }
 
@@ -146,43 +148,24 @@ export function renderEntity(e: Entity) {
   scaleTransform(e.tweenScale.x, e.tweenScale.y);
   rotateTransform(e.tweenAngle);
 
-  const sprite = getSprite(e.spriteId);
-
   if (e.isFlashing) {
-    drawSprite(e.flashId, -sprite.pivot.x, -sprite.pivot.y);
-  } else {
-    if (e.spriteId) {
-      drawSprite(e.spriteId, -sprite.pivot.x, -sprite.pivot.y);
-    }
-
-    if (e.sheet.armorId) {
-      const item = getItem(e.sheet.armorId);
-      drawSprite(item.spriteId, -sprite.pivot.x, -sprite.pivot.y);
-    }
-
-    if (e.sheet.weaponId) {
-      const item = getItem(e.sheet.weaponId);
-      drawSprite(item.spriteId, -sprite.pivot.x, -sprite.pivot.y);
-    }
-
-    if (e.sheet.offhandId) {
-      const item = getItem(e.sheet.offhandId);
-      drawSprite(item.spriteId, -sprite.pivot.x, -sprite.pivot.y);
-    }
+    drawSprite(e.flashId, -e.pivot.x, -e.pivot.y);
+  } else if (e.spriteId) {
+    drawSprite(e.spriteId, -e.pivot.x, -e.pivot.y);
   }
 
   if (e.isOutlineVisible) {
-    drawSprite(e.outlineId, -sprite.pivot.x, -sprite.pivot.y);
+    drawSprite(e.outlineId, -e.pivot.x, -e.pivot.y);
   }
 }
 
 export function renderEntityStatus(e: Entity) {
-  if (e.sheet.stats.health < e.sheet.stats.healthMax) {
+  if (e.stats.health < e.stats.healthMax) {
     const scene = getScene(e.sceneId);
     resetTransform();
     applyCameraTransform(scene.camera);
     translateTransform(e.position.x, e.position.y - e.hitbox.h - 5);
-    drawBar(-5, 0, e.sheet.stats.health, e.sheet.stats.healthMax, COLOR_HEALTH, 10, 3);
+    drawBar(-5, 0, e.stats.health, e.stats.healthMax, COLOR_HEALTH, 10, 3);
   }
 }
 
@@ -193,14 +176,13 @@ export function destroyIfExpired(e: Entity) {
 }
 
 export function destroyIfDead(e: Entity) {
-  if (e.sheet.stats.healthMax && e.sheet.stats.health === 0) {
+  if (e.stats.healthMax && e.stats.health === 0) {
     destroyEntity(e);
   }
 }
 
 export function destroyEntity(e: Entity) {
   e.isDestroyed = true;
-
   const scene = getScene(e.sceneId);
   scene.destroyed.push(e.id);
 }

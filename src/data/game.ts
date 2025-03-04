@@ -1,6 +1,5 @@
 import { MAX_ENTITIES, SceneId } from "@/consts/scene.js";
 import { newScene, Scene } from "@/data/scene.js";
-import { newSheet, Sheet } from "@/data/sheet.js";
 import { table, Table } from "ridder";
 
 export type Game = {
@@ -8,9 +7,6 @@ export type Game = {
   scenes: Table<Scene>;
   sceneId: SceneId;
   sceneNextId: SceneId;
-
-  // Player
-  sheet: Sheet;
 };
 
 export function newGame(): Game {
@@ -19,9 +15,6 @@ export function newGame(): Game {
     scenes: newScenes(),
     sceneId: SceneId.NONE,
     sceneNextId: SceneId.NONE,
-
-    // Player
-    sheet: newSheet(),
   };
 }
 

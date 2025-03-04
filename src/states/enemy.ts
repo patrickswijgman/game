@@ -5,7 +5,6 @@ import { Entity } from "@/data/entity.js";
 import { getAttack } from "@/usecases/attack.js";
 import { setState } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";
-import { getItem } from "@/usecases/item.js";
 import { getEntity } from "@/usecases/scene.js";
 import { seek } from "@/usecases/steering.js";
 import { copyVector, getVectorDistance, normalizeVector, subtractVector, tickTimer } from "ridder";
@@ -61,14 +60,14 @@ export function onEnemyStateExit(e: Entity) {}
 function moveTowardsPlayer(e: Entity) {
   const scene = getScene(e.sceneId);
   const player = getEntity(scene, scene.playerId);
-  seek(e, player.position, 0.5 * e.sheet.stats.movementSpeed);
+  seek(e, player.position, 0.5 * e.stats.movementSpeed);
 }
 
 function isPlayerWithinRange(e: Entity) {
   const scene = getScene(e.sceneId);
   const player = getEntity(scene, scene.playerId);
 
-  if (player.sheet.stats.health) {
+  if (player.stats.health) {
     return getVectorDistance(e.position, player.position) < 100;
   }
 
@@ -79,13 +78,11 @@ function isPlayerInAttackRange(e: Entity) {
   const scene = getScene(e.sceneId);
   const player = getEntity(scene, scene.playerId);
 
-  if (player.sheet.stats.health) {
+  if (player.stats.health) {
     const distance = getVectorDistance(e.position, player.position);
-    const weapon = getItem(e.sheet.weaponId);
-    const attack = getAttack(weapon.attackId);
+    const attack = getAttack(e.attackId);
 
     if (attack && distance < attack.range) {
-      e.attackId = weapon.attackId;
       return true;
     }
   }
@@ -97,7 +94,7 @@ function isPlayerTooFarAway(e: Entity) {
   const scene = getScene(e.sceneId);
   const player = getEntity(scene, scene.playerId);
 
-  if (player.sheet.stats.health) {
+  if (player.stats.health) {
     return getVectorDistance(e.position, player.position) > 200;
   }
 
