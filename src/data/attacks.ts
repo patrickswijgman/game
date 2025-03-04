@@ -19,9 +19,9 @@ export const attacks = table<Attack>(AttackId.MAX, (id) => {
       return {
         spriteId: SpriteId.ATTACK_ARROW,
         pivot: vec(8, 8.5),
-        hitbox: rect(-4, -1, 8, 2),
+        hitbox: rect(-2, -2, 4, 4),
         reach: 4,
-        range: 50,
+        range: 40,
         speed: 2,
         duration: 0,
         recovery: 500,

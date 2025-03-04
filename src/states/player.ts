@@ -3,7 +3,8 @@ import { updateWalkAnimation } from "@/anims/walk.js";
 import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
 import { setState } from "@/usecases/entity.js";
-import { InputCode, copyVector, getVectorLength, isInputDown, normalizeVector, resetVector, scaleVector } from "ridder";
+import { getScene } from "@/usecases/game.js";
+import { InputCode, copyVector, getVectorLength, isInputDown, normalizeVector, resetVector, scaleVector, subtractVector } from "ridder";
 
 export function onPlayerStateEnter(e: Entity) {
   switch (e.stateId) {
@@ -18,6 +19,7 @@ export function onPlayerStateUpdate(e: Entity) {
     case StateId.PLAYER_IDLE:
       {
         updateBreathAnimation(e);
+        aim(e);
         if (move(e)) {
           setState(e, StateId.PLAYER_WALK);
         }
@@ -30,6 +32,7 @@ export function onPlayerStateUpdate(e: Entity) {
     case StateId.PLAYER_WALK:
       {
         updateWalkAnimation(e);
+        aim(e);
         if (!move(e)) {
           setState(e, StateId.PLAYER_IDLE);
         }
@@ -46,18 +49,16 @@ export function onPlayerStateExit(e: Entity) {}
 function move(e: Entity) {
   resetVector(e.velocity);
 
-  if (isInputDown(InputCode.KEY_LEFT)) {
+  if (isInputDown(InputCode.KEY_A)) {
     e.velocity.x -= 1;
-    e.isFlipped = true;
   }
-  if (isInputDown(InputCode.KEY_RIGHT)) {
+  if (isInputDown(InputCode.KEY_D)) {
     e.velocity.x += 1;
-    e.isFlipped = false;
   }
-  if (isInputDown(InputCode.KEY_UP)) {
+  if (isInputDown(InputCode.KEY_W)) {
     e.velocity.y -= 1;
   }
-  if (isInputDown(InputCode.KEY_DOWN)) {
+  if (isInputDown(InputCode.KEY_D)) {
     e.velocity.y += 1;
   }
 
@@ -65,15 +66,22 @@ function move(e: Entity) {
 
   if (isMoving) {
     normalizeVector(e.velocity);
-    copyVector(e.direction, e.velocity);
     scaleVector(e.velocity, 0.75 * e.stats.movementSpeed);
   }
 
   return isMoving;
 }
 
+function aim(e: Entity) {
+  const scene = getScene(e.sceneId);
+  copyVector(e.direction, scene.camera.mousePosition);
+  subtractVector(e.direction, e.position);
+  normalizeVector(e.direction);
+  e.isFlipped = e.direction.x < 0;
+}
+
 function attack(e: Entity) {
-  if (isInputDown(InputCode.KEY_Z)) {
+  if (isInputDown(InputCode.MOUSE_LEFT)) {
     return true;
   }
 

@@ -5,8 +5,7 @@ import { SHADOW_ALPHA } from "@/consts/render.js";
 import { SceneId } from "@/consts/scene.js";
 import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
-import { onAttackEnter, onAttackExit, onAttackUpdate } from "@/states/attack.js";
-import { onStaggerEnter, onStaggerExit, onStaggerUpdate } from "@/states/stagger.js";
+import { onEntityStateEnter, onEntityStateExit, onEntityStateUpdate } from "@/states/entity.js";
 import { getScene } from "@/usecases/game.js";
 import { nextEntity } from "@/usecases/scene.js";
 import { drawBar } from "@/usecases/ui.js";
@@ -55,48 +54,11 @@ export function setState(e: Entity, stateId: StateId) {
 
 export function updateState(e: Entity, onEnter: (e: Entity) => void, onUpdate: (e: Entity) => void, onExit: (e: Entity) => void) {
   if (e.stateNextId !== e.stateId) {
-    switch (e.stateId) {
-      case StateId.ATTACK:
-        onAttackExit(e);
-        break;
-      case StateId.STAGGER:
-        onStaggerExit(e);
-        break;
-      default:
-        onExit(e);
-        break;
-    }
-
-    resetTimer(e.stateTimer);
-    resetVector(e.velocity);
-    resetTween(e);
-
+    onEntityStateExit(e, onExit);
     e.stateId = e.stateNextId;
-
-    switch (e.stateId) {
-      case StateId.ATTACK:
-        onAttackEnter(e);
-        break;
-      case StateId.STAGGER:
-        onStaggerEnter(e);
-        break;
-      default:
-        onEnter(e);
-        break;
-    }
+    onEntityStateEnter(e, onEnter);
   }
-
-  switch (e.stateId) {
-    case StateId.ATTACK:
-      onAttackUpdate(e);
-      break;
-    case StateId.STAGGER:
-      onStaggerUpdate(e);
-      break;
-    default:
-      onUpdate(e);
-      break;
-  }
+  onEntityStateUpdate(e, onUpdate);
 }
 
 export function updatePhysics(e: Entity) {
