@@ -21,6 +21,12 @@ export type Entity = {
   velocity: Vector;
   direction: Vector;
 
+  // Collisions
+  isCollisionsEnabled: boolean;
+  body: Rectangle;
+  bodyOffset: Vector;
+  bodyIntersection: Vector;
+
   // Render
   spriteId: SpriteId;
   pivot: Vector;
@@ -92,6 +98,12 @@ export function newEntity(): Entity {
     position: vec(),
     velocity: vec(),
     direction: vec(),
+
+    // Collisions
+    isCollisionsEnabled: false,
+    body: rect(),
+    bodyOffset: vec(),
+    bodyIntersection: vec(),
 
     // Render
     spriteId: SpriteId.NONE,

@@ -1,44 +1,49 @@
 import { COLOR_GRASS } from "@/consts/colors.js";
 import { SceneId } from "@/consts/scene.js";
-import { Scene } from "@/data/scene.js";
 import { addPlayer } from "@/entities/player.js";
+import { addTree } from "@/entities/tree.js";
 import { getScene } from "@/usecases/game.js";
-import { getEntity } from "@/usecases/scene.js";
-import { copyRectangle, setBackgroundColor, setCameraPosition, setRectangle, updateCamera } from "ridder";
+import { addBody } from "@/usecases/scene.js";
+import { copyRectangle, doesRectangleContain, random, rect, setBackgroundColor, setCameraPosition, setRectangle } from "ridder";
+
+const w = 400;
+const h = 300;
+const border = rect(0, 0, w, h);
+const field = rect(50, 50, w - 100, h - 100);
 
 export function setupWorldScene() {
   const scene = getScene(SceneId.WORLD);
 
-  setRectangle(scene.bounds, 0, 0, 1024, 1024);
+  setBackgroundColor(COLOR_GRASS);
 
+  // Boundary
+  setRectangle(scene.bounds, 0, 0, w, h);
+  addBody(scene, rect(0, 0, w, 40));
+  addBody(scene, rect(0, 0, 40, h));
+  addBody(scene, rect(w - 40, 0, 40, h));
+  addBody(scene, rect(0, h - 40, w, 40));
+
+  // Camera
   scene.camera.smoothing = 0.1;
   scene.camera.shakeReduction = 0.1;
   copyRectangle(scene.camera.bounds, scene.bounds);
+  setCameraPosition(scene.camera, w / 2, h / 2);
 
-  addPlayer(scene.id, 512, 512);
+  // Entities
+  addPlayer(scene.id, w / 2, h / 2);
 
-  setBackgroundColor(COLOR_GRASS);
-  setCameraPosition(scene.camera, 512, 512);
+  for (let i = -4; i <= w; i += 12) {
+    for (let j = -4; j <= h; j += 12) {
+      const x = i + random(4, 8);
+      const y = j + random(4, 8);
+
+      if (doesRectangleContain(field, x, y)) {
+        continue;
+      }
+
+      addTree(scene.id, x, y);
+    }
+  }
 
   return scene;
-}
-
-export function onWorldSceneEnter(scene: Scene) {
-  const player = getEntity(scene, scene.playerId);
-  if (player.isPlayer) {
-    setCameraPosition(scene.camera, player.position.x, player.position.y);
-  }
-}
-
-export function updateWorldScene(scene: Scene) {
-  const player = getEntity(scene, scene.playerId);
-  if (player.isPlayer) {
-    updateCamera(scene.camera, player.position.x, player.position.y);
-  }
-}
-
-export function renderWorldScene(scene: Scene) {
-  //resetTransform();
-  //applyCameraTransform(scene.camera);
-  //drawTexture(TextureId.FLOOR, 0, 0);
 }

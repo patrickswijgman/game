@@ -23,6 +23,7 @@ export type Scene = {
   // World
   camera: Camera;
   bounds: Rectangle;
+  bodies: Array<Rectangle>;
   playerId: number;
 };
 
@@ -48,6 +49,7 @@ export function newScene(id: SceneId): Scene {
     // World
     camera: camera(),
     bounds: rect(),
+    bodies: [],
     playerId: 0,
   };
 }

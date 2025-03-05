@@ -42,6 +42,21 @@ export function updateAttack(e: Entity) {
   copyVector(e.velocity, e.direction);
   scaleVector(e.velocity, attack.speed);
 
+  for (const body of scene.bodies) {
+    if (doRectanglesIntersect(e.hitbox, body)) {
+      if (body === caster.body) {
+        continue;
+      }
+
+      destroyEntity(e);
+      break;
+    }
+  }
+
+  if (e.isDestroyed) {
+    return;
+  }
+
   const targets = caster.isPlayer ? scene.enemies : scene.allies;
 
   for (const id of targets) {
@@ -68,6 +83,7 @@ export function updateAttack(e: Entity) {
       //addToCombatLog(target, isCrit ? `${damage}!` : damage.toString());
 
       destroyEntity(e);
+      break;
     }
   }
 

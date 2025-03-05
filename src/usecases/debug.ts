@@ -14,6 +14,16 @@ export function debugHitboxes(scene: Scene) {
   }
 }
 
+export function debugBodies(scene: Scene) {
+  resetTransform();
+  applyCameraTransform(scene.camera);
+  for (const body of scene.bodies) {
+    if (isRectangleValid(body)) {
+      drawRectInstance(body, "red", false);
+    }
+  }
+}
+
 export function debugFps() {
   drawText(`FPS: ${getFramePerSecond()}`, 1, 1, "lime");
 }

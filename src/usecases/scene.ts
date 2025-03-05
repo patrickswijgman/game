@@ -1,6 +1,6 @@
 import { zeroEntity } from "@/data/entity.js";
 import { Scene } from "@/data/scene.js";
-import { remove } from "ridder";
+import { Rectangle, remove } from "ridder";
 
 export function nextEntity(scene: Scene) {
   let id = scene.entityId;
@@ -30,6 +30,10 @@ export function getEntity(scene: Scene, id: number) {
   return scene.entities[id];
 }
 
+export function addBody(scene: Scene, body: Rectangle) {
+  scene.bodies.push(body);
+}
+
 export function sortEntitiesOnDepth(scene: Scene) {
   scene.render.sort((idA, idB) => {
     const a = scene.entities[idA];
@@ -41,11 +45,13 @@ export function sortEntitiesOnDepth(scene: Scene) {
 export function cleanupDestroyedEntities(scene: Scene) {
   if (scene.destroyed.length) {
     for (const id of scene.destroyed) {
+      const e = getEntity(scene, id);
       remove(scene.update, id);
       remove(scene.render, id);
       remove(scene.allies, id);
       remove(scene.enemies, id);
-      zeroEntity(scene.entities[id]);
+      remove(scene.bodies, e.body);
+      zeroEntity(e);
     }
     scene.destroyed.length = 0;
   }

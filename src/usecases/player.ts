@@ -14,7 +14,7 @@ export function move(e: Entity) {
   if (isInputDown(InputCode.KEY_W)) {
     e.velocity.y -= 1;
   }
-  if (isInputDown(InputCode.KEY_D)) {
+  if (isInputDown(InputCode.KEY_S)) {
     e.velocity.y += 1;
   }
 

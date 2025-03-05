@@ -5,14 +5,14 @@ import { game } from "@/data/game.js";
 import { updateAttack } from "@/entities/attack.js";
 import { updatePlayer } from "@/entities/player.js";
 import { updateTree } from "@/entities/tree.js";
-import { onWorldSceneEnter, renderWorldScene, setupWorldScene, updateWorldScene } from "@/scenes/world.js";
+import { setupWorldScene } from "@/scenes/world.js";
 import { loadAssets } from "@/usecases/assets.js";
-import { debugEntities, debugFps, debugHitboxes } from "@/usecases/debug.js";
-import { destroyIfDead, destroyIfExpired, renderEntity, renderEntityStatus, updatePhysics } from "@/usecases/entity.js";
+import { debugBodies, debugEntities, debugFps, debugHitboxes } from "@/usecases/debug.js";
+import { destroyIfDead, destroyIfExpired, renderEntity, renderEntityStatus, updateCollisions, updatePhysics } from "@/usecases/entity.js";
 import { getScene, switchScene, transitionToNextScene } from "@/usecases/game.js";
 import { renderHud } from "@/usecases/hud.js";
 import { cleanupDestroyedEntities, getEntity, sortEntitiesOnDepth } from "@/usecases/scene.js";
-import { InputCode, isInputPressed, resetTransform, run, scaleTransform, translateTransform } from "ridder";
+import { InputCode, isInputPressed, resetTransform, run, scaleTransform, translateTransform, updateCamera } from "ridder";
 
 let isDebugging = false;
 
@@ -36,23 +36,9 @@ run({
       isDebugging = !isDebugging;
     }
 
-    if (transitionToNextScene()) {
-      const scene = getScene(game.sceneId);
-
-      switch (game.sceneId) {
-        case SceneId.WORLD:
-          onWorldSceneEnter(scene);
-          break;
-      }
-    }
+    transitionToNextScene();
 
     const scene = getScene(game.sceneId);
-
-    switch (scene.id) {
-      case SceneId.WORLD:
-        updateWorldScene(scene);
-        break;
-    }
 
     for (const id of scene.update) {
       const e = getEntity(scene, id);
@@ -77,6 +63,12 @@ run({
       }
 
       updatePhysics(e);
+      updateCollisions(e);
+    }
+
+    const player = getEntity(scene, scene.playerId);
+    if (player.isPlayer) {
+      updateCamera(scene.camera, player.position.x, player.position.y);
     }
 
     cleanupDestroyedEntities(scene);
@@ -85,12 +77,6 @@ run({
 
   render: () => {
     const scene = getScene(game.sceneId);
-
-    switch (scene.id) {
-      case SceneId.WORLD:
-        renderWorldScene(scene);
-        break;
-    }
 
     for (const id of scene.render) {
       const e = getEntity(scene, id);
@@ -103,15 +89,13 @@ run({
     }
 
     const player = getEntity(scene, scene.playerId);
-
-    switch (scene.id) {
-      case SceneId.WORLD:
-        renderHud(player);
-        break;
+    if (player.isPlayer) {
+      renderHud(player);
     }
 
     if (isDebugging) {
       debugHitboxes(scene);
+      debugBodies(scene);
       resetTransform();
       scaleTransform(0.5, 0.5);
       debugFps();

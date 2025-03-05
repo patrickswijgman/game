@@ -7,9 +7,9 @@ import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
 import { onEntityStateEnter, onEntityStateExit, onEntityStateUpdate } from "@/states/entity.js";
 import { getScene } from "@/usecases/game.js";
-import { nextEntity } from "@/usecases/scene.js";
+import { addBody, nextEntity } from "@/usecases/scene.js";
 import { drawBar } from "@/usecases/ui.js";
-import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, getDelta, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, tickTimer, translateTransform } from "ridder";
+import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, getDelta, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, tickTimer, translateTransform, writeIntersectionBetweenRectangles } from "ridder";
 
 export function addEntity(type: Type, sceneId: SceneId, x: number, y: number) {
   const scene = getScene(sceneId);
@@ -43,6 +43,14 @@ export function setHitbox(e: Entity, x: number, y: number, w: number, h: number)
   updateHitbox(e);
 }
 
+export function setBody(e: Entity, x: number, y: number, w: number, h: number) {
+  const scene = getScene(e.sceneId);
+  setVector(e.bodyOffset, x, y);
+  setRectangle(e.body, 0, 0, w, h);
+  updateBody(e);
+  addBody(scene, e.body);
+}
+
 export function setState(e: Entity, stateId: StateId) {
   e.stateNextId = stateId;
 }
@@ -64,6 +72,34 @@ export function updatePhysics(e: Entity) {
   }
 }
 
+export function updateCollisions(e: Entity) {
+  if (e.isCollisionsEnabled) {
+    const scene = getScene(e.sceneId);
+
+    updateBody(e);
+    resetVector(e.bodyIntersection);
+
+    for (const body of scene.bodies) {
+      if (body === e.body) {
+        continue;
+      }
+
+      writeIntersectionBetweenRectangles(e.body, body, e.velocity, e.bodyIntersection);
+    }
+
+    if (e.bodyIntersection.x) {
+      e.position.x += e.bodyIntersection.x;
+      e.velocity.x = 0;
+    }
+    if (e.bodyIntersection.y) {
+      e.position.y += e.bodyIntersection.y;
+      e.velocity.y = 0;
+    }
+
+    updateBody(e);
+  }
+}
+
 export function updateCenter(e: Entity) {
   copyVector(e.center, e.position);
   addVector(e.center, e.centerOffset);
@@ -72,6 +108,11 @@ export function updateCenter(e: Entity) {
 export function updateHitbox(e: Entity) {
   copyVector(e.hitbox, e.position);
   addVector(e.hitbox, e.hitboxOffset);
+}
+
+export function updateBody(e: Entity) {
+  copyVector(e.body, e.position);
+  addVector(e.body, e.bodyOffset);
 }
 
 export function resetEntity(e: Entity) {
@@ -141,7 +182,9 @@ export function destroyIfDead(e: Entity) {
 }
 
 export function destroyEntity(e: Entity) {
-  e.isDestroyed = true;
   const scene = getScene(e.sceneId);
+
+  e.isDestroyed = true;
+
   scene.destroyed.push(e.id);
 }
