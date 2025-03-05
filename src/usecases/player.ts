@@ -2,7 +2,7 @@ import { Entity } from "@/data/entity.js";
 import { getScene } from "@/usecases/game.js";
 import { InputCode, copyVector, getVectorLength, isInputDown, normalizeVector, resetVector, scaleVector, subtractVector } from "ridder";
 
-export function move(e: Entity) {
+export function move(e: Entity, mod = 1) {
   resetVector(e.velocity);
 
   if (isInputDown(InputCode.KEY_A)) {
@@ -22,7 +22,7 @@ export function move(e: Entity) {
 
   if (isMoving) {
     normalizeVector(e.velocity);
-    scaleVector(e.velocity, 0.6 * e.stats.movementSpeed);
+    scaleVector(e.velocity, 0.6 * e.stats.movementSpeed * mod);
   }
 
   return isMoving;

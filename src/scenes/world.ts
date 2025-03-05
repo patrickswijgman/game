@@ -1,15 +1,20 @@
 import { COLOR_GRASS } from "@/consts/colors.js";
 import { SceneId } from "@/consts/scene.js";
+import { Scene } from "@/data/scene.js";
+import { writeRandomPointInPerimeterBetweenRectangles } from "@/engine/rectangle.js";
+import { addMeleeEnemy } from "@/entities/enemy-melee.js";
 import { addPlayer } from "@/entities/player.js";
 import { addTree } from "@/entities/tree.js";
 import { getScene } from "@/usecases/game.js";
 import { addBody } from "@/usecases/scene.js";
-import { copyRectangle, doesRectangleContain, random, rect, setBackgroundColor, setCameraPosition, setRectangle } from "ridder";
+import { copyRectangle, doesRectangleContain, random, rect, resetTimer, setBackgroundColor, setCameraPosition, setRectangle, tickTimer, vec } from "ridder";
 
 const w = 400;
 const h = 300;
+const outside = rect(-50, -50, w + 100, h + 100);
 const border = rect(0, 0, w, h);
 const field = rect(50, 50, w - 100, h - 100);
+const pos = vec();
 
 export function setupWorldScene() {
   const scene = getScene(SceneId.WORLD);
@@ -46,4 +51,12 @@ export function setupWorldScene() {
   }
 
   return scene;
+}
+
+export function updateWorldScene(scene: Scene) {
+  if (tickTimer(scene.spawnTimer, scene.spawnTime)) {
+    writeRandomPointInPerimeterBetweenRectangles(outside, border, pos);
+    addMeleeEnemy(scene.id, pos.x, pos.y);
+    resetTimer(scene.spawnTimer);
+  }
 }

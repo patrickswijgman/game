@@ -40,6 +40,12 @@ export function onPlayerStateUpdate(e: Entity) {
         }
       }
       break;
+
+    case StateId.ATTACK:
+      {
+        move(e, 0.5);
+      }
+      break;
   }
 }
 

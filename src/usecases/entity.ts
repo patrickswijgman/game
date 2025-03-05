@@ -83,7 +83,6 @@ export function updateCollisions(e: Entity) {
       if (body === e.body) {
         continue;
       }
-
       writeIntersectionBetweenRectangles(e.body, body, e.velocity, e.bodyIntersection);
     }
 

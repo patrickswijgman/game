@@ -2,7 +2,7 @@ import { updateBreathAnimation } from "@/anims/breath.js";
 import { updateWalkAnimation } from "@/anims/walk.js";
 import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
-import { isPlayerInAttackRange, isPlayerTooFarAway, isPlayerWithinRange, lookAtPlayer, moveTowardsPlayer } from "@/usecases/enemy.js";
+import { isPlayerAlive, isPlayerInAttackRange, lookAtPlayer, moveTowardsPlayer } from "@/usecases/enemy.js";
 import { setState } from "@/usecases/entity.js";
 import { tickTimer } from "ridder";
 
@@ -19,7 +19,7 @@ export function onEnemyStateUpdate(e: Entity) {
     case StateId.ENEMY_IDLE:
       {
         updateBreathAnimation(e);
-        if (isPlayerWithinRange(e)) {
+        if (isPlayerAlive(e)) {
           setState(e, StateId.ENEMY_SEEK);
         }
       }
@@ -29,7 +29,7 @@ export function onEnemyStateUpdate(e: Entity) {
       {
         updateWalkAnimation(e);
         lookAtPlayer(e);
-        if (isPlayerTooFarAway(e)) {
+        if (!isPlayerAlive(e)) {
           setState(e, StateId.ENEMY_IDLE);
           return;
         }

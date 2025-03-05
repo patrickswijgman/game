@@ -11,22 +11,23 @@ export function moveTowardsPlayer(e: Entity) {
   seek(e, player.position, 0.5 * e.stats.movementSpeed);
 }
 
-export function isPlayerWithinRange(e: Entity) {
+export function lookAtPlayer(e: Entity) {
   const scene = getScene(e.sceneId);
   const player = getEntity(scene, scene.playerId);
 
-  if (player.stats.health) {
-    return getVectorDistance(e.position, player.position) < 100;
+  if (isPlayerAlive(e)) {
+    copyVector(e.direction, player.position);
+    subtractVector(e.direction, e.position);
+    normalizeVector(e.direction);
+    e.isFlipped = player.position.x < e.position.x;
   }
-
-  return false;
 }
 
 export function isPlayerInAttackRange(e: Entity) {
   const scene = getScene(e.sceneId);
   const player = getEntity(scene, scene.playerId);
 
-  if (player.stats.health) {
+  if (isPlayerAlive(e)) {
     const distance = getVectorDistance(e.position, player.position);
     const attack = getAttack(e.attackId);
 
@@ -38,24 +39,8 @@ export function isPlayerInAttackRange(e: Entity) {
   return false;
 }
 
-export function isPlayerTooFarAway(e: Entity) {
+export function isPlayerAlive(e: Entity) {
   const scene = getScene(e.sceneId);
   const player = getEntity(scene, scene.playerId);
-
-  if (player.stats.health) {
-    return getVectorDistance(e.position, player.position) > 200;
-  }
-
-  return false;
-}
-
-export function lookAtPlayer(e: Entity) {
-  const scene = getScene(e.sceneId);
-  const player = getEntity(scene, scene.playerId);
-
-  copyVector(e.direction, player.position);
-  subtractVector(e.direction, e.position);
-  normalizeVector(e.direction);
-
-  e.isFlipped = player.position.x < e.position.x;
+  return player.isPlayer && player.stats.health;
 }

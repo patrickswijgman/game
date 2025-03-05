@@ -27,6 +27,18 @@ export const attacks = table<Attack>(AttackId.MAX, (id) => {
         recovery: 500,
       };
 
+    case AttackId.ENEMY_MELEE:
+      return {
+        spriteId: SpriteId.ATTACK_LONGSWORD,
+        pivot: vec(8, 8),
+        hitbox: rect(-3, -3, 6, 6),
+        reach: 4,
+        range: 10,
+        speed: 0,
+        duration: 150,
+        recovery: 500,
+      };
+
     default:
       return {
         spriteId: SpriteId.NONE,

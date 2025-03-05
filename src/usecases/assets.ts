@@ -11,6 +11,10 @@ export async function loadAssets() {
   loadSprite(SpriteId.PLAYER_SHADOW, TextureId.ATLAS, 0, 32, 16, 16);
   loadSprite(SpriteId.PLAYER_FLASH, TextureId.ATLAS_FLASH, 0, 16, 16, 16);
 
+  loadSprite(SpriteId.ENEMY_MELEE, TextureId.ATLAS, 16, 16, 16, 16);
+  loadSprite(SpriteId.ENEMY_MELEE_SHADOW, TextureId.ATLAS, 16, 32, 16, 16);
+  loadSprite(SpriteId.ENEMY_MELEE_FLASH, TextureId.ATLAS_FLASH, 16, 16, 16, 16);
+
   loadSprite(SpriteId.TREE_PINE, TextureId.ATLAS, 0, 80, 16, 16);
   loadSprite(SpriteId.TREE_SHADOW, TextureId.ATLAS, 0, 96, 16, 16);
 

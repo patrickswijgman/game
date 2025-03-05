@@ -1,6 +1,6 @@
 import { MAX_ENTITIES, SceneId } from "@/consts/scene.js";
 import { Entity, newEntity } from "@/data/entity.js";
-import { Camera, camera, rect, Rectangle, table, Table } from "ridder";
+import { Camera, camera, rect, Rectangle, table, Table, timer, Timer } from "ridder";
 
 export type Scene = {
   id: SceneId;
@@ -24,6 +24,8 @@ export type Scene = {
   camera: Camera;
   bounds: Rectangle;
   bodies: Array<Rectangle>;
+  spawnTime: number;
+  spawnTimer: Timer;
   playerId: number;
 };
 
@@ -49,6 +51,8 @@ export function newScene(id: SceneId): Scene {
     // World
     camera: camera(),
     bounds: rect(),
+    spawnTime: 2000,
+    spawnTimer: timer(),
     bodies: [],
     playerId: 0,
   };

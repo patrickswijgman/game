@@ -21,7 +21,7 @@ export function addPlayer(sceneId: SceneId, x: number, y: number) {
 
   e.stats.health = 3;
   e.stats.healthMax = 3;
-  e.stats.damage = 5;
+  e.stats.damage = 10;
   e.stats.critChance = 0.05;
   e.stats.critDamage = 2;
   e.stats.movementSpeed = 1;

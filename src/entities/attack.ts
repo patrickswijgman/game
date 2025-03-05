@@ -41,11 +41,11 @@ export function updateAttack(e: Entity) {
   copyVector(e.velocity, e.direction);
   scaleVector(e.velocity, attack.speed);
 
-  if (destroyIfHitsWall(e)) {
+  if (dealDamageToTargets(e)) {
     return;
   }
 
-  if (dealDamageToTargets(e)) {
+  if (destroyIfHitsWall(e)) {
     return;
   }
 

@@ -3,9 +3,10 @@ import { FONT_HEIGHT } from "@/consts/render.js";
 import { SceneId } from "@/consts/scene.js";
 import { game } from "@/data/game.js";
 import { updateAttack } from "@/entities/attack.js";
+import { updateMeleeEnemy } from "@/entities/enemy-melee.js";
 import { updatePlayer } from "@/entities/player.js";
 import { updateTree } from "@/entities/tree.js";
-import { setupWorldScene } from "@/scenes/world.js";
+import { setupWorldScene, updateWorldScene } from "@/scenes/world.js";
 import { loadAssets } from "@/usecases/assets.js";
 import { debugBodies, debugEntities, debugFps, debugHitboxes } from "@/usecases/debug.js";
 import { destroyIfDead, destroyIfExpired, renderEntity, renderEntityStatus, updateCollisions, updatePhysics } from "@/usecases/entity.js";
@@ -40,6 +41,12 @@ run({
 
     const scene = getScene(game.sceneId);
 
+    switch (scene.id) {
+      case SceneId.WORLD:
+        updateWorldScene(scene);
+        break;
+    }
+
     for (const id of scene.update) {
       const e = getEntity(scene, id);
 
@@ -50,6 +57,9 @@ run({
       switch (e.type) {
         case Type.PLAYER:
           updatePlayer(e);
+          break;
+        case Type.ENEMY_MELEE:
+          updateMeleeEnemy(e);
           break;
         case Type.TREE:
           updateTree(e);
