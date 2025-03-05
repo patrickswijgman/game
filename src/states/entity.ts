@@ -2,8 +2,7 @@ import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
 import { onAttackEnter, onAttackExit, onAttackUpdate } from "@/states/attack.js";
 import { onStaggerEnter, onStaggerExit, onStaggerUpdate } from "@/states/stagger.js";
-import { resetTween } from "@/usecases/entity.js";
-import { resetTimer, resetVector } from "ridder";
+import { resetEntity } from "@/usecases/entity.js";
 
 export function onEntityStateEnter(e: Entity, onEnter: (e: Entity) => void) {
   switch (e.stateId) {
@@ -36,7 +35,7 @@ export function onEntityStateUpdate(e: Entity, onUpdate: (e: Entity) => void) {
 export function onEntityStateExit(e: Entity, onExit: (e: Entity) => void) {
   switch (e.stateId) {
     case StateId.ATTACK:
-      onAttackExit(e);
+      onAttackExit();
       break;
     case StateId.STAGGER:
       onStaggerExit(e);
@@ -46,7 +45,5 @@ export function onEntityStateExit(e: Entity, onExit: (e: Entity) => void) {
       break;
   }
 
-  resetTimer(e.stateTimer);
-  resetVector(e.velocity);
-  resetTween(e);
+  resetEntity(e);
 }

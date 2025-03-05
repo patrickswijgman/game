@@ -1,4 +1,4 @@
-import { SceneId } from "@/consts/scene.js";
+import { MAX_ENTITIES, SceneId } from "@/consts/scene.js";
 import { Entity, newEntity } from "@/data/entity.js";
 import { Camera, camera, rect, Rectangle, table, Table } from "ridder";
 
@@ -26,7 +26,7 @@ export type Scene = {
   playerId: number;
 };
 
-export function newScene(id: SceneId, maxEntityCount: number): Scene {
+export function newScene(id: SceneId): Scene {
   return {
     id,
 
@@ -34,7 +34,7 @@ export function newScene(id: SceneId, maxEntityCount: number): Scene {
     entityId: 0,
 
     // Tables
-    entities: table(maxEntityCount, newEntity),
+    entities: table(MAX_ENTITIES, newEntity),
 
     // Entity support lists
     update: [],

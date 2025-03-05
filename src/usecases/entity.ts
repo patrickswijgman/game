@@ -37,11 +37,6 @@ export function setCenter(e: Entity, x: number, y: number) {
   updateCenter(e);
 }
 
-export function setCenterFromHitbox(e: Entity) {
-  setVector(e.centerOffset, 0, 1 - Math.ceil(e.hitbox.h / 2));
-  updateCenter(e);
-}
-
 export function setHitbox(e: Entity, x: number, y: number, w: number, h: number) {
   setVector(e.hitboxOffset, x, y);
   setRectangle(e.hitbox, 0, 0, w, h);
@@ -79,7 +74,9 @@ export function updateHitbox(e: Entity) {
   addVector(e.hitbox, e.hitboxOffset);
 }
 
-export function resetTween(e: Entity) {
+export function resetEntity(e: Entity) {
+  resetVector(e.velocity);
+  resetTimer(e.stateTimer);
   resetTimer(e.tweenTimer);
   resetVector(e.tweenPosition);
   setVector(e.tweenScale, 1, 1);

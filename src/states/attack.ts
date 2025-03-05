@@ -22,4 +22,4 @@ export function onAttackUpdate(e: Entity) {
   }
 }
 
-export function onAttackExit(e: Entity) {}
+export function onAttackExit() {}

@@ -2,12 +2,9 @@ import { updateBreathAnimation } from "@/anims/breath.js";
 import { updateWalkAnimation } from "@/anims/walk.js";
 import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
-import { getAttack } from "@/usecases/attack.js";
+import { isPlayerInAttackRange, isPlayerTooFarAway, isPlayerWithinRange, lookAtPlayer, moveTowardsPlayer } from "@/usecases/enemy.js";
 import { setState } from "@/usecases/entity.js";
-import { getScene } from "@/usecases/game.js";
-import { getEntity } from "@/usecases/scene.js";
-import { seek } from "@/usecases/steering.js";
-import { copyVector, getVectorDistance, normalizeVector, subtractVector, tickTimer } from "ridder";
+import { tickTimer } from "ridder";
 
 export function onEnemyStateEnter(e: Entity) {
   switch (e.stateId) {
@@ -55,57 +52,4 @@ export function onEnemyStateUpdate(e: Entity) {
   }
 }
 
-export function onEnemyStateExit(e: Entity) {}
-
-function moveTowardsPlayer(e: Entity) {
-  const scene = getScene(e.sceneId);
-  const player = getEntity(scene, scene.playerId);
-  seek(e, player.position, 0.5 * e.stats.movementSpeed);
-}
-
-function isPlayerWithinRange(e: Entity) {
-  const scene = getScene(e.sceneId);
-  const player = getEntity(scene, scene.playerId);
-
-  if (player.stats.health) {
-    return getVectorDistance(e.position, player.position) < 100;
-  }
-
-  return false;
-}
-
-function isPlayerInAttackRange(e: Entity) {
-  const scene = getScene(e.sceneId);
-  const player = getEntity(scene, scene.playerId);
-
-  if (player.stats.health) {
-    const distance = getVectorDistance(e.position, player.position);
-    const attack = getAttack(e.attackId);
-
-    if (attack && distance < attack.range) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-function isPlayerTooFarAway(e: Entity) {
-  const scene = getScene(e.sceneId);
-  const player = getEntity(scene, scene.playerId);
-
-  if (player.stats.health) {
-    return getVectorDistance(e.position, player.position) > 200;
-  }
-
-  return false;
-}
-
-function lookAtPlayer(e: Entity) {
-  const scene = getScene(e.sceneId);
-  const player = getEntity(scene, scene.playerId);
-  copyVector(e.direction, player.position);
-  subtractVector(e.direction, e.position);
-  normalizeVector(e.direction);
-  e.isFlipped = player.position.x < e.position.x;
-}
+export function onEnemyStateExit() {}
