@@ -22,7 +22,7 @@ export function move(e: Entity) {
 
   if (isMoving) {
     normalizeVector(e.velocity);
-    scaleVector(e.velocity, 0.75 * e.stats.movementSpeed);
+    scaleVector(e.velocity, 0.6 * e.stats.movementSpeed);
   }
 
   return isMoving;
@@ -39,9 +39,5 @@ export function aim(e: Entity) {
 }
 
 export function attack() {
-  if (isInputDown(InputCode.MOUSE_LEFT)) {
-    return true;
-  }
-
-  return false;
+  return isInputDown(InputCode.MOUSE_LEFT);
 }

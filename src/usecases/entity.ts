@@ -172,13 +172,19 @@ export function renderEntityStatus(e: Entity) {
 export function destroyIfExpired(e: Entity) {
   if (e.lifeTime && tickTimer(e.lifeTimer, e.lifeTime)) {
     destroyEntity(e);
+    return true;
   }
+
+  return false;
 }
 
 export function destroyIfDead(e: Entity) {
   if (e.stats.healthMax && e.stats.health === 0) {
     destroyEntity(e);
+    return true;
   }
+
+  return false;
 }
 
 export function destroyEntity(e: Entity) {

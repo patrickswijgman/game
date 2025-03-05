@@ -1,13 +1,12 @@
 import { Type } from "@/consts/entity.js";
 import { SceneId } from "@/consts/scene.js";
-import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
-import { getAttack } from "@/usecases/attack.js";
-import { addEntity, destroyEntity, setHitbox, setSprite, setState } from "@/usecases/entity.js";
+import { dealDamageToTargets, destroyIfHitsWall, destroyIfOutOfRange, getAttack } from "@/usecases/attack.js";
+import { addEntity, setHitbox, setSprite } from "@/usecases/entity.js";
 import { getScene } from "@/usecases/game.js";
 import { getEntity } from "@/usecases/scene.js";
-import { clampStats, copyStats } from "@/usecases/stats.js";
-import { addVector, copyVector, doRectanglesIntersect, getAngle, getVectorDistance, roll, scaleVector } from "ridder";
+import { copyStats } from "@/usecases/stats.js";
+import { addVector, copyVector, getAngle, scaleVector } from "ridder";
 
 export function addAttack(sceneId: SceneId, caster: Entity) {
   const e = addEntity(Type.ATTACK, sceneId, 0, 0);
@@ -42,58 +41,13 @@ export function updateAttack(e: Entity) {
   copyVector(e.velocity, e.direction);
   scaleVector(e.velocity, attack.speed);
 
-  for (const body of scene.bodies) {
-    if (doRectanglesIntersect(e.hitbox, body)) {
-      if (body === caster.body) {
-        continue;
-      }
-
-      destroyEntity(e);
-      break;
-    }
-  }
-
-  if (e.isDestroyed) {
+  if (destroyIfHitsWall(e)) {
     return;
   }
 
-  const targets = caster.isPlayer ? scene.enemies : scene.allies;
-
-  for (const id of targets) {
-    if (id === e.id || id === caster.id) {
-      continue;
-    }
-
-    const target = getEntity(scene, id);
-
-    if (doRectanglesIntersect(e.hitbox, target.hitbox)) {
-      let damage = Math.max(1, e.stats.damage - target.stats.armor);
-      let isCrit = false;
-
-      if (roll(e.stats.critChance)) {
-        damage *= e.stats.critDamage;
-        isCrit = true;
-      }
-
-      target.stats.health -= damage;
-      clampStats(target.stats);
-
-      setState(target, StateId.STAGGER);
-
-      //addToCombatLog(target, isCrit ? `${damage}!` : damage.toString());
-
-      destroyEntity(e);
-      break;
-    }
-  }
-
-  if (e.isDestroyed) {
+  if (dealDamageToTargets(e)) {
     return;
   }
 
-  const traveled = getVectorDistance(e.start, e.position);
-
-  if (attack.range && traveled > attack.range) {
-    destroyEntity(e);
-  }
+  destroyIfOutOfRange(e);
 }

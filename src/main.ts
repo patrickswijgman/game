@@ -43,10 +43,7 @@ run({
     for (const id of scene.update) {
       const e = getEntity(scene, id);
 
-      destroyIfExpired(e);
-      destroyIfDead(e);
-
-      if (e.isDestroyed) {
+      if (destroyIfExpired(e) || destroyIfDead(e)) {
         continue;
       }
 

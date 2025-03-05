@@ -6,23 +6,23 @@ export function writeRandomPointInPerimeterBetweenRectangles(outer: Rectangle, i
 
   const region = random(0, 3);
   switch (region) {
-    case 0: // Top region
+    case 0:
       x = random(outer.x, outer.x + outer.w);
-      y = random(outer.y, inner.y - 1);
+      y = random(outer.y, inner.y);
       break;
 
-    case 1: // Bottom region
+    case 1:
       x = random(outer.x, outer.x + outer.w);
-      y = random(inner.y + inner.h + 1, outer.y + outer.h);
+      y = random(inner.y + inner.h, outer.y + outer.h);
       break;
 
-    case 2: // Left region
-      x = random(outer.x, inner.x - 1);
+    case 2:
+      x = random(outer.x, inner.x);
       y = random(inner.y, inner.y + inner.h);
       break;
 
-    case 3: // Right region
-      x = random(inner.x + inner.w + 1, outer.x + outer.w);
+    case 3:
+      x = random(inner.x + inner.w, outer.x + outer.w);
       y = random(inner.y, inner.y + inner.h);
       break;
   }
