@@ -5,3 +5,4 @@ export const enum SceneId {
 }
 
 export const MAX_ENTITIES = 2048;
+export const MAX_ENEMIES = 500;

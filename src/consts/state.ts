@@ -7,7 +7,7 @@ export const enum StateId {
   ENEMY_IDLE,
   ENEMY_WANDER,
   ENEMY_SEEK,
-  ENEMY_DELAY,
+  ENEMY_ATTACK,
 
   STAGGER,
   ATTACK,

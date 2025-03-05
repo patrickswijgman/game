@@ -2,13 +2,14 @@ import { Entity } from "@/data/entity.js";
 import { getAttack } from "@/usecases/attack.js";
 import { getScene } from "@/usecases/game.js";
 import { getEntity } from "@/usecases/scene.js";
-import { seek } from "@/usecases/steering.js";
+import { avoid, seek } from "@/usecases/steering.js";
 import { copyVector, getVectorDistance, normalizeVector, subtractVector } from "ridder";
 
-export function moveTowardsPlayer(e: Entity) {
+export function moveTowardsPlayer(e: Entity, mod = 1) {
   const scene = getScene(e.sceneId);
   const player = getEntity(scene, scene.playerId);
-  seek(e, player.position, 0.5 * e.stats.movementSpeed);
+  seek(e, player.position, 0.5 * e.stats.movementSpeed * mod);
+  avoid(e, scene.enemies);
 }
 
 export function lookAtPlayer(e: Entity) {

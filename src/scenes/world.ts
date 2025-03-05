@@ -1,5 +1,5 @@
 import { COLOR_GRASS } from "@/consts/colors.js";
-import { SceneId } from "@/consts/scene.js";
+import { MAX_ENEMIES, SceneId } from "@/consts/scene.js";
 import { Scene } from "@/data/scene.js";
 import { writeRandomPointInPerimeterBetweenRectangles } from "@/engine/rectangle.js";
 import { addMeleeEnemy } from "@/entities/enemy-melee.js";
@@ -55,8 +55,13 @@ export function setupWorldScene() {
 
 export function updateWorldScene(scene: Scene) {
   if (tickTimer(scene.spawnTimer, scene.spawnTime)) {
-    writeRandomPointInPerimeterBetweenRectangles(outside, border, pos);
-    addMeleeEnemy(scene.id, pos.x, pos.y);
     resetTimer(scene.spawnTimer);
+
+    if (scene.enemies.length < MAX_ENEMIES) {
+      writeRandomPointInPerimeterBetweenRectangles(outside, border, pos);
+      addMeleeEnemy(scene.id, pos.x, pos.y);
+
+      scene.spawnTime = Math.max(100, scene.spawnTime - 10);
+    }
   }
 }

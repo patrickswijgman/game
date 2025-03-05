@@ -44,6 +44,9 @@ export type Entity = {
   flashId: SpriteId;
   isFlashing: boolean;
 
+  text: string;
+  textColor: string;
+
   // Animation
   tweenPosition: Vector;
   tweenScale: Vector;
@@ -121,6 +124,9 @@ export function newEntity(): Entity {
 
     flashId: SpriteId.NONE,
     isFlashing: false,
+
+    text: "",
+    textColor: "white",
 
     // Animation
     tweenPosition: vec(),

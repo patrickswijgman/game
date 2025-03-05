@@ -18,6 +18,8 @@ export function addMeleeEnemy(sceneId: SceneId, x: number, y: number) {
   setCenter(e, 0, -3);
   setVector(e.direction, 1, 0);
 
+  e.radius = 8;
+
   e.stats.health = 15;
   e.stats.healthMax = 15;
   e.stats.damage = 1;

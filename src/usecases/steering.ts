@@ -18,13 +18,13 @@ export function flee(e: Entity, target: Vector, speed: number) {
   scaleVector(e.velocity, speed);
 }
 
-export function avoid(e: Entity) {
+export function avoid(e: Entity, list: Array<number>) {
   copyVector(e.ahead, e.position);
   addVector(e.ahead, e.velocity);
   resetVector(e.avoid);
 
   const scene = getScene(e.sceneId);
-  const closest = findClosestAhead(e, scene);
+  const closest = findClosestAhead(e, scene, list);
 
   if (closest) {
     const distance = getVectorDistance(e.ahead, closest.position);
@@ -39,11 +39,11 @@ export function avoid(e: Entity) {
   }
 }
 
-function findClosestAhead(e: Entity, scene: Scene) {
+function findClosestAhead(e: Entity, scene: Scene, list: Array<number>) {
   let distance = Infinity;
   let closest: Entity | null = null;
 
-  for (const id of scene.update) {
+  for (const id of list) {
     if (id === e.id) {
       continue;
     }

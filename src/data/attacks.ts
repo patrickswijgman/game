@@ -11,6 +11,7 @@ export type Attack = {
   speed: number;
   duration: number;
   recovery: number;
+  delay: number;
 };
 
 export const attacks = table<Attack>(AttackId.MAX, (id) => {
@@ -23,6 +24,7 @@ export const attacks = table<Attack>(AttackId.MAX, (id) => {
         reach: 4,
         range: 40,
         speed: 2,
+        delay: 0,
         duration: 0,
         recovery: 500,
       };
@@ -35,6 +37,7 @@ export const attacks = table<Attack>(AttackId.MAX, (id) => {
         reach: 4,
         range: 10,
         speed: 0,
+        delay: 500,
         duration: 150,
         recovery: 500,
       };
@@ -47,6 +50,7 @@ export const attacks = table<Attack>(AttackId.MAX, (id) => {
         reach: 0,
         range: 0,
         speed: 0,
+        delay: 0,
         duration: 0,
         recovery: 0,
       };

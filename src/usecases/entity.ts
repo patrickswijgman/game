@@ -8,7 +8,7 @@ import { Entity } from "@/data/entity.js";
 import { onEntityStateEnter, onEntityStateExit, onEntityStateUpdate } from "@/states/entity.js";
 import { getScene } from "@/usecases/game.js";
 import { addBody, nextEntity } from "@/usecases/scene.js";
-import { drawBar } from "@/usecases/ui.js";
+import { drawBar, drawTextOutlined } from "@/usecases/ui.js";
 import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, getDelta, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, tickTimer, translateTransform, writeIntersectionBetweenRectangles } from "ridder";
 
 export function addEntity(type: Type, sceneId: SceneId, x: number, y: number) {
@@ -155,6 +155,10 @@ export function renderEntity(e: Entity) {
 
   if (e.isOutlineVisible) {
     drawSprite(e.outlineId, -e.pivot.x, -e.pivot.y);
+  }
+
+  if (e.text) {
+    drawTextOutlined(e.text, 0, 0, e.textColor, "center", "middle");
   }
 }
 
