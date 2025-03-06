@@ -3,6 +3,7 @@ import { FONT_HEIGHT } from "@/consts/render.js";
 import { SceneId } from "@/consts/scene.js";
 import { game } from "@/data/game.js";
 import { updateAttack } from "@/entities/attack.js";
+import { updateCombatText } from "@/entities/combat-text.js";
 import { updateMeleeEnemy } from "@/entities/enemy-melee.js";
 import { updatePlayer } from "@/entities/player.js";
 import { updateTree } from "@/entities/tree.js";
@@ -66,6 +67,9 @@ run({
           break;
         case Type.ATTACK:
           updateAttack(e);
+          break;
+        case Type.COMBAT_TEXT:
+          updateCombatText(e);
           break;
       }
 

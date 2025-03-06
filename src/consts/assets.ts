@@ -17,7 +17,7 @@ export const enum SpriteId {
   TREE_PINE,
   TREE_SHADOW,
   ATTACK_ARROW,
-  ATTACK_LONGSWORD,
+  ATTACK_ENEMY_MELEE,
 }
 
 export const enum FontId {

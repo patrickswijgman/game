@@ -4,4 +4,5 @@ export const enum Type {
   ENEMY_MELEE,
   TREE,
   ATTACK,
+  COMBAT_TEXT,
 }

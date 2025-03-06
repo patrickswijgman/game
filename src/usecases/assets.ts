@@ -19,7 +19,7 @@ export async function loadAssets() {
   loadSprite(SpriteId.TREE_SHADOW, TextureId.ATLAS, 0, 96, 16, 16);
 
   loadSprite(SpriteId.ATTACK_ARROW, TextureId.ATLAS, 0, 48, 16, 16);
-  loadSprite(SpriteId.ATTACK_LONGSWORD, TextureId.ATLAS, 16, 48, 16, 16);
+  loadSprite(SpriteId.ATTACK_ENEMY_MELEE, TextureId.ATLAS, 16, 48, 16, 16);
 
   await loadFont(FontId.DEFAULT, "fonts/pixelmix.ttf", "pixelmix", FONT_SIZE);
 

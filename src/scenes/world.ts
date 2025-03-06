@@ -6,7 +6,7 @@ import { addMeleeEnemy } from "@/entities/enemy-melee.js";
 import { addPlayer } from "@/entities/player.js";
 import { addTree } from "@/entities/tree.js";
 import { getScene } from "@/usecases/game.js";
-import { addBody } from "@/usecases/scene.js";
+import { addBody, getEntity } from "@/usecases/scene.js";
 import { copyRectangle, doesRectangleContain, random, rect, resetTimer, setBackgroundColor, setCameraPosition, setRectangle, tickTimer, vec } from "ridder";
 
 const w = 400;
@@ -55,13 +55,14 @@ export function setupWorldScene() {
 
 export function updateWorldScene(scene: Scene) {
   if (tickTimer(scene.spawnTimer, scene.spawnTime)) {
-    resetTimer(scene.spawnTimer);
+    const player = getEntity(scene, scene.playerId);
 
-    if (scene.enemies.length < MAX_ENEMIES) {
+    if (player.isPlayer && player.stats.health && scene.enemies.length < MAX_ENEMIES) {
       writeRandomPointInPerimeterBetweenRectangles(outside, border, pos);
       addMeleeEnemy(scene.id, pos.x, pos.y);
-
       scene.spawnTime = Math.max(100, scene.spawnTime - 10);
     }
+
+    resetTimer(scene.spawnTimer);
   }
 }
