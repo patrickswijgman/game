@@ -1,7 +1,6 @@
 import { SpriteId } from "@/consts/assets.js";
 import { COLOR_HEALTH } from "@/consts/colors.js";
 import { Type } from "@/consts/entity.js";
-import { SHADOW_ALPHA } from "@/consts/render.js";
 import { StateId } from "@/consts/state.js";
 import { entities } from "@/data/entities.js";
 import { Entity } from "@/data/entity.js";
@@ -162,7 +161,7 @@ export function renderEntity(e: Entity) {
   }
 
   if (e.shadowId) {
-    setAlpha(SHADOW_ALPHA);
+    setAlpha(0.3);
     drawSprite(e.shadowId, -e.pivot.x + e.shadowOffset.x, -e.pivot.y + e.shadowOffset.y);
     setAlpha(1);
   }

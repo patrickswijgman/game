@@ -1,39 +1,30 @@
 export type Stats = {
+  level: number;
+  experience: number;
+  experienceMax: number;
   health: number;
   healthMax: number;
-
-  mana: number;
-  manaMax: number;
-  manaCost: number;
-
   damage: number;
-  armor: number;
-
   critChance: number;
   critDamage: number;
-
+  range: number;
+  pickupRange: number;
   movementSpeed: number;
-  movementSpeedMax: number;
 };
 
 export function newStats(stats: Partial<Stats> = {}): Stats {
   return {
+    level: 0,
+    experience: 0,
+    experienceMax: 0,
     health: 0,
     healthMax: 0,
-
-    mana: 0,
-    manaMax: 0,
-    manaCost: 0,
-
     damage: 0,
-    armor: 0,
-
     critChance: 0,
     critDamage: 0,
-
+    range: 0,
+    pickupRange: 0,
     movementSpeed: 0,
-    movementSpeedMax: 0,
-
     ...stats,
   };
 }

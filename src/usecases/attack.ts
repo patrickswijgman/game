@@ -53,7 +53,7 @@ export function destroyIfOutOfRange(e: Entity) {
   const attack = getAttack(caster.attackId);
   const traveled = getVectorDistance(e.start, e.position);
 
-  if (attack.range && traveled > attack.range) {
+  if (attack.stats.range && traveled > attack.stats.range) {
     destroyEntity(e);
     return true;
   }

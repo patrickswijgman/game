@@ -3,6 +3,7 @@ export const enum Type {
   PLAYER,
   ENEMY_MELEE,
   TREE,
+  XP_ORB,
   ATTACK,
   COMBAT_TEXT,
 }

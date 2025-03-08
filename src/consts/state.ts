@@ -9,6 +9,9 @@ export const enum StateId {
   ENEMY_SEEK,
   ENEMY_ATTACK,
 
+  XP_ORB_IDLE,
+  XP_ORB_SEEK,
+
   STAGGER,
   ATTACK,
 }

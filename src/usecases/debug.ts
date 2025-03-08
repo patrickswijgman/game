@@ -1,4 +1,3 @@
-import { FONT_HEIGHT } from "@/consts/render.js";
 import { entities } from "@/data/entities.js";
 import { world } from "@/data/world.js";
 import { getEntity } from "@/usecases/entity.js";
@@ -33,6 +32,6 @@ export function debugEntities() {
   const all = entities.table.reduce((prev, e) => (prev += e.isAllocated ? 1 : 0), 0);
   const max = entities.table.length;
   drawText(`entities: ${all} / ${max}`, 1, 1, "lime");
-  translateTransform(0, FONT_HEIGHT);
+  translateTransform(0, 11);
   drawText(`entity ID: ${entities.nextId}`, 1, 1, "lime");
 }

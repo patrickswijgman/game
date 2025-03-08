@@ -1,4 +1,4 @@
-import { COLOR_HEALTH, COLOR_MANA } from "@/consts/colors.js";
+import { COLOR_HEALTH, COLOR_XP } from "@/consts/colors.js";
 import { world } from "@/data/world.js";
 import { getEntity } from "@/usecases/entity.js";
 import { drawBar } from "@/usecases/ui.js";
@@ -12,6 +12,6 @@ export function renderHud() {
     translateTransform(10, 10);
     drawBar(0, 0, e.stats.health, e.stats.healthMax, COLOR_HEALTH, e.stats.healthMax * 10, 5);
     translateTransform(0, 6);
-    drawBar(0, 0, e.stats.mana, e.stats.manaMax, COLOR_MANA, e.stats.manaMax * 10, 5);
+    drawBar(0, 0, e.stats.experience, e.stats.experienceMax, COLOR_XP, 50, 5);
   }
 }

@@ -21,8 +21,8 @@ export function addMeleeEnemy(x: number, y: number) {
   e.stats.health = 15;
   e.stats.healthMax = 15;
   e.stats.damage = 1;
-  e.stats.movementSpeed = 1;
-  e.stats.movementSpeedMax = 1;
+  e.stats.movementSpeed = 0.5;
+  e.stats.experience = 50;
   e.attackId = AttackId.ENEMY_MELEE;
 
   e.isPhysicsEnabled = true;

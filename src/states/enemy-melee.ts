@@ -3,8 +3,9 @@ import { updateWalkAnimation } from "@/anims/walk.js";
 import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
 import { getAttack } from "@/usecases/attack.js";
-import { isPlayerAlive, isPlayerInAttackRange, lookAtPlayer, moveTowardsPlayer } from "@/usecases/enemy.js";
+import { isPlayerInAttackRange, lookAtPlayer, moveTowardsPlayer } from "@/usecases/enemy.js";
 import { setState } from "@/usecases/entity.js";
+import { isPlayerAlive } from "@/usecases/player.js";
 import { tickTimer } from "ridder";
 
 export function onEnemyStateEnter(e: Entity) {

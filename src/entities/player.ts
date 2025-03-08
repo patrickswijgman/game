@@ -1,6 +1,7 @@
 import { SpriteId } from "@/consts/assets.js";
 import { AttackId } from "@/consts/attack.js";
 import { Type } from "@/consts/entity.js";
+import { XP_PER_LEVEL } from "@/consts/player.js";
 import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
 import { onPlayerStateEnter, onPlayerStateExit, onPlayerStateUpdate } from "@/states/player.js";
@@ -18,13 +19,16 @@ export function addPlayer(x: number, y: number) {
   setCenter(e, 0, -3);
   setVector(e.direction, 1, 0);
 
+  e.stats.level = 1;
   e.stats.health = 3;
   e.stats.healthMax = 3;
   e.stats.damage = 10;
   e.stats.critChance = 0.05;
   e.stats.critDamage = 2;
-  e.stats.movementSpeed = 1;
-  e.stats.movementSpeedMax = 1;
+  e.stats.movementSpeed = 0.6;
+  e.stats.pickupRange = 30;
+  e.stats.experience = 0;
+  e.stats.experienceMax = XP_PER_LEVEL;
   e.attackId = AttackId.PLAYER;
 
   e.isPhysicsEnabled = true;

@@ -16,6 +16,8 @@ export const enum SpriteId {
   ENEMY_MELEE_FLASH,
   TREE_PINE,
   TREE_SHADOW,
+  XP_ORB,
+  XP_ORB_SHADOW,
   ATTACK_ARROW,
   ATTACK_ENEMY_MELEE,
 }

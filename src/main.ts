@@ -1,5 +1,4 @@
 import { Type } from "@/consts/entity.js";
-import { FONT_HEIGHT } from "@/consts/render.js";
 import { entities } from "@/data/entities.js";
 import { zeroEntity } from "@/data/entity.js";
 import { world } from "@/data/world.js";
@@ -8,6 +7,7 @@ import { updateCombatText } from "@/entities/combat-text.js";
 import { updateMeleeEnemy } from "@/entities/enemy-melee.js";
 import { updatePlayer } from "@/entities/player.js";
 import { updateTree } from "@/entities/tree.js";
+import { addExperienceOrb, updateExperienceOrb } from "@/entities/xp-orb.js";
 import { loadAssets } from "@/usecases/assets.js";
 import { debugBodies, debugEntities, debugFps, debugHitboxes } from "@/usecases/debug.js";
 import { destroyIfDead, destroyIfExpired, getEntity, renderEntity, renderEntityStatus, updateCollisions, updatePhysics } from "@/usecases/entity.js";
@@ -40,6 +40,9 @@ run({
       const e = getEntity(id);
 
       if (destroyIfExpired(e) || destroyIfDead(e)) {
+        if (e.isEnemy) {
+          addExperienceOrb(e.position.x, e.position.y, e.stats.experience);
+        }
         continue;
       }
 
@@ -55,6 +58,9 @@ run({
           break;
         case Type.ATTACK:
           updateAttack(e);
+          break;
+        case Type.XP_ORB:
+          updateExperienceOrb(e);
           break;
         case Type.COMBAT_TEXT:
           updateCombatText(e);
@@ -93,7 +99,7 @@ run({
       resetTransform();
       scaleTransform(0.5, 0.5);
       debugFps();
-      translateTransform(0, FONT_HEIGHT);
+      translateTransform(0, 11);
       debugEntities();
     }
   },

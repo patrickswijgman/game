@@ -1,5 +1,6 @@
 import { SpriteId } from "@/consts/assets.js";
 import { AttackId } from "@/consts/attack.js";
+import { newStats, Stats } from "@/data/stats.js";
 import { rect, Rectangle, table, vec, Vector } from "ridder";
 
 export type Attack = {
@@ -7,11 +8,11 @@ export type Attack = {
   pivot: Vector;
   hitbox: Rectangle;
   reach: number;
-  range: number;
   speed: number;
+  delay: number;
   duration: number;
   recovery: number;
-  delay: number;
+  stats: Stats;
 };
 
 export const attacks = table<Attack>(AttackId.MAX, (id) => {
@@ -22,11 +23,13 @@ export const attacks = table<Attack>(AttackId.MAX, (id) => {
         pivot: vec(8, 8.5),
         hitbox: rect(-2, -2, 4, 4),
         reach: 4,
-        range: 40,
         speed: 2,
         delay: 0,
         duration: 0,
         recovery: 500,
+        stats: newStats({
+          range: 40,
+        }),
       };
 
     case AttackId.ENEMY_MELEE:
@@ -35,11 +38,13 @@ export const attacks = table<Attack>(AttackId.MAX, (id) => {
         pivot: vec(8, 8),
         hitbox: rect(-3, -3, 6, 6),
         reach: 4,
-        range: 10,
         speed: 0,
         delay: 500,
         duration: 150,
         recovery: 250,
+        stats: newStats({
+          range: 10,
+        }),
       };
 
     default:
@@ -48,11 +53,11 @@ export const attacks = table<Attack>(AttackId.MAX, (id) => {
         hitbox: rect(0, 0, 0, 0),
         pivot: vec(0, 0),
         reach: 0,
-        range: 0,
         speed: 0,
         delay: 0,
         duration: 0,
         recovery: 0,
+        stats: newStats(),
       };
   }
 });

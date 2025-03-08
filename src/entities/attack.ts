@@ -2,7 +2,7 @@ import { Type } from "@/consts/entity.js";
 import { Entity } from "@/data/entity.js";
 import { dealDamageToTargets, destroyIfHitsWall, destroyIfOutOfRange, getAttack } from "@/usecases/attack.js";
 import { addEntity, getEntity, setHitbox, setSprite } from "@/usecases/entity.js";
-import { copyStats } from "@/usecases/stats.js";
+import { addStats, copyStats } from "@/usecases/stats.js";
 import { addVector, copyVector, getAngle, scaleVector } from "ridder";
 
 export function addAttack(caster: Entity) {
@@ -19,7 +19,8 @@ export function addAttack(caster: Entity) {
   setSprite(e, attack.spriteId, attack.pivot.x, attack.pivot.y);
   setHitbox(e, attack.hitbox.x, attack.hitbox.y, attack.hitbox.w, attack.hitbox.h);
 
-  copyStats(e.stats, caster.stats);
+  copyStats(e.stats, attack.stats);
+  addStats(e.stats, caster.stats);
 
   e.angle = getAngle(caster.center.x, caster.center.y, e.position.x, e.position.y);
   e.depth = attack.reach;
