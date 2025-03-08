@@ -1,5 +1,6 @@
 import { COLOR_GRASS } from "@/consts/colors.js";
 import { MAX_ENEMIES } from "@/consts/entity.js";
+import { UpgradeId } from "@/consts/upgrade.js";
 import { ENEMY_SPAWN_TIME_MAX, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_REDUCE } from "@/consts/world.js";
 import { entities } from "@/data/entities.js";
 import { Entity } from "@/data/entity.js";
@@ -8,7 +9,9 @@ import { writeRandomPointInPerimeterBetweenRectangles } from "@/engine/rectangle
 import { addMeleeEnemy } from "@/entities/enemy-melee.js";
 import { addPlayer } from "@/entities/player.js";
 import { addTree } from "@/entities/tree.js";
+import { getEntity } from "@/usecases/entity.js";
 import { isPlayerAlive } from "@/usecases/player.js";
+import { addUpgradeToPool } from "@/usecases/upgrade.js";
 import { clamp, copyRectangle, doesRectangleContain, random, rect, Rectangle, resetTimer, setBackgroundColor, setCameraPosition, setRectangle, tickTimer, vec } from "ridder";
 
 const w = 400;
@@ -33,6 +36,9 @@ export function setupWorld() {
   world.camera.shakeReduction = 0.1;
   copyRectangle(world.camera.bounds, world.bounds);
   setCameraPosition(world.camera, w / 2, h / 2);
+
+  // Upgrades
+  addUpgradeToPool(UpgradeId.DAMAGE, 3);
 
   // Entities
   addPlayer(w / 2, h / 2);
@@ -65,6 +71,10 @@ export function spawnEnemies() {
 
 export function setPlayer(e: Entity) {
   world.playerId = e.id;
+}
+
+export function getPlayer() {
+  return getEntity(world.playerId);
 }
 
 export function addBody(body: Rectangle) {

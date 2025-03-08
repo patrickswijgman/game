@@ -24,7 +24,7 @@ export function addPlayer(x: number, y: number) {
   e.stats.healthMax = 3;
   e.stats.damage = 10;
   e.stats.critChance = 0.05;
-  e.stats.critDamage = 2;
+  e.stats.critDamage = 1.5;
   e.stats.movementSpeed = 0.6;
   e.stats.pickupRange = 30;
   e.stats.experience = 0;

@@ -1,10 +1,10 @@
 import { updateExperienceOrbIdleAnimation, updateExperienceOrbSeekAnimation } from "@/anims/xp-orb.js";
 import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
-import { world } from "@/data/world.js";
 import { addExperience } from "@/usecases/combat.js";
-import { destroyEntity, getEntity, setState } from "@/usecases/entity.js";
+import { destroyEntity, setState } from "@/usecases/entity.js";
 import { isPlayerAlive } from "@/usecases/player.js";
+import { getPlayer } from "@/usecases/world.js";
 import { getVectorDistance } from "ridder";
 
 export function onExperienceOrbStateEnter(e: Entity) {
@@ -21,9 +21,8 @@ export function onExperienceOrbStateUpdate(e: Entity) {
       {
         updateExperienceOrbIdleAnimation(e);
         if (isPlayerAlive()) {
-          const player = getEntity(world.playerId);
+          const player = getPlayer();
           const distance = getVectorDistance(e.position, player.position);
-
           if (distance < player.stats.pickupRange) {
             setState(e, StateId.XP_ORB_SEEK);
           }
@@ -31,16 +30,17 @@ export function onExperienceOrbStateUpdate(e: Entity) {
       }
       break;
 
-    case StateId.XP_ORB_SEEK: {
-      if (isPlayerAlive()) {
-        const completed = updateExperienceOrbSeekAnimation(e);
-        if (completed) {
-          addExperience(e.stats.experience);
-          destroyEntity(e);
+    case StateId.XP_ORB_SEEK:
+      {
+        if (isPlayerAlive()) {
+          const completed = updateExperienceOrbSeekAnimation(e);
+          if (completed) {
+            addExperience(e.stats.experience);
+            destroyEntity(e);
+          }
         }
       }
       break;
-    }
   }
 }
 

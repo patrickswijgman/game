@@ -1,7 +1,6 @@
-import { world } from "@/data/world.js";
-import { getEntity } from "@/usecases/entity.js";
+import { getPlayer } from "@/usecases/world.js";
 
 export function isPlayerAlive() {
-  const player = getEntity(world.playerId);
+  const player = getPlayer();
   return player.isPlayer && player.stats.health;
 }

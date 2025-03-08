@@ -1,21 +1,20 @@
 import { entities } from "@/data/entities.js";
 import { Entity } from "@/data/entity.js";
-import { world } from "@/data/world.js";
 import { getAttack } from "@/usecases/attack.js";
-import { getEntity } from "@/usecases/entity.js";
 import { isPlayerAlive } from "@/usecases/player.js";
 import { avoid, seek } from "@/usecases/steering.js";
+import { getPlayer } from "@/usecases/world.js";
 import { copyVector, getVectorDistance, normalizeVector, subtractVector } from "ridder";
 
 export function moveTowardsPlayer(e: Entity, mod = 1) {
-  const player = getEntity(world.playerId);
+  const player = getPlayer();
   seek(e, player.position, e.stats.movementSpeed * mod);
   avoid(e, entities.enemies);
 }
 
 export function lookAtPlayer(e: Entity) {
   if (isPlayerAlive()) {
-    const player = getEntity(world.playerId);
+    const player = getPlayer();
     copyVector(e.direction, player.position);
     subtractVector(e.direction, e.position);
     normalizeVector(e.direction);
@@ -25,7 +24,7 @@ export function lookAtPlayer(e: Entity) {
 
 export function isPlayerInAttackRange(e: Entity) {
   if (isPlayerAlive()) {
-    const player = getEntity(world.playerId);
+    const player = getPlayer();
     const distance = getVectorDistance(e.position, player.position);
     const attack = getAttack(e.attackId);
 

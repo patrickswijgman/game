@@ -1,13 +1,22 @@
-import { COLOR_OUTLINE } from "@/consts/colors.js";
+import { COLOR_HEALTH, COLOR_OUTLINE, COLOR_XP } from "@/consts/colors.js";
+import { Stats } from "@/data/stats.js";
 import { drawRect, drawText, TextAlign, TextBaseline } from "ridder";
 
-export function drawBar(x: number, y: number, value: number, max: number, color: string, width: number, height: number) {
-  drawRect(x, y, width, height, COLOR_OUTLINE, true);
-  drawRect(x + 1, y + 1, (width - 2) * (value / max), height - 2, color, true);
+export function drawHealthBar(x: number, y: number, stats: Stats, width: number, height: number) {
+  const w = (width - 2) * (stats.health / stats.healthMax);
 
-  if (value > 0) {
-    drawRect(x + (width - 2) * (value / max), y + 1, 1, height - 2, "white", true);
+  drawRect(x, y, width, height, COLOR_OUTLINE, true);
+  drawRect(x + 1, y + 1, w, height - 2, COLOR_HEALTH, true);
+
+  if (stats.health > 0) {
+    drawRect(x + w, y + 1, 1, height - 2, "white", true);
   }
+}
+
+export function drawExperienceBar(x: number, y: number, stats: Stats, width: number, height: number) {
+  const w = width * (stats.experience / stats.experienceMax);
+  drawRect(x, y, width, height, COLOR_OUTLINE, true);
+  drawRect(x, y, w, height, COLOR_XP, true);
 }
 
 export function drawTextOutlined(text: string, x: number, y: number, color = "white", align: TextAlign = "left", baseline: TextBaseline = "top") {

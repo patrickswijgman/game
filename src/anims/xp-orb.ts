@@ -1,6 +1,5 @@
 import { Entity } from "@/data/entity.js";
-import { world } from "@/data/world.js";
-import { getEntity } from "@/usecases/entity.js";
+import { getPlayer } from "@/usecases/world.js";
 import { tickTimer, tween } from "ridder";
 
 export function updateExperienceOrbIdleAnimation(e: Entity) {
@@ -9,7 +8,7 @@ export function updateExperienceOrbIdleAnimation(e: Entity) {
 }
 
 export function updateExperienceOrbSeekAnimation(e: Entity) {
-  const player = getEntity(world.playerId);
+  const player = getPlayer();
   const completed = tickTimer(e.tweenTimer, 500);
 
   e.position.x = tween(e.start.x, player.position.x, 500, "easeInCubic", e.tweenTimer.elapsed);

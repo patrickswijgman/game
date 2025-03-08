@@ -1,3 +1,4 @@
+import { UpgradeId } from "@/consts/upgrade.js";
 import { ENEMY_SPAWN_TIME_MAX } from "@/consts/world.js";
 import { camera, Camera, rect, Rectangle, timer, Timer } from "ridder";
 
@@ -7,6 +8,7 @@ export type World = {
   bodies: Array<Rectangle>;
   spawnTime: number;
   spawnTimer: Timer;
+  upgrades: Array<UpgradeId>;
   playerId: number;
 };
 
@@ -16,5 +18,6 @@ export const world: World = {
   bodies: [],
   spawnTime: ENEMY_SPAWN_TIME_MAX,
   spawnTimer: timer(),
+  upgrades: [],
   playerId: 0,
 };

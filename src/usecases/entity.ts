@@ -1,12 +1,11 @@
 import { SpriteId } from "@/consts/assets.js";
-import { COLOR_HEALTH } from "@/consts/colors.js";
 import { Type } from "@/consts/entity.js";
 import { StateId } from "@/consts/state.js";
 import { entities } from "@/data/entities.js";
 import { Entity } from "@/data/entity.js";
 import { world } from "@/data/world.js";
 import { onEntityStateEnter, onEntityStateExit, onEntityStateUpdate } from "@/states/entity.js";
-import { drawBar, drawTextOutlined } from "@/usecases/ui.js";
+import { drawHealthBar, drawTextOutlined } from "@/usecases/ui.js";
 import { addBody } from "@/usecases/world.js";
 import { addVector, addVectorScaled, applyCameraTransform, clamp, copyVector, drawSprite, getDelta, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, tickTimer, translateTransform, writeIntersectionBetweenRectangles } from "ridder";
 
@@ -190,7 +189,7 @@ export function renderEntityStatus(e: Entity) {
     resetTransform();
     applyCameraTransform(world.camera);
     translateTransform(e.position.x, e.position.y - e.hitbox.h - 5);
-    drawBar(-5, 0, e.stats.health, e.stats.healthMax, COLOR_HEALTH, 10, 3);
+    drawHealthBar(-5, 0, e.stats, 10, 3);
   }
 }
 
