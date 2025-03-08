@@ -12,7 +12,7 @@ import { loadAssets } from "@/usecases/assets.js";
 import { debugBodies, debugEntities, debugFps, debugHitboxes } from "@/usecases/debug.js";
 import { destroyIfDead, destroyIfExpired, getEntity, renderEntity, renderEntityStatus, updateCollisions, updatePhysics } from "@/usecases/entity.js";
 import { renderHud } from "@/usecases/hud.js";
-import { setupWorld, updateWorld } from "@/usecases/world.js";
+import { setupWorld, spawnEnemies } from "@/usecases/world.js";
 import { InputCode, isInputPressed, remove, resetTransform, run, scaleTransform, translateTransform, updateCamera } from "ridder";
 
 let isDebugging = false;
@@ -34,7 +34,7 @@ run({
       isDebugging = !isDebugging;
     }
 
-    updateWorld();
+    spawnEnemies();
 
     for (const id of entities.update) {
       const e = getEntity(id);

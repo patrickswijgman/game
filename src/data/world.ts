@@ -1,3 +1,4 @@
+import { ENEMY_SPAWN_TIME_MAX } from "@/consts/world.js";
 import { camera, Camera, rect, Rectangle, timer, Timer } from "ridder";
 
 export type World = {
@@ -13,7 +14,7 @@ export const world: World = {
   camera: camera(),
   bounds: rect(),
   bodies: [],
-  spawnTime: 2000,
+  spawnTime: ENEMY_SPAWN_TIME_MAX,
   spawnTimer: timer(),
   playerId: 0,
 };

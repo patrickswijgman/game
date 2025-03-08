@@ -1,12 +1,14 @@
 import { COLOR_GRASS } from "@/consts/colors.js";
 import { MAX_ENEMIES } from "@/consts/entity.js";
+import { ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_REDUCE } from "@/consts/world.js";
 import { entities } from "@/data/entities.js";
+import { Entity } from "@/data/entity.js";
 import { world } from "@/data/world.js";
 import { writeRandomPointInPerimeterBetweenRectangles } from "@/engine/rectangle.js";
 import { addMeleeEnemy } from "@/entities/enemy-melee.js";
 import { addPlayer } from "@/entities/player.js";
 import { addTree } from "@/entities/tree.js";
-import { getEntity } from "@/usecases/entity.js";
+import { isPlayerAlive } from "@/usecases/enemy.js";
 import { copyRectangle, doesRectangleContain, random, rect, Rectangle, resetTimer, setBackgroundColor, setCameraPosition, setRectangle, tickTimer, vec } from "ridder";
 
 const w = 400;
@@ -49,18 +51,20 @@ export function setupWorld() {
   }
 }
 
-export function updateWorld() {
+export function spawnEnemies() {
   if (tickTimer(world.spawnTimer, world.spawnTime)) {
-    const player = getEntity(world.playerId);
-
-    if (player.isPlayer && player.stats.health && entities.enemies.length < MAX_ENEMIES) {
+    if (isPlayerAlive() && entities.enemies.length < MAX_ENEMIES) {
       writeRandomPointInPerimeterBetweenRectangles(outside, border, pos);
       addMeleeEnemy(pos.x, pos.y);
-      world.spawnTime = Math.max(100, world.spawnTime - 10);
+      world.spawnTime = Math.max(ENEMY_SPAWN_TIME_MIN, world.spawnTime - ENEMY_SPAWN_TIME_REDUCE);
     }
 
     resetTimer(world.spawnTimer);
   }
+}
+
+export function setPlayer(e: Entity) {
+  world.playerId = e.id;
 }
 
 export function addBody(body: Rectangle) {

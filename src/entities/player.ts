@@ -2,11 +2,10 @@ import { SpriteId } from "@/consts/assets.js";
 import { AttackId } from "@/consts/attack.js";
 import { Type } from "@/consts/entity.js";
 import { StateId } from "@/consts/state.js";
-import { entities } from "@/data/entities.js";
 import { Entity } from "@/data/entity.js";
-import { world } from "@/data/world.js";
 import { onPlayerStateEnter, onPlayerStateExit, onPlayerStateUpdate } from "@/states/player.js";
-import { addEntity, setBody, setCenter, setHitbox, setShadow, setSprite, setState, updateState } from "@/usecases/entity.js";
+import { addEntity, addToAllies, setBody, setCenter, setHitbox, setShadow, setSprite, setState, updateState } from "@/usecases/entity.js";
+import { setPlayer } from "@/usecases/world.js";
 import { setVector } from "ridder";
 
 export function addPlayer(x: number, y: number) {
@@ -33,9 +32,8 @@ export function addPlayer(x: number, y: number) {
   e.isPlayer = true;
 
   setState(e, StateId.PLAYER_IDLE);
-
-  world.playerId = e.id;
-  entities.allies.push(e.id);
+  setPlayer(e);
+  addToAllies(e);
 
   return e;
 }

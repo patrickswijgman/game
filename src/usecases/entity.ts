@@ -16,14 +16,6 @@ export function getEntity(id: number) {
 }
 
 export function addEntity(type: Type, x: number, y: number) {
-  const e = nextEntity();
-  e.type = type;
-  setVector(e.start, x, y);
-  setVector(e.position, x, y);
-  return e;
-}
-
-function nextEntity() {
   let id = entities.nextId;
   let e = entities.table[id];
 
@@ -39,11 +31,22 @@ function nextEntity() {
 
   e.id = id;
   e.isAllocated = true;
+  e.type = type;
+  setVector(e.start, x, y);
+  setVector(e.position, x, y);
 
   entities.update.push(e.id);
   entities.render.push(e.id);
 
   return e;
+}
+
+export function addToAllies(e: Entity) {
+  entities.allies.push(e.id);
+}
+
+export function addToEnemies(e: Entity) {
+  entities.enemies.push(e.id);
 }
 
 export function setSprite(e: Entity, spriteId: SpriteId, pivotX: number, pivotY: number, flashId = SpriteId.NONE, outlineId = SpriteId.NONE) {
