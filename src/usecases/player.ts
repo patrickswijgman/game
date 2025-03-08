@@ -1,5 +1,5 @@
 import { Entity } from "@/data/entity.js";
-import { getScene } from "@/usecases/game.js";
+import { world } from "@/data/world.js";
 import { InputCode, copyVector, getVectorLength, isInputDown, normalizeVector, resetVector, scaleVector, subtractVector } from "ridder";
 
 export function move(e: Entity, mod = 1) {
@@ -29,12 +29,9 @@ export function move(e: Entity, mod = 1) {
 }
 
 export function aim(e: Entity) {
-  const scene = getScene(e.sceneId);
-
-  copyVector(e.direction, scene.camera.mousePosition);
+  copyVector(e.direction, world.camera.mousePosition);
   subtractVector(e.direction, e.position);
   normalizeVector(e.direction);
-
   e.isFlipped = e.direction.x < 0;
 }
 

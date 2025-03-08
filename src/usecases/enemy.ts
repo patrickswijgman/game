@@ -1,22 +1,21 @@
+import { entities } from "@/data/entities.js";
 import { Entity } from "@/data/entity.js";
+import { world } from "@/data/world.js";
 import { getAttack } from "@/usecases/attack.js";
-import { getScene } from "@/usecases/game.js";
-import { getEntity } from "@/usecases/scene.js";
+import { getEntity } from "@/usecases/entity.js";
 import { avoid, seek } from "@/usecases/steering.js";
 import { copyVector, getVectorDistance, normalizeVector, subtractVector } from "ridder";
 
 export function moveTowardsPlayer(e: Entity, mod = 1) {
-  const scene = getScene(e.sceneId);
-  const player = getEntity(scene, scene.playerId);
+  const player = getEntity(world.playerId);
   seek(e, player.position, 0.5 * e.stats.movementSpeed * mod);
-  avoid(e, scene.enemies);
+  avoid(e, entities.enemies);
 }
 
 export function lookAtPlayer(e: Entity) {
-  const scene = getScene(e.sceneId);
-  const player = getEntity(scene, scene.playerId);
+  const player = getEntity(world.playerId);
 
-  if (isPlayerAlive(e)) {
+  if (isPlayerAlive()) {
     copyVector(e.direction, player.position);
     subtractVector(e.direction, e.position);
     normalizeVector(e.direction);
@@ -25,10 +24,9 @@ export function lookAtPlayer(e: Entity) {
 }
 
 export function isPlayerInAttackRange(e: Entity) {
-  const scene = getScene(e.sceneId);
-  const player = getEntity(scene, scene.playerId);
+  const player = getEntity(world.playerId);
 
-  if (isPlayerAlive(e)) {
+  if (isPlayerAlive()) {
     const distance = getVectorDistance(e.position, player.position);
     const attack = getAttack(e.attackId);
 
@@ -40,8 +38,7 @@ export function isPlayerInAttackRange(e: Entity) {
   return false;
 }
 
-export function isPlayerAlive(e: Entity) {
-  const scene = getScene(e.sceneId);
-  const player = getEntity(scene, scene.playerId);
+export function isPlayerAlive() {
+  const player = getEntity(world.playerId);
   return player.isPlayer && player.stats.health;
 }

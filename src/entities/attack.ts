@@ -1,15 +1,12 @@
 import { Type } from "@/consts/entity.js";
-import { SceneId } from "@/consts/scene.js";
 import { Entity } from "@/data/entity.js";
 import { dealDamageToTargets, destroyIfHitsWall, destroyIfOutOfRange, getAttack } from "@/usecases/attack.js";
-import { addEntity, setHitbox, setSprite } from "@/usecases/entity.js";
-import { getScene } from "@/usecases/game.js";
-import { getEntity } from "@/usecases/scene.js";
+import { addEntity, getEntity, setHitbox, setSprite } from "@/usecases/entity.js";
 import { copyStats } from "@/usecases/stats.js";
 import { addVector, copyVector, getAngle, scaleVector } from "ridder";
 
-export function addAttack(sceneId: SceneId, caster: Entity) {
-  const e = addEntity(Type.ATTACK, sceneId, 0, 0);
+export function addAttack(caster: Entity) {
+  const e = addEntity(Type.ATTACK, 0, 0);
   const attack = getAttack(caster.attackId);
 
   copyVector(e.position, caster.direction);
@@ -34,8 +31,7 @@ export function addAttack(sceneId: SceneId, caster: Entity) {
 }
 
 export function updateAttack(e: Entity) {
-  const scene = getScene(e.sceneId);
-  const caster = getEntity(scene, e.casterId);
+  const caster = getEntity(e.casterId);
   const attack = getAttack(caster.attackId);
 
   copyVector(e.velocity, e.direction);

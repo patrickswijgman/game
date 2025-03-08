@@ -1,7 +1,6 @@
 import { SpriteId } from "@/consts/assets.js";
 import { AttackId } from "@/consts/attack.js";
 import { Type } from "@/consts/entity.js";
-import { SceneId } from "@/consts/scene.js";
 import { StateId } from "@/consts/state.js";
 import { newStats, Stats } from "@/data/stats.js";
 import { rect, Rectangle, setVector, timer, Timer, vec, Vector, zero } from "ridder";
@@ -53,9 +52,6 @@ export type Entity = {
   tweenAngle: number;
   tweenTime: number;
   tweenTimer: Timer;
-
-  // Relation
-  sceneId: SceneId;
 
   // State management
   stateId: StateId;
@@ -134,9 +130,6 @@ export function newEntity(): Entity {
     tweenAngle: 0,
     tweenTime: 0,
     tweenTimer: timer(),
-
-    // Relation
-    sceneId: SceneId.NONE,
 
     // State management
     stateId: StateId.NONE,

@@ -1,7 +1,5 @@
 import { Entity } from "@/data/entity.js";
-import { Scene } from "@/data/scene.js";
-import { getScene } from "@/usecases/game.js";
-import { getEntity } from "@/usecases/scene.js";
+import { getEntity } from "@/usecases/entity.js";
 import { addVector, addVectorScaled, copyVector, getDelta, getVectorDistance, getVectorLength, normalizeVector, resetVector, scaleVector, subtractVector, Vector } from "ridder";
 
 export function seek(e: Entity, target: Vector, speed: number) {
@@ -23,8 +21,7 @@ export function avoid(e: Entity, list: Array<number>) {
   addVector(e.ahead, e.velocity);
   resetVector(e.avoid);
 
-  const scene = getScene(e.sceneId);
-  const closest = findClosestAhead(e, scene, list);
+  const closest = findClosestAhead(e, list);
 
   if (closest) {
     const distance = getVectorDistance(e.ahead, closest.position);
@@ -39,7 +36,7 @@ export function avoid(e: Entity, list: Array<number>) {
   }
 }
 
-function findClosestAhead(e: Entity, scene: Scene, list: Array<number>) {
+function findClosestAhead(e: Entity, list: Array<number>) {
   let distance = Infinity;
   let closest: Entity | null = null;
 
@@ -48,7 +45,7 @@ function findClosestAhead(e: Entity, scene: Scene, list: Array<number>) {
       continue;
     }
 
-    const c = getEntity(scene, id);
+    const c = getEntity(id);
 
     if (c.radius) {
       const d = getVectorDistance(e.ahead, c.position);

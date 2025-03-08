@@ -1,16 +1,15 @@
 import { SpriteId } from "@/consts/assets.js";
 import { AttackId } from "@/consts/attack.js";
 import { Type } from "@/consts/entity.js";
-import { SceneId } from "@/consts/scene.js";
 import { StateId } from "@/consts/state.js";
+import { entities } from "@/data/entities.js";
 import { Entity } from "@/data/entity.js";
 import { onEnemyStateEnter, onEnemyStateExit, onEnemyStateUpdate } from "@/states/enemy-melee.js";
 import { addEntity, setCenter, setHitbox, setShadow, setSprite, setState, updateState } from "@/usecases/entity.js";
-import { getScene } from "@/usecases/game.js";
 import { setVector } from "ridder";
 
-export function addMeleeEnemy(sceneId: SceneId, x: number, y: number) {
-  const e = addEntity(Type.ENEMY_MELEE, sceneId, x, y);
+export function addMeleeEnemy(x: number, y: number) {
+  const e = addEntity(Type.ENEMY_MELEE, x, y);
 
   setSprite(e, SpriteId.ENEMY_MELEE, 8, 15, SpriteId.ENEMY_MELEE_FLASH);
   setShadow(e, SpriteId.ENEMY_MELEE_SHADOW, 0, 2);
@@ -32,8 +31,7 @@ export function addMeleeEnemy(sceneId: SceneId, x: number, y: number) {
 
   setState(e, StateId.ENEMY_IDLE);
 
-  const scene = getScene(e.sceneId);
-  scene.enemies.push(e.id);
+  entities.enemies.push(e.id);
 
   return e;
 }

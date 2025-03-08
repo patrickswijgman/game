@@ -2,7 +2,6 @@ import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
 import { addCombatText } from "@/entities/combat-text.js";
 import { setState } from "@/usecases/entity.js";
-import { getScene } from "@/usecases/game.js";
 import { clampStats } from "@/usecases/stats.js";
 import { roll } from "ridder";
 
@@ -20,7 +19,5 @@ export function dealDamage(attack: Entity, target: Entity) {
 
   setState(target, StateId.STAGGER);
 
-  const scene = getScene(attack.sceneId);
-
-  addCombatText(scene.id, target, `${damage}${isCrit ? "!" : ""}`);
+  addCombatText(target, `${damage}${isCrit ? "!" : ""}`);
 }

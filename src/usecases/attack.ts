@@ -1,10 +1,10 @@
 import { AttackId } from "@/consts/attack.js";
 import { attacks } from "@/data/attacks.js";
+import { entities } from "@/data/entities.js";
 import { Entity } from "@/data/entity.js";
+import { world } from "@/data/world.js";
 import { dealDamage } from "@/usecases/combat.js";
-import { destroyEntity } from "@/usecases/entity.js";
-import { getScene } from "@/usecases/game.js";
-import { getEntity } from "@/usecases/scene.js";
+import { destroyEntity, getEntity } from "@/usecases/entity.js";
 import { doRectanglesIntersect, getVectorDistance } from "ridder";
 
 export function getAttack(id: AttackId) {
@@ -12,16 +12,15 @@ export function getAttack(id: AttackId) {
 }
 
 export function dealDamageToTargets(e: Entity) {
-  const scene = getScene(e.sceneId);
-  const caster = getEntity(scene, e.casterId);
-  const targets = caster.isPlayer ? scene.enemies : scene.allies;
+  const caster = getEntity(e.casterId);
+  const targets = caster.isPlayer ? entities.enemies : entities.allies;
 
   for (const id of targets) {
     if (id === e.id || id === caster.id) {
       continue;
     }
 
-    const target = getEntity(scene, id);
+    const target = getEntity(id);
 
     if (doRectanglesIntersect(e.hitbox, target.hitbox)) {
       dealDamage(e, target);
@@ -34,10 +33,9 @@ export function dealDamageToTargets(e: Entity) {
 }
 
 export function destroyIfHitsWall(e: Entity) {
-  const scene = getScene(e.sceneId);
-  const caster = getEntity(scene, e.casterId);
+  const caster = getEntity(e.casterId);
 
-  for (const body of scene.bodies) {
+  for (const body of world.bodies) {
     if (doRectanglesIntersect(e.hitbox, body)) {
       if (body === caster.body) {
         continue;
@@ -51,8 +49,7 @@ export function destroyIfHitsWall(e: Entity) {
 }
 
 export function destroyIfOutOfRange(e: Entity) {
-  const scene = getScene(e.sceneId);
-  const caster = getEntity(scene, e.casterId);
+  const caster = getEntity(e.casterId);
   const attack = getAttack(caster.attackId);
   const traveled = getVectorDistance(e.start, e.position);
 

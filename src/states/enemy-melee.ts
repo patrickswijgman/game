@@ -20,7 +20,7 @@ export function onEnemyStateUpdate(e: Entity) {
     case StateId.ENEMY_IDLE:
       {
         updateBreathAnimation(e);
-        if (isPlayerAlive(e)) {
+        if (isPlayerAlive()) {
           setState(e, StateId.ENEMY_SEEK);
         }
       }
@@ -29,7 +29,7 @@ export function onEnemyStateUpdate(e: Entity) {
     case StateId.ENEMY_SEEK:
       {
         updateWalkAnimation(e);
-        if (!isPlayerAlive(e)) {
+        if (!isPlayerAlive()) {
           setState(e, StateId.ENEMY_IDLE);
           return;
         }

@@ -7,7 +7,7 @@ import { setState } from "@/usecases/entity.js";
 import { tickTimer } from "ridder";
 
 export function onAttackEnter(e: Entity) {
-  addAttack(e.sceneId, e);
+  addAttack(e);
 }
 
 export function onAttackUpdate(e: Entity) {
