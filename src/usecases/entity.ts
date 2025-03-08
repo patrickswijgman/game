@@ -15,7 +15,15 @@ export function getEntity(id: number) {
   return entities.table[id];
 }
 
-export function nextEntity() {
+export function addEntity(type: Type, x: number, y: number) {
+  const e = nextEntity();
+  e.type = type;
+  setVector(e.start, x, y);
+  setVector(e.position, x, y);
+  return e;
+}
+
+function nextEntity() {
   let id = entities.nextId;
   let e = entities.table[id];
 
@@ -35,14 +43,6 @@ export function nextEntity() {
   entities.update.push(e.id);
   entities.render.push(e.id);
 
-  return e;
-}
-
-export function addEntity(type: Type, x: number, y: number) {
-  const e = nextEntity();
-  e.type = type;
-  setVector(e.start, x, y);
-  setVector(e.position, x, y);
   return e;
 }
 
