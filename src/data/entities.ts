@@ -5,7 +5,8 @@ import { table, Table } from "ridder";
 export type Entities = {
   nextId: number;
   table: Table<Entity>;
-  active: Array<number>;
+  update: Array<number>;
+  render: Array<number>;
   allies: Array<number>;
   enemies: Array<number>;
   destroyed: Array<number>;
@@ -14,7 +15,8 @@ export type Entities = {
 export const entities: Entities = {
   nextId: 0,
   table: table(MAX_ENTITIES, newEntity),
-  active: [],
+  update: [],
+  render: [],
   allies: [],
   enemies: [],
   destroyed: [],

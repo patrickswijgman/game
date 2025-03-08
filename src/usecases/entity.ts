@@ -31,7 +31,9 @@ export function nextEntity() {
 
   e.id = id;
   e.isAllocated = true;
-  entities.active.push(e.id);
+
+  entities.update.push(e.id);
+  entities.render.push(e.id);
 
   return e;
 }

@@ -36,7 +36,7 @@ run({
 
     updateWorld();
 
-    for (const id of entities.active) {
+    for (const id of entities.update) {
       const e = getEntity(id);
 
       if (destroyIfExpired(e) || destroyIfDead(e)) {
@@ -75,7 +75,7 @@ run({
   },
 
   render: () => {
-    for (const id of entities.active) {
+    for (const id of entities.render) {
       const e = getEntity(id);
       renderEntity(e);
     }
@@ -100,7 +100,7 @@ run({
 });
 
 function sortEntitiesOnDepth() {
-  entities.active.sort((idA, idB) => {
+  entities.render.sort((idA, idB) => {
     const a = entities.table[idA];
     const b = entities.table[idB];
     return a.position.y + a.depth - b.position.y + b.depth;
@@ -111,7 +111,8 @@ function cleanupDestroyedEntities() {
   if (entities.destroyed.length) {
     for (const id of entities.destroyed) {
       const e = getEntity(id);
-      remove(entities.active, id);
+      remove(entities.update, id);
+      remove(entities.render, id);
       remove(entities.allies, id);
       remove(entities.enemies, id);
       remove(world.bodies, e.body);
