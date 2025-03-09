@@ -36,7 +36,7 @@ export const attacks = table<Attack>(AttackId.MAX, (id) => {
       return {
         spriteId: SpriteId.ATTACK_ENEMY_MELEE,
         pivot: vec(8, 8),
-        hitbox: rect(-3, -3, 6, 6),
+        hitbox: rect(-4, -4, 8, 8),
         reach: 4,
         speed: 0,
         delay: 500,

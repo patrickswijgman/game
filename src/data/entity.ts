@@ -123,7 +123,7 @@ export function newEntity(): Entity {
     isFlashing: false,
 
     text: "",
-    textColor: "white",
+    textColor: "",
 
     // Animation
     tweenPosition: vec(),

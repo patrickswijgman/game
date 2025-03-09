@@ -9,11 +9,52 @@ export type Upgrade = {
 
 export const upgrades = table<Upgrade>(UpgradeId.MAX, (id) => {
   switch (id) {
+    case UpgradeId.HEALTH:
+      return {
+        name: "Health",
+        stats: newStats({
+          health: 2,
+          healthMax: 2,
+        }),
+      };
+
     case UpgradeId.DAMAGE:
       return {
-        name: "",
+        name: "Damage",
         stats: newStats({
           damage: 5,
+        }),
+      };
+
+    case UpgradeId.RANGE:
+      return {
+        name: "Range",
+        stats: newStats({
+          range: 20,
+        }),
+      };
+
+    case UpgradeId.CRIT_CHANCE:
+      return {
+        name: "Crit Chance",
+        stats: newStats({
+          critChance: 0.25,
+        }),
+      };
+
+    case UpgradeId.PICKUP_RANGE:
+      return {
+        name: "Pick up Range",
+        stats: newStats({
+          pickupRange: 30,
+        }),
+      };
+
+    case UpgradeId.MOVEMENT_SPEED:
+      return {
+        name: "Pick up Range",
+        stats: newStats({
+          movementSpeed: 0.15,
         }),
       };
 

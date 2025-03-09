@@ -12,9 +12,10 @@ import { onAttackDestroy } from "@/usecases/attack.js";
 import { debugBodies, debugEntities, debugFps, debugHitboxes } from "@/usecases/debug.js";
 import { onEnemyDestroy } from "@/usecases/enemy.js";
 import { destroyIfDead, destroyIfExpired, getEntity, renderEntity, renderEntityStatus, updateCollisions, updatePhysics } from "@/usecases/entity.js";
+import { setup } from "@/usecases/game.js";
 import { renderHud } from "@/usecases/hud.js";
 import { isPlayerAlive } from "@/usecases/player.js";
-import { getPlayer, setup, spawnEnemies } from "@/usecases/world.js";
+import { getPlayer, spawnEnemies } from "@/usecases/world.js";
 import { InputCode, isInputPressed, remove, resetTransform, run, scaleTransform, translateTransform, updateCamera } from "ridder";
 
 let isDebugging = false;

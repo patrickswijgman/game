@@ -1,14 +1,14 @@
 import { XP_PER_LEVEL } from "@/consts/player.js";
 import { StateId } from "@/consts/state.js";
+import { UPGRADES_CHOICE_AMOUNT } from "@/consts/world.js";
 import { Entity } from "@/data/entity.js";
 import { game } from "@/data/game.js";
 import { addCombatText } from "@/entities/combat-text.js";
 import { setState } from "@/usecases/entity.js";
 import { isPlayerAlive } from "@/usecases/player.js";
 import { clampStats } from "@/usecases/stats.js";
-import { applyUpgradeFromPool } from "@/usecases/upgrade.js";
 import { getPlayer } from "@/usecases/world.js";
-import { pick, roll } from "ridder";
+import { pick, remove, roll } from "ridder";
 
 export function dealDamage(attack: Entity, target: Entity) {
   let damage = attack.stats.damage;
@@ -39,8 +39,20 @@ export function addExperience(xp: number) {
       player.stats.experience = 0;
       player.stats.experienceMax = player.stats.level * XP_PER_LEVEL;
 
-      const upgrade = pick(game.upgrades);
-      applyUpgradeFromPool(upgrade);
+      // TODO: Put into world usecase.
+      for (let i = 0; i < UPGRADES_CHOICE_AMOUNT; i++) {
+        const upgrade = pick(game.upgrades);
+
+        if (upgrade) {
+          remove(game.upgrades, upgrade);
+          game.upgradeChoices.push(upgrade);
+          // TODO: Add not-chosen upgrades back into the pool.
+          //       Prevents that the exact same upgrade is rolled twice.
+          //       However if there are two damage upgrades, then it is possible to get two damage upgrade choices.
+        }
+      }
+
+      // TODO: Go to upgrade choose game state.
     }
   }
 }
