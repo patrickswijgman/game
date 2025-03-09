@@ -1,7 +1,6 @@
 import { Type } from "@/consts/entity.js";
-import { entities } from "@/data/entities.js";
 import { zeroEntity } from "@/data/entity.js";
-import { world } from "@/data/world.js";
+import { game } from "@/data/game.js";
 import { updateAttack } from "@/entities/attack.js";
 import { updateCombatText } from "@/entities/combat-text.js";
 import { updateMeleeEnemy } from "@/entities/enemy-melee.js";
@@ -13,7 +12,7 @@ import { debugBodies, debugEntities, debugFps, debugHitboxes } from "@/usecases/
 import { destroyIfDead, destroyIfExpired, getEntity, renderEntity, renderEntityStatus, updateCollisions, updatePhysics } from "@/usecases/entity.js";
 import { renderHud } from "@/usecases/hud.js";
 import { isPlayerAlive } from "@/usecases/player.js";
-import { getPlayer, setupWorld, spawnEnemies } from "@/usecases/world.js";
+import { getPlayer, setup, spawnEnemies } from "@/usecases/world.js";
 import { InputCode, isInputPressed, remove, resetTransform, run, scaleTransform, translateTransform, updateCamera } from "ridder";
 
 let isDebugging = false;
@@ -24,7 +23,7 @@ run({
 
   setup: async () => {
     await loadAssets();
-    setupWorld();
+    setup();
   },
 
   update: () => {
@@ -37,7 +36,7 @@ run({
 
     spawnEnemies();
 
-    for (const id of entities.update) {
+    for (const id of game.update) {
       const e = getEntity(id);
 
       if (destroyIfExpired(e) || destroyIfDead(e)) {
@@ -74,7 +73,7 @@ run({
 
     if (isPlayerAlive()) {
       const player = getPlayer();
-      updateCamera(world.camera, player.position.x, player.position.y);
+      updateCamera(game.camera, player.position.x, player.position.y);
     }
 
     cleanupDestroyedEntities();
@@ -82,12 +81,12 @@ run({
   },
 
   render: () => {
-    for (const id of entities.render) {
+    for (const id of game.render) {
       const e = getEntity(id);
       renderEntity(e);
     }
 
-    for (const id of entities.enemies) {
+    for (const id of game.enemies) {
       const e = getEntity(id);
       renderEntityStatus(e);
     }
@@ -107,24 +106,24 @@ run({
 });
 
 function sortEntitiesOnDepth() {
-  entities.render.sort((idA, idB) => {
-    const a = entities.table[idA];
-    const b = entities.table[idB];
+  game.render.sort((idA, idB) => {
+    const a = game.entities[idA];
+    const b = game.entities[idB];
     return a.position.y + a.depth - b.position.y + b.depth;
   });
 }
 
 function cleanupDestroyedEntities() {
-  if (entities.destroyed.length) {
-    for (const id of entities.destroyed) {
+  if (game.destroyed.length) {
+    for (const id of game.destroyed) {
       const e = getEntity(id);
-      remove(entities.update, id);
-      remove(entities.render, id);
-      remove(entities.allies, id);
-      remove(entities.enemies, id);
-      remove(world.bodies, e.body);
+      remove(game.update, id);
+      remove(game.render, id);
+      remove(game.allies, id);
+      remove(game.enemies, id);
+      remove(game.bodies, e.body);
       zeroEntity(e);
     }
-    entities.destroyed.length = 0;
+    game.destroyed.length = 0;
   }
 }

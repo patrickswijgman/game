@@ -2,9 +2,8 @@ import { COLOR_GRASS } from "@/consts/colors.js";
 import { MAX_ENEMIES } from "@/consts/entity.js";
 import { UpgradeId } from "@/consts/upgrade.js";
 import { ENEMY_SPAWN_TIME_MAX, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_REDUCE } from "@/consts/world.js";
-import { entities } from "@/data/entities.js";
 import { Entity } from "@/data/entity.js";
-import { world } from "@/data/world.js";
+import { game } from "@/data/game.js";
 import { writeRandomPointInPerimeterBetweenRectangles } from "@/engine/rectangle.js";
 import { addMeleeEnemy } from "@/entities/enemy-melee.js";
 import { addPlayer } from "@/entities/player.js";
@@ -21,21 +20,21 @@ const border = rect(0, 0, w, h);
 const field = rect(50, 50, w - 100, h - 100);
 const pos = vec();
 
-export function setupWorld() {
+export function setup() {
   setBackgroundColor(COLOR_GRASS);
 
   // Boundary
-  setRectangle(world.bounds, 0, 0, w, h);
+  setRectangle(game.bounds, 0, 0, w, h);
   addBody(rect(0, 0, w, 40));
   addBody(rect(0, 0, 40, h));
   addBody(rect(w - 40, 0, 40, h));
   addBody(rect(0, h - 40, w, 40));
 
   // Camera
-  world.camera.smoothing = 0.1;
-  world.camera.shakeReduction = 0.1;
-  copyRectangle(world.camera.bounds, world.bounds);
-  setCameraPosition(world.camera, w / 2, h / 2);
+  game.camera.smoothing = 0.1;
+  game.camera.shakeReduction = 0.1;
+  copyRectangle(game.camera.bounds, game.bounds);
+  setCameraPosition(game.camera, w / 2, h / 2);
 
   // Upgrades
   addUpgradeToPool(UpgradeId.DAMAGE, 3);
@@ -58,25 +57,25 @@ export function setupWorld() {
 }
 
 export function spawnEnemies() {
-  if (tickTimer(world.spawnTimer, world.spawnTime)) {
-    if (isPlayerAlive() && entities.enemies.length < MAX_ENEMIES) {
+  if (tickTimer(game.spawnTimer, game.spawnTime)) {
+    if (isPlayerAlive() && game.enemies.length < MAX_ENEMIES) {
       writeRandomPointInPerimeterBetweenRectangles(outside, border, pos);
       addMeleeEnemy(pos.x, pos.y);
-      world.spawnTime = clamp(world.spawnTime - ENEMY_SPAWN_TIME_REDUCE, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_MAX);
+      game.spawnTime = clamp(game.spawnTime - ENEMY_SPAWN_TIME_REDUCE, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_MAX);
     }
 
-    resetTimer(world.spawnTimer);
+    resetTimer(game.spawnTimer);
   }
 }
 
 export function setPlayer(e: Entity) {
-  world.playerId = e.id;
+  game.playerId = e.id;
 }
 
 export function getPlayer() {
-  return getEntity(world.playerId);
+  return getEntity(game.playerId);
 }
 
 export function addBody(body: Rectangle) {
-  world.bodies.push(body);
+  game.bodies.push(body);
 }

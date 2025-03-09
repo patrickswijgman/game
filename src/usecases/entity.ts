@@ -1,30 +1,29 @@
 import { SpriteId } from "@/consts/assets.js";
 import { Type } from "@/consts/entity.js";
 import { StateId } from "@/consts/state.js";
-import { entities } from "@/data/entities.js";
 import { Entity } from "@/data/entity.js";
-import { world } from "@/data/world.js";
+import { game } from "@/data/game.js";
 import { onEntityStateEnter, onEntityStateExit, onEntityStateUpdate } from "@/states/entity.js";
 import { drawHealthBar, drawTextOutlined } from "@/usecases/ui.js";
 import { addBody } from "@/usecases/world.js";
 import { addVector, addVectorScaled, applyCameraTransform, clamp, copyVector, drawSprite, getDelta, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, tickTimer, translateTransform, writeIntersectionBetweenRectangles } from "ridder";
 
 export function getEntity(id: number) {
-  return entities.table[id];
+  return game.entities[id];
 }
 
 export function addEntity(type: Type, x: number, y: number) {
-  let id = entities.nextId;
-  let e = entities.table[id];
+  let id = game.nextId;
+  let e = game.entities[id];
 
   if (e.isAllocated) {
-    id = entities.table.findIndex((e) => !e.isAllocated);
+    id = game.entities.findIndex((e) => !e.isAllocated);
     if (id === -1) {
       throw new Error("Out of entities :(");
     }
 
-    e = entities.table[id];
-    entities.nextId = clamp(id + 1, 0, entities.table.length - 1);
+    e = game.entities[id];
+    game.nextId = clamp(id + 1, 0, game.entities.length - 1);
   }
 
   e.id = id;
@@ -33,18 +32,18 @@ export function addEntity(type: Type, x: number, y: number) {
   setVector(e.start, x, y);
   setVector(e.position, x, y);
 
-  entities.update.push(e.id);
-  entities.render.push(e.id);
+  game.update.push(e.id);
+  game.render.push(e.id);
 
   return e;
 }
 
 export function addToAllies(e: Entity) {
-  entities.allies.push(e.id);
+  game.allies.push(e.id);
 }
 
 export function addToEnemies(e: Entity) {
-  entities.enemies.push(e.id);
+  game.enemies.push(e.id);
 }
 
 export function setSprite(e: Entity, spriteId: SpriteId, pivotX: number, pivotY: number, flashId = SpriteId.NONE, outlineId = SpriteId.NONE) {
@@ -103,7 +102,7 @@ export function updateCollisions(e: Entity) {
     updateBody(e);
     resetVector(e.bodyIntersection);
 
-    for (const body of world.bodies) {
+    for (const body of game.bodies) {
       if (body === e.body) {
         continue;
       }
@@ -150,7 +149,7 @@ export function resetEntity(e: Entity) {
 
 export function renderEntity(e: Entity) {
   resetTransform();
-  applyCameraTransform(world.camera);
+  applyCameraTransform(game.camera);
   translateTransform(e.position.x, e.position.y);
   scaleTransform(e.scale.x, e.scale.y);
   rotateTransform(e.angle);
@@ -187,7 +186,7 @@ export function renderEntity(e: Entity) {
 export function renderEntityStatus(e: Entity) {
   if (e.stats.health < e.stats.healthMax) {
     resetTransform();
-    applyCameraTransform(world.camera);
+    applyCameraTransform(game.camera);
     translateTransform(e.position.x, e.position.y - e.hitbox.h - 5);
     drawHealthBar(-5, 0, e.stats, 10, 3);
   }
@@ -213,5 +212,5 @@ export function destroyIfDead(e: Entity) {
 
 export function destroyEntity(e: Entity) {
   e.isDestroyed = true;
-  entities.destroyed.push(e.id);
+  game.destroyed.push(e.id);
 }

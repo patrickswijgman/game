@@ -2,7 +2,7 @@ import { updateBreathAnimation } from "@/anims/breath.js";
 import { updateWalkAnimation } from "@/anims/walk.js";
 import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
-import { world } from "@/data/world.js";
+import { game } from "@/data/game.js";
 import { setState } from "@/usecases/entity.js";
 import { InputCode, copyVector, getVectorLength, isInputDown, normalizeVector, resetVector, scaleVector, subtractVector } from "ridder";
 
@@ -79,7 +79,7 @@ function move(e: Entity, mod = 1) {
 }
 
 function aim(e: Entity) {
-  copyVector(e.direction, world.camera.mousePosition);
+  copyVector(e.direction, game.camera.mousePosition);
   subtractVector(e.direction, e.position);
   normalizeVector(e.direction);
   e.isFlipped = e.direction.x < 0;

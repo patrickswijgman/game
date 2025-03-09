@@ -1,8 +1,7 @@
 import { AttackId } from "@/consts/attack.js";
 import { attacks } from "@/data/attacks.js";
-import { entities } from "@/data/entities.js";
 import { Entity } from "@/data/entity.js";
-import { world } from "@/data/world.js";
+import { game } from "@/data/game.js";
 import { dealDamage } from "@/usecases/combat.js";
 import { destroyEntity, getEntity } from "@/usecases/entity.js";
 import { doRectanglesIntersect, getVectorDistance } from "ridder";
@@ -13,7 +12,7 @@ export function getAttack(id: AttackId) {
 
 export function dealDamageToTargets(e: Entity) {
   const caster = getEntity(e.casterId);
-  const targets = caster.isPlayer ? entities.enemies : entities.allies;
+  const targets = caster.isPlayer ? game.enemies : game.allies;
 
   for (const id of targets) {
     if (id === e.id || id === caster.id) {
@@ -35,7 +34,7 @@ export function dealDamageToTargets(e: Entity) {
 export function destroyIfHitsWall(e: Entity) {
   const caster = getEntity(e.casterId);
 
-  for (const body of world.bodies) {
+  for (const body of game.bodies) {
     if (doRectanglesIntersect(e.hitbox, body)) {
       if (body === caster.body) {
         continue;

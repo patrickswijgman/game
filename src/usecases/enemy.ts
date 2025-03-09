@@ -1,5 +1,5 @@
-import { entities } from "@/data/entities.js";
 import { Entity } from "@/data/entity.js";
+import { game } from "@/data/game.js";
 import { getAttack } from "@/usecases/attack.js";
 import { isPlayerAlive } from "@/usecases/player.js";
 import { avoid, seek } from "@/usecases/steering.js";
@@ -9,7 +9,7 @@ import { copyVector, getVectorDistance, normalizeVector, subtractVector } from "
 export function moveTowardsPlayer(e: Entity, mod = 1) {
   const player = getPlayer();
   seek(e, player.position, e.stats.movementSpeed * mod);
-  avoid(e, entities.enemies);
+  avoid(e, game.enemies);
 }
 
 export function lookAtPlayer(e: Entity) {

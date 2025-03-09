@@ -1,7 +1,7 @@
 import { XP_PER_LEVEL } from "@/consts/player.js";
 import { StateId } from "@/consts/state.js";
 import { Entity } from "@/data/entity.js";
-import { world } from "@/data/world.js";
+import { game } from "@/data/game.js";
 import { addCombatText } from "@/entities/combat-text.js";
 import { setState } from "@/usecases/entity.js";
 import { isPlayerAlive } from "@/usecases/player.js";
@@ -39,7 +39,7 @@ export function addExperience(xp: number) {
       player.stats.experience = 0;
       player.stats.experienceMax = player.stats.level * XP_PER_LEVEL;
 
-      const upgrade = pick(world.upgrades);
+      const upgrade = pick(game.upgrades);
       applyUpgradeFromPool(upgrade);
     }
   }
