@@ -11,7 +11,7 @@ export const upgrades = table<Upgrade>(UpgradeId.MAX, (id) => {
   switch (id) {
     case UpgradeId.DAMAGE:
       return {
-        name: "Whetstone",
+        name: "",
         stats: newStats({
           damage: 5,
         }),

@@ -37,7 +37,7 @@ export function setup() {
   setCameraPosition(game.camera, w / 2, h / 2);
 
   // Upgrades
-  addUpgradeToPool(UpgradeId.DAMAGE, 3);
+  addUpgradeToPool(UpgradeId.DAMAGE, 4);
 
   // Entities
   addPlayer(w / 2, h / 2);
