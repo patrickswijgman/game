@@ -6,9 +6,11 @@ import { updateCombatText } from "@/entities/combat-text.js";
 import { updateMeleeEnemy } from "@/entities/enemy-melee.js";
 import { updatePlayer } from "@/entities/player.js";
 import { updateTree } from "@/entities/tree.js";
-import { addExperienceOrb, updateExperienceOrb } from "@/entities/xp-orb.js";
+import { updateExperienceOrb } from "@/entities/xp-orb.js";
 import { loadAssets } from "@/usecases/assets.js";
+import { onAttackDestroy } from "@/usecases/attack.js";
 import { debugBodies, debugEntities, debugFps, debugHitboxes } from "@/usecases/debug.js";
+import { onEnemyDestroy } from "@/usecases/enemy.js";
 import { destroyIfDead, destroyIfExpired, getEntity, renderEntity, renderEntityStatus, updateCollisions, updatePhysics } from "@/usecases/entity.js";
 import { renderHud } from "@/usecases/hud.js";
 import { isPlayerAlive } from "@/usecases/player.js";
@@ -40,9 +42,6 @@ run({
       const e = getEntity(id);
 
       if (destroyIfExpired(e) || destroyIfDead(e)) {
-        if (e.isEnemy) {
-          addExperienceOrb(e.position.x, e.position.y, e.stats.experience);
-        }
         continue;
       }
 
@@ -74,6 +73,16 @@ run({
     if (isPlayerAlive()) {
       const player = getPlayer();
       updateCamera(game.camera, player.position.x, player.position.y);
+    }
+
+    for (const id of game.destroyed) {
+      const e = getEntity(id);
+      if (e.isEnemy) {
+        onEnemyDestroy(e);
+      }
+      if (e.isAttack) {
+        onAttackDestroy(e);
+      }
     }
 
     cleanupDestroyedEntities();

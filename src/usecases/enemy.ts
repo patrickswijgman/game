@@ -1,5 +1,6 @@
 import { Entity } from "@/data/entity.js";
 import { game } from "@/data/game.js";
+import { addExperienceOrb } from "@/entities/xp-orb.js";
 import { getAttack } from "@/usecases/attack.js";
 import { isPlayerAlive } from "@/usecases/player.js";
 import { avoid, seek } from "@/usecases/steering.js";
@@ -34,4 +35,8 @@ export function isPlayerInAttackRange(e: Entity) {
   }
 
   return false;
+}
+
+export function onEnemyDestroy(e: Entity) {
+  addExperienceOrb(e.position.x, e.position.y, e.stats.experience);
 }

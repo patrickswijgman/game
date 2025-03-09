@@ -18,8 +18,8 @@ export function addMeleeEnemy(x: number, y: number) {
 
   e.radius = 8;
 
-  e.stats.health = 15;
-  e.stats.healthMax = 15;
+  e.stats.health = 20;
+  e.stats.healthMax = 20;
   e.stats.damage = 1;
   e.stats.movementSpeed = 0.5;
   e.stats.experience = 50;

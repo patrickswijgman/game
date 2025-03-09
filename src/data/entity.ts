@@ -77,6 +77,7 @@ export type Entity = {
   attackId: AttackId;
   isPlayer: boolean;
   isEnemy: boolean;
+  isAttack: boolean;
 
   // Attack
   casterId: number;
@@ -155,6 +156,7 @@ export function newEntity(): Entity {
     attackId: AttackId.NONE,
     isPlayer: false,
     isEnemy: false,
+    isAttack: false,
 
     // Attack
     casterId: 0,

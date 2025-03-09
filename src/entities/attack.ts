@@ -27,6 +27,7 @@ export function addAttack(caster: Entity) {
   e.lifeTime = attack.duration;
   e.casterId = caster.id;
   e.isPhysicsEnabled = true;
+  e.isAttack = true;
 
   return e;
 }

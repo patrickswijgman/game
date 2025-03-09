@@ -59,3 +59,8 @@ export function destroyIfOutOfRange(e: Entity) {
 
   return false;
 }
+
+export function onAttackDestroy(e: Entity) {
+  switch (e.attackId) {
+  }
+}
