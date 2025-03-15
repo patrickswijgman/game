@@ -1,5 +1,5 @@
+import { getPlayer } from "@/core/world.js";
 import { Entity } from "@/data/entity.js";
-import { getPlayer } from "@/usecases/world.js";
 import { tickTimer, tween } from "ridder";
 
 export function updateExperienceOrbIdleAnimation(e: Entity) {

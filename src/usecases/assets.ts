@@ -3,8 +3,9 @@ import { loadFlashTexture, loadFont, loadOutlineTexture, loadSprite, loadTexture
 
 export async function loadAssets() {
   await loadTexture(TextureId.ATLAS, "textures/atlas.png");
-  await loadOutlineTexture(TextureId.ATLAS_OUTLINE, "textures/atlas.png", "square", "white");
-  await loadFlashTexture(TextureId.ATLAS_FLASH, "textures/atlas.png", "white");
+
+  loadOutlineTexture(TextureId.ATLAS_OUTLINE, TextureId.ATLAS, "square", "white");
+  loadFlashTexture(TextureId.ATLAS_FLASH, TextureId.ATLAS, "white");
 
   loadSprite(SpriteId.PLAYER, TextureId.ATLAS, 0, 16, 16, 16);
   loadSprite(SpriteId.PLAYER_SHADOW, TextureId.ATLAS, 0, 32, 16, 16);

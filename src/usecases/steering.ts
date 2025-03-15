@@ -1,5 +1,5 @@
+import { getEntity } from "@/core/entities.js";
 import { Entity } from "@/data/entity.js";
-import { getEntity } from "@/usecases/entity.js";
 import { addVector, addVectorScaled, copyVector, getDelta, getVectorDistance, getVectorLength, normalizeVector, resetVector, scaleVector, subtractVector, Vector } from "ridder";
 
 export function seek(e: Entity, target: Vector, speed: number) {
@@ -16,7 +16,7 @@ export function flee(e: Entity, target: Vector, speed: number) {
   scaleVector(e.velocity, speed);
 }
 
-export function avoid(e: Entity, list: Array<number>) {
+export function avoid(e: Entity, list: Readonly<Array<number>>) {
   copyVector(e.ahead, e.position);
   addVector(e.ahead, e.velocity);
   resetVector(e.avoid);
@@ -36,7 +36,7 @@ export function avoid(e: Entity, list: Array<number>) {
   }
 }
 
-function findClosestAhead(e: Entity, list: Array<number>) {
+function findClosestAhead(e: Entity, list: Readonly<Array<number>>) {
   let distance = Infinity;
   let closest: Entity | null = null;
 

@@ -1,11 +1,11 @@
-import { game } from "@/data/game.js";
-import { getEntity } from "@/usecases/entity.js";
-import { applyCameraTransform, drawRectInstance, drawText, getFramePerSecond, isRectangleValid, resetTransform, translateTransform } from "ridder";
+import { getEntities, getEntity } from "@/core/entities.js";
+import { getBodies } from "@/core/world.js";
+import { applyCameraTransform, drawRectInstance, drawText, getFramePerSecond, isRectangleValid, resetTransform } from "ridder";
 
 export function debugHitboxes() {
   resetTransform();
-  applyCameraTransform(game.camera);
-  for (const id of game.update) {
+  applyCameraTransform();
+  for (const id of getEntities()) {
     const e = getEntity(id);
     if (isRectangleValid(e.hitbox)) {
       drawRectInstance(e.hitbox, "yellow", false);
@@ -15,8 +15,8 @@ export function debugHitboxes() {
 
 export function debugBodies() {
   resetTransform();
-  applyCameraTransform(game.camera);
-  for (const body of game.bodies) {
+  applyCameraTransform();
+  for (const body of getBodies()) {
     if (isRectangleValid(body)) {
       drawRectInstance(body, "red", false);
     }
@@ -25,12 +25,4 @@ export function debugBodies() {
 
 export function debugFps() {
   drawText(`FPS: ${getFramePerSecond()}`, 1, 1, "lime");
-}
-
-export function debugEntities() {
-  const all = game.entities.reduce((prev, e) => (prev += e.isAllocated ? 1 : 0), 0);
-  const max = game.entities.length;
-  drawText(`entities: ${all} / ${max}`, 1, 1, "lime");
-  translateTransform(0, 11);
-  drawText(`entity ID: ${game.nextId}`, 1, 1, "lime");
 }

@@ -3,10 +3,10 @@ import { AttackId } from "@/consts/attack.js";
 import { Type } from "@/consts/entity.js";
 import { XP_PER_LEVEL } from "@/consts/player.js";
 import { StateId } from "@/consts/state.js";
+import { addToAlliesGroup, setPlayer } from "@/core/world.js";
 import { Entity } from "@/data/entity.js";
 import { onPlayerStateEnter, onPlayerStateExit, onPlayerStateUpdate } from "@/states/player.js";
-import { addEntity, addToAllies, setBody, setCenter, setHitbox, setShadow, setSprite, setState, updateState } from "@/usecases/entity.js";
-import { setPlayer } from "@/usecases/world.js";
+import { addEntity, setBody, setCenter, setHitbox, setShadow, setSprite, setState, updateState } from "@/usecases/entity.js";
 import { setVector } from "ridder";
 
 export function addPlayer(x: number, y: number) {
@@ -36,8 +36,9 @@ export function addPlayer(x: number, y: number) {
   e.isPlayer = true;
 
   setState(e, StateId.PLAYER_IDLE);
-  setPlayer(e);
-  addToAllies(e);
+
+  setPlayer(e.id);
+  addToAlliesGroup(e.id);
 
   return e;
 }

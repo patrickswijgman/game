@@ -1,49 +1,20 @@
 import { SpriteId } from "@/consts/assets.js";
+import { COLOR_OUTLINE } from "@/consts/colors.js";
 import { Type } from "@/consts/entity.js";
 import { StateId } from "@/consts/state.js";
+import { destroyEntity, nextEntity } from "@/core/entities.js";
+import { addBody, getBodies } from "@/core/world.js";
 import { Entity } from "@/data/entity.js";
-import { game } from "@/data/game.js";
 import { onEntityStateEnter, onEntityStateExit, onEntityStateUpdate } from "@/states/entity.js";
-import { drawHealthBar, drawTextOutlined } from "@/usecases/ui.js";
-import { addBody } from "@/usecases/world.js";
-import { addVector, addVectorScaled, applyCameraTransform, clamp, copyVector, drawSprite, getDelta, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, tickTimer, translateTransform, writeIntersectionBetweenRectangles } from "ridder";
-
-export function getEntity(id: number) {
-  return game.entities[id];
-}
+import { drawHealthBar } from "@/usecases/ui.js";
+import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, drawTextOutlined, getDelta, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, tickTimer, translateTransform, writeIntersectionBetweenRectangles } from "ridder";
 
 export function addEntity(type: Type, x: number, y: number) {
-  let id = game.nextId;
-  let e = game.entities[id];
-
-  if (e.isAllocated) {
-    id = game.entities.findIndex((e) => !e.isAllocated);
-    if (id === -1) {
-      throw new Error("Out of entities :(");
-    }
-
-    e = game.entities[id];
-    game.nextId = clamp(id + 1, 0, game.entities.length - 1);
-  }
-
-  e.id = id;
-  e.isAllocated = true;
+  const e = nextEntity();
   e.type = type;
   setVector(e.start, x, y);
   setVector(e.position, x, y);
-
-  game.update.push(e.id);
-  game.render.push(e.id);
-
   return e;
-}
-
-export function addToAllies(e: Entity) {
-  game.allies.push(e.id);
-}
-
-export function addToEnemies(e: Entity) {
-  game.enemies.push(e.id);
 }
 
 export function setSprite(e: Entity, spriteId: SpriteId, pivotX: number, pivotY: number, flashId = SpriteId.NONE, outlineId = SpriteId.NONE) {
@@ -102,7 +73,7 @@ export function updateCollisions(e: Entity) {
     updateBody(e);
     resetVector(e.bodyIntersection);
 
-    for (const body of game.bodies) {
+    for (const body of getBodies()) {
       if (body === e.body) {
         continue;
       }
@@ -149,7 +120,7 @@ export function resetEntity(e: Entity) {
 
 export function renderEntity(e: Entity) {
   resetTransform();
-  applyCameraTransform(game.camera);
+  applyCameraTransform();
   translateTransform(e.position.x, e.position.y);
   scaleTransform(e.scale.x, e.scale.y);
   rotateTransform(e.angle);
@@ -179,14 +150,14 @@ export function renderEntity(e: Entity) {
   }
 
   if (e.text) {
-    drawTextOutlined(e.text, 0, 0, e.textColor, "center", "middle");
+    drawTextOutlined(e.text, 0, 0, e.textColor, COLOR_OUTLINE, "circle", "center", "middle");
   }
 }
 
 export function renderEntityStatus(e: Entity) {
   if (e.stats.health < e.stats.healthMax) {
     resetTransform();
-    applyCameraTransform(game.camera);
+    applyCameraTransform();
     translateTransform(e.position.x, e.position.y - e.hitbox.h - 5);
     drawHealthBar(-5, 0, e.stats, 10, 3);
   }
@@ -194,7 +165,7 @@ export function renderEntityStatus(e: Entity) {
 
 export function destroyIfExpired(e: Entity) {
   if (e.lifeTime && tickTimer(e.lifeTimer, e.lifeTime)) {
-    destroyEntity(e);
+    destroyEntity(e.id);
     return true;
   }
 
@@ -203,14 +174,9 @@ export function destroyIfExpired(e: Entity) {
 
 export function destroyIfDead(e: Entity) {
   if (e.stats.healthMax && e.stats.health === 0) {
-    destroyEntity(e);
+    destroyEntity(e.id);
     return true;
   }
 
   return false;
-}
-
-export function destroyEntity(e: Entity) {
-  e.isDestroyed = true;
-  game.destroyed.push(e.id);
 }

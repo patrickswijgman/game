@@ -1,9 +1,9 @@
 import { AttackId } from "@/consts/attack.js";
+import { destroyEntity, getEntity } from "@/core/entities.js";
+import { getAlliesGroup, getBodies, getEnemiesGroup } from "@/core/world.js";
 import { attacks } from "@/data/attacks.js";
 import { Entity } from "@/data/entity.js";
-import { game } from "@/data/game.js";
 import { dealDamage } from "@/usecases/combat.js";
-import { destroyEntity, getEntity } from "@/usecases/entity.js";
 import { doRectanglesIntersect, getVectorDistance } from "ridder";
 
 export function getAttack(id: AttackId) {
@@ -12,10 +12,10 @@ export function getAttack(id: AttackId) {
 
 export function dealDamageToTargets(e: Entity) {
   const caster = getEntity(e.casterId);
-  const targets = caster.isPlayer ? game.enemies : game.allies;
+  const targets = caster.isPlayer ? getEnemiesGroup() : getAlliesGroup();
 
   for (const id of targets) {
-    if (id === e.id || id === caster.id) {
+    if (id === caster.id) {
       continue;
     }
 
@@ -23,7 +23,7 @@ export function dealDamageToTargets(e: Entity) {
 
     if (doRectanglesIntersect(e.hitbox, target.hitbox)) {
       dealDamage(e, target);
-      destroyEntity(e);
+      destroyEntity(e.id);
       return true;
     }
   }
@@ -34,12 +34,13 @@ export function dealDamageToTargets(e: Entity) {
 export function destroyIfHitsWall(e: Entity) {
   const caster = getEntity(e.casterId);
 
-  for (const body of game.bodies) {
+  for (const body of getBodies()) {
+    if (body === caster.body) {
+      continue;
+    }
+
     if (doRectanglesIntersect(e.hitbox, body)) {
-      if (body === caster.body) {
-        continue;
-      }
-      destroyEntity(e);
+      destroyEntity(e.id);
       return true;
     }
   }
@@ -53,7 +54,7 @@ export function destroyIfOutOfRange(e: Entity) {
   const traveled = getVectorDistance(e.start, e.position);
 
   if (attack.stats.range && traveled > attack.stats.range) {
-    destroyEntity(e);
+    destroyEntity(e.id);
     return true;
   }
 

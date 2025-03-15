@@ -1,10 +1,11 @@
 import { updateExperienceOrbIdleAnimation, updateExperienceOrbSeekAnimation } from "@/anims/xp-orb.js";
 import { StateId } from "@/consts/state.js";
+import { destroyEntity } from "@/core/entities.js";
+import { getPlayer } from "@/core/world.js";
 import { Entity } from "@/data/entity.js";
 import { addExperience } from "@/usecases/combat.js";
-import { destroyEntity, setState } from "@/usecases/entity.js";
+import { setState } from "@/usecases/entity.js";
 import { isPlayerAlive } from "@/usecases/player.js";
-import { getPlayer } from "@/usecases/world.js";
 import { getVectorDistance } from "ridder";
 
 export function onExperienceOrbStateEnter(e: Entity) {
@@ -36,7 +37,7 @@ export function onExperienceOrbStateUpdate(e: Entity) {
           const completed = updateExperienceOrbSeekAnimation(e);
           if (completed) {
             addExperience(e.stats.experience);
-            destroyEntity(e);
+            destroyEntity(e.id);
           }
         }
       }

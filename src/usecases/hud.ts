@@ -1,6 +1,6 @@
+import { getPlayer } from "@/core/world.js";
 import { isPlayerAlive } from "@/usecases/player.js";
 import { drawExperienceBar, drawHealthBar } from "@/usecases/ui.js";
-import { getPlayer } from "@/usecases/world.js";
 import { getWidth, resetTransform, translateTransform } from "ridder";
 
 export function renderHud() {

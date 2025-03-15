@@ -2,9 +2,10 @@ import { SpriteId } from "@/consts/assets.js";
 import { AttackId } from "@/consts/attack.js";
 import { Type } from "@/consts/entity.js";
 import { StateId } from "@/consts/state.js";
+import { addToEnemiesGroup } from "@/core/world.js";
 import { Entity } from "@/data/entity.js";
 import { onEnemyStateEnter, onEnemyStateExit, onEnemyStateUpdate } from "@/states/enemy-melee.js";
-import { addEntity, addToEnemies, setCenter, setHitbox, setShadow, setSprite, setState, updateState } from "@/usecases/entity.js";
+import { addEntity, setCenter, setHitbox, setShadow, setSprite, setState, updateState } from "@/usecases/entity.js";
 import { setVector } from "ridder";
 
 export function addMeleeEnemy(x: number, y: number) {
@@ -29,7 +30,8 @@ export function addMeleeEnemy(x: number, y: number) {
   e.isEnemy = true;
 
   setState(e, StateId.ENEMY_IDLE);
-  addToEnemies(e);
+
+  addToEnemiesGroup(e.id);
 
   return e;
 }

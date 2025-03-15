@@ -1,6 +1,7 @@
 import { Type } from "@/consts/entity.js";
+import { clearDestroyedEntities, getDestroyedEntities, getEntities, getEntity, removeEntity, sortEntities } from "@/core/entities.js";
+import { getEnemiesGroup, getPlayer, removeFromWorld, setupWorld, spawnEnemies } from "@/core/world.js";
 import { zeroEntity } from "@/data/entity.js";
-import { game } from "@/data/game.js";
 import { updateAttack } from "@/entities/attack.js";
 import { updateCombatText } from "@/entities/combat-text.js";
 import { updateMeleeEnemy } from "@/entities/enemy-melee.js";
@@ -9,14 +10,12 @@ import { updateTree } from "@/entities/tree.js";
 import { updateExperienceOrb } from "@/entities/xp-orb.js";
 import { loadAssets } from "@/usecases/assets.js";
 import { onAttackDestroy } from "@/usecases/attack.js";
-import { debugBodies, debugEntities, debugFps, debugHitboxes } from "@/usecases/debug.js";
+import { debugBodies, debugFps, debugHitboxes } from "@/usecases/debug.js";
 import { onEnemyDestroy } from "@/usecases/enemy.js";
-import { destroyIfDead, destroyIfExpired, getEntity, renderEntity, renderEntityStatus, updateCollisions, updatePhysics } from "@/usecases/entity.js";
-import { setup } from "@/usecases/game.js";
+import { destroyIfDead, destroyIfExpired, renderEntity, renderEntityStatus, updateCollisions, updatePhysics } from "@/usecases/entity.js";
 import { renderHud } from "@/usecases/hud.js";
 import { isPlayerAlive } from "@/usecases/player.js";
-import { getPlayer, spawnEnemies } from "@/usecases/world.js";
-import { InputCode, isInputPressed, remove, resetTransform, run, scaleTransform, translateTransform, updateCamera } from "ridder";
+import { InputCode, isInputPressed, resetTransform, run, scaleTransform, translateTransform, updateCamera } from "ridder";
 
 let isDebugging = false;
 
@@ -26,7 +25,7 @@ run({
 
   setup: async () => {
     await loadAssets();
-    setup();
+    setupWorld();
   },
 
   update: () => {
@@ -38,8 +37,9 @@ run({
     }
 
     spawnEnemies();
+    sortEntities(sortEntitiesOnDepth);
 
-    for (const id of game.update) {
+    for (const id of getEntities()) {
       const e = getEntity(id);
 
       if (destroyIfExpired(e) || destroyIfDead(e)) {
@@ -69,14 +69,15 @@ run({
 
       updatePhysics(e);
       updateCollisions(e);
+      renderEntity(e);
     }
 
     if (isPlayerAlive()) {
       const player = getPlayer();
-      updateCamera(game.camera, player.position.x, player.position.y);
+      updateCamera(player.position.x, player.position.y);
     }
 
-    for (const id of game.destroyed) {
+    for (const id of getDestroyedEntities()) {
       const e = getEntity(id);
       if (e.isEnemy) {
         onEnemyDestroy(e);
@@ -84,19 +85,14 @@ run({
       if (e.isAttack) {
         onAttackDestroy(e);
       }
+      removeEntity(id);
+      removeFromWorld(id);
+      zeroEntity(e);
     }
 
-    cleanupDestroyedEntities();
-    sortEntitiesOnDepth();
-  },
+    clearDestroyedEntities();
 
-  render: () => {
-    for (const id of game.render) {
-      const e = getEntity(id);
-      renderEntity(e);
-    }
-
-    for (const id of game.enemies) {
+    for (const id of getEnemiesGroup()) {
       const e = getEntity(id);
       renderEntityStatus(e);
     }
@@ -110,30 +106,12 @@ run({
       scaleTransform(0.5, 0.5);
       debugFps();
       translateTransform(0, 11);
-      debugEntities();
     }
   },
 });
 
-function sortEntitiesOnDepth() {
-  game.render.sort((idA, idB) => {
-    const a = game.entities[idA];
-    const b = game.entities[idB];
-    return a.position.y + a.depth - b.position.y + b.depth;
-  });
-}
-
-function cleanupDestroyedEntities() {
-  if (game.destroyed.length) {
-    for (const id of game.destroyed) {
-      const e = getEntity(id);
-      remove(game.update, id);
-      remove(game.render, id);
-      remove(game.allies, id);
-      remove(game.enemies, id);
-      remove(game.bodies, e.body);
-      zeroEntity(e);
-    }
-    game.destroyed.length = 0;
-  }
+function sortEntitiesOnDepth(idA: number, idB: number): number {
+  const a = getEntity(idA);
+  const b = getEntity(idB);
+  return a.position.y + a.depth - b.position.y + b.depth;
 }
