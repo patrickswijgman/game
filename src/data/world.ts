@@ -1,8 +1,7 @@
 import { COLOR_GRASS } from "@/consts/colors.js";
-import { MAX_ENEMIES } from "@/consts/entity.js";
+import { ENEMY_SPAWN_TIME_MAX, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_REDUCE, MAX_ENEMIES, UPGRADES_CHOICE_AMOUNT } from "@/consts/global.js";
 import { UpgradeId } from "@/consts/upgrade.js";
-import { ENEMY_SPAWN_TIME_MAX, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_REDUCE, UPGRADES_CHOICE_AMOUNT } from "@/consts/world.js";
-import { getEntity } from "@/core/entities.js";
+import { getEntity } from "@/data/entities.js";
 import { writeRandomPointInPerimeterBetweenRectangles } from "@/engine/rectangle.js";
 import { addMeleeEnemy } from "@/entities/enemy-melee.js";
 import { addPlayer } from "@/entities/player.js";

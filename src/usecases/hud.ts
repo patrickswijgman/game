@@ -1,4 +1,4 @@
-import { getPlayer } from "@/core/world.js";
+import { getPlayer } from "@/data/world.js";
 import { isPlayerAlive } from "@/usecases/player.js";
 import { drawExperienceBar, drawHealthBar } from "@/usecases/ui.js";
 import { getWidth, resetTransform, translateTransform } from "ridder";

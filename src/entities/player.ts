@@ -1,10 +1,10 @@
 import { SpriteId } from "@/consts/assets.js";
 import { AttackId } from "@/consts/attack.js";
 import { Type } from "@/consts/entity.js";
-import { XP_PER_LEVEL } from "@/consts/player.js";
+import { XP_PER_LEVEL } from "@/consts/global.js";
 import { StateId } from "@/consts/state.js";
-import { addToAlliesGroup, setPlayer } from "@/core/world.js";
 import { Entity } from "@/data/entity.js";
+import { addToAlliesGroup, setPlayer } from "@/data/world.js";
 import { onPlayerStateEnter, onPlayerStateExit, onPlayerStateUpdate } from "@/states/player.js";
 import { addEntity, setBody, setCenter, setHitbox, setShadow, setSprite, setState, updateState } from "@/usecases/entity.js";
 import { setVector } from "ridder";

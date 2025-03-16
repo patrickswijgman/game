@@ -1,8 +1,8 @@
 import { updateAttackAnimation } from "@/anims/attack.js";
 import { StateId } from "@/consts/state.js";
+import { getAttack } from "@/data/attacks.js";
 import { Entity } from "@/data/entity.js";
 import { addAttack } from "@/entities/attack.js";
-import { getAttack } from "@/usecases/attack.js";
 import { setState } from "@/usecases/entity.js";
 import { tickTimer } from "ridder";
 

@@ -1,14 +1,9 @@
-import { AttackId } from "@/consts/attack.js";
-import { destroyEntity, getEntity } from "@/core/entities.js";
-import { getAlliesGroup, getBodies, getEnemiesGroup } from "@/core/world.js";
-import { attacks } from "@/data/attacks.js";
+import { getAttack } from "@/data/attacks.js";
+import { destroyEntity, getEntity } from "@/data/entities.js";
 import { Entity } from "@/data/entity.js";
+import { getAlliesGroup, getBodies, getEnemiesGroup } from "@/data/world.js";
 import { dealDamage } from "@/usecases/combat.js";
 import { doRectanglesIntersect, getVectorDistance } from "ridder";
-
-export function getAttack(id: AttackId) {
-  return attacks[id];
-}
 
 export function dealDamageToTargets(e: Entity) {
   const caster = getEntity(e.casterId);

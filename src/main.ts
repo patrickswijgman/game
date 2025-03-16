@@ -1,7 +1,7 @@
 import { Type } from "@/consts/entity.js";
-import { clearDestroyedEntities, getDestroyedEntities, getEntities, getEntity, removeEntity, sortEntities } from "@/core/entities.js";
-import { getEnemiesGroup, getPlayer, removeFromWorld, setupWorld, spawnEnemies } from "@/core/world.js";
+import { clearDestroyedEntities, getDestroyedEntities, getEntities, getEntity, removeEntity, sortEntities } from "@/data/entities.js";
 import { zeroEntity } from "@/data/entity.js";
+import { getEnemiesGroup, getPlayer, removeFromWorld, setupWorld, spawnEnemies } from "@/data/world.js";
 import { updateAttack } from "@/entities/attack.js";
 import { updateCombatText } from "@/entities/combat-text.js";
 import { updateMeleeEnemy } from "@/entities/enemy-melee.js";

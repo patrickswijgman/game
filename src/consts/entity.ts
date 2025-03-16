@@ -7,6 +7,3 @@ export const enum Type {
   ATTACK,
   COMBAT_TEXT,
 }
-
-export const MAX_ENTITIES = 2048;
-export const MAX_ENEMIES = 500;

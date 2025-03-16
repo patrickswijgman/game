@@ -1,6 +1,6 @@
-import { getEnemiesGroup, getPlayer } from "@/core/world.js";
+import { getAttack } from "@/data/attacks.js";
 import { Entity } from "@/data/entity.js";
-import { getAttack } from "@/usecases/attack.js";
+import { getEnemiesGroup, getPlayer } from "@/data/world.js";
 import { isPlayerAlive } from "@/usecases/player.js";
 import { avoid, seek } from "@/usecases/steering.js";
 import { copyVector, getVectorDistance, normalizeVector, subtractVector } from "ridder";

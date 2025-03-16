@@ -1,4 +1,4 @@
-import { MAX_ENTITIES } from "@/consts/entity.js";
+import { MAX_ENTITIES } from "@/consts/global.js";
 import { Entity, newEntity } from "@/data/entity.js";
 import { clamp, remove, table, Table } from "ridder";
 

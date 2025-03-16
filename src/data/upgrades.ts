@@ -7,7 +7,7 @@ export type Upgrade = {
   stats: Stats;
 };
 
-export const upgrades = table<Upgrade>(UpgradeId.MAX, (id) => {
+const upgrades = table<Upgrade>(UpgradeId.MAX, (id) => {
   switch (id) {
     case UpgradeId.HEALTH:
       return {
@@ -65,3 +65,7 @@ export const upgrades = table<Upgrade>(UpgradeId.MAX, (id) => {
       };
   }
 });
+
+export function getUpgrade(id: UpgradeId) {
+  return upgrades[id];
+}

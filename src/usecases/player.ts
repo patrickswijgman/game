@@ -1,4 +1,4 @@
-import { getPlayer } from "@/core/world.js";
+import { getPlayer } from "@/data/world.js";
 
 export function isPlayerAlive() {
   const player = getPlayer();

@@ -1,8 +1,8 @@
 import { updateExperienceOrbIdleAnimation, updateExperienceOrbSeekAnimation } from "@/anims/xp-orb.js";
 import { StateId } from "@/consts/state.js";
-import { destroyEntity } from "@/core/entities.js";
-import { getPlayer } from "@/core/world.js";
+import { destroyEntity } from "@/data/entities.js";
 import { Entity } from "@/data/entity.js";
+import { getPlayer } from "@/data/world.js";
 import { addExperience } from "@/usecases/combat.js";
 import { setState } from "@/usecases/entity.js";
 import { isPlayerAlive } from "@/usecases/player.js";

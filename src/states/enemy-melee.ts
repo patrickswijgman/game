@@ -1,9 +1,9 @@
 import { updateBreathAnimation } from "@/anims/breath.js";
 import { updateWalkAnimation } from "@/anims/walk.js";
 import { StateId } from "@/consts/state.js";
+import { getAttack } from "@/data/attacks.js";
 import { Entity } from "@/data/entity.js";
 import { isPlayerInAttackRange, lookAtPlayer, moveTowardsPlayer } from "@/states/enemy.js";
-import { getAttack } from "@/usecases/attack.js";
 import { setState } from "@/usecases/entity.js";
 import { isPlayerAlive } from "@/usecases/player.js";
 import { tickTimer } from "ridder";

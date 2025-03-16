@@ -1,7 +1,7 @@
-import { XP_PER_LEVEL } from "@/consts/player.js";
+import { XP_PER_LEVEL } from "@/consts/global.js";
 import { StateId } from "@/consts/state.js";
-import { getPlayer, updateUpgradeChoices } from "@/core/world.js";
 import { Entity } from "@/data/entity.js";
+import { getPlayer, updateUpgradeChoices } from "@/data/world.js";
 import { addCombatText } from "@/entities/combat-text.js";
 import { setState } from "@/usecases/entity.js";
 import { isPlayerAlive } from "@/usecases/player.js";

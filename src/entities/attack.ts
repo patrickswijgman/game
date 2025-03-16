@@ -1,7 +1,8 @@
 import { Type } from "@/consts/entity.js";
-import { getEntity } from "@/core/entities.js";
+import { getAttack } from "@/data/attacks.js";
+import { getEntity } from "@/data/entities.js";
 import { Entity } from "@/data/entity.js";
-import { dealDamageToTargets, destroyIfHitsWall, destroyIfOutOfRange, getAttack } from "@/usecases/attack.js";
+import { dealDamageToTargets, destroyIfHitsWall, destroyIfOutOfRange } from "@/usecases/attack.js";
 import { addEntity, setHitbox, setSprite } from "@/usecases/entity.js";
 import { addStats, copyStats } from "@/usecases/stats.js";
 import { addVector, copyVector, getAngle, scaleVector } from "ridder";

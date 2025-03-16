@@ -1,5 +1,5 @@
-import { getEntities, getEntity } from "@/core/entities.js";
-import { getBodies } from "@/core/world.js";
+import { getEntities, getEntity } from "@/data/entities.js";
+import { getBodies } from "@/data/world.js";
 import { applyCameraTransform, drawRectInstance, drawText, getFramePerSecond, isRectangleValid, resetTransform } from "ridder";
 
 export function debugHitboxes() {

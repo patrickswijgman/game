@@ -15,7 +15,7 @@ export type Attack = {
   stats: Stats;
 };
 
-export const attacks = table<Attack>(AttackId.MAX, (id) => {
+const attacks = table<Attack>(AttackId.MAX, (id) => {
   switch (id) {
     case AttackId.PLAYER:
       return {
@@ -61,3 +61,7 @@ export const attacks = table<Attack>(AttackId.MAX, (id) => {
       };
   }
 });
+
+export function getAttack(id: AttackId) {
+  return attacks[id];
+}

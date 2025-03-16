@@ -1,4 +1,4 @@
-import { getEntity } from "@/core/entities.js";
+import { getEntity } from "@/data/entities.js";
 import { Entity } from "@/data/entity.js";
 import { addVector, addVectorScaled, copyVector, getDelta, getVectorDistance, getVectorLength, normalizeVector, resetVector, scaleVector, subtractVector, Vector } from "ridder";
 
