@@ -27,7 +27,7 @@ export function isPlayerInAttackRange(e: Entity) {
     const distance = getVectorDistance(e.position, player.position);
     const attack = getAttack(e.attackId);
 
-    if (attack && distance < attack.stats.range) {
+    if (attack && distance < attack.stats.attackRange) {
       return true;
     }
   }

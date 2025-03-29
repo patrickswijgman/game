@@ -6,4 +6,5 @@ export const enum Type {
   XP_ORB,
   ATTACK,
   COMBAT_TEXT,
+  UI_UPGRADE,
 }

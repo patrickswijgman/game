@@ -1,15 +1,21 @@
 import { COLOR_GRASS } from "@/consts/colors.js";
 import { ENEMY_SPAWN_TIME_MAX, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_REDUCE, MAX_ENEMIES, UPGRADES_CHOICE_AMOUNT } from "@/consts/global.js";
 import { UpgradeId } from "@/consts/upgrade.js";
-import { getEntity } from "@/data/entities.js";
-import { writeRandomPointInPerimeterBetweenRectangles } from "@/engine/rectangle.js";
+import { WorldStateId } from "@/consts/world.js";
+import { destroyEntity, getEntity } from "@/data/entities.js";
+import { getUpgrade } from "@/data/upgrades.js";
 import { addMeleeEnemy } from "@/entities/enemy-melee.js";
 import { addPlayer } from "@/entities/player.js";
 import { addTree } from "@/entities/tree.js";
+import { addUpgrade } from "@/entities/upgrade.js";
 import { isPlayerAlive } from "@/usecases/player.js";
-import { clamp, doesRectangleContain, pick, random, rect, Rectangle, remove, resetTimer, setBackgroundColor, setCameraBounds, setCameraPosition, setCameraSmoothing, setRectangle, tickTimer, timer, Timer, vec, Vector } from "ridder";
+import { addStats } from "@/usecases/stats.js";
+import { clamp, doesRectangleContain, getHeight, getWidth, InputCode, pick, random, rect, Rectangle, remove, resetInput, resetTimer, setBackgroundColor, setCameraBounds, setCameraPosition, setCameraSmoothing, setRectangle, tickTimer, timer, Timer, vec, Vector, writeRandomPointInPerimeterBetweenRectangles } from "ridder";
 
 export type World = {
+  // State
+  stateId: WorldStateId;
+
   // Boundary
   bounds: Rectangle;
   boundsOutside: Rectangle;
@@ -21,6 +27,7 @@ export type World = {
   // Groups
   allies: Array<number>;
   enemies: Array<number>;
+  temp: Array<number>;
 
   // Enemy spawning
   spawnTime: number;
@@ -36,6 +43,9 @@ export type World = {
 };
 
 const world: World = {
+  // State
+  stateId: WorldStateId.NONE,
+
   // Boundary
   bounds: rect(),
   boundsOutside: rect(),
@@ -47,6 +57,7 @@ const world: World = {
   // Groups
   allies: [],
   enemies: [],
+  temp: [],
 
   // Enemy spawning
   spawnTime: 0,
@@ -106,6 +117,12 @@ export function setupWorld() {
       addTree(x, y);
     }
   }
+
+  world.stateId = WorldStateId.NORMAL;
+}
+
+export function getWorldState() {
+  return world.stateId;
 }
 
 export function getAlliesGroup(): Readonly<Array<number>> {
@@ -128,6 +145,7 @@ export function removeFromWorld(id: number) {
   const e = getEntity(id);
   remove(world.allies, id);
   remove(world.enemies, id);
+  remove(world.temp, id);
   remove(world.bodies, e.body);
 }
 
@@ -159,18 +177,46 @@ export function spawnEnemies() {
   }
 }
 
-export function updateUpgradeChoices() {
-  for (let i = 0; i < UPGRADES_CHOICE_AMOUNT; i++) {
-    const upgrade = pick(world.upgrades);
+export function chooseUpgrade() {
+  world.upgradeChoices.length = 0;
 
-    if (upgrade) {
-      remove(world.upgrades, upgrade);
-      world.upgradeChoices.push(upgrade);
-      // TODO: Add not-chosen upgrades back into the pool.
-      //       Prevents that the exact same upgrade is rolled twice.
-      //       However if there are two damage upgrades, then it is possible to get two damage upgrade choices.
+  for (let i = 0; i < UPGRADES_CHOICE_AMOUNT; i++) {
+    const id = pick(world.upgrades);
+
+    if (id) {
+      remove(world.upgrades, id);
+      world.upgradeChoices.push(id);
     }
   }
+
+  for (let i = 0; i < world.upgradeChoices.length; i++) {
+    const id = world.upgradeChoices[i];
+    const x = (getWidth() / (UPGRADES_CHOICE_AMOUNT + 1)) * (i + 1) - 50;
+    const y = getHeight() / 2 - 50;
+    const e = addUpgrade(x, y, id);
+    world.temp.push(e.id);
+  }
+
+  if (world.upgradeChoices.length) {
+    resetInput(InputCode.MOUSE_LEFT);
+    world.stateId = WorldStateId.CHOOSE_UPGRADE;
+  }
+}
+
+export function confirmUpgradeChoice(id: UpgradeId) {
+  remove(world.upgrades, id);
+  remove(world.upgradeChoices, id);
+  world.upgrades.push(...world.upgradeChoices);
+
+  const upgrade = getUpgrade(id);
+  const player = getPlayer();
+  addStats(player.stats, upgrade.stats);
+
+  for (const id of world.temp) {
+    destroyEntity(id);
+  }
+
+  world.stateId = WorldStateId.NORMAL;
 }
 
 export function addUpgradeToPool(id: UpgradeId, amount: number) {

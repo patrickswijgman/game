@@ -1,4 +1,3 @@
-import { getAttack } from "@/data/attacks.js";
 import { destroyEntity, getEntity } from "@/data/entities.js";
 import { Entity } from "@/data/entity.js";
 import { getAlliesGroup, getBodies, getEnemiesGroup } from "@/data/world.js";
@@ -44,11 +43,9 @@ export function destroyIfHitsWall(e: Entity) {
 }
 
 export function destroyIfOutOfRange(e: Entity) {
-  const caster = getEntity(e.casterId);
-  const attack = getAttack(caster.attackId);
   const traveled = getVectorDistance(e.start, e.position);
 
-  if (attack.stats.range && traveled > attack.stats.range) {
+  if (e.stats.attackRange && traveled > e.stats.attackRange) {
     destroyEntity(e.id);
     return true;
   }

@@ -30,7 +30,7 @@ const upgrades = table<Upgrade>(UpgradeId.MAX, (id) => {
       return {
         name: "Range",
         stats: newStats({
-          range: 20,
+          attackRange: 20,
         }),
       };
 
@@ -44,7 +44,7 @@ const upgrades = table<Upgrade>(UpgradeId.MAX, (id) => {
 
     case UpgradeId.PICKUP_RANGE:
       return {
-        name: "Pick up Range",
+        name: "Pickup Range",
         stats: newStats({
           pickupRange: 30,
         }),
@@ -52,7 +52,7 @@ const upgrades = table<Upgrade>(UpgradeId.MAX, (id) => {
 
     case UpgradeId.MOVEMENT_SPEED:
       return {
-        name: "Pick up Range",
+        name: "Movement Speed",
         stats: newStats({
           movementSpeed: 0.15,
         }),

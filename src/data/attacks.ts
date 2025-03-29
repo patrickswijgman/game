@@ -27,9 +27,7 @@ const attacks = table<Attack>(AttackId.MAX, (id) => {
         delay: 0,
         duration: 0,
         recovery: 500,
-        stats: newStats({
-          range: 40,
-        }),
+        stats: newStats(),
       };
 
     case AttackId.ENEMY_MELEE:
@@ -43,7 +41,7 @@ const attacks = table<Attack>(AttackId.MAX, (id) => {
         duration: 150,
         recovery: 250,
         stats: newStats({
-          range: 10,
+          attackRange: 10,
         }),
       };
 

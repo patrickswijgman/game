@@ -47,6 +47,12 @@ export function setBody(e: Entity, x: number, y: number, w: number, h: number) {
   addBody(e.body);
 }
 
+export function setHitarea(e: Entity, x: number, y: number, w: number, h: number) {
+  setVector(e.hitareaOffset, x, y);
+  setRectangle(e.hitarea, 0, 0, w, h);
+  updateHitarea(e);
+}
+
 export function setState(e: Entity, stateId: StateId) {
   e.stateNextId = stateId;
 }
@@ -103,6 +109,11 @@ export function updateHitbox(e: Entity) {
   addVector(e.hitbox, e.hitboxOffset);
 }
 
+export function updateHitarea(e: Entity) {
+  copyVector(e.hitarea, e.position);
+  addVector(e.hitarea, e.hitareaOffset);
+}
+
 export function updateBody(e: Entity) {
   copyVector(e.body, e.position);
   addVector(e.body, e.bodyOffset);
@@ -120,7 +131,7 @@ export function resetEntity(e: Entity) {
 
 export function renderEntity(e: Entity) {
   resetTransform();
-  applyCameraTransform();
+  applyCameraTransform(e.scroll.x, e.scroll.y);
   translateTransform(e.position.x, e.position.y);
   scaleTransform(e.scale.x, e.scale.y);
   rotateTransform(e.angle);

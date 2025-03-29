@@ -20,6 +20,8 @@ export const enum SpriteId {
   XP_ORB_SHADOW,
   ATTACK_ARROW,
   ATTACK_ENEMY_MELEE,
+  UI_UPGRADE_BG,
+  UI_UPGRADE_OUTLINE,
 }
 
 export const enum FontId {

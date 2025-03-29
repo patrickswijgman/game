@@ -2,6 +2,7 @@ import { SpriteId } from "@/consts/assets.js";
 import { AttackId } from "@/consts/attack.js";
 import { Type } from "@/consts/entity.js";
 import { StateId } from "@/consts/state.js";
+import { UpgradeId } from "@/consts/upgrade.js";
 import { newStats, Stats } from "@/data/stats.js";
 import { rect, Rectangle, setVector, timer, Timer, vec, Vector, zero } from "ridder";
 
@@ -30,6 +31,7 @@ export type Entity = {
   spriteId: SpriteId;
   pivot: Vector;
   scale: Vector;
+  scroll: Vector;
   angle: number;
   depth: number;
   isFlipped: boolean;
@@ -81,6 +83,11 @@ export type Entity = {
 
   // Attack
   casterId: number;
+
+  // Interaction
+  hitarea: Rectangle;
+  hitareaOffset: Vector;
+  upgradeId: UpgradeId;
 };
 
 export function newEntity(): Entity {
@@ -109,6 +116,7 @@ export function newEntity(): Entity {
     spriteId: SpriteId.NONE,
     pivot: vec(0, 0),
     scale: vec(1, 1),
+    scroll: vec(1, 1),
     angle: 0,
     depth: 0,
     isFlipped: false,
@@ -160,11 +168,17 @@ export function newEntity(): Entity {
 
     // Attack
     casterId: 0,
+
+    // Interaction
+    hitarea: rect(),
+    hitareaOffset: vec(),
+    upgradeId: UpgradeId.NONE,
   };
 }
 
 export function zeroEntity(e: Entity) {
   zero(e);
   setVector(e.scale, 1, 1);
+  setVector(e.scroll, 1, 1);
   setVector(e.tweenScale, 1, 1);
 }

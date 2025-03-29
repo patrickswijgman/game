@@ -23,6 +23,9 @@ export async function loadAssets() {
   loadSprite(SpriteId.XP_ORB, TextureId.ATLAS, 16, 80, 16, 16);
   loadSprite(SpriteId.XP_ORB_SHADOW, TextureId.ATLAS, 16, 96, 16, 16);
 
+  loadSprite(SpriteId.UI_UPGRADE_BG, TextureId.ATLAS, 128, 128, 128, 128);
+  loadSprite(SpriteId.UI_UPGRADE_OUTLINE, TextureId.ATLAS_OUTLINE, 128, 128, 128, 128);
+
   await loadFont(FontId.DEFAULT, "fonts/pixelmix.ttf", "pixelmix", 8);
 
   setFont(FontId.DEFAULT);

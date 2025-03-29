@@ -7,7 +7,7 @@ export type Stats = {
   damage: number;
   critChance: number;
   critDamage: number;
-  range: number;
+  attackRange: number;
   pickupRange: number;
   movementSpeed: number;
 };
@@ -22,7 +22,7 @@ export function newStats(stats: Partial<Stats> = {}): Stats {
     damage: 0,
     critChance: 0,
     critDamage: 0,
-    range: 0,
+    attackRange: 0,
     pickupRange: 0,
     movementSpeed: 0,
     ...stats,

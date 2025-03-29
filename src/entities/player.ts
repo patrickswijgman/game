@@ -26,6 +26,7 @@ export function addPlayer(x: number, y: number) {
   e.stats.critChance = 0.05;
   e.stats.critDamage = 2;
   e.stats.movementSpeed = 0.6;
+  e.stats.attackRange = 40;
   e.stats.pickupRange = 30;
   e.stats.experience = 0;
   e.stats.experienceMax = XP_PER_LEVEL;
