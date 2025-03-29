@@ -23,6 +23,6 @@
     "vitest": "^2.1.8"
   },
   "dependencies": {
-    "ridder": "file:../ridder/ridder"
+    "ridder": "^4.1.0"
   }
 }
