@@ -1,6 +1,16 @@
-import { UpgradeId } from "@/consts/upgrade.js";
-import { newStats, Stats } from "@/data/stats.js";
+import { newStats, Stats } from "@/core/stats.js";
 import { table } from "ridder";
+
+export const enum UpgradeId {
+  NONE,
+  HEALTH,
+  DAMAGE,
+  RANGE,
+  CRIT_CHANCE,
+  PICKUP_RANGE,
+  MOVEMENT_SPEED,
+  MAX,
+}
 
 export type Upgrade = {
   name: string;

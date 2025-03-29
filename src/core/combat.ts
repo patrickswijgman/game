@@ -1,11 +1,8 @@
-import { XP_PER_LEVEL } from "@/consts/global.js";
-import { StateId } from "@/consts/state.js";
-import { Entity } from "@/data/entity.js";
-import { chooseUpgrade, getPlayer } from "@/data/world.js";
+import { XP_PER_LEVEL } from "@/consts.js";
+import { Entity, setState, StateId } from "@/core/entity.js";
+import { clampStats } from "@/core/stats.js";
+import { chooseUpgrade, getPlayer, isPlayerAlive } from "@/core/world.js";
 import { addCombatText } from "@/entities/combat-text.js";
-import { setState } from "@/usecases/entity.js";
-import { isPlayerAlive } from "@/usecases/player.js";
-import { clampStats } from "@/usecases/stats.js";
 import { roll } from "ridder";
 
 export function dealDamage(attack: Entity, target: Entity) {

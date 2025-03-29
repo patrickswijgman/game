@@ -1,23 +1,16 @@
-import { Type } from "@/consts/entity.js";
-import { WorldStateId } from "@/consts/world.js";
-import { clearDestroyedEntities, getDestroyedEntities, getEntities, getEntity, removeEntity, sortEntities } from "@/data/entities.js";
-import { zeroEntity } from "@/data/entity.js";
-import { getEnemiesGroup, getPlayer, getWorldState, removeFromWorld, setupWorld, spawnEnemies } from "@/data/world.js";
-import { updateAttack } from "@/entities/attack.js";
+import { loadAssets } from "@/core/assets.js";
+import { clearDestroyedEntities, getDestroyedEntities, getEntities, getEntity, removeEntity, sortEntities } from "@/core/entities.js";
+import { destroyIfDead, destroyIfExpired, renderEntity, renderEntityStatus, Type, updateCollisions, updatePhysics, zeroEntity } from "@/core/entity.js";
+import { renderHud } from "@/core/ui.js";
+import { getBodies, getEnemiesGroup, getPlayer, getWorldState, isPlayerAlive, removeFromWorld, setupWorld, spawnEnemies, WorldStateId } from "@/core/world.js";
+import { onAttackDestroy, updateAttack } from "@/entities/attack.js";
 import { updateCombatText } from "@/entities/combat-text.js";
-import { updateMeleeEnemy } from "@/entities/enemy-melee.js";
+import { onEnemyDestroy, updateEnemy } from "@/entities/enemy.js";
 import { updatePlayer } from "@/entities/player.js";
 import { updateTree } from "@/entities/tree.js";
 import { renderUpgrade, updateUpgrade } from "@/entities/upgrade.js";
 import { updateExperienceOrb } from "@/entities/xp-orb.js";
-import { loadAssets } from "@/usecases/assets.js";
-import { onAttackDestroy } from "@/usecases/attack.js";
-import { debugBodies, debugFps, debugHitboxes } from "@/usecases/debug.js";
-import { onEnemyDestroy } from "@/usecases/enemy.js";
-import { destroyIfDead, destroyIfExpired, renderEntity, renderEntityStatus, updateCollisions, updatePhysics } from "@/usecases/entity.js";
-import { renderHud } from "@/usecases/hud.js";
-import { isPlayerAlive } from "@/usecases/player.js";
-import { InputCode, isInputPressed, resetTransform, run, scaleTransform, translateTransform, updateCamera } from "ridder";
+import { applyCameraTransform, drawRectInstance, drawText, getFramePerSecond, InputCode, isInputPressed, isRectangleValid, resetTransform, run, scaleTransform, translateTransform, updateCamera } from "ridder";
 
 let isDebugging = false;
 
@@ -62,8 +55,8 @@ run({
               case Type.PLAYER:
                 updatePlayer(e);
                 break;
-              case Type.ENEMY_MELEE:
-                updateMeleeEnemy(e);
+              case Type.ENEMY:
+                updateEnemy(e);
                 break;
               case Type.TREE:
                 updateTree(e);
@@ -146,4 +139,29 @@ function sortEntitiesOnDepth(idA: number, idB: number): number {
   const a = getEntity(idA);
   const b = getEntity(idB);
   return a.position.y + a.depth - b.position.y + b.depth;
+}
+
+function debugHitboxes() {
+  resetTransform();
+  applyCameraTransform();
+  for (const id of getEntities()) {
+    const e = getEntity(id);
+    if (isRectangleValid(e.hitbox)) {
+      drawRectInstance(e.hitbox, "yellow", false);
+    }
+  }
+}
+
+function debugBodies() {
+  resetTransform();
+  applyCameraTransform();
+  for (const body of getBodies()) {
+    if (isRectangleValid(body)) {
+      drawRectInstance(body, "red", false);
+    }
+  }
+}
+
+function debugFps() {
+  drawText(`FPS: ${getFramePerSecond()}`, 1, 1, "lime");
 }

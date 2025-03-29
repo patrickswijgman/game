@@ -1,5 +1,5 @@
-import { getEntity } from "@/data/entities.js";
-import { Entity } from "@/data/entity.js";
+import { getEntity } from "@/core/entities.js";
+import { Entity } from "@/core/entity.js";
 import { addVector, addVectorScaled, copyVector, getDelta, getVectorDistance, getVectorLength, normalizeVector, resetVector, scaleVector, subtractVector, Vector } from "ridder";
 
 export function seek(e: Entity, target: Vector, speed: number) {

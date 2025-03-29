@@ -1,5 +1,34 @@
-import { FontId, SpriteId, TextureId } from "@/consts/assets.js";
 import { loadFlashTexture, loadFont, loadOutlineTexture, loadSprite, loadTexture, setFont } from "ridder";
+
+export const enum TextureId {
+  NONE,
+  ATLAS,
+  ATLAS_OUTLINE,
+  ATLAS_FLASH,
+  FLOOR,
+}
+
+export const enum SpriteId {
+  NONE,
+  PLAYER,
+  PLAYER_SHADOW,
+  PLAYER_FLASH,
+  ENEMY_MELEE,
+  ENEMY_MELEE_SHADOW,
+  ENEMY_MELEE_FLASH,
+  TREE_PINE,
+  TREE_SHADOW,
+  XP_ORB,
+  XP_ORB_SHADOW,
+  ATTACK_ARROW,
+  ATTACK_ENEMY_MELEE,
+  UI_UPGRADE_BG,
+  UI_UPGRADE_OUTLINE,
+}
+
+export const enum FontId {
+  DEFAULT,
+}
 
 export async function loadAssets() {
   await loadTexture(TextureId.ATLAS, "textures/atlas.png");

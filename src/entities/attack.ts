@@ -1,11 +1,12 @@
-import { Type } from "@/consts/entity.js";
-import { getAttack } from "@/data/attacks.js";
-import { getEntity } from "@/data/entities.js";
-import { Entity } from "@/data/entity.js";
-import { dealDamageToTargets, destroyIfHitsWall, destroyIfOutOfRange } from "@/usecases/attack.js";
-import { addEntity, setHitbox, setSprite } from "@/usecases/entity.js";
-import { addStats, copyStats } from "@/usecases/stats.js";
-import { addVector, copyVector, getAngle, scaleVector } from "ridder";
+import { Type } from "@/core/entity.js";
+import { getAttack } from "@/core/attacks.js";
+import { destroyEntity, getEntity } from "@/core/entities.js";
+import { Entity } from "@/core/entity.js";
+import { getAlliesGroup, getBodies, getEnemiesGroup } from "@/core/world.js";
+import { dealDamage } from "@/core/combat.js";
+import { addEntity, setHitbox, setSprite } from "@/core/entity.js";
+import { addStats, copyStats } from "@/core/stats.js";
+import { addVector, copyVector, doRectanglesIntersect, getAngle, getVectorDistance, scaleVector } from "ridder";
 
 export function addAttack(caster: Entity) {
   const e = addEntity(Type.ATTACK, 0, 0);
@@ -51,3 +52,54 @@ export function updateAttack(e: Entity) {
 
   destroyIfOutOfRange(e);
 }
+
+function dealDamageToTargets(e: Entity) {
+  const caster = getEntity(e.casterId);
+  const targets = caster.isPlayer ? getEnemiesGroup() : getAlliesGroup();
+
+  for (const id of targets) {
+    if (id === caster.id) {
+      continue;
+    }
+
+    const target = getEntity(id);
+
+    if (doRectanglesIntersect(e.hitbox, target.hitbox)) {
+      dealDamage(e, target);
+      destroyEntity(e.id);
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function destroyIfHitsWall(e: Entity) {
+  const caster = getEntity(e.casterId);
+
+  for (const body of getBodies()) {
+    if (body === caster.body) {
+      continue;
+    }
+
+    if (doRectanglesIntersect(e.hitbox, body)) {
+      destroyEntity(e.id);
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function destroyIfOutOfRange(e: Entity) {
+  const traveled = getVectorDistance(e.start, e.position);
+
+  if (e.stats.attackRange && traveled > e.stats.attackRange) {
+    destroyEntity(e.id);
+    return true;
+  }
+
+  return false;
+}
+
+export function onAttackDestroy(e: Entity) {}

@@ -1,7 +1,7 @@
 import { updateCombatTextAnimation } from "@/anims/combat-text.js";
-import { Type } from "@/consts/entity.js";
-import { Entity } from "@/data/entity.js";
-import { addEntity } from "@/usecases/entity.js";
+import { Type } from "@/core/entity.js";
+import { Entity } from "@/core/entity.js";
+import { addEntity } from "@/core/entity.js";
 import { setVector } from "ridder";
 
 export function addCombatText(target: Entity, text: string) {

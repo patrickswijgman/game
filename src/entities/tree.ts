@@ -1,8 +1,8 @@
 import { updateWindAnimation } from "@/anims/wind.js";
-import { SpriteId } from "@/consts/assets.js";
-import { Type } from "@/consts/entity.js";
-import { Entity } from "@/data/entity.js";
-import { addEntity, setShadow, setSprite } from "@/usecases/entity.js";
+import { SpriteId } from "@/core/assets.js";
+import { Type } from "@/core/entity.js";
+import { Entity } from "@/core/entity.js";
+import { addEntity, setShadow, setSprite } from "@/core/entity.js";
 import { random } from "ridder";
 
 export function addTree(x: number, y: number) {

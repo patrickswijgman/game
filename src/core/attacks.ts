@@ -1,7 +1,13 @@
-import { SpriteId } from "@/consts/assets.js";
-import { AttackId } from "@/consts/attack.js";
-import { newStats, Stats } from "@/data/stats.js";
+import { SpriteId } from "@/core/assets.js";
+import { newStats, Stats } from "@/core/stats.js";
 import { rect, Rectangle, table, vec, Vector } from "ridder";
+
+export const enum AttackId {
+  NONE,
+  PLAYER,
+  ENEMY_MELEE,
+  MAX,
+}
 
 export type Attack = {
   spriteId: SpriteId;

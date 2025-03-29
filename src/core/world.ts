@@ -1,16 +1,18 @@
-import { COLOR_GRASS } from "@/consts/colors.js";
-import { ENEMY_SPAWN_TIME_MAX, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_REDUCE, MAX_ENEMIES, UPGRADES_CHOICE_AMOUNT } from "@/consts/global.js";
-import { UpgradeId } from "@/consts/upgrade.js";
-import { WorldStateId } from "@/consts/world.js";
-import { destroyEntity, getEntity } from "@/data/entities.js";
-import { getUpgrade } from "@/data/upgrades.js";
+import { COLOR_GRASS, ENEMY_SPAWN_TIME_MAX, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_REDUCE, MAX_ENEMIES, UPGRADES_CHOICE_AMOUNT } from "@/consts.js";
+import { destroyEntity, getEntity } from "@/core/entities.js";
+import { addStats } from "@/core/stats.js";
+import { getUpgrade, UpgradeId } from "@/core/upgrades.js";
 import { addMeleeEnemy } from "@/entities/enemy-melee.js";
 import { addPlayer } from "@/entities/player.js";
 import { addTree } from "@/entities/tree.js";
 import { addUpgrade } from "@/entities/upgrade.js";
-import { isPlayerAlive } from "@/usecases/player.js";
-import { addStats } from "@/usecases/stats.js";
 import { clamp, doesRectangleContain, getHeight, getWidth, InputCode, pick, random, rect, Rectangle, remove, resetInput, resetTimer, setBackgroundColor, setCameraBounds, setCameraPosition, setCameraSmoothing, setRectangle, tickTimer, timer, Timer, vec, Vector, writeRandomPointInPerimeterBetweenRectangles } from "ridder";
+
+export const enum WorldStateId {
+  NONE,
+  NORMAL,
+  CHOOSE_UPGRADE,
+}
 
 export type World = {
   // State
@@ -163,6 +165,11 @@ export function setPlayer(id: number) {
 
 export function getPlayer() {
   return getEntity(world.playerId);
+}
+
+export function isPlayerAlive() {
+  const player = getPlayer();
+  return player.isPlayer && !!player.stats.health;
 }
 
 export function spawnEnemies() {

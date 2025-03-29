@@ -1,5 +1,5 @@
-import { MAX_ENTITIES } from "@/consts/global.js";
-import { Entity, newEntity } from "@/data/entity.js";
+import { MAX_ENTITIES } from "@/consts.js";
+import { Entity, newEntity } from "@/core/entity.js";
 import { clamp, remove, table, Table } from "ridder";
 
 export type Entities = {

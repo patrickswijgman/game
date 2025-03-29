@@ -1,11 +1,8 @@
-import { SpriteId } from "@/consts/assets.js";
-import { Type } from "@/consts/entity.js";
-import { UpgradeId } from "@/consts/upgrade.js";
-import { Entity } from "@/data/entity.js";
-import { Stats } from "@/data/stats.js";
-import { getUpgrade, Upgrade } from "@/data/upgrades.js";
-import { confirmUpgradeChoice, getPlayer } from "@/data/world.js";
-import { addEntity, setHitarea, setSprite } from "@/usecases/entity.js";
+import { SpriteId } from "@/core/assets.js";
+import { addEntity, Entity, setHitarea, setSprite, Type } from "@/core/entity.js";
+import { Stats } from "@/core/stats.js";
+import { getUpgrade, Upgrade, UpgradeId } from "@/core/upgrades.js";
+import { confirmUpgradeChoice, getPlayer } from "@/core/world.js";
 import { doesRectangleContain, drawText, getMousePosition, InputCode, isInputPressed, scaleTransform, setVector, translateTransform } from "ridder";
 
 export function addUpgrade(x: number, y: number, id: UpgradeId) {

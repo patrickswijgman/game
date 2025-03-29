@@ -1,4 +1,4 @@
-import { Entity } from "@/data/entity.js";
+import { Entity } from "@/core/entity.js";
 import { tickTimer, tween } from "ridder";
 
 export function updateCombatTextAnimation(e: Entity) {

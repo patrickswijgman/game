@@ -1,3 +1,5 @@
+import { clamp } from "ridder";
+
 export type Stats = {
   level: number;
   experience: number;
@@ -27,4 +29,20 @@ export function newStats(stats: Partial<Stats> = {}): Stats {
     movementSpeed: 0,
     ...stats,
   };
+}
+
+export function clampStats(stats: Stats) {
+  stats.health = clamp(stats.health, 0, stats.healthMax);
+}
+
+export function addStats(a: Stats, b: Stats) {
+  for (const key in b) {
+    a[key] += b[key];
+  }
+}
+
+export function copyStats(a: Stats, b: Stats) {
+  for (const key in b) {
+    a[key] = b[key];
+  }
 }
