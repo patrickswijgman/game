@@ -1,4 +1,4 @@
-import { COLOR_GRASS, ENEMY_SPAWN_TIME_MAX, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_REDUCE, MAX_ENEMIES, UPGRADES_CHOICE_AMOUNT } from "@/consts.js";
+import { COLOR_GRASS, COLOR_OUTLINE, ENEMY_SPAWN_TIME_MAX, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_REDUCE, MAX_ENEMIES, MAX_LEVEL, UPGRADES_CHOICE_AMOUNT } from "@/consts.js";
 import { destroyEntity, getEntity } from "@/core/entities.js";
 import { addStats } from "@/core/stats.js";
 import { getUpgrade, UpgradeId } from "@/core/upgrades.js";
@@ -6,12 +6,13 @@ import { addMeleeEnemy } from "@/entities/enemy-melee.js";
 import { addPlayer } from "@/entities/player.js";
 import { addTree } from "@/entities/tree.js";
 import { addUpgrade } from "@/entities/upgrade.js";
-import { clamp, doesRectangleContain, getHeight, getWidth, InputCode, pick, random, rect, Rectangle, remove, resetInput, resetTimer, setBackgroundColor, setCameraBounds, setCameraPosition, setCameraSmoothing, setRectangle, tickTimer, timer, Timer, vec, Vector, writeRandomPointInPerimeterBetweenRectangles } from "ridder";
+import { clamp, doesRectangleContain, drawRect, drawTextOutlined, getDeltaTime, getHeight, getWidth, InputCode, pick, random, rect, Rectangle, remove, resetInput, resetTimer, resetTransform, scaleTransform, setAlpha, setBackgroundColor, setCameraBounds, setCameraPosition, setCameraSmoothing, setRectangle, tickTimer, timer, Timer, translateTransform, vec, Vector, writeRandomPointInPerimeterBetweenRectangles } from "ridder";
 
 export const enum WorldStateId {
   NONE,
   NORMAL,
   CHOOSE_UPGRADE,
+  DEFEAT,
 }
 
 export type World = {
@@ -39,6 +40,9 @@ export type World = {
   // Level up
   upgrades: Array<UpgradeId>;
   upgradeChoices: Array<UpgradeId>;
+
+  // Winning
+  time: number;
 
   // Player
   playerId: number;
@@ -69,6 +73,9 @@ const world: World = {
   // Level up
   upgrades: [],
   upgradeChoices: [],
+
+  // Winning
+  time: 0,
 
   // Player
   playerId: 0,
@@ -123,6 +130,21 @@ export function setupWorld() {
   world.stateId = WorldStateId.NORMAL;
 }
 
+export function updateEnemySpawner() {
+  if (tickTimer(world.spawnTimer, world.spawnTime)) {
+    if (isPlayerAlive() && world.enemies.length < MAX_ENEMIES) {
+      writeRandomPointInPerimeterBetweenRectangles(world.boundsOutside, world.bounds, world.spawnPosition);
+      addMeleeEnemy(world.spawnPosition.x, world.spawnPosition.y);
+      world.spawnTime = clamp(world.spawnTime - ENEMY_SPAWN_TIME_REDUCE, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_MAX);
+    }
+    resetTimer(world.spawnTimer);
+  }
+}
+
+export function updateTimeSurvived() {
+  world.time += getDeltaTime();
+}
+
 export function getWorldState() {
   return world.stateId;
 }
@@ -167,20 +189,19 @@ export function getPlayer() {
   return getEntity(world.playerId);
 }
 
+export function addUpgradeToPool(id: UpgradeId, amount: number) {
+  for (let i = 0; i < amount; i++) {
+    world.upgrades.push(id);
+  }
+}
+
+export function removeUpgradeFromPool(id: UpgradeId) {
+  remove(world.upgrades, id);
+}
+
 export function isPlayerAlive() {
   const player = getPlayer();
   return player.isPlayer && !!player.stats.health;
-}
-
-export function spawnEnemies() {
-  if (tickTimer(world.spawnTimer, world.spawnTime)) {
-    if (isPlayerAlive() && world.enemies.length < MAX_ENEMIES) {
-      writeRandomPointInPerimeterBetweenRectangles(world.boundsOutside, world.bounds, world.spawnPosition);
-      addMeleeEnemy(world.spawnPosition.x, world.spawnPosition.y);
-      world.spawnTime = clamp(world.spawnTime - ENEMY_SPAWN_TIME_REDUCE, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_MAX);
-    }
-    resetTimer(world.spawnTimer);
-  }
 }
 
 export function chooseUpgrade() {
@@ -198,7 +219,7 @@ export function chooseUpgrade() {
   for (let i = 0; i < world.upgradeChoices.length; i++) {
     const id = world.upgradeChoices[i];
     const x = (getWidth() / (UPGRADES_CHOICE_AMOUNT + 1)) * (i + 1) - 50;
-    const y = getHeight() / 2 - 50;
+    const y = getHeight() / 2 - 50 + 10;
     const e = addUpgrade(x, y, id);
     world.temp.push(e.id);
   }
@@ -224,12 +245,50 @@ export function confirmUpgradeChoice(id: UpgradeId) {
   world.stateId = WorldStateId.NORMAL;
 }
 
-export function addUpgradeToPool(id: UpgradeId, amount: number) {
-  for (let i = 0; i < amount; i++) {
-    world.upgrades.push(id);
-  }
+export function defeat() {
+  world.stateId = WorldStateId.DEFEAT;
 }
 
-export function removeUpgradeFromPool(id: UpgradeId) {
-  remove(world.upgrades, id);
+export function renderTimeSurvived() {
+  resetTransform();
+  translateTransform(getWidth() - 10, 10);
+  scaleTransform(0.625, 0.625);
+  drawTextOutlined(getTimeSurvivedString(), 0, 0, "white", COLOR_OUTLINE, "circle", "right");
+}
+
+export function renderLevelUp() {
+  const player = getPlayer();
+  resetTransform();
+  translateTransform(getWidth() / 2, 20);
+  scaleTransform(1.25, 1.25);
+  drawTextOutlined("Level up!", 0, 0, "white", COLOR_OUTLINE, "circle", "center", "middle");
+  translateTransform(0, 10);
+  scaleTransform(0.75, 0.75);
+  drawTextOutlined(`(${player.stats.level} / ${MAX_LEVEL})`, 0, 0, "white", COLOR_OUTLINE, "circle", "center", "middle");
+}
+
+export function renderDefeat() {
+  const w = getWidth();
+  const h = getHeight();
+  resetTransform();
+  setAlpha(0.5);
+  drawRect(0, 0, w, h, "black", true);
+  setAlpha(1);
+  translateTransform(w / 2, h / 2 - 30);
+  scaleTransform(2, 2);
+  drawTextOutlined("You died", 0, 0, "red", COLOR_OUTLINE, "circle", "center");
+  translateTransform(0, 12);
+  scaleTransform(0.25, 0.25);
+  drawTextOutlined(`Time survived: ${getTimeSurvivedString()}`, 0, 0, "white", COLOR_OUTLINE, "circle", "center");
+}
+
+function getTimeSurvivedString() {
+  const sec = Math.floor(world.time / 1000);
+  const min = Math.floor(sec / 60)
+    .toString()
+    .padStart(2, "0");
+  const rem = Math.floor(sec % 60)
+    .toString()
+    .padStart(2, "0");
+  return `${min}:${rem}`;
 }

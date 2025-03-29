@@ -1,6 +1,6 @@
 import { COLOR_HEALTH, COLOR_OUTLINE, COLOR_XP } from "@/consts.js";
 import { Stats } from "@/core/stats.js";
-import { getPlayer, isPlayerAlive } from "@/core/world.js";
+import { getPlayer } from "@/core/world.js";
 import { drawRect, getWidth, resetTransform, translateTransform } from "ridder";
 
 export function drawHealthBar(x: number, y: number, stats: Stats, width: number, height: number) {
@@ -19,12 +19,10 @@ export function drawExperienceBar(x: number, y: number, stats: Stats, width: num
 }
 
 export function renderHud() {
-  if (isPlayerAlive()) {
-    const player = getPlayer();
-    resetTransform();
-    translateTransform(10, 10);
-    drawHealthBar(0, 0, player.stats, player.stats.healthMax * 10, 5);
-    resetTransform();
-    drawExperienceBar(0, 0, player.stats, getWidth(), 1);
-  }
+  const player = getPlayer();
+  resetTransform();
+  translateTransform(10, 10);
+  drawHealthBar(0, 0, player.stats, player.stats.healthMax * 10, 5);
+  resetTransform();
+  drawExperienceBar(0, 0, player.stats, getWidth(), 1);
 }

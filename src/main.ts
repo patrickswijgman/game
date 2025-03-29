@@ -2,7 +2,7 @@ import { loadAssets } from "@/core/assets.js";
 import { clearDestroyedEntities, getDestroyedEntities, getEntities, getEntity, removeEntity, sortEntities } from "@/core/entities.js";
 import { destroyIfDead, destroyIfExpired, renderEntity, renderEntityStatus, Type, updateCollisions, updatePhysics, zeroEntity } from "@/core/entity.js";
 import { renderHud } from "@/core/ui.js";
-import { getBodies, getEnemiesGroup, getPlayer, getWorldState, isPlayerAlive, removeFromWorld, setupWorld, spawnEnemies, WorldStateId } from "@/core/world.js";
+import { defeat, getBodies, getEnemiesGroup, getPlayer, getWorldState, isPlayerAlive, removeFromWorld, renderDefeat, renderLevelUp, renderTimeSurvived, setupWorld, updateEnemySpawner, updateTimeSurvived, WorldStateId } from "@/core/world.js";
 import { onAttackDestroy, updateAttack } from "@/entities/attack.js";
 import { updateCombatText } from "@/entities/combat-text.js";
 import { onEnemyDestroy, updateEnemy } from "@/entities/enemy.js";
@@ -31,11 +31,18 @@ run({
       isDebugging = !isDebugging;
     }
 
+    if (!isPlayerAlive()) {
+      defeat();
+    }
+
     const state = getWorldState();
 
     switch (state) {
       case WorldStateId.NORMAL:
-        spawnEnemies();
+        {
+          updateTimeSurvived();
+          updateEnemySpawner();
+        }
         break;
     }
 
@@ -124,11 +131,21 @@ run({
             const e = getEntity(id);
             renderEntityStatus(e);
           }
+          renderTimeSurvived();
+          renderHud();
         }
         break;
-    }
 
-    renderHud();
+      case WorldStateId.CHOOSE_UPGRADE:
+        renderTimeSurvived();
+        renderHud();
+        renderLevelUp();
+        break;
+
+      case WorldStateId.DEFEAT:
+        renderDefeat();
+        break;
+    }
 
     if (isDebugging) {
       debugHitboxes();
