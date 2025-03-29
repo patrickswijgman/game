@@ -8,7 +8,7 @@ export const ENEMY_SPAWN_TIME_REDUCE = 20;
 export const UPGRADES_CHOICE_AMOUNT = 2;
 
 export const MAX_LEVEL = 10;
-export const XP_PER_LEVEL = 50;
+export const XP_PER_LEVEL = 500;
 
 export const COLOR_OUTLINE = "#1e1e1e";
 export const COLOR_HEALTH = "#f24236";
