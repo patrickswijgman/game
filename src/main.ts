@@ -10,7 +10,7 @@ import { updatePlayer } from "@/entities/player.js";
 import { updateTree } from "@/entities/tree.js";
 import { renderUpgrade, updateUpgrade } from "@/entities/upgrade.js";
 import { updateExperienceOrb } from "@/entities/xp-orb.js";
-import { applyCameraTransform, drawRectInstance, drawText, getFramePerSecond, InputCode, isInputPressed, isRectangleValid, resetTransform, run, scaleTransform, translateTransform, updateCamera } from "ridder";
+import { applyCameraTransform, drawRectInstance, drawText, getFramePerSecond, getHeight, getWidth, InputCode, isInputPressed, isRectangleValid, resetTransform, run, scaleTransform, setAlpha, translateTransform, updateCamera } from "ridder";
 
 let isDebugging = false;
 
@@ -155,6 +155,8 @@ run({
       debugFps();
       translateTransform(0, 11);
     }
+
+    drawVersion();
   },
 });
 
@@ -187,4 +189,13 @@ function debugBodies() {
 
 function debugFps() {
   drawText(`FPS: ${getFramePerSecond()}`, 1, 1, "lime");
+}
+
+function drawVersion() {
+  resetTransform();
+  translateTransform(getWidth() - 2, getHeight() - 2);
+  scaleTransform(0.5, 0.5);
+  setAlpha(0.5);
+  drawText(__VERSION__, 0, 0, "white", "right", "bottom");
+  setAlpha(1);
 }
