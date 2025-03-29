@@ -117,9 +117,15 @@ run({
 
     clearDestroyedEntities();
 
-    for (const id of getEnemiesGroup()) {
-      const e = getEntity(id);
-      renderEntityStatus(e);
+    switch (state) {
+      case WorldStateId.NORMAL:
+        {
+          for (const id of getEnemiesGroup()) {
+            const e = getEntity(id);
+            renderEntityStatus(e);
+          }
+        }
+        break;
     }
 
     renderHud();

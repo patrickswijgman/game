@@ -179,7 +179,6 @@ export function spawnEnemies() {
       addMeleeEnemy(world.spawnPosition.x, world.spawnPosition.y);
       world.spawnTime = clamp(world.spawnTime - ENEMY_SPAWN_TIME_REDUCE, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_MAX);
     }
-
     resetTimer(world.spawnTimer);
   }
 }
@@ -211,7 +210,6 @@ export function chooseUpgrade() {
 }
 
 export function confirmUpgradeChoice(id: UpgradeId) {
-  remove(world.upgrades, id);
   remove(world.upgradeChoices, id);
   world.upgrades.push(...world.upgradeChoices);
 

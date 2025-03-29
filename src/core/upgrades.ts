@@ -23,8 +23,8 @@ const upgrades = table<Upgrade>(UpgradeId.MAX, (id) => {
       return {
         name: "Health",
         stats: newStats({
-          health: 2,
-          healthMax: 2,
+          health: 1,
+          healthMax: 1,
         }),
       };
 

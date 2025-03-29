@@ -1,4 +1,4 @@
-import { XP_PER_LEVEL } from "@/consts.js";
+import { MAX_LEVEL, XP_PER_LEVEL } from "@/consts.js";
 import { Entity, setState, StateId } from "@/core/entity.js";
 import { clampStats } from "@/core/stats.js";
 import { chooseUpgrade, getPlayer, isPlayerAlive } from "@/core/world.js";
@@ -29,7 +29,7 @@ export function addExperience(xp: number) {
 
     player.stats.experience += xp;
 
-    if (player.stats.experience >= player.stats.experienceMax) {
+    if (player.stats.experience >= player.stats.experienceMax && player.stats.level < MAX_LEVEL) {
       player.stats.level += 1;
       player.stats.experience = 0;
       player.stats.experienceMax = player.stats.level * XP_PER_LEVEL;
