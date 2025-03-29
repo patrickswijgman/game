@@ -10,9 +10,7 @@ export function updateExperienceOrbIdleAnimation(e: Entity) {
 export function updateExperienceOrbSeekAnimation(e: Entity) {
   const player = getPlayer();
   const completed = tickTimer(e.tweenTimer, 500);
-
   e.position.x = tween(e.start.x, player.position.x, 500, "easeInCubic", e.tweenTimer.elapsed);
   e.position.y = tween(e.start.y, player.position.y, 500, "easeInCubic", e.tweenTimer.elapsed);
-
   return completed;
 }

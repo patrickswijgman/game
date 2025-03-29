@@ -76,6 +76,6 @@ const upgrades = table<Upgrade>(UpgradeId.MAX, (id) => {
   }
 });
 
-export function getUpgrade(id: UpgradeId) {
+export function getUpgrade(id: UpgradeId): Readonly<Upgrade> {
   return upgrades[id];
 }

@@ -212,18 +212,6 @@ export function zeroEntity(e: Entity) {
   setVector(e.tweenScale, 1, 1);
 }
 
-export function onEntityStateExit(e: Entity, onExit: (e: Entity) => void) {
-  switch (e.stateId) {
-    case StateId.STAGGER:
-      {
-        e.isFlashing = false;
-      }
-      break;
-  }
-  resetEntity(e);
-  onExit(e);
-}
-
 export function addEntity(type: Type, x: number, y: number) {
   const e = nextEntity();
   e.type = type;
@@ -270,15 +258,6 @@ export function setHitarea(e: Entity, x: number, y: number, w: number, h: number
 
 export function setState(e: Entity, stateId: StateId) {
   e.stateNextId = stateId;
-}
-
-export function updateState(e: Entity, onEnter: (e: Entity) => void, onUpdate: (e: Entity) => void, onExit: (e: Entity) => void) {
-  if (e.stateNextId !== e.stateId) {
-    onEntityStateExit(e, onExit);
-    e.stateId = e.stateNextId;
-    onEntityStateEnter(e, onEnter);
-  }
-  onEntityStateUpdate(e, onUpdate);
 }
 
 export function updatePhysics(e: Entity) {
@@ -334,23 +313,28 @@ export function updateBody(e: Entity) {
   addVector(e.body, e.bodyOffset);
 }
 
-export function onEntityStateEnter(e: Entity, onEnter: (e: Entity) => void) {
+export function updateState(e: Entity, onEnter: (e: Entity) => void, onUpdate: (e: Entity) => void, onExit: (e: Entity) => void) {
+  if (e.stateNextId !== e.stateId) {
+    onEntityStateExit(e, onExit);
+    e.stateId = e.stateNextId;
+    onEntityStateEnter(e, onEnter);
+  }
+  onEntityStateUpdate(e, onUpdate);
+}
+
+function onEntityStateEnter(e: Entity, onEnter: (e: Entity) => void) {
   switch (e.stateId) {
     case StateId.ATTACK:
-      {
-        addAttack(e);
-      }
+      addAttack(e);
       break;
     case StateId.STAGGER:
-      {
-        e.isFlashing = true;
-      }
+      e.isFlashing = true;
       break;
   }
   onEnter(e);
 }
 
-export function onEntityStateUpdate(e: Entity, onUpdate: (e: Entity) => void) {
+function onEntityStateUpdate(e: Entity, onUpdate: (e: Entity) => void) {
   switch (e.stateId) {
     case StateId.ATTACK:
       {
@@ -373,6 +357,16 @@ export function onEntityStateUpdate(e: Entity, onUpdate: (e: Entity) => void) {
       break;
   }
   onUpdate(e);
+}
+
+function onEntityStateExit(e: Entity, onExit: (e: Entity) => void) {
+  switch (e.stateId) {
+    case StateId.STAGGER:
+      e.isFlashing = false;
+      break;
+  }
+  resetEntity(e);
+  onExit(e);
 }
 
 export function resetEntity(e: Entity) {

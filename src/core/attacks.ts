@@ -66,6 +66,6 @@ const attacks = table<Attack>(AttackId.MAX, (id) => {
   }
 });
 
-export function getAttack(id: AttackId) {
+export function getAttack(id: AttackId): Readonly<Attack> {
   return attacks[id];
 }

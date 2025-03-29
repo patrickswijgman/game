@@ -5,10 +5,8 @@ import { drawRect, getWidth, resetTransform, translateTransform } from "ridder";
 
 export function drawHealthBar(x: number, y: number, stats: Stats, width: number, height: number) {
   const w = (width - 2) * (stats.health / stats.healthMax);
-
   drawRect(x, y, width, height, COLOR_OUTLINE, true);
   drawRect(x + 1, y + 1, w, height - 2, COLOR_HEALTH, true);
-
   if (stats.health > 0) {
     drawRect(x + w, y + 1, 1, height - 2, "white", true);
   }
