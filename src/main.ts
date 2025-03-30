@@ -218,10 +218,6 @@ function debugFps() {
 }
 
 function drawVersion() {
-  let version = __VERSION__;
-  if (version !== "dev") {
-    version = version.substring(0, 7);
-  }
   resetTransform();
   translateTransform(getWidth() - 2, getHeight() - 2);
   scaleTransform(0.5, 0.5);
