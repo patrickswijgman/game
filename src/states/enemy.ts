@@ -17,9 +17,10 @@ export function onEnemyStateUpdate(e: Entity) {
     case StateId.ENEMY_SEEK:
       {
         lookAtPlayer(e);
-        moveTowardsPlayer(e);
         if (isPlayerInAttackRange(e)) {
           setState(e, StateId.ENEMY_ATTACK);
+        } else {
+          moveTowardsPlayer(e);
         }
       }
       break;

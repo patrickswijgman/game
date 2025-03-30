@@ -272,9 +272,12 @@ export function renderDefeat() {
   translateTransform(w / 2, h / 2 - 30);
   scaleTransform(2, 2);
   drawTextOutlined("You died", 0, 0, "red", COLOR_OUTLINE, "circle", "center");
-  translateTransform(0, 12);
-  scaleTransform(0.25, 0.25);
+  translateTransform(0, 15);
+  scaleTransform(0.5, 0.5);
   drawTextOutlined(`Time survived: ${getTimeSurvivedString()}`, 0, 0, "white", COLOR_OUTLINE, "circle", "center");
+  translateTransform(0, 20);
+  scaleTransform(0.75, 0.75);
+  drawTextOutlined("- Press R to restart -", 0, 0, "lightgray", COLOR_OUTLINE, "circle", "center");
 }
 
 function getTimeSurvivedString() {

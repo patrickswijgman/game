@@ -3,7 +3,7 @@ import { dealDamage } from "@/core/combat.js";
 import { destroyEntity, getEntity } from "@/core/entities.js";
 import { addEntity, Entity, setHitbox, setSprite, Type } from "@/core/entity.js";
 import { addStats, copyStats } from "@/core/stats.js";
-import { getAlliesGroup, getBodies, getEnemiesGroup } from "@/core/world.js";
+import { getAlliesGroup, getEnemiesGroup } from "@/core/world.js";
 import { addVector, copyVector, doRectanglesIntersect, getAngle, getVectorDistance, scaleVector } from "ridder";
 
 export function addAttack(caster: Entity) {
@@ -44,10 +44,6 @@ export function updateAttack(e: Entity) {
     return;
   }
 
-  if (destroyIfHitsWall(e)) {
-    return;
-  }
-
   destroyIfOutOfRange(e);
 }
 
@@ -64,23 +60,6 @@ function dealDamageToTargets(e: Entity) {
 
     if (doRectanglesIntersect(e.hitbox, target.hitbox)) {
       dealDamage(e, target);
-      destroyEntity(e.id);
-      return true;
-    }
-  }
-
-  return false;
-}
-
-function destroyIfHitsWall(e: Entity) {
-  const caster = getEntity(e.casterId);
-
-  for (const body of getBodies()) {
-    if (body === caster.body) {
-      continue;
-    }
-
-    if (doRectanglesIntersect(e.hitbox, body)) {
       destroyEntity(e.id);
       return true;
     }
