@@ -1,12 +1,12 @@
 import { COLOR_OUTLINE } from "@/consts.js";
 import { SpriteId } from "@/core/assets.js";
-import { AttackId, getAttack } from "@/core/attacks.js";
+import { AttackId } from "@/core/attacks.js";
 import { destroyEntity, nextEntity } from "@/core/entities.js";
 import { newStats, Stats } from "@/core/stats.js";
 import { drawHealthBar } from "@/core/ui.js";
 import { UpgradeId } from "@/core/upgrades.js";
 import { addBody, getBodies } from "@/core/world.js";
-import { addAttack } from "@/entities/attack.js";
+import { onEntityStateEnter, onEntityStateExit, onEntityStateUpdate } from "@/states/entity.js";
 import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, drawTextOutlined, getDelta, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, tickTimer, timer, Timer, translateTransform, vec, Vector, writeIntersectionBetweenRectangles, zero } from "ridder";
 
 export const enum Type {
@@ -306,14 +306,19 @@ export function updateCollisions(e: Entity) {
       writeIntersectionBetweenRectangles(e.body, body, e.velocity, e.bodyIntersection);
     }
 
+    let isResolved = false;
+
     if (e.bodyIntersection.x) {
       e.position.x += e.bodyIntersection.x;
       e.velocity.x = 0;
-      updateBody(e);
+      isResolved = true;
     }
     if (e.bodyIntersection.y) {
       e.position.y += e.bodyIntersection.y;
       e.velocity.y = 0;
+      isResolved = true;
+    }
+    if (isResolved) {
       updateBody(e);
     }
   }
@@ -355,56 +360,6 @@ export function updateState(e: Entity, onEnter: (e: Entity) => void, onUpdate: (
     onEntityStateEnter(e, onEnter);
   }
   onEntityStateUpdate(e, onUpdate);
-}
-
-function onEntityStateEnter(e: Entity, onEnter: (e: Entity) => void) {
-  switch (e.stateId) {
-    case StateId.ATTACK:
-      const attack = getAttack(e.attackId);
-      setAnimation(e, AnimationId.ATTACK, attack.recovery);
-      addAttack(e);
-      break;
-
-    case StateId.STAGGER:
-      setAnimation(e, AnimationId.STAGGER, 150);
-      e.isFlashing = true;
-      break;
-  }
-  onEnter(e);
-}
-
-function onEntityStateUpdate(e: Entity, onUpdate: (e: Entity) => void) {
-  switch (e.stateId) {
-    case StateId.ATTACK:
-      {
-        const attack = getAttack(e.attackId);
-        if (tickTimer(e.stateTimer, attack.recovery)) {
-          resetState(e);
-        }
-      }
-      break;
-
-    case StateId.STAGGER:
-      {
-        if (tickTimer(e.stateTimer, 150)) {
-          resetState(e);
-        }
-      }
-      break;
-  }
-  onUpdate(e);
-}
-
-function onEntityStateExit(e: Entity, onExit: (e: Entity) => void) {
-  switch (e.stateId) {
-    case StateId.STAGGER:
-      e.isFlashing = false;
-      break;
-  }
-  resetVector(e.velocity);
-  resetTimer(e.stateTimer);
-  resetAnimation(e);
-  onExit(e);
 }
 
 export function resetAnimation(e: Entity) {

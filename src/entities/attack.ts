@@ -1,11 +1,9 @@
-import { Type } from "@/core/entity.js";
 import { getAttack } from "@/core/attacks.js";
-import { destroyEntity, getEntity } from "@/core/entities.js";
-import { Entity } from "@/core/entity.js";
-import { getAlliesGroup, getBodies, getEnemiesGroup } from "@/core/world.js";
 import { dealDamage } from "@/core/combat.js";
-import { addEntity, setHitbox, setSprite } from "@/core/entity.js";
+import { destroyEntity, getEntity } from "@/core/entities.js";
+import { addEntity, Entity, setHitbox, setSprite, Type } from "@/core/entity.js";
 import { addStats, copyStats } from "@/core/stats.js";
+import { getAlliesGroup, getBodies, getEnemiesGroup } from "@/core/world.js";
 import { addVector, copyVector, doRectanglesIntersect, getAngle, getVectorDistance, scaleVector } from "ridder";
 
 export function addAttack(caster: Entity) {
