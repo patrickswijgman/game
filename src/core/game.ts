@@ -1,23 +1,28 @@
-import { COLOR_OUTLINE, ENEMY_SPAWN_TIME_MAX, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_REDUCE, MAX_ENEMIES, MAX_LEVEL } from "@/consts.js";
-import { getEntity } from "@/core/entities.js";
+import { COLOR_OUTLINE, ENEMY_SPAWN_TIME_MAX, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_REDUCE, MAX_ENEMIES, MAX_ENTITIES, MAX_LEVEL } from "@/consts.js";
+import { Entity, newEntity } from "@/core/entity.js";
 import { addStats } from "@/core/stats.js";
 import { getUpgrade, UpgradeId } from "@/core/upgrades.js";
 import { addMeleeEnemy } from "@/entities/enemy-melee.js";
 import { addBackdropWidget } from "@/widgets/backdrop.js";
 import { addDefeatWidget } from "@/widgets/defeat.js";
 import { addUpgradeWidget } from "@/widgets/upgrade.js";
-import { clamp, doesRectangleContain, drawTextOutlined, getDeltaTime, getHeight, getWidth, InputCode, pick, rect, Rectangle, remove, resetInput, resetTimer, resetTransform, roll, scaleTransform, setRectangle, tickTimer, timer, Timer, translateTransform, vec, Vector, writeRandomPointInPerimeterBetweenRectangles } from "ridder";
+import { clamp, doesRectangleContain, drawTextOutlined, getDeltaTime, getHeight, getWidth, InputCode, pick, rect, Rectangle, remove, resetInput, resetTimer, resetTransform, roll, scaleTransform, setRectangle, table, Table, tickTimer, timer, Timer, translateTransform, vec, Vector, writeRandomPointInPerimeterBetweenRectangles } from "ridder";
 
-export const enum WorldStateId {
+export const enum GameStateId {
   NONE,
   NORMAL,
   CHOOSE_UPGRADE,
   DEFEAT,
 }
 
-export type World = {
+export type Game = {
+  // Entities
+  data: Table<Entity>;
+  nextId: number;
+
   // State
-  stateId: WorldStateId;
+  stateId: GameStateId;
+  stateNextId: GameStateId;
 
   // Boundary
   bounds: Rectangle;
@@ -27,7 +32,7 @@ export type World = {
   // Collisions
   bodies: Array<Rectangle>;
 
-  // Entities
+  // Groups
   active: Array<number>;
   allies: Array<number>;
   enemies: Array<number>;
@@ -53,9 +58,14 @@ export type World = {
   playerId: number;
 };
 
-const world: World = {
+const game: Game = {
+  // Entities
+  data: table(MAX_ENTITIES, newEntity),
+  nextId: 0,
+
   // State
-  stateId: WorldStateId.NONE,
+  stateId: GameStateId.NONE,
+  stateNextId: GameStateId.NONE,
 
   // Boundary
   bounds: rect(),
@@ -65,7 +75,7 @@ const world: World = {
   // Collisions
   bodies: [],
 
-  // Entities
+  // Groups
   active: [],
   allies: [],
   enemies: [],
@@ -91,127 +101,160 @@ const world: World = {
   playerId: 0,
 };
 
-export function setWorldBounds(w: number, h: number) {
-  setRectangle(world.bounds, 0, 0, w, h);
-  setRectangle(world.boundsOutside, -50, -50, w + 100, h + 100);
-  setRectangle(world.boundsInside, 50, 50, w - 100, h - 100);
+export function nextEntity() {
+  let id = game.nextId;
+  let e = game.data[id];
+
+  if (e.isAllocated) {
+    id = game.data.findIndex((e) => !e.isAllocated);
+    if (id === -1) {
+      throw new Error("Out of entities :(");
+    }
+
+    e = game.data[id];
+    game.nextId = clamp(id + 1, 0, game.data.length - 1);
+  }
+
+  e.id = id;
+  e.isAllocated = true;
+
+  return e;
+}
+
+export function getEntity(id: number) {
+  return game.data[id];
+}
+
+export function setBounds(w: number, h: number) {
+  setRectangle(game.bounds, 0, 0, w, h);
+  setRectangle(game.boundsOutside, -50, -50, w + 100, h + 100);
+  setRectangle(game.boundsInside, 50, 50, w - 100, h - 100);
 }
 
 export function isInInnerBounds(x: number, y: number) {
-  return doesRectangleContain(world.boundsInside, x, y);
+  return doesRectangleContain(game.boundsInside, x, y);
 }
 
-export function setWorldState(id: WorldStateId) {
-  world.stateId = id;
+export function transitionGameState() {
+  game.stateId = game.stateNextId;
 }
 
-export function getWorldState() {
-  return world.stateId;
+export function setGameState(id: GameStateId) {
+  game.stateNextId = id;
+}
+
+export function isGameState(id: GameStateId) {
+  return game.stateId === id;
+}
+
+export function updateEnemySpawner() {
+  if (tickTimer(game.spawnTimer, game.spawnTime)) {
+    if (game.enemies.length < MAX_ENEMIES) {
+      writeRandomPointInPerimeterBetweenRectangles(game.boundsOutside, game.bounds, game.spawnPosition);
+      addMeleeEnemy(game.spawnPosition.x, game.spawnPosition.y);
+      game.spawnTime = clamp(game.spawnTime - ENEMY_SPAWN_TIME_REDUCE, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_MAX);
+    }
+    resetTimer(game.spawnTimer);
+  }
+}
+
+export function updateTime() {
+  game.time += getDeltaTime();
 }
 
 export function getEntities(): Readonly<Array<number>> {
-  return world.active;
+  return game.active;
 }
 
 export function addToEntities(id: number) {
-  world.active.push(id);
+  game.active.push(id);
 }
 
 export function sortEntities(sort: (a: number, b: number) => number) {
-  world.active.sort(sort);
+  game.active.sort(sort);
 }
 
 export function getDestroyedEntities(): Readonly<Array<number>> {
-  return world.destroyed;
+  return game.destroyed;
 }
 
 export function clearDestroyedEntities() {
-  world.destroyed.length = 0;
+  game.destroyed.length = 0;
 }
 
 export function destroyEntity(id: number) {
   const e = getEntity(id);
   e.isDestroyed = true;
-  world.destroyed.push(id);
-}
-
-export function updateEnemySpawner() {
-  if (tickTimer(world.spawnTimer, world.spawnTime)) {
-    if (world.enemies.length < MAX_ENEMIES) {
-      writeRandomPointInPerimeterBetweenRectangles(world.boundsOutside, world.bounds, world.spawnPosition);
-      addMeleeEnemy(world.spawnPosition.x, world.spawnPosition.y);
-      world.spawnTime = clamp(world.spawnTime - ENEMY_SPAWN_TIME_REDUCE, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_MAX);
-    }
-    resetTimer(world.spawnTimer);
-  }
-}
-
-export function updateTime() {
-  world.time += getDeltaTime();
-}
-
-export function getAlliesGroup(): Readonly<Array<number>> {
-  return world.allies;
-}
-
-export function addToAlliesGroup(id: number) {
-  world.allies.push(id);
-}
-
-export function getEnemiesGroup(): Readonly<Array<number>> {
-  return world.enemies;
-}
-
-export function addToEnemiesGroup(id: number) {
-  world.enemies.push(id);
-}
-
-export function getWidgets(): Readonly<Array<number>> {
-  return world.widgets;
-}
-
-export function addToWidgets(id: number) {
-  world.widgets.push(id);
+  game.destroyed.push(id);
 }
 
 export function removeEntity(id: number) {
   const e = getEntity(id);
-  remove(world.active, id);
-  remove(world.allies, id);
-  remove(world.enemies, id);
-  remove(world.widgets, id);
-  remove(world.levelUpWidgets, id);
-  remove(world.bodies, e.body);
+  remove(game.active, id);
+  remove(game.allies, id);
+  remove(game.enemies, id);
+  remove(game.widgets, id);
+  remove(game.levelUpWidgets, id);
+  remove(game.bodies, e.body);
+}
+
+export function getAlliesGroup(): Readonly<Array<number>> {
+  return game.allies;
+}
+
+export function addToAlliesGroup(id: number) {
+  game.allies.push(id);
+}
+
+export function getEnemiesGroup(): Readonly<Array<number>> {
+  return game.enemies;
+}
+
+export function addToEnemiesGroup(id: number) {
+  game.enemies.push(id);
+}
+
+export function getWidgets(): Readonly<Array<number>> {
+  return game.widgets;
+}
+
+export function addToWidgets(id: number) {
+  game.widgets.push(id);
 }
 
 export function getBodies(): Readonly<Array<Rectangle>> {
-  return world.bodies;
+  return game.bodies;
 }
 
 export function addBody(body: Rectangle) {
-  world.bodies.push(body);
+  game.bodies.push(body);
 }
 
 export function setPlayer(id: number) {
-  world.playerId = id;
+  game.playerId = id;
 }
 
 export function getPlayer() {
-  return getEntity(world.playerId);
+  return getEntity(game.playerId);
+}
+
+export function isPlayerAlive() {
+  const player = getPlayer();
+  return player.isPlayer && player.stats.health;
 }
 
 export function addUpgradeToPool(id: UpgradeId, amount: number) {
   for (let i = 0; i < amount; i++) {
-    world.upgrades.push(id);
+    game.upgrades.push(id);
   }
 }
 
 export function removeUpgradeFromPool(id: UpgradeId) {
-  remove(world.upgrades, id);
+  remove(game.upgrades, id);
 }
 
 export function chooseUpgrade() {
-  world.upgradeChoices.length = 0;
+  game.upgradeChoices.length = 0;
 
   let amount = 2;
   if (roll(0.05)) {
@@ -219,53 +262,57 @@ export function chooseUpgrade() {
   }
 
   for (let i = 0; i < amount; i++) {
-    const id = pick(world.upgrades);
+    const id = pick(game.upgrades);
 
     if (id) {
-      remove(world.upgrades, id);
-      world.upgradeChoices.push(id);
+      remove(game.upgrades, id);
+      game.upgradeChoices.push(id);
     }
   }
 
-  if (world.upgradeChoices.length) {
+  if (game.upgradeChoices.length) {
     const backdrop = addBackdropWidget();
-    world.levelUpWidgets.push(backdrop.id);
+    game.levelUpWidgets.push(backdrop.id);
 
-    for (let i = 0; i < world.upgradeChoices.length; i++) {
-      const id = world.upgradeChoices[i];
-      const x = (getWidth() / (world.upgradeChoices.length + 1)) * (i + 1) - 50;
+    for (let i = 0; i < game.upgradeChoices.length; i++) {
+      const id = game.upgradeChoices[i];
+      const x = (getWidth() / (game.upgradeChoices.length + 1)) * (i + 1) - 50;
       const y = getHeight() / 2 - 50 + 10;
       const e = addUpgradeWidget(x, y, id);
-      world.levelUpWidgets.push(e.id);
+      game.levelUpWidgets.push(e.id);
     }
 
     resetInput(InputCode.MOUSE_LEFT);
-    world.stateId = WorldStateId.CHOOSE_UPGRADE;
+    setGameState(GameStateId.CHOOSE_UPGRADE);
   }
 }
 
 export function confirmUpgradeChoice(id: UpgradeId) {
-  remove(world.upgradeChoices, id);
-  world.upgrades.push(...world.upgradeChoices);
+  remove(game.upgradeChoices, id);
+  game.upgrades.push(...game.upgradeChoices);
 
   const upgrade = getUpgrade(id);
   const player = getPlayer();
   addStats(player.stats, upgrade.stats);
 
-  for (const id of world.levelUpWidgets) {
+  for (const id of game.levelUpWidgets) {
     destroyEntity(id);
   }
 
-  world.stateId = WorldStateId.NORMAL;
+  game.levelUpWidgets.length = 0;
+
+  setGameState(GameStateId.NORMAL);
 }
 
 export function defeat() {
-  if (world.stateId !== WorldStateId.DEFEAT) {
+  if (isGameState(GameStateId.NORMAL)) {
     addBackdropWidget();
     addDefeatWidget();
-    world.stateId = WorldStateId.DEFEAT;
+    setGameState(GameStateId.DEFEAT);
   }
 }
+
+// FIXME widgets
 
 export function renderTimeSurvived() {
   resetTransform();
@@ -286,7 +333,7 @@ export function renderLevelUp() {
 }
 
 export function getTimeString() {
-  const sec = Math.floor(world.time / 1000);
+  const sec = Math.floor(game.time / 1000);
   const min = Math.floor(sec / 60)
     .toString()
     .padStart(2, "0");

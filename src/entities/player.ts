@@ -2,7 +2,7 @@ import { XP_PER_LEVEL } from "@/consts.js";
 import { SpriteId } from "@/core/assets.js";
 import { AttackId } from "@/core/attacks.js";
 import { Entity, StateId, Type, initState, setBody, setCenter, setHitbox, setShadow, setSprite, updateState } from "@/core/entity.js";
-import { addToAlliesGroup, setPlayer } from "@/core/world.js";
+import { addToAlliesGroup, setPlayer } from "@/core/game.js";
 import { addEntity } from "@/entities/entity.js";
 import { onPlayerStateEnter, onPlayerStateExit, onPlayerStateUpdate } from "@/states/player.js";
 import { setVector } from "ridder";

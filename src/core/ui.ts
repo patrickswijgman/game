@@ -1,6 +1,6 @@
 import { COLOR_HEALTH, COLOR_OUTLINE, COLOR_XP } from "@/consts.js";
 import { Stats } from "@/core/stats.js";
-import { getPlayer } from "@/core/world.js";
+import { getPlayer } from "@/core/game.js";
 import { drawRect, getWidth, resetTransform, translateTransform } from "ridder";
 
 export function drawHealthBar(x: number, y: number, stats: Stats, width: number, height: number) {

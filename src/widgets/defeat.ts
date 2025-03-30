@@ -1,6 +1,6 @@
 import { COLOR_OUTLINE } from "@/consts.js";
 import { Type } from "@/core/entity.js";
-import { getTimeString } from "@/core/world.js";
+import { getTimeString } from "@/core/game.js";
 import { addWidget } from "@/widgets/widget.js";
 import { drawTextOutlined, getHeight, getWidth, scaleTransform, translateTransform } from "ridder";
 

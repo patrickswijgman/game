@@ -1,6 +1,6 @@
 import { addExperience } from "@/core/combat.js";
 import { AnimationId, Entity, setAnimation, setState, StateId } from "@/core/entity.js";
-import { destroyEntity, getPlayer } from "@/core/world.js";
+import { destroyEntity, getPlayer } from "@/core/game.js";
 import { getVectorDistance, tickTimer } from "ridder";
 
 export function onExperienceOrbStateEnter(e: Entity) {

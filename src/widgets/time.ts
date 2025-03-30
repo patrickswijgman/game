@@ -1,5 +1,5 @@
 import { Entity, Type } from "@/core/entity.js";
-import { getTimeString } from "@/core/world.js";
+import { getTimeString } from "@/core/game.js";
 import { addWidget } from "@/widgets/widget.js";
 import { setVector } from "ridder";
 

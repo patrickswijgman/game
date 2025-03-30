@@ -1,7 +1,7 @@
 import { MAX_LEVEL, XP_PER_LEVEL } from "@/consts.js";
 import { Entity, setState, StateId } from "@/core/entity.js";
 import { clampStats } from "@/core/stats.js";
-import { chooseUpgrade, getPlayer } from "@/core/world.js";
+import { chooseUpgrade, getPlayer } from "@/core/game.js";
 import { addCombatText } from "@/entities/combat-text.js";
 import { roll } from "ridder";
 

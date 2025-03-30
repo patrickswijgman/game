@@ -1,7 +1,7 @@
 import { getAttack } from "@/core/attacks.js";
 import { AnimationId, Entity, setAnimation, setState, StateId } from "@/core/entity.js";
 import { avoid, seek } from "@/core/steering.js";
-import { getEnemiesGroup, getPlayer } from "@/core/world.js";
+import { getEnemiesGroup, getPlayer } from "@/core/game.js";
 import { copyVector, getVectorDistance, normalizeVector, subtractVector, tickTimer } from "ridder";
 
 export function onEnemyStateEnter(e: Entity) {

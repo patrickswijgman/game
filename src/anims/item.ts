@@ -1,5 +1,5 @@
 import { Entity } from "@/core/entity.js";
-import { getPlayer } from "@/core/world.js";
+import { getPlayer } from "@/core/game.js";
 import { tickTimer, tween } from "ridder";
 
 export function updateItemIdleAnimation(e: Entity) {

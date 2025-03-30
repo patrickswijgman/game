@@ -7,10 +7,9 @@ import { updateWalkAnimation } from "@/anims/walk.js";
 import { updateWindAnimation } from "@/anims/wind.js";
 import { COLOR_GRASS } from "@/consts.js";
 import { loadAssets } from "@/core/assets.js";
-import { getEntity } from "@/core/entities.js";
 import { AnimationId, destroyIfDead, destroyIfExpired, InteractionId, renderEntity, renderEntityStatus, Type, updateAnimation, updateCollisions, updateInteraction, updatePhysics, zeroEntity } from "@/core/entity.js";
+import { addBody, addUpgradeToPool, clearDestroyedEntities, confirmUpgradeChoice, defeat, GameStateId, getBodies, getDestroyedEntities, getEntities, getEntity, getPlayer, getWidgets, isGameState, isInInnerBounds, isPlayerAlive, removeEntity, setBounds, setGameState, sortEntities, transitionGameState, updateEnemySpawner, updateTime } from "@/core/game.js";
 import { UpgradeId } from "@/core/upgrades.js";
-import { addBody, addUpgradeToPool, clearDestroyedEntities, confirmUpgradeChoice, defeat, getBodies, getDestroyedEntities, getEntities, getPlayer, getWidgets, getWorldState, isInInnerBounds, removeEntity, setWorldBounds, setWorldState, sortEntities, updateEnemySpawner, updateTime, WorldStateId } from "@/core/world.js";
 import { onAttackDestroy, updateAttack } from "@/entities/attack.js";
 import { onEnemyDestroy, updateEnemy } from "@/entities/enemy.js";
 import { addPlayer, updatePlayer } from "@/entities/player.js";
@@ -34,7 +33,7 @@ run({
     const w = 400;
     const h = 300;
 
-    setWorldBounds(w, h);
+    setBounds(w, h);
     setBackgroundColor(COLOR_GRASS);
     setCameraSmoothing(0.1);
     setCameraBounds(0, 0, w, h);
@@ -67,7 +66,7 @@ run({
     addHealthWidget(10, 10);
     addTimeWidget(getWidth() - 10, 10);
 
-    setWorldState(WorldStateId.NORMAL);
+    setGameState(GameStateId.NORMAL);
   },
 
   update: () => {
@@ -78,16 +77,13 @@ run({
       isDebugging = !isDebugging;
     }
 
-    const player = getPlayer();
-    const isPlayerAlive = player.isPlayer && player.stats.health;
+    transitionGameState();
 
-    if (!isPlayerAlive) {
+    if (!isPlayerAlive()) {
       defeat();
     }
 
-    const state = getWorldState();
-
-    if (state === WorldStateId.NORMAL) {
+    if (isGameState(GameStateId.NORMAL)) {
       updateTime();
       updateEnemySpawner();
     }
@@ -97,7 +93,7 @@ run({
     for (const id of getEntities()) {
       const e = getEntity(id);
 
-      if (state === WorldStateId.NORMAL) {
+      if (isGameState(GameStateId.NORMAL)) {
         if (destroyIfExpired(e) || destroyIfDead(e)) {
           continue;
         }
@@ -166,6 +162,12 @@ run({
           break;
       }
 
+      switch (e.type) {
+        case Type.UI_TIME:
+          updateTimeWidget(e);
+          break;
+      }
+
       resetTransform();
       renderEntity(e);
 
@@ -176,9 +178,6 @@ run({
         case Type.UI_HEALTH:
           renderHealthWidget();
           break;
-        case Type.UI_TIME:
-          updateTimeWidget(e);
-          break;
         case Type.UI_UPGRADE:
           renderUpgradeWidget(e);
           break;
@@ -188,7 +187,8 @@ run({
       }
     }
 
-    if (isPlayerAlive) {
+    if (isPlayerAlive()) {
+      const player = getPlayer();
       updateCamera(player.position.x, player.position.y);
     }
 

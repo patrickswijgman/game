@@ -1,11 +1,11 @@
 import { COLOR_OUTLINE } from "@/consts.js";
 import { SpriteId } from "@/core/assets.js";
 import { AttackId } from "@/core/attacks.js";
-import { nextEntity } from "@/core/entities.js";
+import { nextEntity } from "@/core/game.js";
 import { newStats, Stats } from "@/core/stats.js";
 import { drawHealthBar } from "@/core/ui.js";
 import { UpgradeId } from "@/core/upgrades.js";
-import { addBody, destroyEntity, getBodies } from "@/core/world.js";
+import { addBody, destroyEntity, getBodies } from "@/core/game.js";
 import { onEntityStateEnter, onEntityStateExit, onEntityStateUpdate } from "@/states/entity.js";
 import { addVector, addVectorScaled, applyCameraTransform, copyVector, doesRectangleContain, drawSprite, drawTextOutlined, getDelta, getMousePosition, InputCode, isInputPressed, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, vec, Vector, writeIntersectionBetweenRectangles, zero } from "ridder";
 

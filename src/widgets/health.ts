@@ -1,6 +1,6 @@
 import { Type } from "@/core/entity.js";
 import { drawHealthBar } from "@/core/ui.js";
-import { getPlayer } from "@/core/world.js";
+import { getPlayer } from "@/core/game.js";
 import { addWidget } from "@/widgets/widget.js";
 
 export function addHealthWidget(x: number, y: number) {

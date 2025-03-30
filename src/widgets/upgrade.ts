@@ -2,7 +2,7 @@ import { SpriteId } from "@/core/assets.js";
 import { Entity, setHitarea, setSprite, Type } from "@/core/entity.js";
 import { copyStats, Stats } from "@/core/stats.js";
 import { getUpgrade, Upgrade, UpgradeId } from "@/core/upgrades.js";
-import { getPlayer } from "@/core/world.js";
+import { getPlayer } from "@/core/game.js";
 import { addWidget } from "@/widgets/widget.js";
 import { drawText, scaleTransform, translateTransform } from "ridder";
 
