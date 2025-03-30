@@ -21,7 +21,7 @@ const upgrades = table<Upgrade>(UpgradeId.MAX, (id) => {
   switch (id) {
     case UpgradeId.HEALTH:
       return {
-        name: "Health",
+        name: "Vigor",
         stats: newStats({
           health: 1,
           healthMax: 1,
@@ -30,7 +30,7 @@ const upgrades = table<Upgrade>(UpgradeId.MAX, (id) => {
 
     case UpgradeId.DAMAGE:
       return {
-        name: "Damage",
+        name: "Whetstone",
         stats: newStats({
           damage: 5,
         }),
@@ -38,7 +38,7 @@ const upgrades = table<Upgrade>(UpgradeId.MAX, (id) => {
 
     case UpgradeId.RANGE:
       return {
-        name: "Range",
+        name: "Sniper",
         stats: newStats({
           attackRange: 20,
         }),
@@ -46,7 +46,7 @@ const upgrades = table<Upgrade>(UpgradeId.MAX, (id) => {
 
     case UpgradeId.CRIT_CHANCE:
       return {
-        name: "Crit Chance",
+        name: "Accuracy",
         stats: newStats({
           critChance: 0.25,
         }),
@@ -54,7 +54,7 @@ const upgrades = table<Upgrade>(UpgradeId.MAX, (id) => {
 
     case UpgradeId.PICKUP_RANGE:
       return {
-        name: "Pickup Range",
+        name: "Magnet",
         stats: newStats({
           pickupRange: 30,
         }),
@@ -62,7 +62,7 @@ const upgrades = table<Upgrade>(UpgradeId.MAX, (id) => {
 
     case UpgradeId.MOVEMENT_SPEED:
       return {
-        name: "Movement Speed",
+        name: "Swiftness",
         stats: newStats({
           movementSpeed: 0.15,
         }),

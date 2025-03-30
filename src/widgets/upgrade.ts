@@ -1,42 +1,26 @@
 import { SpriteId } from "@/core/assets.js";
-import { addEntity, Entity, setHitarea, setSprite, Type } from "@/core/entity.js";
+import { Entity, setHitarea, setSprite, Type } from "@/core/entity.js";
 import { copyStats, Stats } from "@/core/stats.js";
 import { getUpgrade, Upgrade, UpgradeId } from "@/core/upgrades.js";
-import { confirmUpgradeChoice, getPlayer } from "@/core/world.js";
-import { doesRectangleContain, drawText, getMousePosition, InputCode, isInputPressed, scaleTransform, setVector, translateTransform } from "ridder";
+import { getPlayer } from "@/core/world.js";
+import { addWidget } from "@/widgets/widget.js";
+import { drawText, scaleTransform, translateTransform } from "ridder";
 
-export function addUpgrade(x: number, y: number, id: UpgradeId) {
-  const e = addEntity(Type.UI_UPGRADE, x, y);
+export function addUpgradeWidget(x: number, y: number, id: UpgradeId) {
+  const e = addWidget(Type.UI_UPGRADE, x, y);
 
   setSprite(e, SpriteId.UI_UPGRADE_BG, 2, 2, SpriteId.NONE, SpriteId.UI_UPGRADE_OUTLINE);
   setHitarea(e, 0, 0, 100, 100);
 
-  e.upgradeId = id;
-
-  setVector(e.scroll, 0, 0);
-  e.depth = Infinity;
-
   const player = getPlayer();
   copyStats(e.stats, player.stats);
+
+  e.upgradeId = id;
 
   return e;
 }
 
-export function updateUpgrade(e: Entity) {
-  const mouse = getMousePosition(false);
-
-  if (doesRectangleContain(e.hitarea, mouse.x, mouse.y)) {
-    e.isOutlineVisible = true;
-
-    if (isInputPressed(InputCode.MOUSE_LEFT, true)) {
-      confirmUpgradeChoice(e.upgradeId);
-    }
-  } else {
-    e.isOutlineVisible = false;
-  }
-}
-
-export function renderUpgrade(e: Entity) {
+export function renderUpgradeWidget(e: Entity) {
   const upgrade = getUpgrade(e.upgradeId);
 
   translateTransform(0, 12);

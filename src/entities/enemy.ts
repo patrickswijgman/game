@@ -1,5 +1,6 @@
-import { addEntity, Entity, initState, StateId, Type, updateState } from "@/core/entity.js";
+import { Entity, initState, StateId, Type, updateState } from "@/core/entity.js";
 import { addToEnemiesGroup } from "@/core/world.js";
+import { addEntity } from "@/entities/entity.js";
 import { addExperienceOrb } from "@/entities/xp-orb.js";
 import { onEnemyStateEnter, onEnemyStateExit, onEnemyStateUpdate } from "@/states/enemy.js";
 

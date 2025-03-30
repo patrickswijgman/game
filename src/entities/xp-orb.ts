@@ -1,5 +1,6 @@
 import { SpriteId } from "@/core/assets.js";
-import { addEntity, Entity, initState, setShadow, setSprite, StateId, Type, updateState } from "@/core/entity.js";
+import { Entity, initState, setShadow, setSprite, StateId, Type, updateState } from "@/core/entity.js";
+import { addEntity } from "@/entities/entity.js";
 import { onExperienceOrbStateEnter, onExperienceOrbStateExit, onExperienceOrbStateUpdate } from "@/states/xp-orb.js";
 
 export function addExperienceOrb(x: number, y: number, xp: number) {

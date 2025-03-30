@@ -1,5 +1,6 @@
 import { SpriteId } from "@/core/assets.js";
-import { addEntity, AnimationId, setAnimation, setShadow, setSprite, Type } from "@/core/entity.js";
+import { AnimationId, setAnimation, setShadow, setSprite, Type } from "@/core/entity.js";
+import { addEntity } from "@/entities/entity.js";
 import { random } from "ridder";
 
 export function addTree(x: number, y: number) {

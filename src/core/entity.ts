@@ -1,23 +1,30 @@
 import { COLOR_OUTLINE } from "@/consts.js";
 import { SpriteId } from "@/core/assets.js";
 import { AttackId } from "@/core/attacks.js";
-import { destroyEntity, nextEntity } from "@/core/entities.js";
+import { nextEntity } from "@/core/entities.js";
 import { newStats, Stats } from "@/core/stats.js";
 import { drawHealthBar } from "@/core/ui.js";
 import { UpgradeId } from "@/core/upgrades.js";
-import { addBody, getBodies } from "@/core/world.js";
+import { addBody, destroyEntity, getBodies } from "@/core/world.js";
 import { onEntityStateEnter, onEntityStateExit, onEntityStateUpdate } from "@/states/entity.js";
-import { addVector, addVectorScaled, applyCameraTransform, copyVector, drawSprite, drawTextOutlined, getDelta, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, tickTimer, timer, Timer, translateTransform, vec, Vector, writeIntersectionBetweenRectangles, zero } from "ridder";
+import { addVector, addVectorScaled, applyCameraTransform, copyVector, doesRectangleContain, drawSprite, drawTextOutlined, getDelta, getMousePosition, InputCode, isInputPressed, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, vec, Vector, writeIntersectionBetweenRectangles, zero } from "ridder";
 
 export const enum Type {
   NONE,
+
   PLAYER,
   ENEMY,
   TREE,
   XP_ORB,
   ATTACK,
   COMBAT_TEXT,
+
+  UI_BACKDROP,
   UI_UPGRADE,
+  UI_HEALTH,
+  UI_XP_BAR,
+  UI_TIME,
+  UI_DEFEAT,
 }
 
 export const enum StateId {
@@ -41,6 +48,11 @@ export const enum AnimationId {
   ITEM_IDLE,
   ITEM_PICKUP,
   COMBAT_TEXT,
+}
+
+export const enum InteractionId {
+  NONE,
+  CONFIRM_UPGRADE,
 }
 
 export type Entity = {
@@ -68,7 +80,6 @@ export type Entity = {
   spriteId: SpriteId;
   pivot: Vector;
   scale: Vector;
-  scroll: Vector;
   angle: number;
   depth: number;
   isFlipped: boolean;
@@ -84,6 +95,8 @@ export type Entity = {
 
   text: string;
   textColor: string;
+  textAlign: TextAlign;
+  textBaseline: TextBaseline;
 
   // Animation
   animId: AnimationId;
@@ -125,6 +138,7 @@ export type Entity = {
   casterId: number;
 
   // Interaction
+  interactionId: InteractionId;
   hitarea: Rectangle;
   hitareaOffset: Vector;
   upgradeId: UpgradeId;
@@ -156,7 +170,6 @@ export function newEntity(): Entity {
     spriteId: SpriteId.NONE,
     pivot: vec(0, 0),
     scale: vec(1, 1),
-    scroll: vec(1, 1),
     angle: 0,
     depth: 0,
     isFlipped: false,
@@ -172,6 +185,8 @@ export function newEntity(): Entity {
 
     text: "",
     textColor: "",
+    textAlign: "left",
+    textBaseline: "top",
 
     // Animation
     animId: AnimationId.NONE,
@@ -213,6 +228,7 @@ export function newEntity(): Entity {
     casterId: 0,
 
     // Interaction
+    interactionId: InteractionId.NONE,
     hitarea: rect(),
     hitareaOffset: vec(),
     upgradeId: UpgradeId.NONE,
@@ -222,11 +238,12 @@ export function newEntity(): Entity {
 export function zeroEntity(e: Entity) {
   zero(e);
   setVector(e.scale, 1, 1);
-  setVector(e.scroll, 1, 1);
   setVector(e.animScale, 1, 1);
+  e.textAlign = "left";
+  e.textBaseline = "top";
 }
 
-export function addEntity(type: Type, x: number, y: number) {
+export function makeEntity(type: Type, x: number, y: number) {
   const e = nextEntity();
   e.type = type;
   setVector(e.start, x, y);
@@ -364,6 +381,22 @@ export function updateAnimation(e: Entity) {
   return e.animId;
 }
 
+export function updateInteraction(e: Entity, inWorld: boolean) {
+  const mouse = getMousePosition(inWorld);
+
+  if (doesRectangleContain(e.hitarea, mouse.x, mouse.y)) {
+    e.isOutlineVisible = !!e.outlineId;
+
+    if (isInputPressed(InputCode.MOUSE_LEFT, true)) {
+      return e.interactionId;
+    }
+  } else {
+    e.isOutlineVisible = false;
+  }
+
+  return InteractionId.NONE;
+}
+
 export function resetState(e: Entity) {
   setState(e, e.stateStartId);
 }
@@ -373,8 +406,6 @@ export function resetAnimation(e: Entity) {
 }
 
 export function renderEntity(e: Entity) {
-  resetTransform();
-  applyCameraTransform(e.scroll.x, e.scroll.y);
   translateTransform(e.position.x, e.position.y);
   scaleTransform(e.scale.x, e.scale.y);
   rotateTransform(e.angle);
@@ -406,7 +437,7 @@ export function renderEntity(e: Entity) {
   }
 
   if (e.text) {
-    drawTextOutlined(e.text, 0, 0, e.textColor, COLOR_OUTLINE, "circle", "center", "middle");
+    drawTextOutlined(e.text, 0, 0, e.textColor, COLOR_OUTLINE, "circle", e.textAlign, e.textBaseline);
   }
 }
 

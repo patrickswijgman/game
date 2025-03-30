@@ -5,17 +5,23 @@ import { updateItemIdleAnimation, updateItemPickupAnimation } from "@/anims/item
 import { updateStaggerAnimation } from "@/anims/stagger.js";
 import { updateWalkAnimation } from "@/anims/walk.js";
 import { updateWindAnimation } from "@/anims/wind.js";
+import { COLOR_GRASS } from "@/consts.js";
 import { loadAssets } from "@/core/assets.js";
-import { clearDestroyedEntities, getDestroyedEntities, getEntities, getEntity, removeEntity, sortEntities } from "@/core/entities.js";
-import { AnimationId, destroyIfDead, destroyIfExpired, renderEntity, renderEntityStatus, Type, updateAnimation, updateCollisions, updatePhysics, zeroEntity } from "@/core/entity.js";
-import { renderHud } from "@/core/ui.js";
-import { defeat, getBodies, getEnemiesGroup, getPlayer, getWorldState, removeFromWorld, renderDefeat, renderLevelUp, renderTimeSurvived, setupWorld, updateEnemySpawner, updateTimeSurvived, WorldStateId } from "@/core/world.js";
+import { getEntity } from "@/core/entities.js";
+import { AnimationId, destroyIfDead, destroyIfExpired, InteractionId, renderEntity, renderEntityStatus, Type, updateAnimation, updateCollisions, updateInteraction, updatePhysics, zeroEntity } from "@/core/entity.js";
+import { UpgradeId } from "@/core/upgrades.js";
+import { addBody, addUpgradeToPool, clearDestroyedEntities, confirmUpgradeChoice, defeat, getBodies, getDestroyedEntities, getEntities, getPlayer, getWidgets, getWorldState, isInInnerBounds, removeEntity, setWorldBounds, setWorldState, sortEntities, updateEnemySpawner, updateTime, WorldStateId } from "@/core/world.js";
 import { onAttackDestroy, updateAttack } from "@/entities/attack.js";
 import { onEnemyDestroy, updateEnemy } from "@/entities/enemy.js";
-import { updatePlayer } from "@/entities/player.js";
-import { renderUpgrade, updateUpgrade } from "@/entities/upgrade.js";
+import { addPlayer, updatePlayer } from "@/entities/player.js";
+import { addTree } from "@/entities/tree.js";
 import { updateExperienceOrb } from "@/entities/xp-orb.js";
-import { applyCameraTransform, drawRectInstance, drawText, getFramePerSecond, getHeight, getWidth, InputCode, isInputPressed, isRectangleValid, resetTransform, run, scaleTransform, setAlpha, translateTransform, updateCamera } from "ridder";
+import { renderBackdropWidget } from "@/widgets/backdrop.js";
+import { renderDefeatWidget } from "@/widgets/defeat.js";
+import { addHealthWidget, renderHealthWidget } from "@/widgets/health.js";
+import { addTimeWidget, updateTimeWidget } from "@/widgets/time.js";
+import { renderUpgradeWidget } from "@/widgets/upgrade.js";
+import { applyCameraTransform, drawRectInstance, drawText, getFramePerSecond, getHeight, getWidth, InputCode, isInputPressed, isRectangleValid, random, rect, resetTransform, run, scaleTransform, setAlpha, setBackgroundColor, setCameraBounds, setCameraPosition, setCameraSmoothing, translateTransform, updateCamera } from "ridder";
 
 let isDebugging = false;
 
@@ -25,7 +31,43 @@ run({
 
   setup: async () => {
     await loadAssets();
-    setupWorld();
+    const w = 400;
+    const h = 300;
+
+    setWorldBounds(w, h);
+    setBackgroundColor(COLOR_GRASS);
+    setCameraSmoothing(0.1);
+    setCameraBounds(0, 0, w, h);
+    setCameraPosition(w / 2, h / 2);
+
+    addBody(rect(0, 0, w, 40));
+    addBody(rect(0, 0, 40, h));
+    addBody(rect(w - 40, 0, 40, h));
+    addBody(rect(0, h - 40, w, 40));
+
+    addUpgradeToPool(UpgradeId.HEALTH, 2);
+    addUpgradeToPool(UpgradeId.DAMAGE, 4);
+    addUpgradeToPool(UpgradeId.RANGE, 2);
+    addUpgradeToPool(UpgradeId.CRIT_CHANCE, 3);
+    addUpgradeToPool(UpgradeId.PICKUP_RANGE, 2);
+    addUpgradeToPool(UpgradeId.MOVEMENT_SPEED, 2);
+
+    addPlayer(w / 2, h / 2);
+
+    for (let i = -4; i <= w; i += 12) {
+      for (let j = -4; j <= h; j += 12) {
+        const x = i + random(4, 8);
+        const y = j + random(4, 8);
+        if (!isInInnerBounds(x, y)) {
+          addTree(x, y);
+        }
+      }
+    }
+
+    addHealthWidget(10, 10);
+    addTimeWidget(getWidth() - 10, 10);
+
+    setWorldState(WorldStateId.NORMAL);
   },
 
   update: () => {
@@ -37,19 +79,17 @@ run({
     }
 
     const player = getPlayer();
-    const isAlive = player.isPlayer && player.stats.health;
+    const isPlayerAlive = player.isPlayer && player.stats.health;
 
-    if (!isAlive) {
+    if (!isPlayerAlive) {
       defeat();
     }
 
     const state = getWorldState();
 
-    switch (state) {
-      case WorldStateId.NORMAL:
-        updateTimeSurvived();
-        updateEnemySpawner();
-        break;
+    if (state === WorldStateId.NORMAL) {
+      updateTime();
+      updateEnemySpawner();
     }
 
     sortEntities(sortEntitiesOnDepth);
@@ -57,81 +97,98 @@ run({
     for (const id of getEntities()) {
       const e = getEntity(id);
 
-      if (destroyIfExpired(e) || destroyIfDead(e)) {
-        continue;
+      if (state === WorldStateId.NORMAL) {
+        if (destroyIfExpired(e) || destroyIfDead(e)) {
+          continue;
+        }
+
+        switch (e.type) {
+          case Type.PLAYER:
+            updatePlayer(e);
+            break;
+          case Type.ENEMY:
+            updateEnemy(e);
+            break;
+          case Type.ATTACK:
+            updateAttack(e);
+            break;
+          case Type.XP_ORB:
+            updateExperienceOrb(e);
+            break;
+        }
+
+        updatePhysics(e);
+        updateCollisions(e);
+
+        switch (updateAnimation(e)) {
+          case AnimationId.ATTACK:
+            updateAttackAnimation(e);
+            break;
+          case AnimationId.STAGGER:
+            updateStaggerAnimation(e);
+            break;
+          case AnimationId.BREATH:
+            updateBreathAnimation(e);
+            break;
+          case AnimationId.WALK:
+            updateWalkAnimation(e);
+            break;
+          case AnimationId.WIND:
+            updateWindAnimation(e);
+            break;
+          case AnimationId.ITEM_IDLE:
+            updateItemIdleAnimation(e);
+            break;
+          case AnimationId.ITEM_PICKUP:
+            updateItemPickupAnimation(e);
+            break;
+          case AnimationId.COMBAT_TEXT:
+            updateCombatTextAnimation(e);
+            break;
+        }
       }
 
-      switch (state) {
-        case WorldStateId.NORMAL:
-          {
-            switch (e.type) {
-              case Type.PLAYER:
-                updatePlayer(e);
-                break;
-              case Type.ENEMY:
-                updateEnemy(e);
-                break;
-              case Type.ATTACK:
-                updateAttack(e);
-                break;
-              case Type.XP_ORB:
-                updateExperienceOrb(e);
-                break;
-            }
+      resetTransform();
+      applyCameraTransform();
+      renderEntity(e);
 
-            updatePhysics(e);
-            updateCollisions(e);
+      if (e.isEnemy) {
+        renderEntityStatus(e);
+      }
+    }
 
-            switch (updateAnimation(e)) {
-              case AnimationId.ATTACK:
-                updateAttackAnimation(e);
-                break;
-              case AnimationId.STAGGER:
-                updateStaggerAnimation(e);
-                break;
-              case AnimationId.BREATH:
-                updateBreathAnimation(e);
-                break;
-              case AnimationId.WALK:
-                updateWalkAnimation(e);
-                break;
-              case AnimationId.WIND:
-                updateWindAnimation(e);
-                break;
-              case AnimationId.ITEM_IDLE:
-                updateItemIdleAnimation(e);
-                break;
-              case AnimationId.ITEM_PICKUP:
-                updateItemPickupAnimation(e);
-                break;
-              case AnimationId.COMBAT_TEXT:
-                updateCombatTextAnimation(e);
-                break;
-            }
-          }
-          break;
+    for (const id of getWidgets()) {
+      const e = getEntity(id);
 
-        case WorldStateId.CHOOSE_UPGRADE:
-          {
-            switch (e.type) {
-              case Type.UI_UPGRADE:
-                updateUpgrade(e);
-                break;
-            }
-          }
+      switch (updateInteraction(e, false)) {
+        case InteractionId.CONFIRM_UPGRADE:
+          confirmUpgradeChoice(e.upgradeId);
           break;
       }
 
+      resetTransform();
       renderEntity(e);
 
       switch (e.type) {
+        case Type.UI_BACKDROP:
+          renderBackdropWidget();
+          break;
+        case Type.UI_HEALTH:
+          renderHealthWidget();
+          break;
+        case Type.UI_TIME:
+          updateTimeWidget(e);
+          break;
         case Type.UI_UPGRADE:
-          renderUpgrade(e);
+          renderUpgradeWidget(e);
+          break;
+        case Type.UI_DEFEAT:
+          renderDefeatWidget();
           break;
       }
     }
 
-    if (isAlive) {
+    if (isPlayerAlive) {
       updateCamera(player.position.x, player.position.y);
     }
 
@@ -144,34 +201,10 @@ run({
         onAttackDestroy(e);
       }
       removeEntity(id);
-      removeFromWorld(id);
       zeroEntity(e);
     }
 
     clearDestroyedEntities();
-
-    switch (state) {
-      case WorldStateId.NORMAL:
-        {
-          for (const id of getEnemiesGroup()) {
-            const e = getEntity(id);
-            renderEntityStatus(e);
-          }
-          renderTimeSurvived();
-          renderHud();
-        }
-        break;
-
-      case WorldStateId.CHOOSE_UPGRADE:
-        renderTimeSurvived();
-        renderHud();
-        renderLevelUp();
-        break;
-
-      case WorldStateId.DEFEAT:
-        renderDefeat();
-        break;
-    }
 
     if (isDebugging) {
       debugHitboxes();
@@ -179,7 +212,6 @@ run({
       resetTransform();
       scaleTransform(0.5, 0.5);
       debugFps();
-      translateTransform(0, 11);
     }
 
     drawVersion();

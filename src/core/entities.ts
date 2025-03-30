@@ -1,18 +1,14 @@
 import { MAX_ENTITIES } from "@/consts.js";
 import { Entity, newEntity } from "@/core/entity.js";
-import { clamp, remove, table, Table } from "ridder";
+import { clamp, table, Table } from "ridder";
 
 export type Entities = {
   data: Table<Entity>;
-  active: Array<number>;
-  destroyed: Array<number>;
   nextId: number;
 };
 
 const entities: Entities = {
   data: table(MAX_ENTITIES, newEntity),
-  active: [],
-  destroyed: [],
   nextId: 0,
 };
 
@@ -33,37 +29,9 @@ export function nextEntity() {
   e.id = id;
   e.isAllocated = true;
 
-  entities.active.push(e.id);
-
   return e;
 }
 
 export function getEntity(id: number) {
   return entities.data[id];
-}
-
-export function removeEntity(id: number) {
-  remove(entities.active, id);
-}
-
-export function destroyEntity(id: number) {
-  const e = getEntity(id);
-  e.isDestroyed = true;
-  entities.destroyed.push(id);
-}
-
-export function getEntities(): Readonly<Array<number>> {
-  return entities.active;
-}
-
-export function sortEntities(sort: (a: number, b: number) => number) {
-  entities.active.sort(sort);
-}
-
-export function getDestroyedEntities(): Readonly<Array<number>> {
-  return entities.destroyed;
-}
-
-export function clearDestroyedEntities() {
-  entities.destroyed.length = 0;
 }
