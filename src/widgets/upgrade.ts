@@ -1,8 +1,8 @@
 import { SpriteId } from "@/core/assets.js";
-import { Entity, setHitarea, setSprite, Type } from "@/core/entity.js";
+import { Entity, InteractionId, setHitarea, setSprite, Type } from "@/core/entity.js";
+import { getPlayer } from "@/core/game.js";
 import { copyStats, Stats } from "@/core/stats.js";
 import { getUpgrade, Upgrade, UpgradeId } from "@/core/upgrades.js";
-import { getPlayer } from "@/core/game.js";
 import { addWidget } from "@/widgets/widget.js";
 import { drawText, scaleTransform, translateTransform } from "ridder";
 
@@ -15,6 +15,7 @@ export function addUpgradeWidget(x: number, y: number, id: UpgradeId) {
   const player = getPlayer();
   copyStats(e.stats, player.stats);
 
+  e.interactionId = InteractionId.CONFIRM_UPGRADE;
   e.upgradeId = id;
 
   return e;
