@@ -369,7 +369,7 @@ export function resetState(e: Entity) {
 }
 
 export function resetAnimation(e: Entity) {
-  e.animNextId = AnimationId.NONE;
+  setAnimation(e, AnimationId.NONE);
 }
 
 export function renderEntity(e: Entity) {
