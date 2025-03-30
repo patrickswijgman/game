@@ -344,15 +344,6 @@ export function updateBody(e: Entity) {
   addVector(e.body, e.bodyOffset);
 }
 
-export function updateAnimation(e: Entity) {
-  if (e.animNextId !== e.animId) {
-    resetAnimation(e);
-    e.animId = e.animNextId;
-  }
-
-  return e.animId;
-}
-
 export function updateState(e: Entity, onEnter: (e: Entity) => void, onUpdate: (e: Entity) => void, onExit: (e: Entity) => void) {
   if (e.stateNextId !== e.stateId) {
     onEntityStateExit(e, onExit);
@@ -362,15 +353,23 @@ export function updateState(e: Entity, onEnter: (e: Entity) => void, onUpdate: (
   onEntityStateUpdate(e, onUpdate);
 }
 
-export function resetAnimation(e: Entity) {
-  resetTimer(e.animTimer);
-  resetVector(e.animPosition);
-  setVector(e.animScale, 1, 1);
-  e.animAngle = 0;
+export function updateAnimation(e: Entity) {
+  if (e.animNextId !== e.animId) {
+    resetTimer(e.animTimer);
+    resetVector(e.animPosition);
+    setVector(e.animScale, 1, 1);
+    e.animAngle = 0;
+    e.animId = e.animNextId;
+  }
+  return e.animId;
 }
 
 export function resetState(e: Entity) {
   setState(e, e.stateStartId);
+}
+
+export function resetAnimation(e: Entity) {
+  e.animNextId = AnimationId.NONE;
 }
 
 export function renderEntity(e: Entity) {
