@@ -1,8 +1,8 @@
 import { Entity } from "@/core/entity.js";
 import { tickTimer, tween } from "ridder";
 
-export function updateAttackAnimation(e: Entity, duration: number) {
-  tickTimer(e.tweenTimer, duration);
-  e.tweenScale.x = tween(1, 1.1, duration / 2, "easeInOutSine", e.tweenTimer.elapsed);
-  e.tweenScale.y = tween(1, 1.1, duration / 2, "easeInOutSine", e.tweenTimer.elapsed);
+export function updateAttackAnimation(e: Entity) {
+  tickTimer(e.animTimer, e.animDuration);
+  e.animScale.x = tween(1, 1.1, e.animDuration / 2, "easeInOutSine", e.animTimer.elapsed);
+  e.animScale.y = tween(1, 1.1, e.animDuration / 2, "easeInOutSine", e.animTimer.elapsed);
 }

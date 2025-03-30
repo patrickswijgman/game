@@ -1,7 +1,4 @@
-import { updateCombatTextAnimation } from "@/anims/combat-text.js";
-import { Type } from "@/core/entity.js";
-import { Entity } from "@/core/entity.js";
-import { addEntity } from "@/core/entity.js";
+import { addEntity, AnimationId, Entity, setAnimation, Type } from "@/core/entity.js";
 import { setVector } from "ridder";
 
 export function addCombatText(target: Entity, text: string) {
@@ -15,11 +12,9 @@ export function addCombatText(target: Entity, text: string) {
   e.textColor = getColor(text, target);
   e.lifeTime = 1000;
 
-  return e;
-}
+  setAnimation(e, AnimationId.COMBAT_TEXT, 500);
 
-export function updateCombatText(e: Entity) {
-  updateCombatTextAnimation(e);
+  return e;
 }
 
 function getColor(text: string, target: Entity) {

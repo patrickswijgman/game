@@ -132,7 +132,7 @@ export function setupWorld() {
 
 export function updateEnemySpawner() {
   if (tickTimer(world.spawnTimer, world.spawnTime)) {
-    if (isPlayerAlive() && world.enemies.length < MAX_ENEMIES) {
+    if (world.enemies.length < MAX_ENEMIES) {
       writeRandomPointInPerimeterBetweenRectangles(world.boundsOutside, world.bounds, world.spawnPosition);
       addMeleeEnemy(world.spawnPosition.x, world.spawnPosition.y);
       world.spawnTime = clamp(world.spawnTime - ENEMY_SPAWN_TIME_REDUCE, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_MAX);
@@ -197,11 +197,6 @@ export function addUpgradeToPool(id: UpgradeId, amount: number) {
 
 export function removeUpgradeFromPool(id: UpgradeId) {
   remove(world.upgrades, id);
-}
-
-export function isPlayerAlive() {
-  const player = getPlayer();
-  return player.isPlayer && !!player.stats.health;
 }
 
 export function chooseUpgrade() {

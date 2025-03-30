@@ -1,5 +1,3 @@
-import { updateAttackAnimation } from "@/anims/attack.js";
-import { updateStaggerAnimation } from "@/anims/stagger.js";
 import { COLOR_OUTLINE } from "@/consts.js";
 import { SpriteId } from "@/core/assets.js";
 import { AttackId, getAttack } from "@/core/attacks.js";
@@ -26,13 +24,23 @@ export const enum StateId {
   NONE,
   ATTACK,
   STAGGER,
-  PLAYER_IDLE,
-  PLAYER_WALK,
-  ENEMY_IDLE,
+  PLAYER,
   ENEMY_SEEK,
   ENEMY_ATTACK,
-  XP_ORB_IDLE,
-  XP_ORB_SEEK,
+  ITEM_IDLE,
+  ITEM_PICKUP,
+}
+
+export const enum AnimationId {
+  NONE,
+  ATTACK,
+  STAGGER,
+  BREATH,
+  WALK,
+  WIND,
+  ITEM_IDLE,
+  ITEM_PICKUP,
+  COMBAT_TEXT,
 }
 
 export type Entity = {
@@ -78,15 +86,18 @@ export type Entity = {
   textColor: string;
 
   // Animation
-  tweenPosition: Vector;
-  tweenScale: Vector;
-  tweenAngle: number;
-  tweenTime: number;
-  tweenTimer: Timer;
+  animId: AnimationId;
+  animNextId: AnimationId;
+  animPosition: Vector;
+  animScale: Vector;
+  animAngle: number;
+  animTimer: Timer;
+  animDuration: number;
 
   // State management
   stateId: StateId;
   stateNextId: StateId;
+  stateStartId: StateId;
   stateTimer: Timer;
 
   // Life cycle
@@ -163,15 +174,18 @@ export function newEntity(): Entity {
     textColor: "",
 
     // Animation
-    tweenPosition: vec(),
-    tweenScale: vec(1, 1),
-    tweenAngle: 0,
-    tweenTime: 0,
-    tweenTimer: timer(),
+    animId: AnimationId.NONE,
+    animNextId: AnimationId.NONE,
+    animPosition: vec(),
+    animScale: vec(1, 1),
+    animAngle: 0,
+    animDuration: 0,
+    animTimer: timer(),
 
     // State management
     stateId: StateId.NONE,
     stateNextId: StateId.NONE,
+    stateStartId: StateId.NONE,
     stateTimer: timer(),
 
     // Life cycle
@@ -209,7 +223,7 @@ export function zeroEntity(e: Entity) {
   zero(e);
   setVector(e.scale, 1, 1);
   setVector(e.scroll, 1, 1);
-  setVector(e.tweenScale, 1, 1);
+  setVector(e.animScale, 1, 1);
 }
 
 export function addEntity(type: Type, x: number, y: number) {
@@ -218,6 +232,11 @@ export function addEntity(type: Type, x: number, y: number) {
   setVector(e.start, x, y);
   setVector(e.position, x, y);
   return e;
+}
+
+export function initState(e: Entity, stateId: StateId) {
+  e.stateStartId = stateId;
+  e.stateNextId = stateId;
 }
 
 export function setSprite(e: Entity, spriteId: SpriteId, pivotX: number, pivotY: number, flashId = SpriteId.NONE, outlineId = SpriteId.NONE) {
@@ -256,6 +275,13 @@ export function setHitarea(e: Entity, x: number, y: number, w: number, h: number
   updateHitarea(e);
 }
 
+export function setAnimation(e: Entity, animId: AnimationId, duration = 0) {
+  if (animId !== e.animNextId) {
+    e.animNextId = animId;
+    e.animDuration = duration;
+  }
+}
+
 export function setState(e: Entity, stateId: StateId) {
   e.stateNextId = stateId;
 }
@@ -283,13 +309,13 @@ export function updateCollisions(e: Entity) {
     if (e.bodyIntersection.x) {
       e.position.x += e.bodyIntersection.x;
       e.velocity.x = 0;
+      updateBody(e);
     }
     if (e.bodyIntersection.y) {
       e.position.y += e.bodyIntersection.y;
       e.velocity.y = 0;
+      updateBody(e);
     }
-
-    updateBody(e);
   }
 }
 
@@ -313,6 +339,15 @@ export function updateBody(e: Entity) {
   addVector(e.body, e.bodyOffset);
 }
 
+export function updateAnimation(e: Entity) {
+  if (e.animNextId !== e.animId) {
+    resetAnimation(e);
+    e.animId = e.animNextId;
+  }
+
+  return e.animId;
+}
+
 export function updateState(e: Entity, onEnter: (e: Entity) => void, onUpdate: (e: Entity) => void, onExit: (e: Entity) => void) {
   if (e.stateNextId !== e.stateId) {
     onEntityStateExit(e, onExit);
@@ -325,9 +360,13 @@ export function updateState(e: Entity, onEnter: (e: Entity) => void, onUpdate: (
 function onEntityStateEnter(e: Entity, onEnter: (e: Entity) => void) {
   switch (e.stateId) {
     case StateId.ATTACK:
+      const attack = getAttack(e.attackId);
+      setAnimation(e, AnimationId.ATTACK, attack.recovery);
       addAttack(e);
       break;
+
     case StateId.STAGGER:
+      setAnimation(e, AnimationId.STAGGER, 150);
       e.isFlashing = true;
       break;
   }
@@ -339,19 +378,16 @@ function onEntityStateUpdate(e: Entity, onUpdate: (e: Entity) => void) {
     case StateId.ATTACK:
       {
         const attack = getAttack(e.attackId);
-        const duration = attack.recovery;
-        updateAttackAnimation(e, duration);
-        if (tickTimer(e.stateTimer, duration)) {
-          setState(e, StateId.NONE);
+        if (tickTimer(e.stateTimer, attack.recovery)) {
+          resetState(e);
         }
       }
       break;
+
     case StateId.STAGGER:
       {
-        const duration = 150;
-        updateStaggerAnimation(e, duration);
-        if (tickTimer(e.stateTimer, duration)) {
-          setState(e, StateId.NONE);
+        if (tickTimer(e.stateTimer, 150)) {
+          resetState(e);
         }
       }
       break;
@@ -365,18 +401,21 @@ function onEntityStateExit(e: Entity, onExit: (e: Entity) => void) {
       e.isFlashing = false;
       break;
   }
-  resetEntity(e);
+  resetVector(e.velocity);
+  resetTimer(e.stateTimer);
+  resetAnimation(e);
   onExit(e);
 }
 
-export function resetEntity(e: Entity) {
-  resetVector(e.velocity);
-  resetTimer(e.stateTimer);
-  resetTimer(e.tweenTimer);
-  resetVector(e.tweenPosition);
-  setVector(e.tweenScale, 1, 1);
-  e.tweenAngle = 0;
-  e.tweenTime = 0;
+export function resetAnimation(e: Entity) {
+  resetTimer(e.animTimer);
+  resetVector(e.animPosition);
+  setVector(e.animScale, 1, 1);
+  e.animAngle = 0;
+}
+
+export function resetState(e: Entity) {
+  setState(e, e.stateStartId);
 }
 
 export function renderEntity(e: Entity) {
@@ -396,9 +435,11 @@ export function renderEntity(e: Entity) {
     setAlpha(1);
   }
 
-  translateTransform(e.tweenPosition.x, e.tweenPosition.y);
-  scaleTransform(e.tweenScale.x, e.tweenScale.y);
-  rotateTransform(e.tweenAngle);
+  if (e.animId) {
+    translateTransform(e.animPosition.x, e.animPosition.y);
+    scaleTransform(e.animScale.x, e.animScale.y);
+    rotateTransform(e.animAngle);
+  }
 
   if (e.isFlashing) {
     drawSprite(e.flashId, -e.pivot.x, -e.pivot.y);

@@ -2,7 +2,7 @@ import { Entity } from "@/core/entity.js";
 import { tickTimer, tween } from "ridder";
 
 export function updateBreathAnimation(e: Entity) {
-  tickTimer(e.tweenTimer, Infinity);
-  e.tweenScale.x = tween(1, 1.1, 2000, "easeInOutSine", e.tweenTimer.elapsed);
-  e.tweenScale.y = tween(1, 1.1, 2000, "easeInOutSine", e.tweenTimer.elapsed);
+  tickTimer(e.animTimer, Infinity);
+  e.animScale.x = tween(1, 1.1, e.animDuration, "easeInOutSine", e.animTimer.elapsed);
+  e.animScale.y = tween(1, 1.1, e.animDuration, "easeInOutSine", e.animTimer.elapsed);
 }

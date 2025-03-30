@@ -1,10 +1,9 @@
-import { updateExperienceOrbIdleAnimation, updateExperienceOrbSeekAnimation } from "@/anims/xp-orb.js";
 import { SpriteId } from "@/core/assets.js";
 import { addExperience } from "@/core/combat.js";
 import { destroyEntity } from "@/core/entities.js";
-import { addEntity, Entity, setShadow, setSprite, setState, StateId, Type, updateState } from "@/core/entity.js";
-import { getPlayer, isPlayerAlive } from "@/core/world.js";
-import { getVectorDistance } from "ridder";
+import { addEntity, AnimationId, Entity, initState, setAnimation, setShadow, setSprite, setState, StateId, Type, updateState } from "@/core/entity.js";
+import { getPlayer } from "@/core/world.js";
+import { getVectorDistance, tickTimer } from "ridder";
 
 export function addExperienceOrb(x: number, y: number, xp: number) {
   const e = addEntity(Type.XP_ORB, x, y);
@@ -14,7 +13,7 @@ export function addExperienceOrb(x: number, y: number, xp: number) {
 
   e.stats.experience = xp;
 
-  setState(e, StateId.XP_ORB_IDLE);
+  initState(e, StateId.ITEM_IDLE);
 
   return e;
 }
@@ -25,35 +24,33 @@ export function updateExperienceOrb(e: Entity) {
 
 function onStateEnter(e: Entity) {
   switch (e.stateId) {
-    case StateId.NONE:
-      setState(e, StateId.XP_ORB_IDLE);
+    case StateId.ITEM_IDLE:
+      setAnimation(e, AnimationId.ITEM_IDLE, 1000);
+      break;
+
+    case StateId.ITEM_PICKUP:
+      setAnimation(e, AnimationId.ITEM_PICKUP, 500);
       break;
   }
 }
 
 function onStateUpdate(e: Entity) {
   switch (e.stateId) {
-    case StateId.XP_ORB_IDLE:
+    case StateId.ITEM_IDLE:
       {
-        updateExperienceOrbIdleAnimation(e);
-        if (isPlayerAlive()) {
-          const player = getPlayer();
-          const distance = getVectorDistance(e.position, player.position);
-          if (distance < player.stats.pickupRange) {
-            setState(e, StateId.XP_ORB_SEEK);
-          }
+        const player = getPlayer();
+        const distance = getVectorDistance(e.position, player.position);
+        if (distance < player.stats.pickupRange) {
+          setState(e, StateId.ITEM_PICKUP);
         }
       }
       break;
 
-    case StateId.XP_ORB_SEEK:
+    case StateId.ITEM_PICKUP:
       {
-        if (isPlayerAlive()) {
-          const completed = updateExperienceOrbSeekAnimation(e);
-          if (completed) {
-            addExperience(e.stats.experience);
-            destroyEntity(e.id);
-          }
+        if (tickTimer(e.stateTimer, 500)) {
+          addExperience(e.stats.experience);
+          destroyEntity(e.id);
         }
       }
       break;

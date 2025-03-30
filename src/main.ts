@@ -1,13 +1,18 @@
+import { updateAttackAnimation } from "@/anims/attack.js";
+import { updateBreathAnimation } from "@/anims/breath.js";
+import { updateCombatTextAnimation } from "@/anims/combat-text.js";
+import { updateItemIdleAnimation, updateItemPickupAnimation } from "@/anims/item.js";
+import { updateStaggerAnimation } from "@/anims/stagger.js";
+import { updateWalkAnimation } from "@/anims/walk.js";
+import { updateWindAnimation } from "@/anims/wind.js";
 import { loadAssets } from "@/core/assets.js";
 import { clearDestroyedEntities, getDestroyedEntities, getEntities, getEntity, removeEntity, sortEntities } from "@/core/entities.js";
-import { destroyIfDead, destroyIfExpired, renderEntity, renderEntityStatus, Type, updateCollisions, updatePhysics, zeroEntity } from "@/core/entity.js";
+import { AnimationId, destroyIfDead, destroyIfExpired, renderEntity, renderEntityStatus, Type, updateAnimation, updateCollisions, updatePhysics, zeroEntity } from "@/core/entity.js";
 import { renderHud } from "@/core/ui.js";
-import { defeat, getBodies, getEnemiesGroup, getPlayer, getWorldState, isPlayerAlive, removeFromWorld, renderDefeat, renderLevelUp, renderTimeSurvived, setupWorld, updateEnemySpawner, updateTimeSurvived, WorldStateId } from "@/core/world.js";
+import { defeat, getBodies, getEnemiesGroup, getPlayer, getWorldState, removeFromWorld, renderDefeat, renderLevelUp, renderTimeSurvived, setupWorld, updateEnemySpawner, updateTimeSurvived, WorldStateId } from "@/core/world.js";
 import { onAttackDestroy, updateAttack } from "@/entities/attack.js";
-import { updateCombatText } from "@/entities/combat-text.js";
 import { onEnemyDestroy, updateEnemy } from "@/entities/enemy.js";
 import { updatePlayer } from "@/entities/player.js";
-import { updateTree } from "@/entities/tree.js";
 import { renderUpgrade, updateUpgrade } from "@/entities/upgrade.js";
 import { updateExperienceOrb } from "@/entities/xp-orb.js";
 import { applyCameraTransform, drawRectInstance, drawText, getFramePerSecond, getHeight, getWidth, InputCode, isInputPressed, isRectangleValid, resetTransform, run, scaleTransform, setAlpha, translateTransform, updateCamera } from "ridder";
@@ -31,7 +36,10 @@ run({
       isDebugging = !isDebugging;
     }
 
-    if (!isPlayerAlive()) {
+    const player = getPlayer();
+    const isAlive = player.isPlayer && player.stats.health;
+
+    if (!isAlive) {
       defeat();
     }
 
@@ -39,10 +47,8 @@ run({
 
     switch (state) {
       case WorldStateId.NORMAL:
-        {
-          updateTimeSurvived();
-          updateEnemySpawner();
-        }
+        updateTimeSurvived();
+        updateEnemySpawner();
         break;
     }
 
@@ -65,22 +71,43 @@ run({
               case Type.ENEMY:
                 updateEnemy(e);
                 break;
-              case Type.TREE:
-                updateTree(e);
-                break;
               case Type.ATTACK:
                 updateAttack(e);
                 break;
               case Type.XP_ORB:
                 updateExperienceOrb(e);
                 break;
-              case Type.COMBAT_TEXT:
-                updateCombatText(e);
-                break;
             }
 
             updatePhysics(e);
             updateCollisions(e);
+
+            switch (updateAnimation(e)) {
+              case AnimationId.ATTACK:
+                updateAttackAnimation(e);
+                break;
+              case AnimationId.STAGGER:
+                updateStaggerAnimation(e);
+                break;
+              case AnimationId.BREATH:
+                updateBreathAnimation(e);
+                break;
+              case AnimationId.WALK:
+                updateWalkAnimation(e);
+                break;
+              case AnimationId.WIND:
+                updateWindAnimation(e);
+                break;
+              case AnimationId.ITEM_IDLE:
+                updateItemIdleAnimation(e);
+                break;
+              case AnimationId.ITEM_PICKUP:
+                updateItemPickupAnimation(e);
+                break;
+              case AnimationId.COMBAT_TEXT:
+                updateCombatTextAnimation(e);
+                break;
+            }
           }
           break;
 
@@ -104,8 +131,7 @@ run({
       }
     }
 
-    if (isPlayerAlive()) {
-      const player = getPlayer();
+    if (isAlive) {
       updateCamera(player.position.x, player.position.y);
     }
 
@@ -195,7 +221,7 @@ function drawVersion() {
   resetTransform();
   translateTransform(getWidth() - 2, getHeight() - 2);
   scaleTransform(0.5, 0.5);
-  setAlpha(0.5);
+  setAlpha(0.3);
   drawText(__VERSION__, 0, 0, "white", "right", "bottom");
   setAlpha(1);
 }
