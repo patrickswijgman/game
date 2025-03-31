@@ -8,7 +8,7 @@ import { updateWindAnimation } from "@/anims/wind.js";
 import { COLOR_GRASS } from "@/consts.js";
 import { loadAssets } from "@/core/assets.js";
 import { AnimationId, destroyIfDead, destroyIfExpired, InteractionId, renderEntity, renderEntityStatus, Type, updateAnimation, updateCollisions, updateInteraction, updatePhysics, zeroEntity } from "@/core/entity.js";
-import { addBody, addUpgradeToPool, clearDestroyedEntities, confirmUpgradeChoice, defeat, GameStateId, getBodies, getDestroyedEntities, getEntity, getObjectsGroup, getPlayer, getWidgetsGroup, isInInnerBounds, isPlayerAlive, removeEntity, setBounds, setGameState, sortObjectsGroup, transitionGameState, updateEnemySpawner, updateTime } from "@/core/game.js";
+import { addBody, addUpgradeToPool, clearDestroyedEntities, confirmUpgradeChoice, defeat, GameStateId, getDestroyedEntities, getEntity, getObjectsGroup, getPlayer, getWidgetsGroup, isInInnerBounds, isPlayerAlive, removeEntity, setBounds, setGameState, sortObjectsGroup, transitionGameState, updateEnemySpawner, updateTime } from "@/core/game.js";
 import { UpgradeId } from "@/core/upgrades.js";
 import { onAttackDestroy, updateAttack } from "@/entities/attack.js";
 import { onEnemyDestroy, updateEnemy } from "@/entities/enemy.js";
@@ -24,9 +24,7 @@ import { addTimeWidget, updateTimeWidget } from "@/widgets/time.js";
 import { renderUpgradeWidget } from "@/widgets/upgrade.js";
 import { addVersionWidget } from "@/widgets/version.js";
 import { addExperienceWidget, renderExperienceWidget } from "@/widgets/xp.js";
-import { applyCameraTransform, drawRectInstance, getHeight, getWidth, InputCode, isInputPressed, isRectangleValid, random, rect, resetTransform, run, scaleTransform, setBackgroundColor, setCameraBounds, setCameraPosition, setCameraSmoothing, updateCamera } from "ridder";
-
-let isDebugging = false;
+import { applyCameraTransform, getHeight, getWidth, InputCode, isInputPressed, random, rect, resetTransform, run, setBackgroundColor, setCameraBounds, setCameraPosition, setCameraSmoothing, updateCamera } from "ridder";
 
 run({
   width: 320,
@@ -80,19 +78,16 @@ run({
     if (isInputPressed(InputCode.KEY_R)) {
       document.location.reload();
     }
-    if (isInputPressed(InputCode.KEY_H)) {
-      isDebugging = !isDebugging;
-    }
 
     const state = transitionGameState();
 
     if (state === GameStateId.NORMAL) {
-      if (!isPlayerAlive()) {
+      if (isPlayerAlive()) {
+        updateTime();
+        updateEnemySpawner();
+      } else {
         defeat();
-        return;
       }
-      updateTime();
-      updateEnemySpawner();
     }
 
     sortObjectsGroup(sortEntitiesOnDepth);
@@ -200,6 +195,9 @@ run({
         case Type.WIDGET_DEFEAT:
           renderDefeatWidget();
           break;
+        case Type.WIDGET_DEBUG:
+          renderDefeatWidget();
+          break;
       }
     }
 
@@ -221,13 +219,6 @@ run({
     }
 
     clearDestroyedEntities();
-
-    if (isDebugging) {
-      debugHitboxes();
-      debugBodies();
-      resetTransform();
-      scaleTransform(0.5, 0.5);
-    }
   },
 });
 
@@ -235,25 +226,4 @@ function sortEntitiesOnDepth(idA: number, idB: number): number {
   const a = getEntity(idA);
   const b = getEntity(idB);
   return a.position.y + a.depth - b.position.y + b.depth;
-}
-
-function debugHitboxes() {
-  resetTransform();
-  applyCameraTransform();
-  for (const id of getObjectsGroup()) {
-    const e = getEntity(id);
-    if (isRectangleValid(e.hitbox)) {
-      drawRectInstance(e.hitbox, "yellow", false);
-    }
-  }
-}
-
-function debugBodies() {
-  resetTransform();
-  applyCameraTransform();
-  for (const body of getBodies()) {
-    if (isRectangleValid(body)) {
-      drawRectInstance(body, "red", false);
-    }
-  }
 }

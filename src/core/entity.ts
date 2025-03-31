@@ -27,6 +27,7 @@ export const enum Type {
   WIDGET_DEFEAT,
   WIDGET_FPS,
   WIDGET_VERSION,
+  WIDGET_DEBUG,
 }
 
 export const enum StateId {
