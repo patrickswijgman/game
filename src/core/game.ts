@@ -126,16 +126,13 @@ export function getEntity(id: number) {
   return game.entities[id];
 }
 
-export function transitionGameState() {
-  game.stateId = game.stateNextId;
-}
-
 export function setGameState(id: GameStateId) {
   game.stateNextId = id;
 }
 
-export function isGameState(id: GameStateId) {
-  return game.stateId === id;
+export function transitionGameState() {
+  game.stateId = game.stateNextId;
+  return game.stateId;
 }
 
 export function setBounds(w: number, h: number) {
@@ -308,11 +305,9 @@ export function confirmUpgradeChoice(id: UpgradeId) {
 }
 
 export function defeat() {
-  if (isGameState(GameStateId.NORMAL)) {
-    addBackdropWidget();
-    addDefeatWidget();
-    setGameState(GameStateId.DEFEAT);
-  }
+  addBackdropWidget();
+  addDefeatWidget();
+  setGameState(GameStateId.DEFEAT);
 }
 
 export function getTimeString() {

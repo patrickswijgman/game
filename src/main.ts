@@ -8,7 +8,7 @@ import { updateWindAnimation } from "@/anims/wind.js";
 import { COLOR_GRASS } from "@/consts.js";
 import { loadAssets } from "@/core/assets.js";
 import { AnimationId, destroyIfDead, destroyIfExpired, InteractionId, renderEntity, renderEntityStatus, Type, updateAnimation, updateCollisions, updateInteraction, updatePhysics, zeroEntity } from "@/core/entity.js";
-import { addBody, addUpgradeToPool, clearDestroyedEntities, confirmUpgradeChoice, defeat, GameStateId, getBodies, getDestroyedEntities, getEntity, getObjectsGroup, getPlayer, getWidgetsGroup, isGameState, isInInnerBounds, isPlayerAlive, removeEntity, setBounds, setGameState, sortObjectsGroup, transitionGameState, updateEnemySpawner, updateTime } from "@/core/game.js";
+import { addBody, addUpgradeToPool, clearDestroyedEntities, confirmUpgradeChoice, defeat, GameStateId, getBodies, getDestroyedEntities, getEntity, getObjectsGroup, getPlayer, getWidgetsGroup, isInInnerBounds, isPlayerAlive, removeEntity, setBounds, setGameState, sortObjectsGroup, transitionGameState, updateEnemySpawner, updateTime } from "@/core/game.js";
 import { UpgradeId } from "@/core/upgrades.js";
 import { onAttackDestroy, updateAttack } from "@/entities/attack.js";
 import { onEnemyDestroy, updateEnemy } from "@/entities/enemy.js";
@@ -84,13 +84,13 @@ run({
       isDebugging = !isDebugging;
     }
 
-    transitionGameState();
+    const state = transitionGameState();
 
-    if (!isPlayerAlive()) {
-      defeat();
-    }
-
-    if (isGameState(GameStateId.NORMAL)) {
+    if (state === GameStateId.NORMAL) {
+      if (!isPlayerAlive()) {
+        defeat();
+        return;
+      }
       updateTime();
       updateEnemySpawner();
     }
@@ -100,7 +100,7 @@ run({
     for (const id of getObjectsGroup()) {
       const e = getEntity(id);
 
-      if (isGameState(GameStateId.NORMAL)) {
+      if (state === GameStateId.NORMAL) {
         if (destroyIfExpired(e) || destroyIfDead(e)) {
           continue;
         }
