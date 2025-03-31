@@ -1,12 +1,13 @@
-import { COLOR_OUTLINE, ENEMY_SPAWN_TIME_MAX, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_REDUCE, MAX_ENEMIES, MAX_ENTITIES, MAX_LEVEL } from "@/consts.js";
+import { ENEMY_SPAWN_TIME_MAX, ENEMY_SPAWN_TIME_MIN, ENEMY_SPAWN_TIME_REDUCE, MAX_ENEMIES, MAX_ENTITIES } from "@/consts.js";
 import { Entity, newEntity } from "@/core/entity.js";
 import { addStats } from "@/core/stats.js";
 import { getUpgrade, UpgradeId } from "@/core/upgrades.js";
 import { addMeleeEnemy } from "@/entities/enemy-melee.js";
 import { addBackdropWidget } from "@/widgets/backdrop.js";
 import { addDefeatWidget } from "@/widgets/defeat.js";
+import { addLevelUpWidget } from "@/widgets/levelup.js";
 import { addUpgradeWidget } from "@/widgets/upgrade.js";
-import { clamp, doesRectangleContain, drawTextOutlined, getDeltaTime, getHeight, getWidth, InputCode, pick, rect, Rectangle, remove, resetInput, resetTimer, resetTransform, roll, scaleTransform, setRectangle, table, Table, tickTimer, timer, Timer, translateTransform, vec, Vector, writeRandomPointInPerimeterBetweenRectangles } from "ridder";
+import { clamp, doesRectangleContain, getDeltaTime, getHeight, getWidth, InputCode, pick, rect, Rectangle, remove, resetInput, resetTimer, roll, setRectangle, table, Table, tickTimer, timer, Timer, vec, Vector, writeRandomPointInPerimeterBetweenRectangles } from "ridder";
 
 export const enum GameStateId {
   NONE,
@@ -17,7 +18,7 @@ export const enum GameStateId {
 
 export type Game = {
   // Entities
-  data: Table<Entity>;
+  entities: Table<Entity>;
   nextId: number;
 
   // State
@@ -33,7 +34,7 @@ export type Game = {
   bodies: Array<Rectangle>;
 
   // Groups
-  active: Array<number>;
+  objects: Array<number>;
   allies: Array<number>;
   enemies: Array<number>;
   widgets: Array<number>;
@@ -60,7 +61,7 @@ export type Game = {
 
 const game: Game = {
   // Entities
-  data: table(MAX_ENTITIES, newEntity),
+  entities: table(MAX_ENTITIES, newEntity),
   nextId: 0,
 
   // State
@@ -76,7 +77,7 @@ const game: Game = {
   bodies: [],
 
   // Groups
-  active: [],
+  objects: [],
   allies: [],
   enemies: [],
   widgets: [],
@@ -103,16 +104,16 @@ const game: Game = {
 
 export function nextEntity() {
   let id = game.nextId;
-  let e = game.data[id];
+  let e = game.entities[id];
 
   if (e.isAllocated) {
-    id = game.data.findIndex((e) => !e.isAllocated);
+    id = game.entities.findIndex((e) => !e.isAllocated);
     if (id === -1) {
       throw new Error("Out of entities :(");
     }
 
-    e = game.data[id];
-    game.nextId = clamp(id + 1, 0, game.data.length - 1);
+    e = game.entities[id];
+    game.nextId = clamp(id + 1, 0, game.entities.length - 1);
   }
 
   e.id = id;
@@ -122,17 +123,7 @@ export function nextEntity() {
 }
 
 export function getEntity(id: number) {
-  return game.data[id];
-}
-
-export function setBounds(w: number, h: number) {
-  setRectangle(game.bounds, 0, 0, w, h);
-  setRectangle(game.boundsOutside, -50, -50, w + 100, h + 100);
-  setRectangle(game.boundsInside, 50, 50, w - 100, h - 100);
-}
-
-export function isInInnerBounds(x: number, y: number) {
-  return doesRectangleContain(game.boundsInside, x, y);
+  return game.entities[id];
 }
 
 export function transitionGameState() {
@@ -145,6 +136,16 @@ export function setGameState(id: GameStateId) {
 
 export function isGameState(id: GameStateId) {
   return game.stateId === id;
+}
+
+export function setBounds(w: number, h: number) {
+  setRectangle(game.bounds, 0, 0, w, h);
+  setRectangle(game.boundsOutside, -50, -50, w + 100, h + 100);
+  setRectangle(game.boundsInside, 50, 50, w - 100, h - 100);
+}
+
+export function isInInnerBounds(x: number, y: number) {
+  return doesRectangleContain(game.boundsInside, x, y);
 }
 
 export function updateEnemySpawner() {
@@ -162,40 +163,16 @@ export function updateTime() {
   game.time += getDeltaTime();
 }
 
-export function getEntities(): Readonly<Array<number>> {
-  return game.active;
+export function getObjectsGroup(): Readonly<Array<number>> {
+  return game.objects;
 }
 
-export function addToEntities(id: number) {
-  game.active.push(id);
+export function addToObjectsGroup(id: number) {
+  game.objects.push(id);
 }
 
-export function sortEntities(sort: (a: number, b: number) => number) {
-  game.active.sort(sort);
-}
-
-export function getDestroyedEntities(): Readonly<Array<number>> {
-  return game.destroyed;
-}
-
-export function clearDestroyedEntities() {
-  game.destroyed.length = 0;
-}
-
-export function destroyEntity(id: number) {
-  const e = getEntity(id);
-  e.isDestroyed = true;
-  game.destroyed.push(id);
-}
-
-export function removeEntity(id: number) {
-  const e = getEntity(id);
-  remove(game.active, id);
-  remove(game.allies, id);
-  remove(game.enemies, id);
-  remove(game.widgets, id);
-  remove(game.levelUpWidgets, id);
-  remove(game.bodies, e.body);
+export function sortObjectsGroup(sort: (a: number, b: number) => number) {
+  game.objects.sort(sort);
 }
 
 export function getAlliesGroup(): Readonly<Array<number>> {
@@ -214,12 +191,36 @@ export function addToEnemiesGroup(id: number) {
   game.enemies.push(id);
 }
 
-export function getWidgets(): Readonly<Array<number>> {
+export function getWidgetsGroup(): Readonly<Array<number>> {
   return game.widgets;
 }
 
-export function addToWidgets(id: number) {
+export function addToWidgetsGroup(id: number) {
   game.widgets.push(id);
+}
+
+export function destroyEntity(id: number) {
+  const e = getEntity(id);
+  e.isDestroyed = true;
+  game.destroyed.push(id);
+}
+
+export function getDestroyedEntities(): Readonly<Array<number>> {
+  return game.destroyed;
+}
+
+export function clearDestroyedEntities() {
+  game.destroyed.length = 0;
+}
+
+export function removeEntity(id: number) {
+  const e = getEntity(id);
+  remove(game.objects, id);
+  remove(game.allies, id);
+  remove(game.enemies, id);
+  remove(game.widgets, id);
+  remove(game.levelUpWidgets, id);
+  remove(game.bodies, e.body);
 }
 
 export function getBodies(): Readonly<Array<Rectangle>> {
@@ -272,7 +273,9 @@ export function chooseUpgrade() {
 
   if (game.upgradeChoices.length) {
     const backdrop = addBackdropWidget();
-    game.levelUpWidgets.push(backdrop.id);
+    const levelup = addLevelUpWidget();
+
+    game.levelUpWidgets.push(backdrop.id, levelup.id);
 
     for (let i = 0; i < game.upgradeChoices.length; i++) {
       const id = game.upgradeChoices[i];
@@ -310,26 +313,6 @@ export function defeat() {
     addDefeatWidget();
     setGameState(GameStateId.DEFEAT);
   }
-}
-
-// FIXME widgets
-
-export function renderTimeSurvived() {
-  resetTransform();
-  translateTransform(getWidth() - 10, 10);
-  scaleTransform(0.625, 0.625);
-  drawTextOutlined(getTimeString(), 0, 0, "white", COLOR_OUTLINE, "circle", "right");
-}
-
-export function renderLevelUp() {
-  const player = getPlayer();
-  resetTransform();
-  translateTransform(getWidth() / 2, 20);
-  scaleTransform(1.25, 1.25);
-  drawTextOutlined("Level up!", 0, 0, "white", COLOR_OUTLINE, "circle", "center", "middle");
-  translateTransform(0, 10);
-  scaleTransform(0.75, 0.75);
-  drawTextOutlined(`(${player.stats.level} / ${MAX_LEVEL})`, 0, 0, "white", COLOR_OUTLINE, "circle", "center", "middle");
 }
 
 export function getTimeString() {

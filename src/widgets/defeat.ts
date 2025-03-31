@@ -7,7 +7,7 @@ import { drawTextOutlined, getHeight, getWidth, scaleTransform, translateTransfo
 export function addDefeatWidget() {
   const x = getWidth() / 2;
   const y = getHeight() / 2;
-  const e = addWidget(Type.UI_DEFEAT, x, y);
+  const e = addWidget(Type.WIDGET_DEFEAT, x, y);
   return e;
 }
 

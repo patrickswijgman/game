@@ -1,10 +1,10 @@
 import { makeEntity, Type } from "@/core/entity.js";
-import { addToWidgets } from "@/core/game.js";
+import { addToWidgetsGroup } from "@/core/game.js";
 
 export function addWidget(type: Type, x: number, y: number) {
   const e = makeEntity(type, x, y);
 
-  addToWidgets(e.id);
+  addToWidgetsGroup(e.id);
 
   return e;
 }

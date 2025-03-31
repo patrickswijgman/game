@@ -4,7 +4,7 @@ import { addWidget } from "@/widgets/widget.js";
 import { setVector } from "ridder";
 
 export function addTimeWidget(x: number, y: number) {
-  const e = addWidget(Type.UI_TIME, x, y);
+  const e = addWidget(Type.WIDGET_TIME, x, y);
 
   setVector(e.scale, 0.625, 0.625);
 

@@ -8,7 +8,7 @@ import { updateWindAnimation } from "@/anims/wind.js";
 import { COLOR_GRASS } from "@/consts.js";
 import { loadAssets } from "@/core/assets.js";
 import { AnimationId, destroyIfDead, destroyIfExpired, InteractionId, renderEntity, renderEntityStatus, Type, updateAnimation, updateCollisions, updateInteraction, updatePhysics, zeroEntity } from "@/core/entity.js";
-import { addBody, addUpgradeToPool, clearDestroyedEntities, confirmUpgradeChoice, defeat, GameStateId, getBodies, getDestroyedEntities, getEntities, getEntity, getPlayer, getWidgets, isGameState, isInInnerBounds, isPlayerAlive, removeEntity, setBounds, setGameState, sortEntities, transitionGameState, updateEnemySpawner, updateTime } from "@/core/game.js";
+import { addBody, addUpgradeToPool, clearDestroyedEntities, confirmUpgradeChoice, defeat, GameStateId, getBodies, getDestroyedEntities, getEntity, getObjectsGroup, getPlayer, getWidgetsGroup, isGameState, isInInnerBounds, isPlayerAlive, removeEntity, setBounds, setGameState, sortObjectsGroup, transitionGameState, updateEnemySpawner, updateTime } from "@/core/game.js";
 import { UpgradeId } from "@/core/upgrades.js";
 import { onAttackDestroy, updateAttack } from "@/entities/attack.js";
 import { onEnemyDestroy, updateEnemy } from "@/entities/enemy.js";
@@ -17,10 +17,14 @@ import { addTree } from "@/entities/tree.js";
 import { updateExperienceOrb } from "@/entities/xp-orb.js";
 import { renderBackdropWidget } from "@/widgets/backdrop.js";
 import { renderDefeatWidget } from "@/widgets/defeat.js";
+import { addFpsWidget, updateFpsWidget } from "@/widgets/fps.js";
 import { addHealthWidget, renderHealthWidget } from "@/widgets/health.js";
+import { renderLevelupWidget } from "@/widgets/levelup.js";
 import { addTimeWidget, updateTimeWidget } from "@/widgets/time.js";
 import { renderUpgradeWidget } from "@/widgets/upgrade.js";
-import { applyCameraTransform, drawRectInstance, drawText, getFramePerSecond, getHeight, getWidth, InputCode, isInputPressed, isRectangleValid, random, rect, resetTransform, run, scaleTransform, setAlpha, setBackgroundColor, setCameraBounds, setCameraPosition, setCameraSmoothing, translateTransform, updateCamera } from "ridder";
+import { addVersionWidget } from "@/widgets/version.js";
+import { addExperienceWidget, renderExperienceWidget } from "@/widgets/xp.js";
+import { applyCameraTransform, drawRectInstance, getHeight, getWidth, InputCode, isInputPressed, isRectangleValid, random, rect, resetTransform, run, scaleTransform, setBackgroundColor, setCameraBounds, setCameraPosition, setCameraSmoothing, updateCamera } from "ridder";
 
 let isDebugging = false;
 
@@ -64,7 +68,10 @@ run({
     }
 
     addHealthWidget(10, 10);
+    addExperienceWidget(0, 0);
     addTimeWidget(getWidth() - 10, 10);
+    addFpsWidget(2, 2);
+    addVersionWidget(getWidth() - 2, getHeight() - 2);
 
     setGameState(GameStateId.NORMAL);
   },
@@ -88,9 +95,9 @@ run({
       updateEnemySpawner();
     }
 
-    sortEntities(sortEntitiesOnDepth);
+    sortObjectsGroup(sortEntitiesOnDepth);
 
-    for (const id of getEntities()) {
+    for (const id of getObjectsGroup()) {
       const e = getEntity(id);
 
       if (isGameState(GameStateId.NORMAL)) {
@@ -153,7 +160,7 @@ run({
       }
     }
 
-    for (const id of getWidgets()) {
+    for (const id of getWidgetsGroup()) {
       const e = getEntity(id);
 
       switch (updateInteraction(e, false)) {
@@ -163,8 +170,11 @@ run({
       }
 
       switch (e.type) {
-        case Type.UI_TIME:
+        case Type.WIDGET_TIME:
           updateTimeWidget(e);
+          break;
+        case Type.WIDGET_FPS:
+          updateFpsWidget(e);
           break;
       }
 
@@ -172,16 +182,22 @@ run({
       renderEntity(e);
 
       switch (e.type) {
-        case Type.UI_BACKDROP:
+        case Type.WIDGET_BACKDROP:
           renderBackdropWidget();
           break;
-        case Type.UI_HEALTH:
+        case Type.WIDGET_HEALTH:
           renderHealthWidget();
           break;
-        case Type.UI_UPGRADE:
+        case Type.WIDGET_XP:
+          renderExperienceWidget();
+          break;
+        case Type.WIDGET_UPGRADE:
           renderUpgradeWidget(e);
           break;
-        case Type.UI_DEFEAT:
+        case Type.WIDGET_LEVEL_UP:
+          renderLevelupWidget();
+          break;
+        case Type.WIDGET_DEFEAT:
           renderDefeatWidget();
           break;
       }
@@ -211,10 +227,7 @@ run({
       debugBodies();
       resetTransform();
       scaleTransform(0.5, 0.5);
-      debugFps();
     }
-
-    drawVersion();
   },
 });
 
@@ -227,7 +240,7 @@ function sortEntitiesOnDepth(idA: number, idB: number): number {
 function debugHitboxes() {
   resetTransform();
   applyCameraTransform();
-  for (const id of getEntities()) {
+  for (const id of getObjectsGroup()) {
     const e = getEntity(id);
     if (isRectangleValid(e.hitbox)) {
       drawRectInstance(e.hitbox, "yellow", false);
@@ -243,17 +256,4 @@ function debugBodies() {
       drawRectInstance(body, "red", false);
     }
   }
-}
-
-function debugFps() {
-  drawText(`FPS: ${getFramePerSecond()}`, 1, 1, "lime");
-}
-
-function drawVersion() {
-  resetTransform();
-  translateTransform(getWidth() - 2, getHeight() - 2);
-  scaleTransform(0.5, 0.5);
-  setAlpha(0.3);
-  drawText(__VERSION__, 0, 0, "white", "right", "bottom");
-  setAlpha(1);
 }

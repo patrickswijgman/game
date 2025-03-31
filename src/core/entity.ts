@@ -1,11 +1,10 @@
 import { COLOR_OUTLINE } from "@/consts.js";
 import { SpriteId } from "@/core/assets.js";
 import { AttackId } from "@/core/attacks.js";
-import { nextEntity } from "@/core/game.js";
+import { addBody, destroyEntity, getBodies, nextEntity } from "@/core/game.js";
 import { newStats, Stats } from "@/core/stats.js";
 import { drawHealthBar } from "@/core/ui.js";
 import { UpgradeId } from "@/core/upgrades.js";
-import { addBody, destroyEntity, getBodies } from "@/core/game.js";
 import { onEntityStateEnter, onEntityStateExit, onEntityStateUpdate } from "@/states/entity.js";
 import { addVector, addVectorScaled, applyCameraTransform, copyVector, doesRectangleContain, drawSprite, drawTextOutlined, getDelta, getMousePosition, InputCode, isInputPressed, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, vec, Vector, writeIntersectionBetweenRectangles, zero } from "ridder";
 
@@ -19,12 +18,15 @@ export const enum Type {
   ATTACK,
   COMBAT_TEXT,
 
-  UI_BACKDROP,
-  UI_UPGRADE,
-  UI_HEALTH,
-  UI_XP_BAR,
-  UI_TIME,
-  UI_DEFEAT,
+  WIDGET_BACKDROP,
+  WIDGET_UPGRADE,
+  WIDGET_HEALTH,
+  WIDGET_XP,
+  WIDGET_TIME,
+  WIDGET_LEVEL_UP,
+  WIDGET_DEFEAT,
+  WIDGET_FPS,
+  WIDGET_VERSION,
 }
 
 export const enum StateId {
@@ -81,6 +83,7 @@ export type Entity = {
   pivot: Vector;
   scale: Vector;
   angle: number;
+  alpha: number;
   depth: number;
   isFlipped: boolean;
 
@@ -171,6 +174,7 @@ export function newEntity(): Entity {
     pivot: vec(0, 0),
     scale: vec(1, 1),
     angle: 0,
+    alpha: 1,
     depth: 0,
     isFlipped: false,
 
@@ -239,6 +243,7 @@ export function zeroEntity(e: Entity) {
   zero(e);
   setVector(e.scale, 1, 1);
   setVector(e.animScale, 1, 1);
+  e.alpha = 1;
   e.textAlign = "left";
   e.textBaseline = "top";
 }
@@ -409,6 +414,7 @@ export function renderEntity(e: Entity) {
   translateTransform(e.position.x, e.position.y);
   scaleTransform(e.scale.x, e.scale.y);
   rotateTransform(e.angle);
+  setAlpha(e.alpha);
 
   if (e.isFlipped) {
     scaleTransform(-1, 1);
@@ -439,6 +445,8 @@ export function renderEntity(e: Entity) {
   if (e.text) {
     drawTextOutlined(e.text, 0, 0, e.textColor, COLOR_OUTLINE, "circle", e.textAlign, e.textBaseline);
   }
+
+  setAlpha(1);
 }
 
 export function renderEntityStatus(e: Entity) {

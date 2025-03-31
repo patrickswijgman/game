@@ -7,7 +7,7 @@ import { addWidget } from "@/widgets/widget.js";
 import { drawText, scaleTransform, translateTransform } from "ridder";
 
 export function addUpgradeWidget(x: number, y: number, id: UpgradeId) {
-  const e = addWidget(Type.UI_UPGRADE, x, y);
+  const e = addWidget(Type.WIDGET_UPGRADE, x, y);
 
   setSprite(e, SpriteId.UI_UPGRADE_BG, 2, 2, SpriteId.NONE, SpriteId.UI_UPGRADE_OUTLINE);
   setHitarea(e, 0, 0, 100, 100);

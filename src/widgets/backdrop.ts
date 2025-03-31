@@ -3,7 +3,7 @@ import { addWidget } from "@/widgets/widget.js";
 import { drawRect, getHeight, getWidth, setAlpha } from "ridder";
 
 export function addBackdropWidget() {
-  const e = addWidget(Type.UI_BACKDROP, 0, 0);
+  const e = addWidget(Type.WIDGET_BACKDROP, 0, 0);
   return e;
 }
 
