@@ -1,17 +1,15 @@
 import { XP_PER_LEVEL } from "@/consts.js";
 import { SpriteId } from "@/core/assets.js";
 import { AttackId } from "@/core/attacks.js";
-import { Entity, StateId, Type, initState, setBody, setCenter, setHitbox, setShadow, setSprite, updateState } from "@/core/entity.js";
+import { Entity, StateId, Type, applyAnimationTransform, drawShadow, initState, setBody, setCenter, setHitbox, updateState } from "@/core/entity.js";
 import { addToAlliesGroup, setPlayer } from "@/core/game.js";
 import { addEntity } from "@/entities/entity.js";
 import { onPlayerStateEnter, onPlayerStateExit, onPlayerStateUpdate } from "@/states/player.js";
-import { setVector } from "ridder";
+import { drawSprite, setVector } from "ridder";
 
 export function addPlayer(x: number, y: number) {
   const e = addEntity(Type.PLAYER, x, y);
 
-  setSprite(e, SpriteId.PLAYER, 8, 15, SpriteId.PLAYER_FLASH);
-  setShadow(e, SpriteId.PLAYER_SHADOW, 0, 2);
   setBody(e, -3, -2, 6, 2);
   setHitbox(e, -3, -8, 6, 8);
   setCenter(e, 0, -3);
@@ -44,4 +42,19 @@ export function addPlayer(x: number, y: number) {
 
 export function updatePlayer(e: Entity) {
   updateState(e, onPlayerStateEnter, onPlayerStateUpdate, onPlayerStateExit);
+}
+
+export function renderPlayer(e: Entity) {
+  const x = -8;
+  const y = -15;
+
+  drawShadow(SpriteId.PLAYER_SHADOW, x, y + 2);
+
+  applyAnimationTransform(e);
+
+  if (e.isFlashing) {
+    drawSprite(SpriteId.PLAYER_FLASH, x, y);
+  } else {
+    drawSprite(SpriteId.PLAYER, x, y);
+  }
 }

@@ -7,22 +7,24 @@ import { updateWalkAnimation } from "@/anims/walk.js";
 import { updateWindAnimation } from "@/anims/wind.js";
 import { COLOR_GRASS } from "@/consts.js";
 import { loadAssets } from "@/core/assets.js";
-import { AnimationId, destroyIfDead, destroyIfExpired, InteractionId, renderEntity, renderEntityStatus, Type, updateAnimation, updateCollisions, updateInteraction, updatePhysics, zeroEntity } from "@/core/entity.js";
+import { AnimationId, applyEntityTransform, destroyIfDead, destroyIfExpired, drawEnemyStatus, InteractionId, Type, updateAnimation, updateCollisions, updateInteraction, updatePhysics, zeroEntity } from "@/core/entity.js";
 import { addBody, addUpgradeToPool, clearDestroyedEntities, confirmUpgradeChoice, defeat, GameStateId, getDestroyedEntities, getEntity, getObjectsGroup, getPlayer, getWidgetsGroup, isInInnerBounds, isPlayerAlive, removeEntity, setBounds, setGameState, sortObjectsGroup, transitionGameState, updateEnemySpawner, updateTime } from "@/core/game.js";
 import { UpgradeId } from "@/core/upgrades.js";
-import { onAttackDestroy, updateAttack } from "@/entities/attack.js";
+import { onAttackDestroy, renderAttack, updateAttack } from "@/entities/attack.js";
+import { renderCombatText } from "@/entities/combat-text.js";
+import { renderMeleeEnemy } from "@/entities/enemy-melee.js";
 import { onEnemyDestroy, updateEnemy } from "@/entities/enemy.js";
-import { addPlayer, updatePlayer } from "@/entities/player.js";
-import { addTree } from "@/entities/tree.js";
-import { updateExperienceOrb } from "@/entities/xp-orb.js";
+import { addPlayer, renderPlayer, updatePlayer } from "@/entities/player.js";
+import { addTree, renderTree } from "@/entities/tree.js";
+import { renderExperienceOrb, updateExperienceOrb } from "@/entities/xp-orb.js";
 import { renderBackdropWidget } from "@/widgets/backdrop.js";
 import { renderDefeatWidget } from "@/widgets/defeat.js";
-import { addFpsWidget, updateFpsWidget } from "@/widgets/fps.js";
+import { addFpsWidget, renderFpsWidget } from "@/widgets/fps.js";
 import { addHealthWidget, renderHealthWidget } from "@/widgets/health.js";
 import { renderLevelupWidget } from "@/widgets/levelup.js";
-import { addTimeWidget, updateTimeWidget } from "@/widgets/time.js";
+import { addTimeWidget, renderTimeWidget } from "@/widgets/time.js";
 import { renderUpgradeWidget } from "@/widgets/upgrade.js";
-import { addVersionWidget } from "@/widgets/version.js";
+import { addVersionWidget, renderVersionWidget } from "@/widgets/version.js";
 import { addExperienceWidget, renderExperienceWidget } from "@/widgets/xp.js";
 import { applyCameraTransform, getHeight, getWidth, InputCode, isInputPressed, random, rect, resetTransform, run, setBackgroundColor, setCameraBounds, setCameraPosition, setCameraSmoothing, updateCamera } from "ridder";
 
@@ -65,6 +67,7 @@ run({
       }
     }
 
+    // TODO move position to widget
     addHealthWidget(10, 10);
     addExperienceWidget(0, 0);
     addTimeWidget(getWidth() - 10, 10);
@@ -104,7 +107,7 @@ run({
           case Type.PLAYER:
             updatePlayer(e);
             break;
-          case Type.ENEMY:
+          case Type.ENEMY_MELEE:
             updateEnemy(e);
             break;
           case Type.ATTACK:
@@ -148,10 +151,31 @@ run({
 
       resetTransform();
       applyCameraTransform();
-      renderEntity(e);
+      applyEntityTransform(e);
+
+      switch (e.type) {
+        case Type.PLAYER:
+          renderPlayer(e);
+          break;
+        case Type.ENEMY_MELEE:
+          renderMeleeEnemy(e);
+          break;
+        case Type.TREE:
+          renderTree(e);
+          break;
+        case Type.ATTACK:
+          renderAttack(e);
+          break;
+        case Type.XP_ORB:
+          renderExperienceOrb(e);
+          break;
+        case Type.COMBAT_TEXT:
+          renderCombatText(e);
+          break;
+      }
 
       if (e.isEnemy) {
-        renderEntityStatus(e);
+        drawEnemyStatus(e);
       }
     }
 
@@ -164,17 +188,8 @@ run({
           break;
       }
 
-      switch (e.type) {
-        case Type.WIDGET_TIME:
-          updateTimeWidget(e);
-          break;
-        case Type.WIDGET_FPS:
-          updateFpsWidget(e);
-          break;
-      }
-
       resetTransform();
-      renderEntity(e);
+      applyEntityTransform(e);
 
       switch (e.type) {
         case Type.WIDGET_BACKDROP:
@@ -195,8 +210,17 @@ run({
         case Type.WIDGET_DEFEAT:
           renderDefeatWidget();
           break;
+        case Type.WIDGET_TIME:
+          renderTimeWidget();
+          break;
+        case Type.WIDGET_FPS:
+          renderFpsWidget();
+          break;
         case Type.WIDGET_DEBUG:
           renderDefeatWidget();
+          break;
+        case Type.WIDGET_VERSION:
+          renderVersionWidget();
           break;
       }
     }

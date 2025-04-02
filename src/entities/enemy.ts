@@ -4,8 +4,8 @@ import { addEntity } from "@/entities/entity.js";
 import { addExperienceOrb } from "@/entities/xp-orb.js";
 import { onEnemyStateEnter, onEnemyStateExit, onEnemyStateUpdate } from "@/states/enemy.js";
 
-export function addEnemy(x: number, y: number) {
-  const e = addEntity(Type.ENEMY, x, y);
+export function addEnemy(type: Type, x: number, y: number) {
+  const e = addEntity(type, x, y);
 
   e.isEnemy = true;
 

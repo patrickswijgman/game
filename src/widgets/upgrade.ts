@@ -1,15 +1,14 @@
 import { SpriteId } from "@/core/assets.js";
-import { Entity, InteractionId, setHitarea, setSprite, Type } from "@/core/entity.js";
+import { Entity, InteractionId, setHitarea, Type } from "@/core/entity.js";
 import { getPlayer } from "@/core/game.js";
 import { copyStats, Stats } from "@/core/stats.js";
 import { getUpgrade, Upgrade, UpgradeId } from "@/core/upgrades.js";
 import { addWidget } from "@/widgets/widget.js";
-import { drawText, scaleTransform, translateTransform } from "ridder";
+import { drawSprite, drawText, scaleTransform, translateTransform } from "ridder";
 
 export function addUpgradeWidget(x: number, y: number, id: UpgradeId) {
   const e = addWidget(Type.WIDGET_UPGRADE, x, y);
 
-  setSprite(e, SpriteId.UI_UPGRADE_BG, 2, 2, SpriteId.NONE, SpriteId.UI_UPGRADE_OUTLINE);
   setHitarea(e, 0, 0, 100, 100);
 
   const player = getPlayer();
@@ -22,7 +21,15 @@ export function addUpgradeWidget(x: number, y: number, id: UpgradeId) {
 }
 
 export function renderUpgradeWidget(e: Entity) {
+  const x = -2;
+  const y = -2;
   const upgrade = getUpgrade(e.upgradeId);
+
+  drawSprite(SpriteId.UI_UPGRADE_BG, x, y);
+
+  if (e.isHovered) {
+    drawSprite(SpriteId.UI_UPGRADE_OUTLINE, x, y);
+  }
 
   translateTransform(0, 12);
   drawText(upgrade.name, e.hitarea.w / 2, 0, "white", "center", "middle");

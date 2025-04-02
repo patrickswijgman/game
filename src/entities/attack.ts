@@ -1,11 +1,10 @@
 import { getAttack } from "@/core/attacks.js";
 import { dealDamage } from "@/core/combat.js";
-import { getEntity } from "@/core/game.js";
-import { Entity, setHitbox, setSprite, Type } from "@/core/entity.js";
+import { Entity, setHitbox, Type } from "@/core/entity.js";
+import { destroyEntity, getAlliesGroup, getEnemiesGroup, getEntity } from "@/core/game.js";
 import { addStats, copyStats } from "@/core/stats.js";
-import { destroyEntity, getAlliesGroup, getEnemiesGroup } from "@/core/game.js";
 import { addEntity } from "@/entities/entity.js";
-import { addVector, copyVector, doRectanglesIntersect, getAngle, getVectorDistance, scaleVector } from "ridder";
+import { addVector, copyVector, doRectanglesIntersect, drawSprite, getAngle, getVectorDistance, rotateTransform, scaleVector } from "ridder";
 
 export function addAttack(caster: Entity) {
   const e = addEntity(Type.ATTACK, 0, 0);
@@ -18,13 +17,11 @@ export function addAttack(caster: Entity) {
 
   copyVector(e.direction, caster.direction);
 
-  setSprite(e, attack.spriteId, attack.pivot.x, attack.pivot.y);
   setHitbox(e, attack.hitbox.x, attack.hitbox.y, attack.hitbox.w, attack.hitbox.h);
 
   copyStats(e.stats, attack.stats);
   addStats(e.stats, caster.stats);
 
-  e.angle = getAngle(caster.center.x, caster.center.y, e.position.x, e.position.y);
   e.depth = attack.reach;
   e.lifeTime = attack.duration;
   e.casterId = caster.id;
@@ -78,6 +75,13 @@ function destroyIfOutOfRange(e: Entity) {
   }
 
   return false;
+}
+
+export function renderAttack(e: Entity) {
+  const caster = getEntity(e.casterId);
+  const attack = getAttack(caster.attackId);
+  rotateTransform(getAngle(0, 0, e.direction.x, e.direction.y));
+  drawSprite(attack.spriteId, -attack.pivot.x, -attack.pivot.y);
 }
 
 export function onAttackDestroy(e: Entity) {}

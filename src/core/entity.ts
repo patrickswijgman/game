@@ -1,4 +1,4 @@
-import { COLOR_OUTLINE } from "@/consts.js";
+import { SHADOW_ALPHA } from "@/consts.js";
 import { SpriteId } from "@/core/assets.js";
 import { AttackId } from "@/core/attacks.js";
 import { addBody, destroyEntity, getBodies, nextEntity } from "@/core/game.js";
@@ -6,13 +6,13 @@ import { newStats, Stats } from "@/core/stats.js";
 import { drawHealthBar } from "@/core/ui.js";
 import { UpgradeId } from "@/core/upgrades.js";
 import { onEntityStateEnter, onEntityStateExit, onEntityStateUpdate } from "@/states/entity.js";
-import { addVector, addVectorScaled, applyCameraTransform, copyVector, doesRectangleContain, drawSprite, drawTextOutlined, getDelta, getMousePosition, InputCode, isInputPressed, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, TextAlign, TextBaseline, tickTimer, timer, Timer, translateTransform, vec, Vector, writeIntersectionBetweenRectangles, zero } from "ridder";
+import { addVector, addVectorScaled, applyCameraTransform, copyVector, doesRectangleContain, drawSprite, getDelta, getMousePosition, InputCode, isInputPressed, rect, Rectangle, resetTimer, resetTransform, resetVector, rotateTransform, scaleTransform, setAlpha, setRectangle, setVector, tickTimer, timer, Timer, translateTransform, vec, Vector, writeIntersectionBetweenRectangles, zero } from "ridder";
 
 export const enum Type {
   NONE,
 
   PLAYER,
-  ENEMY,
+  ENEMY_MELEE,
   TREE,
   XP_ORB,
   ATTACK,
@@ -80,27 +80,10 @@ export type Entity = {
   bodyIntersection: Vector;
 
   // Render
-  spriteId: SpriteId;
-  pivot: Vector;
-  scale: Vector;
-  angle: number;
-  alpha: number;
   depth: number;
   isFlipped: boolean;
-
-  shadowId: SpriteId;
-  shadowOffset: Vector;
-
-  outlineId: SpriteId;
-  isOutlineVisible: boolean;
-
-  flashId: SpriteId;
   isFlashing: boolean;
-
-  text: string;
-  textColor: string;
-  textAlign: TextAlign;
-  textBaseline: TextBaseline;
+  isHovered: boolean;
 
   // Animation
   animId: AnimationId;
@@ -134,6 +117,8 @@ export type Entity = {
   hitboxOffset: Vector;
   stats: Stats;
   attackId: AttackId;
+  targetId: number;
+  text: string;
   isPlayer: boolean;
   isEnemy: boolean;
   isAttack: boolean;
@@ -171,27 +156,10 @@ export function newEntity(): Entity {
     bodyIntersection: vec(),
 
     // Render
-    spriteId: SpriteId.NONE,
-    pivot: vec(0, 0),
-    scale: vec(1, 1),
-    angle: 0,
-    alpha: 1,
     depth: 0,
     isFlipped: false,
-
-    shadowId: SpriteId.NONE,
-    shadowOffset: vec(),
-
-    outlineId: SpriteId.NONE,
-    isOutlineVisible: false,
-
-    flashId: SpriteId.NONE,
     isFlashing: false,
-
-    text: "",
-    textColor: "",
-    textAlign: "left",
-    textBaseline: "top",
+    isHovered: false,
 
     // Animation
     animId: AnimationId.NONE,
@@ -225,6 +193,8 @@ export function newEntity(): Entity {
     hitboxOffset: vec(),
     stats: newStats(),
     attackId: AttackId.NONE,
+    targetId: 0,
+    text: "",
     isPlayer: false,
     isEnemy: false,
     isAttack: false,
@@ -242,11 +212,7 @@ export function newEntity(): Entity {
 
 export function zeroEntity(e: Entity) {
   zero(e);
-  setVector(e.scale, 1, 1);
   setVector(e.animScale, 1, 1);
-  e.alpha = 1;
-  e.textAlign = "left";
-  e.textBaseline = "top";
 }
 
 export function makeEntity(type: Type, x: number, y: number) {
@@ -260,18 +226,6 @@ export function makeEntity(type: Type, x: number, y: number) {
 export function initState(e: Entity, stateId: StateId) {
   e.stateStartId = stateId;
   e.stateNextId = stateId;
-}
-
-export function setSprite(e: Entity, spriteId: SpriteId, pivotX: number, pivotY: number, flashId = SpriteId.NONE, outlineId = SpriteId.NONE) {
-  e.spriteId = spriteId;
-  e.flashId = flashId;
-  e.outlineId = outlineId;
-  setVector(e.pivot, pivotX, pivotY);
-}
-
-export function setShadow(e: Entity, id: SpriteId, offsetX: number, offsetY: number) {
-  e.shadowId = id;
-  setVector(e.shadowOffset, offsetX, offsetY);
 }
 
 export function setCenter(e: Entity, x: number, y: number) {
@@ -391,13 +345,13 @@ export function updateInteraction(e: Entity, inWorld: boolean) {
   const mouse = getMousePosition(inWorld);
 
   if (doesRectangleContain(e.hitarea, mouse.x, mouse.y)) {
-    e.isOutlineVisible = !!e.outlineId;
+    e.isHovered = true;
 
     if (isInputPressed(InputCode.MOUSE_LEFT, true)) {
       return e.interactionId;
     }
   } else {
-    e.isOutlineVisible = false;
+    e.isHovered = false;
   }
 
   return InteractionId.NONE;
@@ -411,46 +365,26 @@ export function resetAnimation(e: Entity) {
   setAnimation(e, AnimationId.NONE);
 }
 
-export function renderEntity(e: Entity) {
-  translateTransform(e.position.x, e.position.y);
-  scaleTransform(e.scale.x, e.scale.y);
-  rotateTransform(e.angle);
-  setAlpha(e.alpha);
+export function applyAnimationTransform(e: Entity) {
+  translateTransform(e.animPosition.x, e.animPosition.y);
+  scaleTransform(e.animScale.x, e.animScale.y);
+  rotateTransform(e.animAngle);
+}
 
+export function applyEntityTransform(e: Entity) {
+  translateTransform(e.position.x, e.position.y);
   if (e.isFlipped) {
     scaleTransform(-1, 1);
   }
+}
 
-  if (e.shadowId) {
-    setAlpha(0.3);
-    drawSprite(e.shadowId, -e.pivot.x + e.shadowOffset.x, -e.pivot.y + e.shadowOffset.y);
-    setAlpha(1);
-  }
-
-  if (e.animId) {
-    translateTransform(e.animPosition.x, e.animPosition.y);
-    scaleTransform(e.animScale.x, e.animScale.y);
-    rotateTransform(e.animAngle);
-  }
-
-  if (e.isFlashing) {
-    drawSprite(e.flashId, -e.pivot.x, -e.pivot.y);
-  } else if (e.spriteId) {
-    drawSprite(e.spriteId, -e.pivot.x, -e.pivot.y);
-  }
-
-  if (e.isOutlineVisible) {
-    drawSprite(e.outlineId, -e.pivot.x, -e.pivot.y);
-  }
-
-  if (e.text) {
-    drawTextOutlined(e.text, 0, 0, e.textColor, COLOR_OUTLINE, "circle", e.textAlign, e.textBaseline);
-  }
-
+export function drawShadow(id: SpriteId, x: number, y: number) {
+  setAlpha(SHADOW_ALPHA);
+  drawSprite(id, x, y);
   setAlpha(1);
 }
 
-export function renderEntityStatus(e: Entity) {
+export function drawEnemyStatus(e: Entity) {
   if (e.stats.health < e.stats.healthMax) {
     resetTransform();
     applyCameraTransform();

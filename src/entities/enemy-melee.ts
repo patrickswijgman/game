@@ -1,14 +1,12 @@
 import { SpriteId } from "@/core/assets.js";
 import { AttackId } from "@/core/attacks.js";
-import { setCenter, setHitbox, setShadow, setSprite } from "@/core/entity.js";
+import { applyAnimationTransform, drawShadow, Entity, setCenter, setHitbox, Type } from "@/core/entity.js";
 import { addEnemy } from "@/entities/enemy.js";
-import { setVector } from "ridder";
+import { drawSprite, setVector } from "ridder";
 
 export function addMeleeEnemy(x: number, y: number) {
-  const e = addEnemy(x, y);
+  const e = addEnemy(Type.ENEMY_MELEE, x, y);
 
-  setSprite(e, SpriteId.ENEMY_MELEE, 8, 15, SpriteId.ENEMY_MELEE_FLASH);
-  setShadow(e, SpriteId.ENEMY_MELEE_SHADOW, 0, 2);
   setHitbox(e, -3, -8, 6, 8);
   setCenter(e, 0, -3);
   setVector(e.direction, 1, 0);
@@ -25,4 +23,19 @@ export function addMeleeEnemy(x: number, y: number) {
   e.isPhysicsEnabled = true;
 
   return e;
+}
+
+export function renderMeleeEnemy(e: Entity) {
+  const x = -8;
+  const y = -15;
+
+  drawShadow(SpriteId.ENEMY_MELEE_SHADOW, x, y + 2);
+
+  applyAnimationTransform(e);
+
+  if (e.isFlashing) {
+    drawSprite(SpriteId.ENEMY_MELEE_FLASH, x, y);
+  } else {
+    drawSprite(SpriteId.ENEMY_MELEE, x, y);
+  }
 }
