@@ -5,7 +5,6 @@ export const enum TextureId {
   ATLAS,
   ATLAS_OUTLINE,
   ATLAS_FLASH,
-  FLOOR,
 }
 
 export const enum SpriteId {

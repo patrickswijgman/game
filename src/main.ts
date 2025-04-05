@@ -7,8 +7,8 @@ import { updateWalkAnimation } from "@/anims/walk.js";
 import { updateWindAnimation } from "@/anims/wind.js";
 import { COLOR_GRASS } from "@/consts.js";
 import { loadAssets } from "@/core/assets.js";
-import { AnimationId, applyEntityTransform, destroyIfDead, destroyIfExpired, drawEnemyStatus, InteractionId, Type, updateAnimation, updateCollisions, updateInteraction, updatePhysics, zeroEntity } from "@/core/entity.js";
-import { addBody, addUpgradeToPool, clearDestroyedEntities, confirmUpgradeChoice, defeat, GameStateId, getDestroyedEntities, getEntity, getObjectsGroup, getPlayer, getWidgetsGroup, isInInnerBounds, isPlayerAlive, removeEntity, setBounds, setGameState, sortObjectsGroup, transitionGameState, updateEnemySpawner, updateTime } from "@/core/game.js";
+import { AnimationId, applyEntityTransform, destroyIfDead, destroyIfExpired, drawEntityStatus, InteractionId, Type, updateAnimation, updateCollisions, updateInteraction, updatePhysics, zeroEntity } from "@/core/entity.js";
+import { addBody, addUpgradeToPool, chooseUpgrade, clearDestroyedEntities, confirmUpgradeChoice, defeat, GameStateId, getDestroyedEntities, getEntity, getObjectsGroup, getPlayer, getWidgetsGroup, isInInnerBounds, isPlayerAlive, removeEntity, setBounds, setGameState, sortObjectsGroup, transitionGameState, updateEnemySpawner, updateGameStateTimer, updateTime } from "@/core/game.js";
 import { UpgradeId } from "@/core/upgrades.js";
 import { onAttackDestroy, renderAttack, updateAttack } from "@/entities/attack.js";
 import { renderCombatText } from "@/entities/combat-text.js";
@@ -26,7 +26,7 @@ import { addTimeWidget, renderTimeWidget } from "@/widgets/time.js";
 import { renderUpgradeWidget } from "@/widgets/upgrade.js";
 import { addVersionWidget, renderVersionWidget } from "@/widgets/version.js";
 import { addExperienceWidget, renderExperienceWidget } from "@/widgets/xp.js";
-import { applyCameraTransform, getHeight, getWidth, InputCode, isInputPressed, random, rect, resetTransform, run, setBackgroundColor, setCameraBounds, setCameraPosition, setCameraSmoothing, updateCamera } from "ridder";
+import { applyCameraTransform, InputCode, isInputPressed, random, rect, resetTransform, run, setBackgroundColor, setCameraBounds, setCameraPosition, setCameraSmoothing, updateCamera } from "ridder";
 
 run({
   width: 320,
@@ -50,7 +50,8 @@ run({
 
     addUpgradeToPool(UpgradeId.HEALTH, 2);
     addUpgradeToPool(UpgradeId.DAMAGE, 4);
-    addUpgradeToPool(UpgradeId.RANGE, 2);
+    addUpgradeToPool(UpgradeId.ATTACK_RANGE, 2);
+    addUpgradeToPool(UpgradeId.ATTACK_SPEED, 4);
     addUpgradeToPool(UpgradeId.CRIT_CHANCE, 3);
     addUpgradeToPool(UpgradeId.PICKUP_RANGE, 2);
     addUpgradeToPool(UpgradeId.MOVEMENT_SPEED, 2);
@@ -67,30 +68,41 @@ run({
       }
     }
 
-    // TODO move position to widget
-    addHealthWidget(10, 10);
-    addExperienceWidget(0, 0);
-    addTimeWidget(getWidth() - 10, 10);
-    addFpsWidget(2, 2);
-    addVersionWidget(getWidth() - 2, getHeight() - 2);
+    addHealthWidget();
+    addExperienceWidget();
+    addTimeWidget();
+    addFpsWidget();
+    addVersionWidget();
 
     setGameState(GameStateId.NORMAL);
   },
 
   update: () => {
-    if (isInputPressed(InputCode.KEY_R)) {
-      document.location.reload();
-    }
-
     const state = transitionGameState();
 
-    if (state === GameStateId.NORMAL) {
-      if (isPlayerAlive()) {
-        updateTime();
-        updateEnemySpawner();
-      } else {
-        defeat();
-      }
+    switch (state) {
+      case GameStateId.NORMAL:
+        {
+          if (isPlayerAlive()) {
+            updateTime();
+            updateEnemySpawner();
+          } else {
+            defeat();
+          }
+        }
+        break;
+
+      case GameStateId.LEVEL_UP:
+        if (updateGameStateTimer(500)) {
+          chooseUpgrade();
+        }
+        break;
+
+      case GameStateId.DEFEAT:
+        if (isInputPressed(InputCode.KEY_R)) {
+          document.location.reload();
+        }
+        break;
     }
 
     sortObjectsGroup(sortEntitiesOnDepth);
@@ -175,14 +187,14 @@ run({
       }
 
       if (e.isEnemy) {
-        drawEnemyStatus(e);
+        drawEntityStatus(e);
       }
     }
 
     for (const id of getWidgetsGroup()) {
       const e = getEntity(id);
 
-      switch (updateInteraction(e, false)) {
+      switch (updateInteraction(e)) {
         case InteractionId.CONFIRM_UPGRADE:
           confirmUpgradeChoice(e.upgradeId);
           break;

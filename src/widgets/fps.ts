@@ -2,8 +2,8 @@ import { Type } from "@/core/entity.js";
 import { addWidget } from "@/widgets/widget.js";
 import { drawText, getFramePerSecond, scaleTransform, setAlpha } from "ridder";
 
-export function addFpsWidget(x: number, y: number) {
-  const e = addWidget(Type.WIDGET_FPS, x, y);
+export function addFpsWidget() {
+  const e = addWidget(Type.WIDGET_FPS, 2, 2);
   return e;
 }
 

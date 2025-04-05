@@ -24,6 +24,7 @@ export function addAttack(caster: Entity) {
 
   e.depth = attack.reach;
   e.lifeTime = attack.duration;
+  e.attackId = caster.attackId;
   e.casterId = caster.id;
   e.isPhysicsEnabled = true;
   e.isAttack = true;
@@ -78,8 +79,7 @@ function destroyIfOutOfRange(e: Entity) {
 }
 
 export function renderAttack(e: Entity) {
-  const caster = getEntity(e.casterId);
-  const attack = getAttack(caster.attackId);
+  const attack = getAttack(e.attackId);
   rotateTransform(getAngle(0, 0, e.direction.x, e.direction.y));
   drawSprite(attack.spriteId, -attack.pivot.x, -attack.pivot.y);
 }

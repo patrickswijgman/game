@@ -7,11 +7,12 @@ import { addBackdropWidget } from "@/widgets/backdrop.js";
 import { addDefeatWidget } from "@/widgets/defeat.js";
 import { addLevelUpWidget } from "@/widgets/levelup.js";
 import { addUpgradeWidget } from "@/widgets/upgrade.js";
-import { clamp, doesRectangleContain, getDeltaTime, getHeight, getWidth, InputCode, pick, rect, Rectangle, remove, resetInput, resetTimer, roll, setRectangle, table, Table, tickTimer, timer, Timer, vec, Vector, writeRandomPointInPerimeterBetweenRectangles } from "ridder";
+import { clamp, doesRectangleContain, getDeltaTime, getHeight, getWidth, InputCode, pick, rect, Rectangle, remove, resetInput, resetTimer, setRectangle, table, Table, tickTimer, timer, Timer, vec, Vector, writeRandomPointInPerimeterBetweenRectangles } from "ridder";
 
 export const enum GameStateId {
   NONE,
   NORMAL,
+  LEVEL_UP,
   CHOOSE_UPGRADE,
   DEFEAT,
 }
@@ -24,6 +25,7 @@ export type Game = {
   // State
   stateId: GameStateId;
   stateNextId: GameStateId;
+  stateTimer: Timer;
 
   // Boundary
   bounds: Rectangle;
@@ -67,6 +69,7 @@ const game: Game = {
   // State
   stateId: GameStateId.NONE,
   stateNextId: GameStateId.NONE,
+  stateTimer: timer(),
 
   // Boundary
   bounds: rect(),
@@ -133,6 +136,16 @@ export function setGameState(id: GameStateId) {
 export function transitionGameState() {
   game.stateId = game.stateNextId;
   return game.stateId;
+}
+
+export function updateGameStateTimer(duration: number) {
+  const completed = tickTimer(game.stateTimer, duration);
+
+  if (completed) {
+    resetTimer(game.stateTimer);
+  }
+
+  return completed;
 }
 
 export function setBounds(w: number, h: number) {
@@ -254,12 +267,7 @@ export function removeUpgradeFromPool(id: UpgradeId) {
 export function chooseUpgrade() {
   game.upgradeChoices.length = 0;
 
-  let amount = 2;
-  if (roll(0.05)) {
-    amount = 3;
-  }
-
-  for (let i = 0; i < amount; i++) {
+  for (let i = 0; i < 2; i++) {
     const id = pick(game.upgrades);
 
     if (id) {
@@ -288,11 +296,12 @@ export function chooseUpgrade() {
 }
 
 export function confirmUpgradeChoice(id: UpgradeId) {
+  const upgrade = getUpgrade(id);
+  const player = getPlayer();
+
   remove(game.upgradeChoices, id);
   game.upgrades.push(...game.upgradeChoices);
 
-  const upgrade = getUpgrade(id);
-  const player = getPlayer();
   addStats(player.stats, upgrade.stats);
 
   for (const id of game.levelUpWidgets) {

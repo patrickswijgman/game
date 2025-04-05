@@ -4,8 +4,8 @@ import { drawExperienceBar } from "@/core/ui.js";
 import { addWidget } from "@/widgets/widget.js";
 import { getWidth } from "ridder";
 
-export function addExperienceWidget(x: number, y: number) {
-  const e = addWidget(Type.WIDGET_XP, x, y);
+export function addExperienceWidget() {
+  const e = addWidget(Type.WIDGET_XP, 0, 0);
   return e;
 }
 

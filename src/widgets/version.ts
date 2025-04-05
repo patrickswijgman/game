@@ -1,8 +1,10 @@
 import { Type } from "@/core/entity.js";
 import { addWidget } from "@/widgets/widget.js";
-import { drawText, scaleTransform, setAlpha } from "ridder";
+import { drawText, getHeight, getWidth, scaleTransform, setAlpha } from "ridder";
 
-export function addVersionWidget(x: number, y: number) {
+export function addVersionWidget() {
+  const x = getWidth() - 2;
+  const y = getHeight() - 2;
   const e = addWidget(Type.WIDGET_VERSION, x, y);
   return e;
 }

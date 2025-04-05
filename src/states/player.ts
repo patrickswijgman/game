@@ -12,6 +12,7 @@ export function onPlayerStateUpdate(e: Entity) {
       break;
 
     case StateId.ATTACK:
+      aim(e);
       move(e, 0.5);
       break;
   }

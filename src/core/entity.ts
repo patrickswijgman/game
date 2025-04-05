@@ -118,15 +118,13 @@ export type Entity = {
   stats: Stats;
   attackId: AttackId;
   targetId: number;
+  casterId: number;
   text: string;
   isPlayer: boolean;
   isEnemy: boolean;
   isAttack: boolean;
 
-  // Attack
-  casterId: number;
-
-  // Interaction
+  // UI
   interactionId: InteractionId;
   hitarea: Rectangle;
   hitareaOffset: Vector;
@@ -194,15 +192,13 @@ export function newEntity(): Entity {
     stats: newStats(),
     attackId: AttackId.NONE,
     targetId: 0,
+    casterId: 0,
     text: "",
     isPlayer: false,
     isEnemy: false,
     isAttack: false,
 
-    // Attack
-    casterId: 0,
-
-    // Interaction
+    // UI
     interactionId: InteractionId.NONE,
     hitarea: rect(),
     hitareaOffset: vec(),
@@ -341,8 +337,8 @@ export function updateAnimation(e: Entity) {
   return e.animId;
 }
 
-export function updateInteraction(e: Entity, inWorld: boolean) {
-  const mouse = getMousePosition(inWorld);
+export function updateInteraction(e: Entity) {
+  const mouse = getMousePosition(false);
 
   if (doesRectangleContain(e.hitarea, mouse.x, mouse.y)) {
     e.isHovered = true;
@@ -384,7 +380,7 @@ export function drawShadow(id: SpriteId, x: number, y: number) {
   setAlpha(1);
 }
 
-export function drawEnemyStatus(e: Entity) {
+export function drawEntityStatus(e: Entity) {
   if (e.stats.health < e.stats.healthMax) {
     resetTransform();
     applyCameraTransform();

@@ -5,10 +5,11 @@ export const enum UpgradeId {
   NONE,
   HEALTH,
   DAMAGE,
-  RANGE,
+  ATTACK_RANGE,
   CRIT_CHANCE,
   PICKUP_RANGE,
   MOVEMENT_SPEED,
+  ATTACK_SPEED,
   MAX,
 }
 
@@ -36,11 +37,19 @@ const upgrades = table<Upgrade>(UpgradeId.MAX, (id) => {
         }),
       };
 
-    case UpgradeId.RANGE:
+    case UpgradeId.ATTACK_RANGE:
       return {
         name: "Sniper",
         stats: newStats({
           attackRange: 20,
+        }),
+      };
+
+    case UpgradeId.ATTACK_SPEED:
+      return {
+        name: "Rapid Fire",
+        stats: newStats({
+          attackSpeed: 0.25,
         }),
       };
 

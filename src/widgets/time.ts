@@ -2,9 +2,11 @@ import { COLOR_OUTLINE } from "@/consts.js";
 import { Type } from "@/core/entity.js";
 import { getTimeString } from "@/core/game.js";
 import { addWidget } from "@/widgets/widget.js";
-import { drawTextOutlined, scaleTransform } from "ridder";
+import { drawTextOutlined, getWidth, scaleTransform } from "ridder";
 
-export function addTimeWidget(x: number, y: number) {
+export function addTimeWidget() {
+  const x = getWidth() - 10;
+  const y = 10;
   const e = addWidget(Type.WIDGET_TIME, x, y);
   return e;
 }

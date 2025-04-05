@@ -41,6 +41,7 @@ export function renderUpgradeWidget(e: Entity) {
   drawStat(e, upgrade, "Crit Chance", "critChance");
   drawStat(e, upgrade, "Crit Damage", "critDamage");
   drawStat(e, upgrade, "Attack Range", "attackRange");
+  drawStat(e, upgrade, "Attack Speed", "attackSpeed");
   drawStat(e, upgrade, "Pickup Range", "pickupRange");
   drawStat(e, upgrade, "Move. Speed", "movementSpeed");
 }
