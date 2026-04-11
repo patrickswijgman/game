@@ -1,0 +1,19 @@
+Game
+state number
+nextState number
+
+Run
+deck array number
+hand array number
+
+Card soa 64
+cardName array string
+cardDescription array string
+cardManaCost array uint8
+cardDamage array uint8
+cardDamageScaling array uint8
+
+Item soa 64
+itemName array string
+itemDescription array string
+itemDamage array uint8
