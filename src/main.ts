@@ -4,7 +4,7 @@ import { activeEntities, entities } from "@/data.ts";
 import { addPlayer, drawPlayer, getPlayerIfAlive, updatePlayer } from "@/entities/player.ts";
 import { drawFramesPerSecond, drawHitboxes } from "@/lib/debug.ts";
 import { cleanupDestroyedEntities, sortOnDepth } from "@/lib/entities.ts";
-import { resolveCollisions, updatePos } from "@/lib/entity.ts";
+import { moveAndCollide } from "@/lib/entity.ts";
 import { loadResources } from "@/lib/resources.ts";
 
 async function setup() {
@@ -35,8 +35,7 @@ function update() {
         break;
     }
 
-    updatePos(e);
-    resolveCollisions(e, activeEntities);
+    moveAndCollide(e, activeEntities);
 
     switch (e.type) {
       case Type.PLAYER:

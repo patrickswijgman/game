@@ -3,37 +3,35 @@ import { type Entity, entities } from "@/data.ts";
 import { isRectValid, resolveIntersection, setRect } from "@/lib/rect.ts";
 import { addVec, copyVec, isVecValid, resetVec, setVec, setVecLength, subVec } from "@/lib/vec.ts";
 
-export function updatePos(e: Entity) {
-  if (isVecValid(e.vel)) {
-    setVecLength(e.vel, e.speed * delta);
-    addVec(e.pos, e.vel);
-  }
-}
-
 export function setHitbox(e: Entity, x: number, y: number, w: number, h: number) {
   setVec(e.hitboxOffset, x, y);
   setRect(e.hitbox, 0, 0, w, h);
-  updateHitboxPos(e);
+  updateHitbox(e);
 }
 
-function updateHitboxPos(e: Entity) {
+export function updateHitbox(e: Entity) {
   copyVec(e.hitbox, e.pos);
   addVec(e.hitbox, e.hitboxOffset);
 }
 
-export function resolveCollisions(self: Entity, list: Array<number>) {
-  if (isVecValid(self.vel) && isRectValid(self.hitbox)) {
-    updateHitboxPos(self);
-    resetVec(self.hitboxIntersection);
+export function moveAndCollide(self: Entity, list: Array<number>) {
+  if (isVecValid(self.vel)) {
+    setVecLength(self.vel, self.speed * delta);
+    addVec(self.pos, self.vel);
 
-    for (const idx of list) {
-      const other = entities[idx];
-      resolveIntersection(self.hitbox, other.hitbox, self.vel, self.hitboxIntersection);
+    if (isRectValid(self.hitbox)) {
+      updateHitbox(self);
+      resetVec(self.hitboxIntersection);
+
+      for (const idx of list) {
+        const other = entities[idx];
+        resolveIntersection(self.hitbox, other.hitbox, self.vel, self.hitboxIntersection);
+      }
+
+      addVec(self.hitbox, self.hitboxIntersection);
+      copyVec(self.pos, self.hitbox);
+      subVec(self.pos, self.hitboxOffset);
     }
-
-    addVec(self.hitbox, self.hitboxIntersection);
-    copyVec(self.pos, self.hitbox);
-    subVec(self.pos, self.hitboxOffset);
   }
 }
 
