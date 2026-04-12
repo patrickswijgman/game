@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.6/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.11/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -8,12 +8,12 @@
   },
   "formatter": {
     "indentStyle": "space",
-    "lineWidth": 320
+    "lineWidth": 320,
+    "includes": ["**", "!**/src/data.ts"]
   },
   "linter": {
     "rules": {
       "style": {
-        "noNonNullAssertion": "off",
         "useArrayLiterals": "off"
       },
       "suspicious": {

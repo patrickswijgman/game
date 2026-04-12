@@ -1,19 +1,24 @@
-Game
-state number
-nextState number
+game group
+activeEntities array entity
+destroyedEntities array entity
+playerIdx number
 
-Run
-deck array number
-hand array number
+vector struct
+x number
+y number
 
-Card soa 64
-cardName array string
-cardDescription array string
-cardManaCost array uint8
-cardDamage array uint8
-cardDamageScaling array uint8
+sheet struct
+health number
+healthMax number
 
-Item soa 64
-itemName array string
-itemDescription array string
-itemDamage array uint8
+entity struct
+idx number
+type number
+pos vector
+vel vector
+sheet sheet
+speed number
+isActive boolean
+isFlipped boolean
+
+entities aos 2048 entity

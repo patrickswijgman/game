@@ -1,21 +1,22 @@
 {
-  "name": "snuggy-game",
+  "name": "game",
   "private": true,
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "start": "vite",
-    "build": "vite build --base=./",
+    "build": "tsc && biome check && vite build",
     "gen": "game-data-gen data src/data.ts"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@biomejs/biome": "^2.4.6",
-    "typescript": "^5.9.3",
-    "vite": "^7.3.1"
+    "@biomejs/biome": "^2.4.11",
+    "typescript": "^6.0.2",
+    "vite": "^8.0.8"
   },
   "dependencies": {
-    "game-data-gen": "^1.2.1",
-    "snuggy": "^1.0.9"
+    "game-data-gen": "^2.2.0",
+    "snuggy": "^1.1.0"
   }
 }

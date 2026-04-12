@@ -2,8 +2,9 @@
 preferences.importModuleSpecifierPreference = "non-relative"
 preferences.importModuleSpecifierEnding = "js"
 
-[language-server]
-biome = { command = "npx", args = ["biome", "lsp-proxy"] }
+[language-server.biome]
+command = "npx"
+args = ["biome", "lsp-proxy"]
 
 [[language]]
 name = "typescript"
@@ -11,11 +12,11 @@ language-servers = [{ name = "typescript-language-server", except-features = ["f
 auto-format = true
 
 [[language]]
-name = "html"
-language-servers = ["biome"]
+name = "json"
+language-servers = [{ name = "vscode-json-language-server", except-features = ["format"] }, "biome"]
 auto-format = true
 
 [[language]]
-name = "json"
-language-servers = ["biome"]
+name = "jsonc"
+language-servers = [{ name = "vscode-json-language-server", except-features = ["format"] }, "biome"]
 auto-format = true

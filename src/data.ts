@@ -1,161 +1,169 @@
 /*
- * Generated with game-data-gen on 3/11/2026, 9:24:01 AM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 4/12/2026, 3:39:12 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
  * --------------------------------------------------
- * Game (group)
+ * game (group)
  * --------------------------------------------------
  */
 
-export let state = 0
-export let nextState = 0
+export let activeEntities = new Array<Entity>()
+export let destroyedEntities = new Array<Entity>()
+export let playerIdx = 0
 
-/** Set the value of the state field within the Game group. */
-export function setState(value: number) {
-  state = value
+/** Set the value of the activeEntities field within the game group. */
+export function setActiveEntities(value: Array<Entity>) {
+  activeEntities = value
 }
 
-/** Set the value of the nextState field within the Game group. */
-export function setNextState(value: number) {
-  nextState = value
+/** Set the value of the destroyedEntities field within the game group. */
+export function setDestroyedEntities(value: Array<Entity>) {
+  destroyedEntities = value
 }
 
-/** Zero the state field within the Game group. */
-export function zeroState() {
-  state = 0
+/** Set the value of the playerIdx field within the game group. */
+export function setPlayerIdx(value: number) {
+  playerIdx = value
 }
 
-/** Zero the nextState field within the Game group. */
-export function zeroNextState() {
-  nextState = 0
+/** Zero the activeEntities field within the game group. */
+export function zeroActiveEntities() {
+  activeEntities.length = 0
 }
 
-/** Zero all fields within the Game group. */
+/** Zero the destroyedEntities field within the game group. */
+export function zeroDestroyedEntities() {
+  destroyedEntities.length = 0
+}
+
+/** Zero the playerIdx field within the game group. */
+export function zeroPlayerIdx() {
+  playerIdx = 0
+}
+
+/** Zero all fields within the game group. */
 export function zeroGameData() {
-  state = 0
-  nextState = 0
+  activeEntities.length = 0
+  destroyedEntities.length = 0
+  playerIdx = 0
 }
 
 /*
  * --------------------------------------------------
- * Run (group)
+ * vector (struct)
  * --------------------------------------------------
  */
 
-export const deck = new Array<number>()
-export const hand = new Array<number>()
-
-/** Zero the deck field within the Run group. */
-export function zeroDeck() {
-  deck.length = 0
+export type Vector = {
+  x: number
+  y: number
 }
 
-/** Zero the hand field within the Run group. */
-export function zeroHand() {
-  hand.length = 0
+/** Create a new Vector object. */
+export function createVector(): Vector {
+  const obj = Object.create(null)
+  obj.x = 0
+  obj.y = 0
+  return obj
 }
 
-/** Zero all fields within the Run group. */
-export function zeroRunData() {
-  deck.length = 0
-  hand.length = 0
+/** Zero the given Vector object. */
+export function zeroVector(obj: Vector) {
+  obj.x = 0
+  obj.y = 0
 }
 
 /*
  * --------------------------------------------------
- * Card (Structure of Arrays)
+ * sheet (struct)
  * --------------------------------------------------
  */
 
-export const MAX_CARD_COUNT = 64
-
-export const cardName = new Array<string>(64).fill("")
-export const cardDescription = new Array<string>(64).fill("")
-export const cardManaCost = new Uint8Array(64)
-export const cardDamage = new Uint8Array(64)
-export const cardDamageScaling = new Uint8Array(64)
-
-/** Zero an index within the Card Structure of Arrays. */
-export function zeroCard(idx: number) {
-  cardName[idx] = ""
-  cardDescription[idx] = ""
-  cardManaCost[idx] = 0
-  cardDamage[idx] = 0
-  cardDamageScaling[idx] = 0
+export type Sheet = {
+  health: number
+  healthMax: number
 }
 
-/** Zero the cardName field within the Card Structure of Arrays. */
-export function zeroCardName() {
-  cardName.fill("")
+/** Create a new Sheet object. */
+export function createSheet(): Sheet {
+  const obj = Object.create(null)
+  obj.health = 0
+  obj.healthMax = 0
+  return obj
 }
 
-/** Zero the cardDescription field within the Card Structure of Arrays. */
-export function zeroCardDescription() {
-  cardDescription.fill("")
-}
-
-/** Zero the cardManaCost field within the Card Structure of Arrays. */
-export function zeroCardManaCost() {
-  cardManaCost.fill(0)
-}
-
-/** Zero the cardDamage field within the Card Structure of Arrays. */
-export function zeroCardDamage() {
-  cardDamage.fill(0)
-}
-
-/** Zero the cardDamageScaling field within the Card Structure of Arrays. */
-export function zeroCardDamageScaling() {
-  cardDamageScaling.fill(0)
-}
-
-/** Zero all fields within the Card Structure of Arrays. */
-export function zeroCardData() {
-  cardName.fill("")
-  cardDescription.fill("")
-  cardManaCost.fill(0)
-  cardDamage.fill(0)
-  cardDamageScaling.fill(0)
+/** Zero the given Sheet object. */
+export function zeroSheet(obj: Sheet) {
+  obj.health = 0
+  obj.healthMax = 0
 }
 
 /*
  * --------------------------------------------------
- * Item (Structure of Arrays)
+ * entity (struct)
  * --------------------------------------------------
  */
 
-export const MAX_ITEM_COUNT = 64
-
-export const itemName = new Array<string>(64).fill("")
-export const itemDescription = new Array<string>(64).fill("")
-export const itemDamage = new Uint8Array(64)
-
-/** Zero an index within the Item Structure of Arrays. */
-export function zeroItem(idx: number) {
-  itemName[idx] = ""
-  itemDescription[idx] = ""
-  itemDamage[idx] = 0
+export type Entity = {
+  idx: number
+  type: number
+  pos: Vector
+  vel: Vector
+  sheet: Sheet
+  speed: number
+  isActive: boolean
+  isFlipped: boolean
 }
 
-/** Zero the itemName field within the Item Structure of Arrays. */
-export function zeroItemName() {
-  itemName.fill("")
+/** Create a new Entity object. */
+export function createEntity(): Entity {
+  const obj = Object.create(null)
+  obj.idx = 0
+  obj.type = 0
+  obj.pos = createVector()
+  obj.vel = createVector()
+  obj.sheet = createSheet()
+  obj.speed = 0
+  obj.isActive = false
+  obj.isFlipped = false
+  return obj
 }
 
-/** Zero the itemDescription field within the Item Structure of Arrays. */
-export function zeroItemDescription() {
-  itemDescription.fill("")
+/** Zero the given Entity object. */
+export function zeroEntity(obj: Entity) {
+  obj.idx = 0
+  obj.type = 0
+  zeroVector(obj.pos)
+  zeroVector(obj.vel)
+  zeroSheet(obj.sheet)
+  obj.speed = 0
+  obj.isActive = false
+  obj.isFlipped = false
 }
 
-/** Zero the itemDamage field within the Item Structure of Arrays. */
-export function zeroItemDamage() {
-  itemDamage.fill(0)
+/*
+ * --------------------------------------------------
+ * entities (array of structures)
+ * --------------------------------------------------
+ */
+
+export const MAX_ENTITIES_COUNT = 2048
+
+/** An array of Entity objects (structures). */
+export const entities = new Array<Entity>(2048)
+for (let i=0; i<2048; i++) {
+  entities[i] = createEntity()
 }
 
-/** Zero all fields within the Item Structure of Arrays. */
-export function zeroItemData() {
-  itemName.fill("")
-  itemDescription.fill("")
-  itemDamage.fill(0)
+/** Zero all objects within the entities array of structures. */
+export function zeroEntities() {
+  for (let i=0; i<2048; i++) {
+    zeroEntity(entities[i])
+  }
+}
+
+/** Zero an object at a specific index within the entities array of structures. */
+export function zeroEntityAt(index: number) {
+  zeroEntity(entities[index])
 }
