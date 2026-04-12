@@ -26,14 +26,10 @@ export function destroyEntity(e: Entity) {
   destroyedEntities.push(e.idx);
 }
 
-function sortOnDepth(idxA: number, idxB: number) {
+export function sortOnDepth(idxA: number, idxB: number) {
   const a = entities[idxA];
   const b = entities[idxB];
   return a.pos.y - b.pos.y;
-}
-
-export function sortActiveEntities() {
-  activeEntities.sort(sortOnDepth);
 }
 
 export function cleanupDestroyedEntities() {

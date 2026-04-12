@@ -1,10 +1,11 @@
-import { delta, drawText, fps, resetTransform, run, scaleTransform, setCameraPosition, setCameraSmoothing, setCameraTarget, translateTransform, updateCamera } from "snuggy";
+import { run, setCameraPosition, setCameraSmoothing, setCameraTarget, updateCamera } from "snuggy";
 import { Type } from "@/consts.ts";
 import { activeEntities, entities } from "@/data.ts";
 import { addPlayer, drawPlayer, getPlayerIfAlive, updatePlayer } from "@/entities/player.ts";
-import { cleanupDestroyedEntities, sortActiveEntities } from "@/lib/entities.ts";
+import { drawFramesPerSecond, drawHitboxes } from "@/lib/debug.ts";
+import { cleanupDestroyedEntities, sortOnDepth } from "@/lib/entities.ts";
+import { resolveCollisions, updatePos } from "@/lib/entity.ts";
 import { loadResources } from "@/lib/resources.ts";
-import { addVectors, setVectorLength } from "@/lib/vector.ts";
 
 async function setup() {
   await loadResources();
@@ -19,7 +20,7 @@ async function setup() {
 }
 
 function update() {
-  sortActiveEntities();
+  activeEntities.sort(sortOnDepth);
 
   for (const idx of activeEntities) {
     const e = entities[idx];
@@ -34,8 +35,8 @@ function update() {
         break;
     }
 
-    setVectorLength(e.vel, e.speed * delta);
-    addVectors(e.pos, e.vel);
+    updatePos(e);
+    resolveCollisions(e, activeEntities);
 
     switch (e.type) {
       case Type.PLAYER:
@@ -53,10 +54,8 @@ function update() {
 
   cleanupDestroyedEntities();
 
-  resetTransform();
-  translateTransform(1, 1);
-  scaleTransform(0.5, 0.5);
-  drawText(fps.toString(), 0, 0, "lime", "left", "top");
+  drawHitboxes();
+  drawFramesPerSecond();
 }
 
 run(640, setup, update);

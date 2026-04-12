@@ -3,9 +3,15 @@ activeEntities array number
 destroyedEntities array number
 playerIdx number
 
-vector struct
+vec struct
 x number
 y number
+
+rect struct
+x number
+y number
+w number
+h number
 
 sheet struct
 health number
@@ -14,10 +20,13 @@ healthMax number
 entity struct
 idx number
 type number
-pos vector
-vel vector
-sheet sheet
+pos vec
+vel vec
 speed number
+hitbox rect
+hitboxOffset vec
+hitboxIntersection vec
+sheet sheet
 isActive boolean
 isFlipped boolean
 

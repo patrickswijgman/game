@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 4/12/2026, 4:26:32 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 4/12/2026, 8:01:25 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -51,27 +51,58 @@ export function zeroGameData() {
 
 /*
  * --------------------------------------------------
- * vector (struct)
+ * vec (struct)
  * --------------------------------------------------
  */
 
-export type Vector = {
+export type Vec = {
   x: number
   y: number
 }
 
-/** Create a new Vector object. */
-export function createVector(): Vector {
+/** Create a new Vec object. */
+export function createVec(): Vec {
   const obj = Object.create(null)
   obj.x = 0
   obj.y = 0
   return obj
 }
 
-/** Zero the given Vector object. */
-export function zeroVector(obj: Vector) {
+/** Zero the given Vec object. */
+export function zeroVec(obj: Vec) {
   obj.x = 0
   obj.y = 0
+}
+
+/*
+ * --------------------------------------------------
+ * rect (struct)
+ * --------------------------------------------------
+ */
+
+export type Rect = {
+  x: number
+  y: number
+  w: number
+  h: number
+}
+
+/** Create a new Rect object. */
+export function createRect(): Rect {
+  const obj = Object.create(null)
+  obj.x = 0
+  obj.y = 0
+  obj.w = 0
+  obj.h = 0
+  return obj
+}
+
+/** Zero the given Rect object. */
+export function zeroRect(obj: Rect) {
+  obj.x = 0
+  obj.y = 0
+  obj.w = 0
+  obj.h = 0
 }
 
 /*
@@ -108,10 +139,13 @@ export function zeroSheet(obj: Sheet) {
 export type Entity = {
   idx: number
   type: number
-  pos: Vector
-  vel: Vector
-  sheet: Sheet
+  pos: Vec
+  vel: Vec
   speed: number
+  hitbox: Rect
+  hitboxOffset: Vec
+  hitboxIntersection: Vec
+  sheet: Sheet
   isActive: boolean
   isFlipped: boolean
 }
@@ -121,10 +155,13 @@ export function createEntity(): Entity {
   const obj = Object.create(null)
   obj.idx = 0
   obj.type = 0
-  obj.pos = createVector()
-  obj.vel = createVector()
-  obj.sheet = createSheet()
+  obj.pos = createVec()
+  obj.vel = createVec()
   obj.speed = 0
+  obj.hitbox = createRect()
+  obj.hitboxOffset = createVec()
+  obj.hitboxIntersection = createVec()
+  obj.sheet = createSheet()
   obj.isActive = false
   obj.isFlipped = false
   return obj
@@ -134,10 +171,13 @@ export function createEntity(): Entity {
 export function zeroEntity(obj: Entity) {
   obj.idx = 0
   obj.type = 0
-  zeroVector(obj.pos)
-  zeroVector(obj.vel)
-  zeroSheet(obj.sheet)
+  zeroVec(obj.pos)
+  zeroVec(obj.vel)
   obj.speed = 0
+  zeroRect(obj.hitbox)
+  zeroVec(obj.hitboxOffset)
+  zeroVec(obj.hitboxIntersection)
+  zeroSheet(obj.sheet)
   obj.isActive = false
   obj.isFlipped = false
 }
