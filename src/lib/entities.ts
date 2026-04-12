@@ -13,7 +13,7 @@ export function addEntity(type: Type, x: number, y: number) {
       e.pos.x = x;
       e.pos.y = y;
       e.isActive = true;
-      activeEntities.push(e);
+      activeEntities.push(e.idx);
       return e;
     }
   }
@@ -23,10 +23,12 @@ export function addEntity(type: Type, x: number, y: number) {
 
 export function destroyEntity(e: Entity) {
   e.isActive = false;
-  destroyedEntities.push(e);
+  destroyedEntities.push(e.idx);
 }
 
-function sortOnDepth(a: Entity, b: Entity) {
+function sortOnDepth(idxA: number, idxB: number) {
+  const a = entities[idxA];
+  const b = entities[idxB];
   return a.pos.y - b.pos.y;
 }
 
@@ -35,8 +37,12 @@ export function sortActiveEntities() {
 }
 
 export function cleanupDestroyedEntities() {
-  for (const e of destroyedEntities) {
-    activeEntities.splice(activeEntities.indexOf(e), 1);
+  for (const idx of destroyedEntities) {
+    const i = activeEntities.indexOf(idx);
+
+    if (i !== -1) {
+      activeEntities.splice(i, 1);
+    }
   }
 
   zeroDestroyedEntities();

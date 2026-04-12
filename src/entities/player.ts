@@ -2,13 +2,13 @@ import { drawSprite, isInputDown } from "snuggy";
 import { Input, Texture, Type } from "@/consts.ts";
 import { type Entity, entities, playerIdx, setPlayerIdx } from "@/data.ts";
 import { addEntity, setEntityTransform } from "@/lib/entities.ts";
-import { normalizeVector, resetVector, scaleVector } from "@/lib/vector.ts";
+import { resetVector } from "@/lib/vector.ts";
 
 export function addPlayer(x: number, y: number) {
   const e = addEntity(Type.PLAYER, x, y);
   e.sheet.health = 50;
   e.sheet.healthMax = 50;
-  e.speed = 0.5;
+  e.speed = 1;
   setPlayerIdx(e.idx);
 }
 
@@ -29,16 +29,19 @@ export function updatePlayer(e: Entity) {
     e.vel.x += 1;
     e.isFlipped = false;
   }
-
-  normalizeVector(e.vel);
-  scaleVector(e.vel, e.speed);
 }
 
 export function drawPlayer(e: Entity) {
   setEntityTransform(e, true);
-  drawSprite(Texture.ATLAS, -8, -16, 0, 0, 16, 16);
+  drawSprite(Texture.ATLAS, -8, -15, 0, 0, 16, 16);
 }
 
-export function getPlayer() {
-  return entities[playerIdx];
+export function getPlayerIfAlive() {
+  const e = entities[playerIdx];
+
+  if (e.type === Type.PLAYER && e.isActive) {
+    return e;
+  }
+
+  return null;
 }

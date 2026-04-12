@@ -15,6 +15,11 @@ export function subVectors(a: Vector, b: Vector) {
   a.y -= b.y;
 }
 
+export function multiplyVectors(a: Vector, b: Vector) {
+  a.x *= b.x;
+  a.y *= b.y;
+}
+
 export function scaleVector(v: Vector, s: number) {
   v.x *= s;
   v.y *= s;
@@ -26,9 +31,13 @@ export function getVectorLength(v: Vector) {
   return Math.sqrt(x + y);
 }
 
+export function setVectorLength(v: Vector, l: number) {
+  normalizeVector(v);
+  scaleVector(v, l);
+}
+
 export function normalizeVector(v: Vector) {
   const len = getVectorLength(v);
-
   if (len) {
     v.x /= len;
     v.y /= len;

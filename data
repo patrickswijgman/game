@@ -1,6 +1,6 @@
 game group
-activeEntities array entity
-destroyedEntities array entity
+activeEntities array number
+destroyedEntities array number
 playerIdx number
 
 vector struct

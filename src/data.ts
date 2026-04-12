@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 4/12/2026, 3:39:12 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 4/12/2026, 4:26:32 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -8,17 +8,17 @@
  * --------------------------------------------------
  */
 
-export let activeEntities = new Array<Entity>()
-export let destroyedEntities = new Array<Entity>()
+export let activeEntities = new Array<number>()
+export let destroyedEntities = new Array<number>()
 export let playerIdx = 0
 
 /** Set the value of the activeEntities field within the game group. */
-export function setActiveEntities(value: Array<Entity>) {
+export function setActiveEntities(value: Array<number>) {
   activeEntities = value
 }
 
 /** Set the value of the destroyedEntities field within the game group. */
-export function setDestroyedEntities(value: Array<Entity>) {
+export function setDestroyedEntities(value: Array<number>) {
   destroyedEntities = value
 }
 
