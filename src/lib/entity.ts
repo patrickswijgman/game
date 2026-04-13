@@ -1,37 +1,41 @@
 import { addCameraTransform, delta, resetTransform, scaleTransform, translateTransform } from "snuggy";
-import { type Entity, entities } from "@/data.ts";
-import { isRectValid, resolveIntersection, setRect } from "@/lib/rect.ts";
-import { addVec, copyVec, isVecValid, resetVec, setVec, setVecLength, subVec } from "@/lib/vec.ts";
+import { type Entity, entities, zeroVec } from "@/data.ts";
+import { isRectValid, setRect, writeRectIntersection } from "@/lib/rect.ts";
+import { addVec, copyVec, isVecValid, normalizeVec, scaleVec, setVec } from "@/lib/vec.ts";
 
 export function setHitbox(e: Entity, x: number, y: number, w: number, h: number) {
-  setVec(e.hitboxOffset, x, y);
-  setRect(e.hitbox, 0, 0, w, h);
+  setVec(e.bodyOffset, x, y);
+  setRect(e.body, 0, 0, w, h);
   updateHitbox(e);
 }
 
 export function updateHitbox(e: Entity) {
-  copyVec(e.hitbox, e.pos);
-  addVec(e.hitbox, e.hitboxOffset);
+  copyVec(e.body, e.pos);
+  addVec(e.body, e.bodyOffset);
 }
 
 export function moveAndCollide(self: Entity, list: Array<number>) {
   if (isVecValid(self.vel)) {
-    setVecLength(self.vel, self.speed * delta);
+    normalizeVec(self.vel);
+    scaleVec(self.vel, self.speed);
+    scaleVec(self.vel, delta);
     addVec(self.pos, self.vel);
 
-    if (isRectValid(self.hitbox)) {
+    if (isRectValid(self.body)) {
       updateHitbox(self);
-      resetVec(self.hitboxIntersection);
+
+      zeroVec(self.bodyIntersection);
 
       for (const idx of list) {
         const other = entities[idx];
-        resolveIntersection(self.hitbox, other.hitbox, self.vel, self.hitboxIntersection);
+        writeRectIntersection(self.body, other.body, self.vel, self.bodyIntersection);
       }
 
-      addVec(self.hitbox, self.hitboxIntersection);
-      copyVec(self.pos, self.hitbox);
-      subVec(self.pos, self.hitboxOffset);
+      addVec(self.body, self.bodyIntersection);
+      addVec(self.pos, self.bodyIntersection);
     }
+
+    zeroVec(self.vel);
   }
 }
 

@@ -23,9 +23,9 @@ type number
 pos vec
 vel vec
 speed number
-hitbox rect
-hitboxOffset vec
-hitboxIntersection vec
+body rect
+bodyOffset vec
+bodyIntersection vec
 sheet sheet
 isActive boolean
 isFlipped boolean

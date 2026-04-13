@@ -1,9 +1,8 @@
-import { drawSprite, isInputDown } from "snuggy";
+import { drawSprite, isInputDown, pointerWorldX } from "snuggy";
 import { Input, Texture, Type } from "@/consts.ts";
 import { type Entity, entities, playerIdx, setPlayerIdx } from "@/data.ts";
 import { addEntity, setEntityTransform } from "@/lib/entities.ts";
 import { setHitbox } from "@/lib/entity.ts";
-import { resetVec } from "@/lib/vec.ts";
 
 export function addPlayer(x: number, y: number) {
   const e = addEntity(Type.PLAYER, x, y);
@@ -15,8 +14,6 @@ export function addPlayer(x: number, y: number) {
 }
 
 export function updatePlayer(e: Entity) {
-  resetVec(e.vel);
-
   if (isInputDown(Input.UP)) {
     e.vel.y -= 1;
   }
@@ -25,12 +22,12 @@ export function updatePlayer(e: Entity) {
   }
   if (isInputDown(Input.LEFT)) {
     e.vel.x -= 1;
-    e.isFlipped = true;
   }
   if (isInputDown(Input.RIGHT)) {
     e.vel.x += 1;
-    e.isFlipped = false;
   }
+
+  e.isFlipped = pointerWorldX < e.pos.x;
 }
 
 export function getPlayerIfAlive() {

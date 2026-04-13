@@ -25,11 +25,6 @@ export function scaleVec(v: Vec, s: number) {
   v.y *= s;
 }
 
-export function resetVec(v: Vec) {
-  v.x = 0;
-  v.y = 0;
-}
-
 export function normalizeVec(v: Vec) {
   const len = getVecLength(v);
   if (len) {
@@ -42,11 +37,6 @@ export function getVecLength(v: Vec) {
   const x = v.x * v.x;
   const y = v.y * v.y;
   return Math.sqrt(x + y);
-}
-
-export function setVecLength(v: Vec, l: number) {
-  normalizeVec(v);
-  scaleVec(v, l);
 }
 
 export function isVecValid(v: Vec) {

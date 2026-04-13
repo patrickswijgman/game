@@ -7,8 +7,8 @@ export function setRect(r: Rect, x: number, y: number, w: number, h: number) {
   r.h = h;
 }
 
-export function resolveIntersection(a: Rect, b: Rect, vel: Vec, out: Vec) {
-  if (!isIntersection(a, b)) {
+export function writeRectIntersection(a: Rect, b: Rect, vel: Vec, out: Vec) {
+  if (!isRectIntersection(a, b)) {
     return;
   }
 
@@ -70,7 +70,7 @@ export function resolveIntersection(a: Rect, b: Rect, vel: Vec, out: Vec) {
   return out;
 }
 
-export function isIntersection(a: Rect, b: Rect) {
+export function isRectIntersection(a: Rect, b: Rect) {
   if (a === b || !isRectValid(a) || !isRectValid(b)) {
     return false;
   }

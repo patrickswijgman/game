@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 4/12/2026, 8:01:25 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 4/13/2026, 7:34:14 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -142,9 +142,9 @@ export type Entity = {
   pos: Vec
   vel: Vec
   speed: number
-  hitbox: Rect
-  hitboxOffset: Vec
-  hitboxIntersection: Vec
+  body: Rect
+  bodyOffset: Vec
+  bodyIntersection: Vec
   sheet: Sheet
   isActive: boolean
   isFlipped: boolean
@@ -158,9 +158,9 @@ export function createEntity(): Entity {
   obj.pos = createVec()
   obj.vel = createVec()
   obj.speed = 0
-  obj.hitbox = createRect()
-  obj.hitboxOffset = createVec()
-  obj.hitboxIntersection = createVec()
+  obj.body = createRect()
+  obj.bodyOffset = createVec()
+  obj.bodyIntersection = createVec()
   obj.sheet = createSheet()
   obj.isActive = false
   obj.isFlipped = false
@@ -174,9 +174,9 @@ export function zeroEntity(obj: Entity) {
   zeroVec(obj.pos)
   zeroVec(obj.vel)
   obj.speed = 0
-  zeroRect(obj.hitbox)
-  zeroVec(obj.hitboxOffset)
-  zeroVec(obj.hitboxIntersection)
+  zeroRect(obj.body)
+  zeroVec(obj.bodyOffset)
+  zeroVec(obj.bodyIntersection)
   zeroSheet(obj.sheet)
   obj.isActive = false
   obj.isFlipped = false

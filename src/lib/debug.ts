@@ -13,6 +13,6 @@ export function drawHitboxes() {
     const e = entities[idx];
     resetTransform();
     addCameraTransform();
-    drawRect(e.hitbox.x, e.hitbox.y, e.hitbox.w, e.hitbox.h, "red", false);
+    drawRect(e.body.x, e.body.y, e.body.w, e.body.h, "red", false);
   }
 }

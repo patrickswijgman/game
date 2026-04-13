@@ -1,6 +1,7 @@
 import { run, setCameraPosition, setCameraSmoothing, setCameraTarget, updateCamera } from "snuggy";
 import { Type } from "@/consts.ts";
 import { activeEntities, entities } from "@/data.ts";
+import { addEnemy, drawEnemy, updateEnemy } from "@/entities/enemy.ts";
 import { addPlayer, drawPlayer, getPlayerIfAlive, updatePlayer } from "@/entities/player.ts";
 import { drawFramesPerSecond, drawHitboxes } from "@/lib/debug.ts";
 import { cleanupDestroyedEntities, sortOnDepth } from "@/lib/entities.ts";
@@ -17,6 +18,7 @@ async function setup() {
   setCameraSmoothing(0.1);
 
   addPlayer(x, y);
+  addEnemy(x + 20, y);
 }
 
 function update() {
@@ -33,6 +35,9 @@ function update() {
       case Type.PLAYER:
         updatePlayer(e);
         break;
+      case Type.ENEMY:
+        updateEnemy(e);
+        break;
     }
 
     moveAndCollide(e, activeEntities);
@@ -40,6 +45,9 @@ function update() {
     switch (e.type) {
       case Type.PLAYER:
         drawPlayer(e);
+        break;
+      case Type.ENEMY:
+        drawEnemy(e);
         break;
     }
   }

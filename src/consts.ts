@@ -9,6 +9,7 @@ export const enum Font {
 export const enum Type {
   UNKNOWN,
   PLAYER,
+  ENEMY,
 }
 
 export const enum Input {
