@@ -26,6 +26,8 @@ speed number
 body rect
 bodyOffset vec
 bodyIntersection vec
+hitbox rect
+hitboxOffset vec
 sheet sheet
 isActive boolean
 isFlipped boolean

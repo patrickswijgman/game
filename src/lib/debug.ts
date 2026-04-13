@@ -8,11 +8,20 @@ export function drawFramesPerSecond() {
   drawText(fps.toString(), 0, 0, "lime", "left", "top");
 }
 
-export function drawHitboxes() {
+export function drawBodies() {
   for (const idx of activeEntities) {
     const e = entities[idx];
     resetTransform();
     addCameraTransform();
     drawRect(e.body.x, e.body.y, e.body.w, e.body.h, "red", false);
+  }
+}
+
+export function drawHitboxes() {
+  for (const idx of activeEntities) {
+    const e = entities[idx];
+    resetTransform();
+    addCameraTransform();
+    drawRect(e.hitbox.x, e.hitbox.y, e.hitbox.w, e.hitbox.h, "yellow", false);
   }
 }

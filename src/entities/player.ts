@@ -2,7 +2,7 @@ import { drawSprite, isInputDown, pointerWorldX } from "snuggy";
 import { Input, Texture, Type } from "@/consts.ts";
 import { type Entity, entities, playerIdx, setPlayerIdx } from "@/data.ts";
 import { addEntity } from "@/lib/entities.ts";
-import { setBody, setEntityTransform } from "@/lib/entity.ts";
+import { setBody, setEntityTransform, setHitbox } from "@/lib/entity.ts";
 
 export function addPlayer(x: number, y: number) {
   const e = addEntity(Type.PLAYER, x, y);
@@ -10,6 +10,7 @@ export function addPlayer(x: number, y: number) {
   e.sheet.healthMax = 50;
   e.speed = 1;
   setBody(e, -4, -2, 8, 2);
+  setHitbox(e, -5, -10, 10, 10);
   setPlayerIdx(e.idx);
 }
 

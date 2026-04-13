@@ -3,7 +3,7 @@ import { Type } from "@/consts.ts";
 import { activeEntities, entities } from "@/data.ts";
 import { addEnemy, drawEnemy, updateEnemy } from "@/entities/enemy.ts";
 import { addPlayer, drawPlayer, getPlayerIfAlive, updatePlayer } from "@/entities/player.ts";
-import { drawFramesPerSecond, drawHitboxes } from "@/lib/debug.ts";
+import { drawBodies, drawFramesPerSecond, drawHitboxes } from "@/lib/debug.ts";
 import { cleanupDestroyedEntities, sortEntitiesOnDepth } from "@/lib/entities.ts";
 import { moveAndCollide } from "@/lib/entity.ts";
 import { loadResources } from "@/lib/resources.ts";
@@ -62,6 +62,7 @@ function update() {
   cleanupDestroyedEntities();
 
   drawHitboxes();
+  drawBodies();
   drawFramesPerSecond();
 }
 

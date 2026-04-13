@@ -14,6 +14,17 @@ export function updateBody(e: Entity) {
   addVec(e.body, e.bodyOffset);
 }
 
+export function setHitbox(e: Entity, x: number, y: number, w: number, h: number) {
+  setVec(e.hitboxOffset, x, y);
+  setRect(e.hitbox, 0, 0, w, h);
+  updateHitbox(e);
+}
+
+export function updateHitbox(e: Entity) {
+  copyVec(e.hitbox, e.pos);
+  addVec(e.hitbox, e.hitboxOffset);
+}
+
 export function moveAndCollide(self: Entity, list: Array<number>) {
   if (isVecValid(self.vel)) {
     setVecMagnitude(self.vel, self.speed * delta);
@@ -31,6 +42,10 @@ export function moveAndCollide(self: Entity, list: Array<number>) {
 
       addVec(self.body, self.bodyIntersection);
       addVec(self.pos, self.bodyIntersection);
+    }
+
+    if (isRectValid(self.hitbox)) {
+      updateHitbox(self);
     }
 
     zeroVec(self.vel);
