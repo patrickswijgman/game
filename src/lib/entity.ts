@@ -3,13 +3,13 @@ import { type Entity, entities, zeroVec } from "@/data.ts";
 import { isRectValid, setRect, writeRectIntersection } from "@/lib/rect.ts";
 import { addVec, copyVec, isVecValid, normalizeVec, scaleVec, setVec } from "@/lib/vec.ts";
 
-export function setHitbox(e: Entity, x: number, y: number, w: number, h: number) {
+export function setBody(e: Entity, x: number, y: number, w: number, h: number) {
   setVec(e.bodyOffset, x, y);
   setRect(e.body, 0, 0, w, h);
-  updateHitbox(e);
+  updateBody(e);
 }
 
-export function updateHitbox(e: Entity) {
+export function updateBody(e: Entity) {
   copyVec(e.body, e.pos);
   addVec(e.body, e.bodyOffset);
 }
@@ -22,7 +22,7 @@ export function moveAndCollide(self: Entity, list: Array<number>) {
     addVec(self.pos, self.vel);
 
     if (isRectValid(self.body)) {
-      updateHitbox(self);
+      updateBody(self);
 
       zeroVec(self.bodyIntersection);
 
