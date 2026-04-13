@@ -25,30 +25,30 @@ export function updateHitbox(e: Entity) {
   addVec(e.hitbox, e.hitboxOffset);
 }
 
-export function moveAndCollide(self: Entity, list: Array<number>) {
-  if (isVecValid(self.vel)) {
-    setVecMagnitude(self.vel, self.speed * delta);
-    addVec(self.pos, self.vel);
+export function moveAndCollide(e: Entity, list: Array<number>) {
+  if (isVecValid(e.vel)) {
+    setVecMagnitude(e.vel, e.speed * delta);
+    addVec(e.pos, e.vel);
 
-    if (isRectValid(self.body)) {
-      updateBody(self);
+    if (isRectValid(e.body)) {
+      updateBody(e);
 
-      zeroVec(self.bodyIntersection);
+      zeroVec(e.bodyIntersection);
 
       for (const idx of list) {
         const other = entities[idx];
-        writeRectIntersection(self.body, other.body, self.vel, self.bodyIntersection);
+        writeRectIntersection(e.body, other.body, e.vel, e.bodyIntersection);
       }
 
-      addVec(self.body, self.bodyIntersection);
-      addVec(self.pos, self.bodyIntersection);
+      addVec(e.body, e.bodyIntersection);
+      addVec(e.pos, e.bodyIntersection);
     }
 
-    if (isRectValid(self.hitbox)) {
-      updateHitbox(self);
+    if (isRectValid(e.hitbox)) {
+      updateHitbox(e);
     }
 
-    zeroVec(self.vel);
+    zeroVec(e.vel);
   }
 }
 

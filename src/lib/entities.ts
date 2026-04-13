@@ -1,5 +1,6 @@
 import type { Type } from "@/consts.ts";
 import { activeEntities, destroyedEntities, type Entity, entities, MAX_ENTITIES_COUNT, zeroDestroyedEntities, zeroEntity } from "@/data.ts";
+import { removeFromArray } from "@/lib/array.ts";
 
 export function addEntity(type: Type, x: number, y: number) {
   for (let i = 0; i < MAX_ENTITIES_COUNT; i++) {
@@ -33,11 +34,7 @@ export function sortEntitiesOnDepth(idxA: number, idxB: number) {
 
 export function cleanupDestroyedEntities() {
   for (const idx of destroyedEntities) {
-    const i = activeEntities.indexOf(idx);
-
-    if (i !== -1) {
-      activeEntities.splice(i, 1);
-    }
+    removeFromArray(activeEntities, idx);
   }
 
   zeroDestroyedEntities();
