@@ -1,4 +1,3 @@
-import { addCameraTransform, resetTransform, scaleTransform, translateTransform } from "snuggy";
 import type { Type } from "@/consts.ts";
 import { activeEntities, destroyedEntities, type Entity, entities, MAX_ENTITIES_COUNT, zeroDestroyedEntities, zeroEntity } from "@/data.ts";
 
@@ -26,7 +25,7 @@ export function destroyEntity(e: Entity) {
   destroyedEntities.push(e.idx);
 }
 
-export function sortOnDepth(idxA: number, idxB: number) {
+export function sortEntitiesOnDepth(idxA: number, idxB: number) {
   const a = entities[idxA];
   const b = entities[idxB];
   return a.pos.y - b.pos.y;
@@ -42,18 +41,4 @@ export function cleanupDestroyedEntities() {
   }
 
   zeroDestroyedEntities();
-}
-
-export function setEntityTransform(e: Entity, inWorld: boolean) {
-  resetTransform();
-
-  if (inWorld) {
-    addCameraTransform();
-  }
-
-  translateTransform(e.pos.x, e.pos.y);
-
-  if (e.isFlipped) {
-    scaleTransform(-1, 1);
-  }
 }

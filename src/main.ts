@@ -4,7 +4,7 @@ import { activeEntities, entities } from "@/data.ts";
 import { addEnemy, drawEnemy, updateEnemy } from "@/entities/enemy.ts";
 import { addPlayer, drawPlayer, getPlayerIfAlive, updatePlayer } from "@/entities/player.ts";
 import { drawFramesPerSecond, drawHitboxes } from "@/lib/debug.ts";
-import { cleanupDestroyedEntities, sortOnDepth } from "@/lib/entities.ts";
+import { cleanupDestroyedEntities, sortEntitiesOnDepth } from "@/lib/entities.ts";
 import { moveAndCollide } from "@/lib/entity.ts";
 import { loadResources } from "@/lib/resources.ts";
 
@@ -22,7 +22,7 @@ async function setup() {
 }
 
 function update() {
-  activeEntities.sort(sortOnDepth);
+  activeEntities.sort(sortEntitiesOnDepth);
 
   for (const idx of activeEntities) {
     const e = entities[idx];

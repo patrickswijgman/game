@@ -1,8 +1,8 @@
 import { drawSprite, isInputDown, pointerWorldX } from "snuggy";
 import { Input, Texture, Type } from "@/consts.ts";
 import { type Entity, entities, playerIdx, setPlayerIdx } from "@/data.ts";
-import { addEntity, setEntityTransform } from "@/lib/entities.ts";
-import { setBody } from "@/lib/entity.ts";
+import { addEntity } from "@/lib/entities.ts";
+import { setBody, setEntityTransform } from "@/lib/entity.ts";
 
 export function addPlayer(x: number, y: number) {
   const e = addEntity(Type.PLAYER, x, y);

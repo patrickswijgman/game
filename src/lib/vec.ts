@@ -1,3 +1,4 @@
+import { getDistance } from "snuggy";
 import type { Vec } from "@/data.ts";
 
 export function setVec(v: Vec, x: number, y: number) {
@@ -26,17 +27,33 @@ export function scaleVec(v: Vec, s: number) {
 }
 
 export function normalizeVec(v: Vec) {
-  const len = getVecLength(v);
-  if (len) {
-    v.x /= len;
-    v.y /= len;
+  const m = getVecMagnitude(v);
+  if (m) {
+    v.x /= m;
+    v.y /= m;
   }
 }
 
-export function getVecLength(v: Vec) {
+export function limitVec(v: Vec, l: number) {
+  const m = getVecMagnitude(v);
+  if (m > l) {
+    setVecMagnitude(v, l);
+  }
+}
+
+export function getVecMagnitude(v: Vec) {
   const x = v.x * v.x;
   const y = v.y * v.y;
   return Math.sqrt(x + y);
+}
+
+export function setVecMagnitude(v: Vec, m: number) {
+  normalizeVec(v);
+  scaleVec(v, m);
+}
+
+export function getVecDistance(a: Vec, b: Vec) {
+  return getDistance(a.x, a.y, b.x, b.y);
 }
 
 export function isVecValid(v: Vec) {

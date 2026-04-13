@@ -1,7 +1,7 @@
 import { addCameraTransform, delta, resetTransform, scaleTransform, translateTransform } from "snuggy";
 import { type Entity, entities, zeroVec } from "@/data.ts";
 import { isRectValid, setRect, writeRectIntersection } from "@/lib/rect.ts";
-import { addVec, copyVec, isVecValid, normalizeVec, scaleVec, setVec } from "@/lib/vec.ts";
+import { addVec, copyVec, isVecValid, setVec, setVecMagnitude } from "@/lib/vec.ts";
 
 export function setBody(e: Entity, x: number, y: number, w: number, h: number) {
   setVec(e.bodyOffset, x, y);
@@ -16,9 +16,7 @@ export function updateBody(e: Entity) {
 
 export function moveAndCollide(self: Entity, list: Array<number>) {
   if (isVecValid(self.vel)) {
-    normalizeVec(self.vel);
-    scaleVec(self.vel, self.speed);
-    scaleVec(self.vel, delta);
+    setVecMagnitude(self.vel, self.speed * delta);
     addVec(self.pos, self.vel);
 
     if (isRectValid(self.body)) {

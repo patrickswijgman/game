@@ -2,8 +2,8 @@ import { drawSprite } from "snuggy";
 import { Texture, Type } from "@/consts.ts";
 import type { Entity } from "@/data.ts";
 import { getPlayerIfAlive } from "@/entities/player.ts";
-import { addEntity, setEntityTransform } from "@/lib/entities.ts";
-import { setBody } from "@/lib/entity.ts";
+import { addEntity } from "@/lib/entities.ts";
+import { setBody, setEntityTransform } from "@/lib/entity.ts";
 
 export function addEnemy(x: number, y: number) {
   const e = addEntity(Type.ENEMY, x, y);
