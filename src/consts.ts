@@ -6,12 +6,6 @@ export const enum Font {
   DEFAULT,
 }
 
-export const enum Type {
-  UNKNOWN,
-  PLAYER,
-  ENEMY,
-}
-
 export const enum Input {
   UP = "KeyW",
   DOWN = "KeyS",
