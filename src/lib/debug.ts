@@ -1,5 +1,6 @@
 import { addCameraTransform, drawRect, drawText, fps, resetTransform, scaleTransform, translateTransform } from "snuggy";
 import { activeEntities, entities } from "@/data.ts";
+import { isRectIntersection } from "@/lib/rect.ts";
 
 export function drawFramesPerSecond() {
   resetTransform();
@@ -20,8 +21,20 @@ export function drawBodies() {
 export function drawHitboxes() {
   for (const idx of activeEntities) {
     const e = entities[idx];
+
+    let color = "yellow";
+
+    for (const idx of activeEntities) {
+      const other = entities[idx];
+
+      if (isRectIntersection(e.hitbox, other.hitbox)) {
+        color = "purple";
+        break;
+      }
+    }
+
     resetTransform();
     addCameraTransform();
-    drawRect(e.hitbox.x, e.hitbox.y, e.hitbox.w, e.hitbox.h, "yellow", false);
+    drawRect(e.hitbox.x, e.hitbox.y, e.hitbox.w, e.hitbox.h, color, false);
   }
 }
