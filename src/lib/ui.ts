@@ -43,10 +43,10 @@ export function drawCards(cards: Array<number>, anchorX: number, anchorY: number
     translateTransform(1, -1);
     drawSprite(Texture.ATLAS, -4, -2, 0, 80, 32, 32);
 
-    if (isHover && onClick) {
+    if (isHover) {
       drawSprite(Texture.ATLAS, -4, -2, 32, 80, 32, 32);
 
-      if (isInputPressed(Input.LMB)) {
+      if (onClick && isInputPressed(Input.LMB)) {
         onClick(i);
       }
     }
@@ -86,21 +86,24 @@ export function drawCards(cards: Array<number>, anchorX: number, anchorY: number
 
 export function drawHealth(sheet: Sheet, x: number, y: number, align: "left" | "right") {
   resetTransform();
+
   if (align === "right") {
     translateTransform(x - 16, y);
   } else {
     translateTransform(x, y);
   }
+
   for (let i = 0; i < sheet.healthMax; i++) {
-    if (align === "right") {
-      translateTransform(-11, 0);
-    } else {
-      translateTransform(11, 0);
-    }
     if (i + 1 <= sheet.health) {
       drawSprite(Texture.ATLAS, 0, 0, 0, 112, 16, 16);
     } else {
       drawSprite(Texture.ATLAS, 0, 0, 16, 112, 16, 16);
+    }
+
+    if (align === "right") {
+      translateTransform(-11, 0);
+    } else {
+      translateTransform(11, 0);
     }
   }
 }
@@ -110,12 +113,12 @@ export function drawButton(text: string, x: number, y: number, onClick?: () => v
 
   resetTransform();
   translateTransform(x, y);
-  drawSprite(Texture.ATLAS, -2, -2, 96, 80, 48, 16);
+  drawSprite(Texture.ATLAS, -2, -2, 128, 80, 48, 16);
 
-  if (onClick && isHover) {
-    drawSprite(Texture.ATLAS, -2, -2, 96, 96, 48, 16);
+  if (isHover) {
+    drawSprite(Texture.ATLAS, -2, -2, 128, 96, 48, 16);
 
-    if (isInputPressed(Input.LMB)) {
+    if (onClick && isInputPressed(Input.LMB)) {
       onClick();
     }
   }

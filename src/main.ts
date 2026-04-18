@@ -1,6 +1,6 @@
 import { drawRect, drawSprite, getHeight, getWidth, resetTransform, run, scaleTransform, translateTransform } from "snuggy";
 import { Action, BUTTON_WIDTH, CARD_HEIGHT, CARD_WIDTH, Color, EnemyType, State, Texture } from "@/consts.ts";
-import { action, enemy, enemyCards, player, playerCards, setAction, setState, setStateNext, state, stateNext, zeroEnemyCards, zeroPlayerCards } from "@/data.ts";
+import { enemy, enemyCards, player, playerCards, playerHandAction, setPlayerHandAction, setState, setStateNext, state, stateNext, zeroEnemyCards, zeroPlayerCards, zeroPlayerHandAction } from "@/data.ts";
 import { setupCards } from "@/lib/cards";
 import { setupEnemy } from "@/lib/enemy.ts";
 import { setupItems } from "@/lib/items.ts";
@@ -27,7 +27,7 @@ function update() {
 
   if (state !== stateNext) {
     // Reset
-    setAction(Action.NONE);
+    zeroPlayerHandAction();
 
     // Exit
     switch (state) {
@@ -71,7 +71,7 @@ function update() {
         break;
 
       case State.PLAYER_CHOOSE_CARD:
-        setAction(Action.CONFIRM_CARD);
+        setPlayerHandAction(Action.CONFIRM_CARD);
         break;
 
       case State.REVEAL:
@@ -109,7 +109,7 @@ function update() {
   // Player
   if (player.health) {
     resetTransform();
-    translateTransform(50, 70);
+    translateTransform(50, 80);
     drawSprite(Texture.ATLAS, -16, -31, 0, 0, 32, 32);
     drawSprite(Texture.ATLAS, -16, -3, 0, 32, 32, 16);
   }
@@ -120,46 +120,44 @@ function update() {
   translateTransform(-1, 1);
   drawSprite(Texture.ATLAS, -4, -2, 64, 80, 32, 32);
   translateTransform(1, -1);
-  drawSprite(Texture.ATLAS, -4, -2, 0, 80, 32, 32);
+  drawSprite(Texture.ATLAS, -4, -2, 96, 80, 32, 32);
   translateTransform(CARD_WIDTH / 2, CARD_HEIGHT / 2);
   scaleTransform(1, 1);
   drawTextWithShadow(player.deck.draw.length.toString(), 0, 0, "white", "center", "middle");
 
   // Total values
-  const color = isWinning ? "white" : "red";
+  const color = isWinning ? "white" : Color.ERROR;
   resetTransform();
-  translateTransform(getWidth() / 2, 60);
-  drawSprite(Texture.ATLAS, -48, -8, 0, 224, 96, 32);
+  translateTransform(getWidth() / 2, 15);
+  drawSprite(Texture.ATLAS, -48, -12, 0, 224, 96, 32);
   scaleTransform(0.5, 0.5);
-  drawTextWithShadow("Total", 0, 0, "white", "center", "top");
-  scaleTransform(2, 2);
-  translateTransform(-20, 5);
-  drawTextWithShadow(playerTotal.toString(), 0, 0, color, "left", "top");
-  translateTransform(20, 2);
-  scaleTransform(0.5, 0.5);
-  drawTextWithShadow("vs", 0, 0, color, "center", "top");
-  scaleTransform(2, 2);
-  translateTransform(20, -2);
-  drawTextWithShadow(enemyTotal.toString(), 0, 0, color, "right", "top");
+  drawTextWithShadow("vs", 0, 0, color, "center", "middle");
+  scaleTransform(1.5, 1.5);
+  translateTransform(-30, 0);
+  drawTextWithShadow(playerTotal.toString(), 0, 0, color, "center", "middle");
+  translateTransform(60, 0);
+  drawTextWithShadow(enemyTotal.toString(), 0, 0, color, "center", "middle");
 
   if (state === State.PLAYER_CHOOSE_CARD) {
-    drawButton("End turn", getWidth() / 2 - BUTTON_WIDTH / 2, 78, onEndTurnButtonClick);
+    const x = getWidth() / 2 - BUTTON_WIDTH / 2;
+    const y = 28;
+    drawButton("End turn", x, y, onEndTurnButtonClick);
   }
 
   // Player stuff
   drawHealth(player, 10, 10, "left");
-  drawCards(playerCards, 50, 80);
+  drawCards(playerCards, 50, 90);
 
   // Enemy stuff
   drawHealth(enemy, getWidth() - 10, 10, "right");
-  drawCards(enemyCards, getWidth() - 50, 80);
+  drawCards(enemyCards, getWidth() - 50, 90);
 
-  // Hand
+  // Hand cards
   drawCards(player.deck.hand, getWidth() / 2, getHeight() - 35, onPlayerHandCardClick);
 }
 
 function onPlayerHandCardClick(i: number) {
-  switch (action) {
+  switch (playerHandAction) {
     case Action.CONFIRM_CARD:
       playCard(player, i, playerCards);
       setStateNext(State.REVEAL);

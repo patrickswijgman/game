@@ -1,11 +1,11 @@
 Game group
 player Sheet
 playerCards array number
+playerHandAction number
 enemy Sheet
 enemyCards array number
 state number
 stateNext number
-action number
 
 Deck struct
 hand array number

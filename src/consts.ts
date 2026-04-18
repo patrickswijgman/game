@@ -52,6 +52,7 @@ export const enum ItemEffect {
 export const enum Color {
   SHADOW = "#1e1e1e",
   GRASS = "#577647",
+  ERROR = "#dd1c1a",
 }
 
 export const enum Action {

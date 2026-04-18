@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 4/18/2026, 11:43:02 AM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 4/18/2026, 4:00:04 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -10,11 +10,11 @@
 
 export let player = createSheet()
 export let playerCards = new Array<number>()
+export let playerHandAction = 0
 export let enemy = createSheet()
 export let enemyCards = new Array<number>()
 export let state = 0
 export let stateNext = 0
-export let action = 0
 
 /** Set the value of the player field within the Game group. */
 export function setPlayer(value: Sheet) {
@@ -24,6 +24,11 @@ export function setPlayer(value: Sheet) {
 /** Set the value of the playerCards field within the Game group. */
 export function setPlayerCards(value: Array<number>) {
   playerCards = value
+}
+
+/** Set the value of the playerHandAction field within the Game group. */
+export function setPlayerHandAction(value: number) {
+  playerHandAction = value
 }
 
 /** Set the value of the enemy field within the Game group. */
@@ -46,11 +51,6 @@ export function setStateNext(value: number) {
   stateNext = value
 }
 
-/** Set the value of the action field within the Game group. */
-export function setAction(value: number) {
-  action = value
-}
-
 /** Zero the player field within the Game group. */
 export function zeroPlayer() {
   zeroSheet(player)
@@ -59,6 +59,11 @@ export function zeroPlayer() {
 /** Zero the playerCards field within the Game group. */
 export function zeroPlayerCards() {
   playerCards.length = 0
+}
+
+/** Zero the playerHandAction field within the Game group. */
+export function zeroPlayerHandAction() {
+  playerHandAction = 0
 }
 
 /** Zero the enemy field within the Game group. */
@@ -81,20 +86,15 @@ export function zeroStateNext() {
   stateNext = 0
 }
 
-/** Zero the action field within the Game group. */
-export function zeroAction() {
-  action = 0
-}
-
 /** Zero all fields within the Game group. */
 export function zeroGameData() {
   zeroSheet(player)
   playerCards.length = 0
+  playerHandAction = 0
   zeroSheet(enemy)
   enemyCards.length = 0
   state = 0
   stateNext = 0
-  action = 0
 }
 
 /*
