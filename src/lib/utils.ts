@@ -19,15 +19,6 @@ export function shuffle(array: Array<unknown>) {
   }
 }
 
-export function pick<T>(array: Array<T>) {
-  if (array.length > 0) {
-    const i = random(array.length);
-    const e = array[i];
-    array.splice(i, 1);
-    return e;
-  }
-}
-
 export function withinBounds(px: number, py: number, x: number, y: number, w: number, h: number) {
   return px > x && px < x + w && py > y && py < y + h;
 }

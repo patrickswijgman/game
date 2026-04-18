@@ -19,6 +19,8 @@ export const enum State {
   PLAYER_CHOOSE_CARD,
   REVEAL,
   RESOLVE,
+  VICTORY,
+  DEFEAT,
 }
 
 export const enum EnemyType {
@@ -49,6 +51,7 @@ export const enum ItemEffect {
 
 export const enum Color {
   SHADOW = "#1e1e1e",
+  GRASS = "#577647",
 }
 
 export const enum Action {
@@ -58,3 +61,6 @@ export const enum Action {
 
 export const CARD_WIDTH = 24;
 export const CARD_HEIGHT = 28;
+
+export const BUTTON_WIDTH = 44;
+export const BUTTON_HEIGHT = 12;

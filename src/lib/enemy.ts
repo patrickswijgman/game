@@ -10,7 +10,7 @@ export function setupEnemy(type: EnemyType) {
       {
         enemy.name = "Rat";
         enemy.health = 1;
-        enemy.healthMax = 1;
+        enemy.healthMax = 2;
         addCards(enemy, CardId.BITE, 3);
       }
       break;

@@ -22,7 +22,3 @@ export function setupCards() {
 export function getCard(id: CardId) {
   return cards[id];
 }
-
-export function isCardValid(id?: CardId) {
-  return id !== undefined;
-}
