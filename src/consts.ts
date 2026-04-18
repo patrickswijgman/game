@@ -7,8 +7,54 @@ export const enum Font {
 }
 
 export const enum Input {
-  UP = "KeyW",
-  DOWN = "KeyS",
-  LEFT = "KeyA",
-  RIGHT = "KeyD",
+  LMB = "0",
 }
+
+export const enum State {
+  DEFAULT,
+  PREPARE_ENEMY,
+  PREPARE_DECKS,
+  PREPARE_ROUND,
+  ENEMY_CHOOSE_CARD,
+  PLAYER_CHOOSE_CARD,
+  REVEAL,
+  RESOLVE,
+}
+
+export const enum EnemyType {
+  UNKNOWN,
+  RAT,
+}
+
+export const enum CardId {
+  PUNCH,
+  STICK,
+
+  // Enemy specific cards
+  BITE,
+}
+
+export const enum CardEffect {
+  REPLACE,
+}
+
+export const enum ItemId {
+  HEALTH_POTION,
+}
+
+export const enum ItemEffect {
+  HEALTH_RESTORE,
+  HEALTH_MAX_INCREASE,
+}
+
+export const enum Color {
+  SHADOW = "#1e1e1e",
+}
+
+export const enum Action {
+  NONE,
+  CONFIRM_CARD,
+}
+
+export const CARD_WIDTH = 24;
+export const CARD_HEIGHT = 28;

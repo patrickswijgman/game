@@ -1,0 +1,35 @@
+Game group
+player Sheet
+playerCards array number
+enemy Sheet
+enemyCards array number
+state number
+stateNext number
+action number
+
+Deck struct
+hand array number
+draw array number
+discard array number
+
+Card struct
+name string
+description string
+value number
+effects array number
+
+Sheet struct
+name string
+type number
+health number
+healthMax number
+deck Deck
+items array number
+
+Item struct
+name string
+effects array number
+
+cards aos 64 Card
+
+items aos 64 Item
