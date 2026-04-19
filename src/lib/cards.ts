@@ -20,3 +20,13 @@ export function setupCards() {
 export function getCard(id: CardId) {
   return cards[id];
 }
+
+export function isValueCard(id: CardId) {
+  const card = cards[id];
+  return card && card.value > 0;
+}
+
+export function isSpecialCard(id: CardId) {
+  const card = cards[id];
+  return card && card.value === 0 && card.effects.length > 0;
+}

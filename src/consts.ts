@@ -8,6 +8,7 @@ export const enum Font {
 
 export const enum Input {
   LMB = "0",
+  END_TURN = "Space",
 }
 
 export const enum State {
@@ -16,9 +17,11 @@ export const enum State {
   PREPARE_ENEMY,
   PREPARE_DECKS,
   PREPARE_ROUND,
-  ENEMY_CHOOSE_CARD,
-  PLAYER_CHOOSE_CARD,
-  REVEAL,
+  ENEMY_CHOOSE_VALUE_CARD,
+  PLAYER_CHOOSE_VALUE_CARD,
+  ENEMY_CHOOSE_SPECIAL_CARD,
+  PLAYER_CHOOSE_SPECIAL_CARD,
+  PLAYER_CONFIRMED_CARD,
   RESOLVE,
   VICTORY,
   DEFEAT,
@@ -54,13 +57,10 @@ export const enum Color {
   ERROR = "#dd1c1a",
 }
 
-export const enum Action {
-  NONE,
-  CONFIRM_CARD,
-}
-
 export const CARD_WIDTH = 28;
 export const CARD_HEIGHT = 32;
 
 export const BUTTON_WIDTH = 44;
 export const BUTTON_HEIGHT = 12;
+
+export const END_TURN_STATES = [State.PLAYER_CHOOSE_VALUE_CARD, State.PLAYER_CHOOSE_SPECIAL_CARD] as const;

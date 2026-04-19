@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 4/19/2026, 9:52:11 AM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 4/19/2026, 3:21:31 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -10,7 +10,6 @@
 
 export let player = createSheet()
 export let playerCards = new Array<number>()
-export let playerHandAction = 0
 export let enemy = createSheet()
 export let enemyCards = new Array<number>()
 export let state = 0
@@ -25,11 +24,6 @@ export function setPlayer(value: Sheet) {
 /** Set the value of the playerCards field within the Game group. */
 export function setPlayerCards(value: Array<number>) {
   playerCards = value
-}
-
-/** Set the value of the playerHandAction field within the Game group. */
-export function setPlayerHandAction(value: number) {
-  playerHandAction = value
 }
 
 /** Set the value of the enemy field within the Game group. */
@@ -67,11 +61,6 @@ export function zeroPlayerCards() {
   playerCards.length = 0
 }
 
-/** Zero the playerHandAction field within the Game group. */
-export function zeroPlayerHandAction() {
-  playerHandAction = 0
-}
-
 /** Zero the enemy field within the Game group. */
 export function zeroEnemy() {
   zeroSheet(enemy)
@@ -101,7 +90,6 @@ export function zeroStateTimer() {
 export function zeroGameData() {
   zeroSheet(player)
   playerCards.length = 0
-  playerHandAction = 0
   zeroSheet(enemy)
   enemyCards.length = 0
   state = 0
@@ -117,7 +105,6 @@ export function zeroGameData() {
 
 export type Card = {
   name: string
-  description: string
   value: number
   effects: Array<number>
 }
@@ -126,7 +113,6 @@ export type Card = {
 export function createCard(): Card {
   const obj = Object.create(null)
   obj.name = ""
-  obj.description = ""
   obj.value = 0
   obj.effects = new Array<number>()
   return obj
@@ -135,7 +121,6 @@ export function createCard(): Card {
 /** Zero the given Card object. */
 export function zeroCard(obj: Card) {
   obj.name = ""
-  obj.description = ""
   obj.value = 0
   obj.effects.length = 0
 }
@@ -147,12 +132,13 @@ export function zeroCard(obj: Card) {
  */
 
 export type Sheet = {
-  name: string
   type: number
+  name: string
   health: number
   healthMax: number
   hand: Array<number>
   draw: Array<number>
+  drawAmount: number
   discard: Array<number>
   items: Array<number>
 }
@@ -160,12 +146,13 @@ export type Sheet = {
 /** Create a new Sheet object. */
 export function createSheet(): Sheet {
   const obj = Object.create(null)
-  obj.name = ""
   obj.type = 0
+  obj.name = ""
   obj.health = 0
   obj.healthMax = 0
   obj.hand = new Array<number>()
   obj.draw = new Array<number>()
+  obj.drawAmount = 0
   obj.discard = new Array<number>()
   obj.items = new Array<number>()
   return obj
@@ -173,12 +160,13 @@ export function createSheet(): Sheet {
 
 /** Zero the given Sheet object. */
 export function zeroSheet(obj: Sheet) {
-  obj.name = ""
   obj.type = 0
+  obj.name = ""
   obj.health = 0
   obj.healthMax = 0
   obj.hand.length = 0
   obj.draw.length = 0
+  obj.drawAmount = 0
   obj.discard.length = 0
   obj.items.length = 0
 }
@@ -191,6 +179,7 @@ export function zeroSheet(obj: Sheet) {
 
 export type Item = {
   name: string
+  cards: Array<number>
   effects: Array<number>
 }
 
@@ -198,6 +187,7 @@ export type Item = {
 export function createItem(): Item {
   const obj = Object.create(null)
   obj.name = ""
+  obj.cards = new Array<number>()
   obj.effects = new Array<number>()
   return obj
 }
@@ -205,6 +195,7 @@ export function createItem(): Item {
 /** Zero the given Item object. */
 export function zeroItem(obj: Item) {
   obj.name = ""
+  obj.cards.length = 0
   obj.effects.length = 0
 }
 

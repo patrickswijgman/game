@@ -9,14 +9,8 @@ export function addCards(sheet: Sheet, id: CardId, amount: number) {
   }
 }
 
-export function pullCards(sheet: Sheet, amount: number) {
+export function drawCardsIntoHand(sheet: Sheet, amount: number) {
   for (let i = 0; i < amount; i++) {
-    if (sheet.draw.length === 0) {
-      sheet.draw.push(...sheet.discard);
-      sheet.discard.length = 0;
-      shuffle(sheet.draw);
-    }
-
     const cardId = sheet.draw.pop();
 
     if (cardId !== undefined) {
@@ -47,7 +41,7 @@ export function prepareDeck(sheet: Sheet) {
   shuffle(sheet.draw);
 }
 
-export function getTotalValue(sheet: Sheet, cards: Array<number>) {
+export function getTotalValue(_sheet: Sheet, cards: Array<number>) {
   let total = 0;
 
   for (const cardId of cards) {

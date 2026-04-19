@@ -8,6 +8,7 @@ export function setupPlayer() {
   player.name = "Player";
   player.health = 3;
   player.healthMax = 3;
+  player.drawAmount = 3;
   addCards(player, CardId.PUNCH, 3);
   addCards(player, CardId.STICK, 2);
 }
@@ -17,10 +18,8 @@ export function preparePlayer() {
 }
 
 export function drawPlayer() {
-  if (player.health) {
-    resetTransform();
-    translateTransform(50, 80);
-    drawSprite(Texture.ATLAS, -16, -31, 0, 0, 32, 32);
-    drawSprite(Texture.ATLAS, -16, -3, 0, 32, 32, 16);
-  }
+  resetTransform();
+  translateTransform(50, 80);
+  drawSprite(Texture.ATLAS, -16, -31, 0, 0, 32, 32);
+  drawSprite(Texture.ATLAS, -16, -3, 0, 32, 32, 16);
 }
