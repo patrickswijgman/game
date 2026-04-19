@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 4/18/2026, 4:00:04 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 4/19/2026, 9:52:11 AM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -15,6 +15,7 @@ export let enemy = createSheet()
 export let enemyCards = new Array<number>()
 export let state = 0
 export let stateNext = 0
+export let stateTimer = createTimer()
 
 /** Set the value of the player field within the Game group. */
 export function setPlayer(value: Sheet) {
@@ -49,6 +50,11 @@ export function setState(value: number) {
 /** Set the value of the stateNext field within the Game group. */
 export function setStateNext(value: number) {
   stateNext = value
+}
+
+/** Set the value of the stateTimer field within the Game group. */
+export function setStateTimer(value: Timer) {
+  stateTimer = value
 }
 
 /** Zero the player field within the Game group. */
@@ -86,6 +92,11 @@ export function zeroStateNext() {
   stateNext = 0
 }
 
+/** Zero the stateTimer field within the Game group. */
+export function zeroStateTimer() {
+  zeroTimer(stateTimer)
+}
+
 /** Zero all fields within the Game group. */
 export function zeroGameData() {
   zeroSheet(player)
@@ -95,34 +106,7 @@ export function zeroGameData() {
   enemyCards.length = 0
   state = 0
   stateNext = 0
-}
-
-/*
- * --------------------------------------------------
- * Deck (struct)
- * --------------------------------------------------
- */
-
-export type Deck = {
-  hand: Array<number>
-  draw: Array<number>
-  discard: Array<number>
-}
-
-/** Create a new Deck object. */
-export function createDeck(): Deck {
-  const obj = Object.create(null)
-  obj.hand = new Array<number>()
-  obj.draw = new Array<number>()
-  obj.discard = new Array<number>()
-  return obj
-}
-
-/** Zero the given Deck object. */
-export function zeroDeck(obj: Deck) {
-  obj.hand.length = 0
-  obj.draw.length = 0
-  obj.discard.length = 0
+  zeroTimer(stateTimer)
 }
 
 /*
@@ -167,7 +151,9 @@ export type Sheet = {
   type: number
   health: number
   healthMax: number
-  deck: Deck
+  hand: Array<number>
+  draw: Array<number>
+  discard: Array<number>
   items: Array<number>
 }
 
@@ -178,7 +164,9 @@ export function createSheet(): Sheet {
   obj.type = 0
   obj.health = 0
   obj.healthMax = 0
-  obj.deck = createDeck()
+  obj.hand = new Array<number>()
+  obj.draw = new Array<number>()
+  obj.discard = new Array<number>()
   obj.items = new Array<number>()
   return obj
 }
@@ -189,7 +177,9 @@ export function zeroSheet(obj: Sheet) {
   obj.type = 0
   obj.health = 0
   obj.healthMax = 0
-  zeroDeck(obj.deck)
+  obj.hand.length = 0
+  obj.draw.length = 0
+  obj.discard.length = 0
   obj.items.length = 0
 }
 
@@ -216,6 +206,28 @@ export function createItem(): Item {
 export function zeroItem(obj: Item) {
   obj.name = ""
   obj.effects.length = 0
+}
+
+/*
+ * --------------------------------------------------
+ * Timer (struct)
+ * --------------------------------------------------
+ */
+
+export type Timer = {
+  elapsed: number
+}
+
+/** Create a new Timer object. */
+export function createTimer(): Timer {
+  const obj = Object.create(null)
+  obj.elapsed = 0
+  return obj
+}
+
+/** Zero the given Timer object. */
+export function zeroTimer(obj: Timer) {
+  obj.elapsed = 0
 }
 
 /*

@@ -12,6 +12,7 @@ export const enum Input {
 
 export const enum State {
   DEFAULT,
+  PREPARE_PLAYER,
   PREPARE_ENEMY,
   PREPARE_DECKS,
   PREPARE_ROUND,
@@ -31,9 +32,7 @@ export const enum EnemyType {
 export const enum CardId {
   PUNCH,
   STICK,
-
-  // Enemy specific cards
-  BITE,
+  RAT_BITE,
 }
 
 export const enum CardEffect {
@@ -60,8 +59,8 @@ export const enum Action {
   CONFIRM_CARD,
 }
 
-export const CARD_WIDTH = 24;
-export const CARD_HEIGHT = 28;
+export const CARD_WIDTH = 28;
+export const CARD_HEIGHT = 32;
 
 export const BUTTON_WIDTH = 44;
 export const BUTTON_HEIGHT = 12;

@@ -1,3 +1,6 @@
+import { time } from "snuggy";
+import type { Timer } from "@/data.ts";
+
 export function random(max: number) {
   return Math.floor(Math.random() * max);
 }
@@ -21,4 +24,14 @@ export function shuffle(array: Array<unknown>) {
 
 export function withinBounds(px: number, py: number, x: number, y: number, w: number, h: number) {
   return px > x && px < x + w && py > y && py < y + h;
+}
+
+export function tickTimer(t: Timer, duration: number) {
+  if (t.elapsed >= duration) {
+    return false;
+  }
+
+  t.elapsed += time;
+
+  return t.elapsed >= duration;
 }

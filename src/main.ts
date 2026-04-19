@@ -1,14 +1,14 @@
-import { drawRect, drawSprite, getHeight, getWidth, resetTransform, run, scaleTransform, translateTransform } from "snuggy";
-import { Action, BUTTON_WIDTH, CARD_HEIGHT, CARD_WIDTH, Color, EnemyType, State, Texture } from "@/consts.ts";
-import { enemy, enemyCards, player, playerCards, playerHandAction, setPlayerHandAction, setState, setStateNext, state, stateNext, zeroEnemyCards, zeroPlayerCards, zeroPlayerHandAction } from "@/data.ts";
+import { drawRect, getHeight, getWidth, run } from "snuggy";
+import { Action, BUTTON_WIDTH, Color, EnemyType, State } from "@/consts.ts";
+import { enemy, enemyCards, player, playerCards, playerHandAction, setPlayerHandAction, setState, setStateNext, state, stateNext, stateTimer, zeroEnemyCards, zeroPlayerCards, zeroPlayerHandAction, zeroTimer } from "@/data.ts";
 import { setupCards } from "@/lib/cards";
-import { setupEnemy } from "@/lib/enemy.ts";
+import { drawEnemy, enemyChooseCard, prepareEnemy } from "@/lib/enemy.ts";
 import { setupItems } from "@/lib/items.ts";
-import { setupPlayer } from "@/lib/player.ts";
+import { drawPlayer, preparePlayer, setupPlayer } from "@/lib/player.ts";
 import { loadResources } from "@/lib/resources.ts";
 import { discardHand, getTotalValue, playCard, prepareDeck, pullCards } from "@/lib/sheet.ts";
-import { drawButton, drawCards, drawHealth, drawTextWithShadow } from "@/lib/ui.ts";
-import { random } from "@/lib/utils.ts";
+import { drawButton, drawCards, drawDrawPile, drawHealth, drawTotalValues } from "@/lib/ui.ts";
+import { tickTimer } from "@/lib/utils.ts";
 
 async function setup() {
   await loadResources();
@@ -17,16 +17,13 @@ async function setup() {
   setupItems();
   setupPlayer();
 
-  setStateNext(State.PREPARE_ENEMY);
+  setStateNext(State.PREPARE_PLAYER);
 }
 
 function update() {
-  const playerTotal = getTotalValue(player, playerCards);
-  const enemyTotal = getTotalValue(enemy, enemyCards);
-  const isWinning = playerTotal > enemyTotal;
-
   if (state !== stateNext) {
     // Reset
+    zeroTimer(stateTimer);
     zeroPlayerHandAction();
 
     // Exit
@@ -41,8 +38,13 @@ function update() {
 
     // Enter
     switch (state) {
+      case State.PREPARE_PLAYER:
+        preparePlayer();
+        setStateNext(State.PREPARE_ENEMY);
+        break;
+
       case State.PREPARE_ENEMY:
-        setupEnemy(EnemyType.RAT);
+        prepareEnemy(EnemyType.RAT);
         setStateNext(State.PREPARE_DECKS);
         break;
 
@@ -61,13 +63,8 @@ function update() {
         break;
 
       case State.ENEMY_CHOOSE_CARD:
-        {
-          if (enemy.deck.hand.length > 0) {
-            const cardId = random(enemy.deck.hand.length);
-            playCard(enemy, cardId, enemyCards);
-          }
-          setStateNext(State.PLAYER_CHOOSE_CARD);
-        }
+        enemyChooseCard();
+        setStateNext(State.PLAYER_CHOOSE_CARD);
         break;
 
       case State.PLAYER_CHOOSE_CARD:
@@ -79,81 +76,66 @@ function update() {
         break;
 
       case State.RESOLVE:
-        {
-          if (isWinning) {
-            enemy.health -= 1;
-            if (enemy.health === 0) {
-              setStateNext(State.VICTORY);
-            } else {
-              setStateNext(State.PREPARE_ROUND);
-            }
-          } else {
-            player.health -= 1;
-            if (player.health === 0) {
-              setStateNext(State.DEFEAT);
-            } else {
-              setStateNext(State.PREPARE_ROUND);
-            }
-          }
-        }
+        resolveRound();
         break;
     }
   }
 
   // Update
   switch (state) {
+    case State.VICTORY:
+      {
+        if (tickTimer(stateTimer, 1000)) {
+          setStateNext(State.PREPARE_PLAYER);
+        }
+      }
+      break;
   }
 
-  drawRect(0, 0, getWidth(), getHeight(), Color.GRASS, true);
+  drawRoom();
+  drawPlayer();
+  drawEnemy();
+  drawDrawPile();
+  drawTotalValues();
 
-  // Player
-  if (player.health) {
-    resetTransform();
-    translateTransform(50, 80);
-    drawSprite(Texture.ATLAS, -16, -31, 0, 0, 32, 32);
-    drawSprite(Texture.ATLAS, -16, -3, 0, 32, 32, 16);
-  }
-
-  // Draw-pile
-  resetTransform();
-  translateTransform(10, getHeight() - 35);
-  translateTransform(-1, 1);
-  drawSprite(Texture.ATLAS, -4, -2, 64, 80, 32, 32);
-  translateTransform(1, -1);
-  drawSprite(Texture.ATLAS, -4, -2, 96, 80, 32, 32);
-  translateTransform(CARD_WIDTH / 2, CARD_HEIGHT / 2);
-  scaleTransform(1, 1);
-  drawTextWithShadow(player.deck.draw.length.toString(), 0, 0, "white", "center", "middle");
-
-  // Total values
-  const color = isWinning ? "white" : Color.ERROR;
-  resetTransform();
-  translateTransform(getWidth() / 2, 15);
-  drawSprite(Texture.ATLAS, -48, -12, 0, 224, 96, 32);
-  scaleTransform(0.5, 0.5);
-  drawTextWithShadow("vs", 0, 0, color, "center", "middle");
-  scaleTransform(1.5, 1.5);
-  translateTransform(-30, 0);
-  drawTextWithShadow(playerTotal.toString(), 0, 0, color, "center", "middle");
-  translateTransform(60, 0);
-  drawTextWithShadow(enemyTotal.toString(), 0, 0, color, "center", "middle");
-
+  // End turn
   if (state === State.PLAYER_CHOOSE_CARD) {
     const x = getWidth() / 2 - BUTTON_WIDTH / 2;
     const y = 28;
     drawButton("End turn", x, y, onEndTurnButtonClick);
   }
 
-  // Player stuff
   drawHealth(player, 10, 10, "left");
-  drawCards(playerCards, 50, 90);
-
-  // Enemy stuff
+  drawCards(playerCards, 50, 85);
   drawHealth(enemy, getWidth() - 10, 10, "right");
-  drawCards(enemyCards, getWidth() - 50, 90);
+  drawCards(enemyCards, getWidth() - 50, 85);
+  drawCards(player.hand, getWidth() / 2, getHeight() - 35, onPlayerHandCardClick);
+}
 
-  // Hand cards
-  drawCards(player.deck.hand, getWidth() / 2, getHeight() - 35, onPlayerHandCardClick);
+function resolveRound() {
+  const playerTotal = getTotalValue(player, playerCards);
+  const enemyTotal = getTotalValue(enemy, enemyCards);
+  const isWinning = playerTotal > enemyTotal;
+
+  if (isWinning) {
+    enemy.health -= 1;
+    if (enemy.health === 0) {
+      setStateNext(State.VICTORY);
+    } else {
+      setStateNext(State.PREPARE_ROUND);
+    }
+  } else {
+    player.health -= 1;
+    if (player.health === 0) {
+      setStateNext(State.DEFEAT);
+    } else {
+      setStateNext(State.PREPARE_ROUND);
+    }
+  }
+}
+
+function drawRoom() {
+  drawRect(0, 0, getWidth(), getHeight(), Color.GRASS, true);
 }
 
 function onPlayerHandCardClick(i: number) {

@@ -1,7 +1,8 @@
 import { drawSprite, drawText, getHeight, getWidth, isInputPressed, pointerX, pointerY, resetTransform, scaleTransform, translateTransform } from "snuggy";
 import { BUTTON_HEIGHT, BUTTON_WIDTH, CARD_HEIGHT, CARD_WIDTH, Color, Input, Texture } from "@/consts.ts";
-import type { Sheet } from "@/data.ts";
+import { enemy, enemyCards, player, playerCards, type Sheet } from "@/data.ts";
 import { getCard } from "@/lib/cards.ts";
+import { getTotalValue } from "@/lib/sheet.ts";
 import { withinBounds } from "@/lib/utils.ts";
 
 export function drawTextWithShadow(text: string, x: number, y: number, color: string, align: CanvasTextAlign, baseline: CanvasTextBaseline) {
@@ -39,19 +40,19 @@ export function drawCards(cards: Array<number>, anchorX: number, anchorY: number
     resetTransform();
     translateTransform(x, y);
     translateTransform(-1, 1);
-    drawSprite(Texture.ATLAS, -4, -2, 64, 80, 32, 32);
+    drawSprite(Texture.ATLAS, -2, -2, 96, 64, 48, 48);
     translateTransform(1, -1);
-    drawSprite(Texture.ATLAS, -4, -2, 0, 80, 32, 32);
+    drawSprite(Texture.ATLAS, -2, -2, 0, 64, 48, 48);
 
     if (isHover) {
-      drawSprite(Texture.ATLAS, -4, -2, 32, 80, 32, 32);
+      drawSprite(Texture.ATLAS, -2, -2, 48, 64, 48, 48);
 
       if (onClick && isInputPressed(Input.LMB)) {
         onClick(i);
       }
     }
 
-    const nameScaling = (1 / (Math.max(card.name.length, 6) / 6)) * 0.375;
+    const nameScaling = (1 / (Math.max(card.name.length, 8) / 8)) * 0.375;
     resetTransform();
     translateTransform(x, y);
     translateTransform(CARD_WIDTH / 2, 5);
@@ -73,10 +74,12 @@ export function drawCards(cards: Array<number>, anchorX: number, anchorY: number
       const w = 96;
       const h = 96;
       const x = getWidth() / 2 - w / 2;
-      const y = getHeight() / 2 - h / 2;
+      const y = 27;
+
       resetTransform();
       translateTransform(x, y);
       drawSprite(Texture.ATLAS, 0, 0, 0, 128, w, h);
+
       translateTransform(w / 2, 8);
       scaleTransform(0.75, 0.75);
       drawTextWithShadow(card.name, 0, 0, "white", "center", "top");
@@ -113,10 +116,10 @@ export function drawButton(text: string, x: number, y: number, onClick?: () => v
 
   resetTransform();
   translateTransform(x, y);
-  drawSprite(Texture.ATLAS, -2, -2, 128, 80, 48, 16);
+  drawSprite(Texture.ATLAS, -2, -2, 96, 128, 48, 16);
 
   if (isHover) {
-    drawSprite(Texture.ATLAS, -2, -2, 128, 96, 48, 16);
+    drawSprite(Texture.ATLAS, -2, -2, 96, 144, 48, 16);
 
     if (onClick && isInputPressed(Input.LMB)) {
       onClick();
@@ -128,8 +131,39 @@ export function drawButton(text: string, x: number, y: number, onClick?: () => v
   drawTextWithShadow(text, 0, 0, "white", "center", "middle");
 }
 
+export function drawTotalValues() {
+  const playerTotal = getTotalValue(player, playerCards);
+  const enemyTotal = getTotalValue(enemy, enemyCards);
+  const isWinning = playerTotal > enemyTotal;
+  const color = isWinning ? "white" : Color.ERROR;
+
+  resetTransform();
+  translateTransform(getWidth() / 2, 15);
+  drawSprite(Texture.ATLAS, -48, -12, 0, 224, 96, 32);
+
+  scaleTransform(0.5, 0.5);
+  drawTextWithShadow("vs", 0, 0, color, "center", "middle");
+
+  scaleTransform(1.5, 1.5);
+  translateTransform(-30, 0);
+  drawTextWithShadow(playerTotal.toString(), 0, 0, color, "center", "middle");
+
+  translateTransform(60, 0);
+  drawTextWithShadow(enemyTotal.toString(), 0, 0, color, "center", "middle");
+}
+
+export function drawDrawPile() {
+  resetTransform();
+  translateTransform(10, getHeight() - 35);
+  drawSprite(Texture.ATLAS, -2, -2, 96, 64, 48, 48);
+  drawSprite(Texture.ATLAS, -2, -2, 144, 64, 48, 48);
+  translateTransform(CARD_WIDTH / 2, CARD_HEIGHT / 2);
+  scaleTransform(1, 1);
+  drawTextWithShadow(player.draw.length.toString(), 0, 0, "white", "center", "middle");
+}
+
 function getCardX(x: number, i: number, l: number) {
-  return x - ((CARD_WIDTH - 4) * l) / 2 + (CARD_WIDTH - 8) * i;
+  return x - ((CARD_WIDTH - 5) * l) / 2 + (CARD_WIDTH - 10) * i;
 }
 
 function getCardY(y: number) {

@@ -12,9 +12,7 @@ export function setupCards() {
   card.name = "Stick";
   card.value = 2;
 
-  // Enemy specific cards
-
-  card = getCard(CardId.BITE);
+  card = getCard(CardId.RAT_BITE);
   card.name = "Bite";
   card.value = 1;
 }
