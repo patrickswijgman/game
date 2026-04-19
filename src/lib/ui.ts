@@ -145,12 +145,12 @@ export function drawTotalValues(x: number, y: number) {
   scaleTransform(0.75, 0.75);
 
   translateTransform(-60, 0);
-  drawSprite(Texture.ATLAS, -16, -9, 32, 112, 16, 16);
+  drawSprite(Texture.ATLAS, -15, -9, 32, 112, 16, 16);
   color = isWinning ? "white" : Color.ERROR;
   drawTextWithShadow(playerTotal.toString(), 0, 0, color, "left", "middle");
 
-  translateTransform(120 + 8, 0);
-  drawSprite(Texture.ATLAS, -16, -9, 32, 112, 16, 16);
+  translateTransform(120, 0);
+  drawSprite(Texture.ATLAS, -15, -9, 32, 112, 16, 16);
   color = isWinning ? Color.ERROR : "white";
   drawTextWithShadow(enemyTotal.toString(), 0, 0, color, "left", "middle");
 }
