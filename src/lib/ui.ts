@@ -70,6 +70,7 @@ export function drawCards(cards: Array<number>, anchorX: number, anchorY: number
   if (hoveredCardIndex !== -1) {
     const cardId = cards[hoveredCardIndex];
     const card = getCard(cardId);
+
     if (card) {
       const w = 96;
       const h = 96;

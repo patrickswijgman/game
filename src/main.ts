@@ -21,7 +21,7 @@ async function setup() {
 }
 
 function update() {
-  if (state !== stateNext) {
+  while (state !== stateNext) {
     // Reset
     zeroTimer(stateTimer);
     zeroPlayerHandAction();
