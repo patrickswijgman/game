@@ -1,20 +1,22 @@
-import { CardId, EnemyType } from "@/consts.ts";
-import { enemy, enemyCards, zeroSheet } from "@/data.ts";
+import { CardId, ENEMY_PER_LEVEL, EnemyType } from "@/consts.ts";
+import { enemy, enemyCards, level, zeroSheet } from "@/data.ts";
 import { isValueCard } from "@/lib/cards.ts";
 import { addCards, playCard } from "@/lib/sheet.ts";
 import { shuffle } from "@/lib/utils.ts";
 
-export function prepareEnemy(type: EnemyType) {
+export function prepareEnemy() {
+  const type = ENEMY_PER_LEVEL[level];
+
   zeroSheet(enemy);
 
   switch (type) {
     case EnemyType.RAT:
       {
         enemy.name = "Rat";
-        enemy.health = 2;
-        enemy.healthMax = 2;
-        enemy.drawAmount = 3;
-        addCards(enemy, CardId.RAT_BITE, 9);
+        enemy.health = 5;
+        enemy.healthMax = 5;
+        addCards(enemy, CardId.SCRATCH, 4);
+        addCards(enemy, CardId.BITE, 4);
       }
       break;
   }
@@ -34,4 +36,4 @@ export function enemyChooseValueCard() {
 
 export function enemyChooseSpecialCard() {}
 
-export function drawEnemy() {}
+export function drawEnemy(x: number, y: number) {}

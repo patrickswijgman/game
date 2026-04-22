@@ -1,11 +1,10 @@
 import { drawRect, getHeight, getWidth, isInputPressed, run } from "snuggy";
-import { Color, END_TURN_STATES, EnemyType, Input, State } from "@/consts.ts";
-import { enemy, enemyCards, player, playerCards, setState, setStateNext, state, stateNext, stateTimer, zeroEnemyCards, zeroPlayerCards, zeroTimer } from "@/data.ts";
+import { Color, END_TURN_STATES, Input, State } from "@/consts.ts";
+import { enemy, enemyCards, level, player, playerCards, round, setLevel, setRound, setState, setStateNext, state, stateNext, stateTimer, zeroEnemyCards, zeroPlayerCards, zeroRound, zeroTimer } from "@/data.ts";
 import { isSpecialCard, isValueCard, setupCards } from "@/lib/cards";
 import { drawFramesPerSecond } from "@/lib/debug.ts";
 import { drawEnemy, enemyChooseSpecialCard, enemyChooseValueCard, prepareEnemy } from "@/lib/enemy.ts";
-import { setupItems } from "@/lib/items.ts";
-import { drawPlayer, preparePlayer, setupPlayer } from "@/lib/player.ts";
+import { drawPlayer, setupPlayer } from "@/lib/player.ts";
 import { loadResources } from "@/lib/resources.ts";
 import { drawCardsIntoHand, getTotalValue, playCard, prepareDeck } from "@/lib/sheet.ts";
 import { drawCards, drawDrawPile, drawEndTurnButton, drawHealth, drawTotalValues } from "@/lib/ui.ts";
@@ -15,10 +14,9 @@ async function setup() {
   await loadResources();
 
   setupCards();
-  setupItems();
   setupPlayer();
 
-  setStateNext(State.PREPARE_PLAYER);
+  setStateNext(State.PREPARE_LEVEL);
 }
 
 function update() {
@@ -38,21 +36,13 @@ function update() {
 
     // Enter
     switch (state) {
-      case State.PREPARE_PLAYER:
-        preparePlayer();
-        setStateNext(State.PREPARE_ENEMY);
-        break;
-
-      case State.PREPARE_ENEMY:
-        prepareEnemy(EnemyType.RAT);
-        setStateNext(State.PREPARE_DECKS);
-        break;
-
-      case State.PREPARE_DECKS:
+      case State.PREPARE_LEVEL:
+        zeroRound();
+        prepareEnemy();
         prepareDeck(player);
         prepareDeck(enemy);
-        drawCardsIntoHand(player, player.drawAmount - 1);
-        drawCardsIntoHand(enemy, enemy.drawAmount - 1);
+        drawCardsIntoHand(player, 4);
+        drawCardsIntoHand(enemy, 4);
         setStateNext(State.PREPARE_ROUND);
         break;
 
@@ -85,6 +75,11 @@ function update() {
       case State.RESOLVE:
         resolveRound();
         break;
+
+      case State.VICTORY:
+      case State.DEFEAT:
+        setLevel(level + 1);
+        break;
     }
   }
 
@@ -93,7 +88,7 @@ function update() {
     case State.VICTORY:
       {
         if (tickTimer(stateTimer, 1000)) {
-          setStateNext(State.PREPARE_PLAYER);
+          setStateNext(State.PREPARE_LEVEL);
         }
       }
       break;
@@ -105,27 +100,28 @@ function update() {
     endTurn();
   }
 
+  // Render
+  const w = getWidth();
+  const h = getHeight();
+
   // World
-  drawRoom();
+  drawBackground();
   if (player.health) {
-    drawPlayer();
+    drawPlayer(50, h / 2 - 10);
   }
   if (enemy.health) {
-    drawEnemy();
+    drawEnemy(w - 50, h / 2 - 10);
   }
 
   // UI
-  const w = getWidth();
-  const h = getHeight();
   drawDrawPile();
-  drawTotalValues(w / 2, 18);
+  drawHealth(w / 2, 10);
+  drawTotalValues(w / 2, 25);
   if (canEndTurn) {
-    drawEndTurnButton(w / 2, 12, endTurn);
+    drawEndTurnButton(w / 2, 40, endTurn);
   }
-  drawHealth(player, 10, 10, "left");
-  drawCards(playerCards, 50, 85, 80);
-  drawHealth(enemy, w - 10, 10, "right");
-  drawCards(enemyCards, w - 50, 85, 80);
+  drawCards(playerCards, 50, 80, 80);
+  drawCards(enemyCards, w - 50, 80, 80);
   drawCards(player.hand, w / 2, h - 35, 120, confirmCard);
   drawFramesPerSecond();
 }
@@ -161,25 +157,33 @@ function endTurn() {
 function resolveRound() {
   const playerTotal = getTotalValue(player, playerCards);
   const enemyTotal = getTotalValue(enemy, enemyCards);
+  const isTie = playerTotal === enemyTotal;
   const isWinning = playerTotal > enemyTotal;
+  const damage = Math.min(3, Math.abs(playerTotal - enemyTotal));
 
-  if (isWinning) {
+  if (isTie) {
     enemy.health -= 1;
-    if (enemy.health === 0) {
-      setStateNext(State.VICTORY);
-    } else {
-      setStateNext(State.PREPARE_ROUND);
-    }
-  } else {
     player.health -= 1;
-    if (player.health === 0) {
-      setStateNext(State.DEFEAT);
+  } else {
+    if (isWinning) {
+      enemy.health -= Math.min(enemy.health, damage);
     } else {
-      setStateNext(State.PREPARE_ROUND);
+      player.health -= Math.min(player.health, damage);
     }
   }
+
+  if (player.health === 0) {
+    setStateNext(State.DEFEAT);
+  } else if (enemy.health === 0) {
+    setStateNext(State.VICTORY);
+  } else {
+    setStateNext(State.PREPARE_ROUND);
+  }
+
+  setRound(round + 1);
 }
-function drawRoom() {
+
+function drawBackground() {
   drawRect(0, 0, getWidth(), getHeight(), Color.GRASS, true);
 }
 

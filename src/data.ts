@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 4/19/2026, 3:21:31 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 4/22/2026, 2:54:47 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -15,6 +15,8 @@ export let enemyCards = new Array<number>()
 export let state = 0
 export let stateNext = 0
 export let stateTimer = createTimer()
+export let round = 0
+export let level = 0
 
 /** Set the value of the player field within the Game group. */
 export function setPlayer(value: Sheet) {
@@ -49,6 +51,16 @@ export function setStateNext(value: number) {
 /** Set the value of the stateTimer field within the Game group. */
 export function setStateTimer(value: Timer) {
   stateTimer = value
+}
+
+/** Set the value of the round field within the Game group. */
+export function setRound(value: number) {
+  round = value
+}
+
+/** Set the value of the level field within the Game group. */
+export function setLevel(value: number) {
+  level = value
 }
 
 /** Zero the player field within the Game group. */
@@ -86,6 +98,16 @@ export function zeroStateTimer() {
   zeroTimer(stateTimer)
 }
 
+/** Zero the round field within the Game group. */
+export function zeroRound() {
+  round = 0
+}
+
+/** Zero the level field within the Game group. */
+export function zeroLevel() {
+  level = 0
+}
+
 /** Zero all fields within the Game group. */
 export function zeroGameData() {
   zeroSheet(player)
@@ -95,6 +117,8 @@ export function zeroGameData() {
   state = 0
   stateNext = 0
   zeroTimer(stateTimer)
+  round = 0
+  level = 0
 }
 
 /*
@@ -138,7 +162,6 @@ export type Sheet = {
   healthMax: number
   hand: Array<number>
   draw: Array<number>
-  drawAmount: number
   discard: Array<number>
   items: Array<number>
 }
@@ -152,7 +175,6 @@ export function createSheet(): Sheet {
   obj.healthMax = 0
   obj.hand = new Array<number>()
   obj.draw = new Array<number>()
-  obj.drawAmount = 0
   obj.discard = new Array<number>()
   obj.items = new Array<number>()
   return obj
@@ -166,7 +188,6 @@ export function zeroSheet(obj: Sheet) {
   obj.healthMax = 0
   obj.hand.length = 0
   obj.draw.length = 0
-  obj.drawAmount = 0
   obj.discard.length = 0
   obj.items.length = 0
 }
@@ -245,30 +266,4 @@ export function zeroCards() {
 /** Zero an object at a specific index within the cards array of structures. */
 export function zeroCardAt(index: number) {
   zeroCard(cards[index])
-}
-
-/*
- * --------------------------------------------------
- * items (array of structures)
- * --------------------------------------------------
- */
-
-export const MAX_ITEMS_COUNT = 64
-
-/** An array of Item objects (structures). */
-export const items = new Array<Item>(64)
-for (let i=0; i<64; i++) {
-  items[i] = createItem()
-}
-
-/** Zero all objects within the items array of structures. */
-export function zeroItems() {
-  for (let i=0; i<64; i++) {
-    zeroItem(items[i])
-  }
-}
-
-/** Zero an object at a specific index within the items array of structures. */
-export function zeroItemAt(index: number) {
-  zeroItem(items[index])
 }

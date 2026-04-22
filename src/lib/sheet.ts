@@ -11,6 +11,12 @@ export function addCards(sheet: Sheet, id: CardId, amount: number) {
 
 export function drawCardsIntoHand(sheet: Sheet, amount: number) {
   for (let i = 0; i < amount; i++) {
+    if (sheet.draw.length === 0) {
+      sheet.draw.push(...sheet.discard);
+      sheet.discard.length = 0;
+      shuffle(sheet.draw);
+    }
+
     const cardId = sheet.draw.pop();
 
     if (cardId !== undefined) {

@@ -6,20 +6,17 @@ import { addCards } from "@/lib/sheet.ts";
 export function setupPlayer() {
   zeroSheet(player);
   player.name = "Player";
-  player.health = 3;
-  player.healthMax = 3;
-  player.drawAmount = 3;
-  addCards(player, CardId.PUNCH, 3);
-  addCards(player, CardId.STICK, 2);
+  player.health = 15;
+  player.healthMax = 15;
+  addCards(player, CardId.DAGGER, 3);
+  addCards(player, CardId.SHORTSWORD, 2);
+  addCards(player, CardId.MACE, 1);
+  addCards(player, CardId.FIREBALL, 1);
 }
 
-export function preparePlayer() {
-  player.health = player.healthMax;
-}
-
-export function drawPlayer() {
+export function drawPlayer(x: number, y: number) {
   resetTransform();
-  translateTransform(50, 80);
+  translateTransform(x, y);
   drawSprite(Texture.ATLAS, -16, -31, 0, 0, 32, 32);
   drawSprite(Texture.ATLAS, -16, -3, 0, 32, 32, 16);
 }

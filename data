@@ -6,6 +6,8 @@ enemyCards array number
 state number
 stateNext number
 stateTimer Timer
+round number
+level number
 
 Card struct
 name string
@@ -19,7 +21,6 @@ health number
 healthMax number
 hand array number
 draw array number
-drawAmount number
 discard array number
 items array number
 
@@ -32,5 +33,3 @@ Timer struct
 elapsed number
 
 cards aos 64 Card
-
-items aos 64 Item

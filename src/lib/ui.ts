@@ -1,6 +1,6 @@
 import { drawSprite, drawText, getHeight, getWidth, isInputPressed, pointerX, pointerY, resetTransform, scaleTransform, translateTransform } from "snuggy";
 import { BUTTON_HEIGHT, BUTTON_WIDTH, CARD_HEIGHT, CARD_WIDTH, Color, Input, Texture } from "@/consts.ts";
-import { enemy, enemyCards, player, playerCards, type Sheet } from "@/data.ts";
+import { enemy, enemyCards, player, playerCards } from "@/data.ts";
 import { getCard, isValueCard } from "@/lib/cards.ts";
 import { getTotalValue } from "@/lib/sheet.ts";
 import { withinBounds } from "@/lib/utils.ts";
@@ -82,33 +82,10 @@ export function drawCards(cards: Array<number>, anchorX: number, anchorY: number
       translateTransform(x, y);
       drawSprite(Texture.ATLAS, 0, 0, 0, 128, w, h);
 
-      translateTransform(w / 2, 8);
-      scaleTransform(0.75, 0.75);
-      drawTextWithShadow(card.name, 0, 0, "white", "center", "top");
-    }
-  }
-}
-
-export function drawHealth(sheet: Sheet, x: number, y: number, align: "left" | "right") {
-  resetTransform();
-
-  if (align === "right") {
-    translateTransform(x - 16, y);
-  } else {
-    translateTransform(x, y);
-  }
-
-  for (let i = 0; i < sheet.healthMax; i++) {
-    if (i + 1 <= sheet.health) {
-      drawSprite(Texture.ATLAS, 0, 0, 0, 112, 16, 16);
-    } else {
-      drawSprite(Texture.ATLAS, 0, 0, 16, 112, 16, 16);
-    }
-
-    if (align === "right") {
-      translateTransform(-11, 0);
-    } else {
-      translateTransform(11, 0);
+      const nameScaling = (1 / (Math.max(card.name.length, 16) / 16)) * 0.75;
+      translateTransform(w / 2, 15);
+      scaleTransform(nameScaling, nameScaling);
+      drawTextWithShadow(card.name, 0, 0, "white", "center", "bottom");
     }
   }
 }
@@ -133,26 +110,28 @@ export function drawButton(text: string, x: number, y: number, onClick: () => vo
   drawTextWithShadow(text, 0, 0, "white", "center", "middle");
 }
 
-export function drawTotalValues(x: number, y: number) {
-  const playerTotal = getTotalValue(player, playerCards);
-  const enemyTotal = getTotalValue(enemy, enemyCards);
-  const isWinning = playerTotal > enemyTotal;
-
-  let color: string;
-
+export function drawHealth(x: number, y: number) {
   resetTransform();
   translateTransform(x, y);
   scaleTransform(0.75, 0.75);
+  drawSprite(Texture.ATLAS, -7.5, -6, 112, 160, 16, 16);
+  translateTransform(-20, 0);
+  drawTextWithShadow(`${player.health} / ${player.healthMax}`, 0, 0, "white", "right", "middle");
+  translateTransform(40, 0);
+  drawTextWithShadow(`${enemy.health} / ${enemy.healthMax}`, 0, 0, "white", "left", "middle");
+}
 
-  translateTransform(-60, 0);
-  drawSprite(Texture.ATLAS, -15, -9, 32, 112, 16, 16);
-  color = isWinning ? "white" : Color.ERROR;
-  drawTextWithShadow(playerTotal.toString(), 0, 0, color, "left", "middle");
-
-  translateTransform(120, 0);
-  drawSprite(Texture.ATLAS, -15, -9, 32, 112, 16, 16);
-  color = isWinning ? Color.ERROR : "white";
-  drawTextWithShadow(enemyTotal.toString(), 0, 0, color, "left", "middle");
+export function drawTotalValues(x: number, y: number) {
+  const playerTotal = getTotalValue(player, playerCards);
+  const enemyTotal = getTotalValue(enemy, enemyCards);
+  resetTransform();
+  translateTransform(x, y);
+  scaleTransform(0.75, 0.75);
+  drawSprite(Texture.ATLAS, -5.5, -11, 96, 160, 16, 32);
+  translateTransform(-20, 0);
+  drawTextWithShadow(playerTotal.toString(), 0, 0, "white", "right", "middle");
+  translateTransform(40, 0);
+  drawTextWithShadow(enemyTotal.toString(), 0, 0, "white", "left", "middle");
 }
 
 export function drawEndTurnButton(x: number, y: number, onClick: () => void) {

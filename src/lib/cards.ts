@@ -4,17 +4,31 @@ import { type Card, cards } from "@/data.ts";
 export function setupCards() {
   let card: Card;
 
-  card = getCard(CardId.PUNCH);
-  card.name = "Punch";
-  card.value = 1;
+  card = getCard(CardId.DAGGER);
+  card.name = "Dagger";
+  card.value = 3;
 
-  card = getCard(CardId.STICK);
-  card.name = "Stick";
-  card.value = 2;
+  card = getCard(CardId.SHORTSWORD);
+  card.name = "Shortsword";
+  card.value = 5;
 
-  card = getCard(CardId.RAT_BITE);
+  card = getCard(CardId.MACE);
+  card.name = "Mace";
+  card.value = 6;
+
+  card = getCard(CardId.FIREBALL);
+  card.name = "Fireball";
+  card.value = 7;
+
+  // Rat
+
+  card = getCard(CardId.SCRATCH);
+  card.name = "Scratch";
+  card.value = 3;
+
+  card = getCard(CardId.BITE);
   card.name = "Bite";
-  card.value = 1;
+  card.value = 4;
 }
 
 export function getCard(id: CardId) {

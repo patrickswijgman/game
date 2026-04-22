@@ -13,9 +13,7 @@ export const enum Input {
 
 export const enum State {
   DEFAULT,
-  PREPARE_PLAYER,
-  PREPARE_ENEMY,
-  PREPARE_DECKS,
+  PREPARE_LEVEL,
   PREPARE_ROUND,
   ENEMY_CHOOSE_VALUE_CARD,
   PLAYER_CHOOSE_VALUE_CARD,
@@ -33,22 +31,21 @@ export const enum EnemyType {
 }
 
 export const enum CardId {
-  PUNCH,
-  STICK,
-  RAT_BITE,
+  NONE,
+
+  DAGGER,
+  SHORTSWORD,
+  MACE,
+  FIREBALL,
+  STONE_THROW,
+
+  // Rat
+  SCRATCH,
+  BITE,
 }
 
 export const enum CardEffect {
   REPLACE,
-}
-
-export const enum ItemId {
-  HEALTH_POTION,
-}
-
-export const enum ItemEffect {
-  HEALTH_RESTORE,
-  HEALTH_MAX_INCREASE,
 }
 
 export const enum Color {
@@ -64,3 +61,5 @@ export const BUTTON_WIDTH = 44;
 export const BUTTON_HEIGHT = 12;
 
 export const END_TURN_STATES = [State.PLAYER_CHOOSE_VALUE_CARD, State.PLAYER_CHOOSE_SPECIAL_CARD] as const;
+
+export const ENEMY_PER_LEVEL = [EnemyType.RAT, EnemyType.RAT, EnemyType.RAT, EnemyType.RAT, EnemyType.RAT, EnemyType.RAT, EnemyType.RAT, EnemyType.RAT, EnemyType.RAT, EnemyType.RAT] as const;
