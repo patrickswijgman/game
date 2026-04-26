@@ -1,21 +1,18 @@
 import { drawSprite, drawText, getHeight, getWidth, isInputPressed, pointerX, pointerY, resetTransform, scaleTransform, translateTransform } from "snuggy";
 import { BUTTON_HEIGHT, BUTTON_WIDTH, CARD_HEIGHT, CARD_WIDTH, Color, Input, Texture } from "@/consts.ts";
-import { enemy, enemyCards, player, playerCards } from "@/data.ts";
-import { getCard, isValueCard } from "@/lib/cards.ts";
+import { type Card, enemy, player } from "@/data.ts";
+import { isValueCard } from "@/lib/cards.ts";
 import { getTotalValue } from "@/lib/sheet.ts";
 import { withinBounds } from "@/lib/utils.ts";
 
 export function drawTextWithShadow(text: string, x: number, y: number, color: string, align: CanvasTextAlign, baseline: CanvasTextBaseline) {
-  // Font correction
-  x += 0.5;
-  y -= 0.5;
   drawText(text, x + 1, y, Color.SHADOW, align, baseline);
   drawText(text, x, y + 1, Color.SHADOW, align, baseline);
   drawText(text, x + 1, y + 1, Color.SHADOW, align, baseline);
   drawText(text, x, y, color, align, baseline);
 }
 
-export function drawCards(cards: Array<number>, anchorX: number, anchorY: number, maxWidth: number, onClick?: (i: number) => void) {
+export function drawCards(cards: Array<Card>, anchorX: number, anchorY: number, maxWidth: number, onClick?: (i: number) => void) {
   let hoveredCardIndex = -1;
 
   // Hover
@@ -32,8 +29,7 @@ export function drawCards(cards: Array<number>, anchorX: number, anchorY: number
 
   // Card
   for (let i = 0; i < cards.length; i++) {
-    const cardId = cards[i];
-    const card = getCard(cardId);
+    const card = cards[i];
     const x = getCardX(anchorX, i, cards.length, maxWidth);
     const y = getCardY(anchorY);
     const isHover = hoveredCardIndex === i;
@@ -54,14 +50,14 @@ export function drawCards(cards: Array<number>, anchorX: number, anchorY: number
     resetTransform();
     translateTransform(x, y);
     translateTransform(CARD_WIDTH / 2, CARD_HEIGHT - 12);
-    scaleTransform(nameScaling, nameScaling);
+    scaleTransform(nameScaling);
     drawTextWithShadow(card.name, 0, 0, "white", "center", "middle");
 
-    if (isValueCard(cardId)) {
+    if (isValueCard(card)) {
       resetTransform();
       translateTransform(x, y);
       translateTransform(CARD_WIDTH / 2, CARD_HEIGHT - 5.5);
-      scaleTransform(0.5, 0.5);
+      scaleTransform(0.5);
       drawSprite(Texture.ATLAS, -14, -9, 32, 112, 16, 16);
       drawTextWithShadow(card.value.toString(), 1, 0, "white", "left", "middle");
     }
@@ -69,8 +65,7 @@ export function drawCards(cards: Array<number>, anchorX: number, anchorY: number
 
   // Tooltip
   if (hoveredCardIndex !== -1) {
-    const cardId = cards[hoveredCardIndex];
-    const card = getCard(cardId);
+    const card = cards[hoveredCardIndex];
 
     if (card) {
       const w = 96;
@@ -84,7 +79,7 @@ export function drawCards(cards: Array<number>, anchorX: number, anchorY: number
 
       const nameScaling = (1 / (Math.max(card.name.length, 16) / 16)) * 0.75;
       translateTransform(w / 2, 15);
-      scaleTransform(nameScaling, nameScaling);
+      scaleTransform(nameScaling);
       drawTextWithShadow(card.name, 0, 0, "white", "center", "bottom");
     }
   }
@@ -106,14 +101,14 @@ export function drawButton(text: string, x: number, y: number, onClick: () => vo
   }
 
   translateTransform(BUTTON_WIDTH / 2, BUTTON_HEIGHT / 2);
-  scaleTransform(0.5, 0.5);
+  scaleTransform(0.5);
   drawTextWithShadow(text, 0, 0, "white", "center", "middle");
 }
 
 export function drawHealth(x: number, y: number) {
   resetTransform();
   translateTransform(x, y);
-  scaleTransform(0.75, 0.75);
+  scaleTransform(0.75);
   drawSprite(Texture.ATLAS, -7.5, -6, 112, 160, 16, 16);
   translateTransform(-20, 0);
   drawTextWithShadow(`${player.health} / ${player.healthMax}`, 0, 0, "white", "right", "middle");
@@ -122,11 +117,11 @@ export function drawHealth(x: number, y: number) {
 }
 
 export function drawTotalValues(x: number, y: number) {
-  const playerTotal = getTotalValue(player, playerCards);
-  const enemyTotal = getTotalValue(enemy, enemyCards);
+  const playerTotal = getTotalValue(player);
+  const enemyTotal = getTotalValue(enemy);
   resetTransform();
   translateTransform(x, y);
-  scaleTransform(0.75, 0.75);
+  scaleTransform(0.75);
   drawSprite(Texture.ATLAS, -5.5, -11, 96, 160, 16, 32);
   translateTransform(-20, 0);
   drawTextWithShadow(playerTotal.toString(), 0, 0, "white", "right", "middle");

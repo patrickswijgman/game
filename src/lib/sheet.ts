@@ -1,11 +1,17 @@
-import type { CardId } from "@/consts.ts";
-import type { Sheet } from "@/data.ts";
-import { getCard } from "@/lib/cards.ts";
+import { CardEffect, type CardId, CardType } from "@/consts.ts";
+import { cards, copyCard, createCard, type Sheet, zeroSheet } from "@/data.ts";
 import { shuffle } from "@/lib/utils.ts";
+
+export function setSheet(sheet: Sheet, name: string, health: number) {
+  zeroSheet(sheet);
+  sheet.name = name;
+  sheet.health = health;
+  sheet.healthMax = health;
+}
 
 export function addCards(sheet: Sheet, id: CardId, amount: number) {
   for (let i = 0; i < amount; i++) {
-    sheet.discard.push(id);
+    sheet.discard.push(cards[id]);
   }
 }
 
@@ -17,10 +23,10 @@ export function drawCardsIntoHand(sheet: Sheet, amount: number) {
       shuffle(sheet.draw);
     }
 
-    const cardId = sheet.draw.pop();
+    const card = sheet.draw.pop();
 
-    if (cardId !== undefined) {
-      sheet.hand.push(cardId);
+    if (card) {
+      sheet.hand.push(card);
     }
   }
 }
@@ -30,14 +36,47 @@ export function discardHand(sheet: Sheet) {
   sheet.hand.length = 0;
 }
 
-export function playCard(sheet: Sheet, i: number, cards: Array<number>) {
-  const cardId = sheet.hand[i];
-  sheet.hand.splice(i, 1);
-  sheet.discard.push(cardId);
-  cards.push(cardId);
+export function playCard(caster: Sheet, index: number, target: Sheet) {
+  const card = caster.hand[index];
+
+  if (card) {
+    caster.hand.splice(index, 1);
+    caster.discard.push(card);
+
+    const playCard = createCard();
+    copyCard(playCard, card);
+
+    switch (playCard.type) {
+      case CardType.ATTACK:
+        target.play.push(playCard);
+        break;
+
+      case CardType.SELF:
+        caster.play.push(playCard);
+        break;
+    }
+  }
+}
+
+export function processPlayCards(sheet: Sheet) {
+  let i = sheet.play.length;
+
+  while (i--) {
+    const card = sheet.play[i];
+
+    if (card.duration > 0) {
+      card.duration -= 1;
+
+      if (card.duration === 0) {
+        sheet.play.splice(i, 1);
+      }
+    }
+  }
 }
 
 export function prepareDeck(sheet: Sheet) {
+  sheet.play.length = 0;
+
   sheet.draw.push(...sheet.discard);
   sheet.discard.length = 0;
 
@@ -47,13 +86,22 @@ export function prepareDeck(sheet: Sheet) {
   shuffle(sheet.draw);
 }
 
-export function getTotalValue(_sheet: Sheet, cards: Array<number>) {
+export function getTotalValue(sheet: Sheet) {
   let total = 0;
 
-  for (const cardId of cards) {
-    const card = getCard(cardId);
+  for (const card of sheet.play) {
     total += card.value;
+
+    switch (card.effect) {
+      case CardEffect.BUFF:
+        total += card.effectValue;
+        break;
+
+      case CardEffect.DEBUFF:
+        total -= card.effectValue;
+        break;
+    }
   }
 
-  return total;
+  return Math.max(0, total);
 }

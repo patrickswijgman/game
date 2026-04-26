@@ -1,8 +1,6 @@
 Game group
 player Sheet
-playerCards array number
 enemy Sheet
-enemyCards array number
 state number
 stateNext number
 stateTimer Timer
@@ -11,23 +9,21 @@ level number
 
 Card struct
 name string
+type number
 value number
-effects array number
+duration number
+effect number
+effectValue number
 
 Sheet struct
 type number
 name string
 health number
 healthMax number
-hand array number
-draw array number
-discard array number
-items array number
-
-Item struct
-name string
-cards array number
-effects array number
+play array Card
+hand array Card
+draw array Card
+discard array Card
 
 Timer struct
 elapsed number

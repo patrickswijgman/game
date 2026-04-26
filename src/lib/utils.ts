@@ -22,6 +22,14 @@ export function shuffle(array: Array<unknown>) {
   }
 }
 
+export function pick<T>(array: Array<T>) {
+  if (array.length > 0) {
+    return array[random(array.length)];
+  }
+
+  return null;
+}
+
 export function withinBounds(px: number, py: number, x: number, y: number, w: number, h: number) {
   return px > x && px < x + w && py > y && py < y + h;
 }

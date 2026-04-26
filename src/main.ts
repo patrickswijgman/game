@@ -1,12 +1,12 @@
 import { drawRect, getHeight, getWidth, isInputPressed, run } from "snuggy";
 import { Color, END_TURN_STATES, Input, State } from "@/consts.ts";
-import { enemy, enemyCards, level, player, playerCards, round, setLevel, setRound, setState, setStateNext, state, stateNext, stateTimer, zeroEnemyCards, zeroPlayerCards, zeroRound, zeroTimer } from "@/data.ts";
+import { enemy, level, player, round, setLevel, setRound, setState, setStateNext, state, stateNext, stateTimer, zeroRound, zeroTimer } from "@/data.ts";
 import { isSpecialCard, isValueCard, setupCards } from "@/lib/cards";
 import { drawFramesPerSecond } from "@/lib/debug.ts";
 import { drawEnemy, enemyChooseSpecialCard, enemyChooseValueCard, prepareEnemy } from "@/lib/enemy.ts";
 import { drawPlayer, setupPlayer } from "@/lib/player.ts";
 import { loadResources } from "@/lib/resources.ts";
-import { drawCardsIntoHand, getTotalValue, playCard, prepareDeck } from "@/lib/sheet.ts";
+import { drawCardsIntoHand, getTotalValue, playCard, prepareDeck, processPlayCards } from "@/lib/sheet.ts";
 import { drawCards, drawDrawPile, drawEndTurnButton, drawHealth, drawTotalValues } from "@/lib/ui.ts";
 import { tickTimer } from "@/lib/utils.ts";
 
@@ -26,10 +26,6 @@ function update() {
 
     // Exit
     switch (state) {
-      case State.RESOLVE:
-        zeroPlayerCards();
-        zeroEnemyCards();
-        break;
     }
 
     setState(stateNext);
@@ -74,6 +70,8 @@ function update() {
 
       case State.RESOLVE:
         resolveRound();
+        processPlayCards(player);
+        processPlayCards(enemy);
         break;
 
       case State.VICTORY:
@@ -120,20 +118,20 @@ function update() {
   if (canEndTurn) {
     drawEndTurnButton(w / 2, 40, endTurn);
   }
-  drawCards(playerCards, 50, 80, 80);
-  drawCards(enemyCards, w - 50, 80, 80);
+  drawCards(player.play, 50, 80, 80);
+  drawCards(enemy.play, w - 50, 80, 80);
   drawCards(player.hand, w / 2, h - 35, 120, confirmCard);
   drawFramesPerSecond();
 }
 
 function confirmCard(i: number) {
-  const cardId = player.hand[i];
+  const card = player.hand[i];
 
   switch (state) {
     case State.PLAYER_CHOOSE_VALUE_CARD:
       {
-        if (isValueCard(cardId)) {
-          playCard(player, i, playerCards);
+        if (isValueCard(card)) {
+          playCard(player, i, enemy);
           setStateNext(State.PLAYER_CONFIRMED_CARD);
         }
       }
@@ -141,8 +139,8 @@ function confirmCard(i: number) {
 
     case State.PLAYER_CHOOSE_SPECIAL_CARD:
       {
-        if (isSpecialCard(cardId)) {
-          playCard(player, i, playerCards);
+        if (isSpecialCard(card)) {
+          playCard(player, i, enemy);
           setStateNext(State.PLAYER_CONFIRMED_CARD);
         }
       }
@@ -155,8 +153,8 @@ function endTurn() {
 }
 
 function resolveRound() {
-  const playerTotal = getTotalValue(player, playerCards);
-  const enemyTotal = getTotalValue(enemy, enemyCards);
+  const playerTotal = getTotalValue(player);
+  const enemyTotal = getTotalValue(enemy);
   const isTie = playerTotal === enemyTotal;
   const isWinning = playerTotal > enemyTotal;
   const damage = Math.min(3, Math.abs(playerTotal - enemyTotal));

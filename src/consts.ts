@@ -32,20 +32,28 @@ export const enum EnemyType {
 
 export const enum CardId {
   NONE,
-
+  // Player
   DAGGER,
   SHORTSWORD,
   MACE,
   FIREBALL,
-  STONE_THROW,
-
+  SHARPEN,
+  TAUNT,
   // Rat
   SCRATCH,
   BITE,
 }
 
 export const enum CardEffect {
-  REPLACE,
+  NONE,
+  BUFF,
+  DEBUFF,
+}
+
+export const enum CardType {
+  NONE,
+  SELF,
+  ATTACK,
 }
 
 export const enum Color {
@@ -60,6 +68,17 @@ export const CARD_HEIGHT = 32;
 export const BUTTON_WIDTH = 44;
 export const BUTTON_HEIGHT = 12;
 
-export const END_TURN_STATES = [State.PLAYER_CHOOSE_VALUE_CARD, State.PLAYER_CHOOSE_SPECIAL_CARD] as const;
+export const END_TURN_STATES: Readonly<Array<State>> = [State.PLAYER_CHOOSE_VALUE_CARD, State.PLAYER_CHOOSE_SPECIAL_CARD];
 
-export const ENEMY_PER_LEVEL = [EnemyType.RAT, EnemyType.RAT, EnemyType.RAT, EnemyType.RAT, EnemyType.RAT, EnemyType.RAT, EnemyType.RAT, EnemyType.RAT, EnemyType.RAT, EnemyType.RAT] as const;
+export const ENEMY_PER_LEVEL: Readonly<Record<number, Array<EnemyType>>> = {
+  0: [EnemyType.RAT],
+  1: [EnemyType.RAT],
+  2: [EnemyType.RAT],
+  3: [EnemyType.RAT],
+  4: [EnemyType.RAT],
+  5: [EnemyType.RAT],
+  6: [EnemyType.RAT],
+  7: [EnemyType.RAT],
+  8: [EnemyType.RAT],
+  9: [EnemyType.RAT],
+};

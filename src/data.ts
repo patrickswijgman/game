@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 4/22/2026, 2:54:47 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 4/26/2026, 11:20:47 AM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -9,9 +9,7 @@
  */
 
 export let player = createSheet()
-export let playerCards = new Array<number>()
 export let enemy = createSheet()
-export let enemyCards = new Array<number>()
 export let state = 0
 export let stateNext = 0
 export let stateTimer = createTimer()
@@ -23,19 +21,9 @@ export function setPlayer(value: Sheet) {
   player = value
 }
 
-/** Set the value of the playerCards field within the Game group. */
-export function setPlayerCards(value: Array<number>) {
-  playerCards = value
-}
-
 /** Set the value of the enemy field within the Game group. */
 export function setEnemy(value: Sheet) {
   enemy = value
-}
-
-/** Set the value of the enemyCards field within the Game group. */
-export function setEnemyCards(value: Array<number>) {
-  enemyCards = value
 }
 
 /** Set the value of the state field within the Game group. */
@@ -68,19 +56,9 @@ export function zeroPlayer() {
   zeroSheet(player)
 }
 
-/** Zero the playerCards field within the Game group. */
-export function zeroPlayerCards() {
-  playerCards.length = 0
-}
-
 /** Zero the enemy field within the Game group. */
 export function zeroEnemy() {
   zeroSheet(enemy)
-}
-
-/** Zero the enemyCards field within the Game group. */
-export function zeroEnemyCards() {
-  enemyCards.length = 0
 }
 
 /** Zero the state field within the Game group. */
@@ -111,9 +89,7 @@ export function zeroLevel() {
 /** Zero all fields within the Game group. */
 export function zeroGameData() {
   zeroSheet(player)
-  playerCards.length = 0
   zeroSheet(enemy)
-  enemyCards.length = 0
   state = 0
   stateNext = 0
   zeroTimer(stateTimer)
@@ -129,24 +105,43 @@ export function zeroGameData() {
 
 export type Card = {
   name: string
+  type: number
   value: number
-  effects: Array<number>
+  duration: number
+  effect: number
+  effectValue: number
 }
 
 /** Create a new Card object. */
-export function createCard(): Card {
-  const obj = Object.create(null)
+export function createCard() {
+  const obj = Object.create(null) as Card
   obj.name = ""
+  obj.type = 0
   obj.value = 0
-  obj.effects = new Array<number>()
+  obj.duration = 0
+  obj.effect = 0
+  obj.effectValue = 0
   return obj
+}
+
+/** Copy the values of Card object b into Card object a. */
+export function copyCard(a: Card, b: Card) {
+  a.name = b.name
+  a.type = b.type
+  a.value = b.value
+  a.duration = b.duration
+  a.effect = b.effect
+  a.effectValue = b.effectValue
 }
 
 /** Zero the given Card object. */
 export function zeroCard(obj: Card) {
   obj.name = ""
+  obj.type = 0
   obj.value = 0
-  obj.effects.length = 0
+  obj.duration = 0
+  obj.effect = 0
+  obj.effectValue = 0
 }
 
 /*
@@ -160,24 +155,44 @@ export type Sheet = {
   name: string
   health: number
   healthMax: number
-  hand: Array<number>
-  draw: Array<number>
-  discard: Array<number>
-  items: Array<number>
+  play: Array<Card>
+  hand: Array<Card>
+  draw: Array<Card>
+  discard: Array<Card>
 }
 
 /** Create a new Sheet object. */
-export function createSheet(): Sheet {
-  const obj = Object.create(null)
+export function createSheet() {
+  const obj = Object.create(null) as Sheet
   obj.type = 0
   obj.name = ""
   obj.health = 0
   obj.healthMax = 0
-  obj.hand = new Array<number>()
-  obj.draw = new Array<number>()
-  obj.discard = new Array<number>()
-  obj.items = new Array<number>()
+  obj.play = new Array<Card>()
+  obj.hand = new Array<Card>()
+  obj.draw = new Array<Card>()
+  obj.discard = new Array<Card>()
   return obj
+}
+
+/** Copy the values of Sheet object b into Sheet object a. */
+export function copySheet(a: Sheet, b: Sheet) {
+  a.type = b.type
+  a.name = b.name
+  a.health = b.health
+  a.healthMax = b.healthMax
+  for (let i = 0; i < b.play.length; i++) {
+    copyCard(a.play[i], b.play[i])
+  }
+  for (let i = 0; i < b.hand.length; i++) {
+    copyCard(a.hand[i], b.hand[i])
+  }
+  for (let i = 0; i < b.draw.length; i++) {
+    copyCard(a.draw[i], b.draw[i])
+  }
+  for (let i = 0; i < b.discard.length; i++) {
+    copyCard(a.discard[i], b.discard[i])
+  }
 }
 
 /** Zero the given Sheet object. */
@@ -186,38 +201,10 @@ export function zeroSheet(obj: Sheet) {
   obj.name = ""
   obj.health = 0
   obj.healthMax = 0
+  obj.play.length = 0
   obj.hand.length = 0
   obj.draw.length = 0
   obj.discard.length = 0
-  obj.items.length = 0
-}
-
-/*
- * --------------------------------------------------
- * Item (struct)
- * --------------------------------------------------
- */
-
-export type Item = {
-  name: string
-  cards: Array<number>
-  effects: Array<number>
-}
-
-/** Create a new Item object. */
-export function createItem(): Item {
-  const obj = Object.create(null)
-  obj.name = ""
-  obj.cards = new Array<number>()
-  obj.effects = new Array<number>()
-  return obj
-}
-
-/** Zero the given Item object. */
-export function zeroItem(obj: Item) {
-  obj.name = ""
-  obj.cards.length = 0
-  obj.effects.length = 0
 }
 
 /*
@@ -231,10 +218,15 @@ export type Timer = {
 }
 
 /** Create a new Timer object. */
-export function createTimer(): Timer {
-  const obj = Object.create(null)
+export function createTimer() {
+  const obj = Object.create(null) as Timer
   obj.elapsed = 0
   return obj
+}
+
+/** Copy the values of Timer object b into Timer object a. */
+export function copyTimer(a: Timer, b: Timer) {
+  a.elapsed = b.elapsed
 }
 
 /** Zero the given Timer object. */
@@ -248,7 +240,7 @@ export function zeroTimer(obj: Timer) {
  * --------------------------------------------------
  */
 
-export const MAX_CARDS_COUNT = 64
+export const MAX_CARDS = 64
 
 /** An array of Card objects (structures). */
 export const cards = new Array<Card>(64)
@@ -264,6 +256,6 @@ export function zeroCards() {
 }
 
 /** Zero an object at a specific index within the cards array of structures. */
-export function zeroCardAt(index: number) {
+export function zeroCardsAt(index: number) {
   zeroCard(cards[index])
 }
