@@ -1,6 +1,6 @@
 import { addCameraTransform, resetTransform, rotateTransform, scaleTransform, translateTransform } from "snuggy";
 import type { Type } from "@/consts.ts";
-import { active, activeIndex, animAngle, animScaleX, animScaleY, animX, animY, isAllocated, isDestroyed, isFlipped, MAX_ENTITY_COUNT, posX, posY, toAdd, toRemove, type, zeroEntity, zeroToAdd, zeroToRemove } from "@/data.ts";
+import { active, animAngle, animScaleX, animScaleY, animX, animY, idx, isAllocated, isDestroyed, isFlipped, MAX_ENTITY_COUNT, posX, posY, toAdd, toRemove, type, zeroEntity, zeroToAdd, zeroToRemove } from "@/data.ts";
 
 function nextEntity() {
   for (let i = 0; i < MAX_ENTITY_COUNT; i++) {
@@ -58,7 +58,7 @@ export function destroyEntity(id: number) {
 
 export function addNewEntities() {
   for (const id of toAdd) {
-    activeIndex[id] = active.length;
+    idx[id] = active.length;
     active.push(id);
   }
   zeroToAdd();
@@ -66,14 +66,13 @@ export function addNewEntities() {
 
 export function removeDestroyedEntities() {
   for (const id of toRemove) {
-    const idx = activeIndex[id];
+    const i = idx[id];
     const last = active[active.length - 1];
 
-    active[idx] = last;
-    activeIndex[last] = idx;
+    active[i] = last;
+    idx[last] = i;
     active.pop();
 
-    activeIndex[id] = -1;
     zeroEntity(id);
   }
   zeroToRemove();
@@ -88,11 +87,11 @@ export function sortEntities() {
     while (j >= 0 && posY[active[j]] > depth) {
       const neighbour = active[j];
       active[j + 1] = neighbour;
-      activeIndex[neighbour] = j + 1;
+      idx[neighbour] = j + 1;
       j--;
     }
 
     active[j + 1] = id;
-    activeIndex[id] = j + 1;
+    idx[id] = j + 1;
   }
 }

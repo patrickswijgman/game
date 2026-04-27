@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 4/27/2026, 1:05:19 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 4/27/2026, 1:15:17 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -9,7 +9,6 @@
  */
 
 export let active = new Array<number>()
-export let activeIndex = new Array<number>()
 export let toAdd = new Array<number>()
 export let toRemove = new Array<number>()
 export let player = 0
@@ -19,11 +18,6 @@ export let stateNext = 0
 /** Set the value of the active field within the game group. */
 export function setActive(value: Array<number>) {
   active = value
-}
-
-/** Set the value of the activeIndex field within the game group. */
-export function setActiveIndex(value: Array<number>) {
-  activeIndex = value
 }
 
 /** Set the value of the toAdd field within the game group. */
@@ -56,11 +50,6 @@ export function zeroActive() {
   active.length = 0
 }
 
-/** Zero the activeIndex field within the game group. */
-export function zeroActiveIndex() {
-  activeIndex.length = 0
-}
-
 /** Zero the toAdd field within the game group. */
 export function zeroToAdd() {
   toAdd.length = 0
@@ -89,7 +78,6 @@ export function zeroStateNext() {
 /** Zero all fields within the game group. */
 export function zeroGameData() {
   active.length = 0
-  activeIndex.length = 0
   toAdd.length = 0
   toRemove.length = 0
   player = 0
@@ -105,6 +93,7 @@ export function zeroGameData() {
 
 export const MAX_ENTITY_COUNT = 10_000
 
+export const idx = new Array<number>(10_000).fill(0)
 export const type = new Array<number>(10_000).fill(0)
 export const posX = new Array<number>(10_000).fill(0)
 export const posY = new Array<number>(10_000).fill(0)
@@ -133,6 +122,7 @@ export const staggerDuration = new Array<number>(10_000).fill(0)
 
 /** Zero an index within the entity structure of arrays. */
 export function zeroEntity(idx: number) {
+  idx[idx] = 0
   type[idx] = 0
   posX[idx] = 0
   posY[idx] = 0
@@ -158,6 +148,11 @@ export function zeroEntity(idx: number) {
   isStaggered[idx] = false
   staggerTime[idx] = 0
   staggerDuration[idx] = 0
+}
+
+/** Zero the idx field within the entity structure of arrays. */
+export function zeroIdx() {
+  idx.fill(0)
 }
 
 /** Zero the type field within the entity structure of arrays. */
@@ -287,6 +282,7 @@ export function zeroStaggerDuration() {
 
 /** Zero all fields within the entity structure of arrays. */
 export function zeroEntityData() {
+  idx.fill(0)
   type.fill(0)
   posX.fill(0)
   posY.fill(0)

@@ -1,6 +1,5 @@
 game group
 active array number
-activeIndex array number
 toAdd array number
 toRemove array number
 player number
@@ -8,6 +7,7 @@ state number
 stateNext number
 
 entity soa 10_000
+idx number
 type number
 posX number
 posY number
