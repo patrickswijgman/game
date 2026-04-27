@@ -1,0 +1,2 @@
+[keys.normal."\\"]
+g = ":sh npm run gen --silent"

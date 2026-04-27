@@ -12,3 +12,8 @@ export const enum Input {
   LEFT = "KeyA",
   RIGHT = "KeyD",
 }
+
+export const enum Type {
+  UNKNOWN,
+  PLAYER,
+}

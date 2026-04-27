@@ -1,4 +1,4 @@
-import { loadFont, loadTexture, setFont } from "snuggy";
+import { loadFont, loadTexture, setFont, setFontOffset } from "snuggy";
 import { Font, Texture } from "@/consts.ts";
 
 export async function loadResources() {
@@ -13,4 +13,5 @@ export async function loadResources() {
   ]);
 
   setFont(Font.DEFAULT);
+  setFontOffset(0.5, -0.5);
 }
