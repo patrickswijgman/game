@@ -131,7 +131,7 @@ function confirmCard(i: number) {
     case State.PLAYER_CHOOSE_VALUE_CARD:
       {
         if (isValueCard(card)) {
-          playCard(player, i, enemy);
+          playCard(player, card, enemy);
           setStateNext(State.PLAYER_CONFIRMED_CARD);
         }
       }
@@ -140,7 +140,7 @@ function confirmCard(i: number) {
     case State.PLAYER_CHOOSE_SPECIAL_CARD:
       {
         if (isSpecialCard(card)) {
-          playCard(player, i, enemy);
+          playCard(player, card, enemy);
           setStateNext(State.PLAYER_CONFIRMED_CARD);
         }
       }

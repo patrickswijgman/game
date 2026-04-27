@@ -33,9 +33,9 @@ function setSpecialCard(id: CardId, name: string, effect: CardEffect, effectValu
 }
 
 export function isValueCard(card: Card) {
-  return card && card.value > 0;
+  return card.value > 0;
 }
 
 export function isSpecialCard(card: Card) {
-  return card && card.value === 0 && card.effect > CardEffect.NONE;
+  return card.effect > CardEffect.NONE;
 }

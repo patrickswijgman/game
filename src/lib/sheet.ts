@@ -1,5 +1,5 @@
 import { CardEffect, type CardId, CardType } from "@/consts.ts";
-import { cards, copyCard, createCard, type Sheet, zeroSheet } from "@/data.ts";
+import { type Card, cards, copyCard, createCard, type Sheet, zeroSheet } from "@/data.ts";
 import { shuffle } from "@/lib/utils.ts";
 
 export function setSheet(sheet: Sheet, name: string, health: number) {
@@ -36,25 +36,25 @@ export function discardHand(sheet: Sheet) {
   sheet.hand.length = 0;
 }
 
-export function playCard(caster: Sheet, index: number, target: Sheet) {
-  const card = caster.hand[index];
+export function playCard(caster: Sheet, card: Card, target: Sheet) {
+  const index = caster.hand.indexOf(card);
 
-  if (card) {
+  if (index !== -1) {
     caster.hand.splice(index, 1);
     caster.discard.push(card);
+  }
 
-    const playCard = createCard();
-    copyCard(playCard, card);
+  const playCard = createCard();
+  copyCard(playCard, card);
 
-    switch (playCard.type) {
-      case CardType.ATTACK:
-        target.play.push(playCard);
-        break;
+  switch (playCard.type) {
+    case CardType.ATTACK:
+      target.play.push(playCard);
+      break;
 
-      case CardType.SELF:
-        caster.play.push(playCard);
-        break;
-    }
+    case CardType.SELF:
+      caster.play.push(playCard);
+      break;
   }
 }
 

@@ -18,14 +18,22 @@ export function prepareEnemy() {
 
 export function enemyChooseValueCard() {
   shuffle(enemy.hand);
-  const i = enemy.hand.findIndex(isValueCard);
-  playCard(enemy, i, player);
+
+  const card = enemy.hand.find(isValueCard);
+
+  if (card) {
+    playCard(enemy, card, player);
+  }
 }
 
 export function enemyChooseSpecialCard() {
   shuffle(enemy.hand);
-  const i = enemy.hand.findIndex(isSpecialCard);
-  playCard(enemy, i, player);
+
+  const card = enemy.hand.find(isSpecialCard);
+
+  if (card) {
+    playCard(enemy, card, player);
+  }
 }
 
 export function drawEnemy(x: number, y: number) {}
