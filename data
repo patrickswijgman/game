@@ -1,5 +1,6 @@
 game group
 active array number
+activeIndex array number
 toAdd array number
 toRemove array number
 player number
@@ -16,11 +17,19 @@ hitboxX number
 hitboxY number
 hitboxW number
 hitboxH number
+hitboxOffsetX number
+hitboxOffsetY number
 animX number
 animY number
 animScaleX number
 animScaleY number
 animAngle number
+health number
+healthMax number
+damage number
 isAllocated boolean
 isDestroyed boolean
 isFlipped boolean
+isStaggered boolean
+staggerTime number
+staggerDuration number
