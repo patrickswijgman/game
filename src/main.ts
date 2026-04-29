@@ -1,8 +1,9 @@
 import { drawRect, run, setCameraPosition, setCameraSmoothing, setCameraTarget, updateCamera } from "snuggy";
-import { Type } from "@/consts.ts";
+import { EnemyVariant, Type } from "@/consts.ts";
 import { active, isDestroyed, posX, posY, type } from "@/data.ts";
+import { setupEnemy, updateEnemy } from "@/entities/enemy.ts";
 import { setupPlayer, updatePlayer } from "@/entities/player.ts";
-import { drawFramesPerSecond } from "@/lib/debug.ts";
+import { drawFramesPerSecond, drawHitboxes } from "@/lib/debug.ts";
 import { addNewEntities, removeDestroyedEntities, setupEntities, sortEntities } from "@/lib/entities.ts";
 import { loadResources } from "@/lib/resources.ts";
 
@@ -18,6 +19,10 @@ async function setup() {
   setupEntities();
 
   setupPlayer(x, y);
+
+  setupEnemy(300, 100, EnemyVariant.MELEE);
+  setupEnemy(350, 100, EnemyVariant.MELEE);
+  setupEnemy(350, 150, EnemyVariant.MELEE);
 }
 
 function update() {
@@ -37,11 +42,15 @@ function update() {
         updatePlayer(id);
         setCameraTarget(posX[id], posY[id]);
         break;
+      case Type.ENEMY:
+        updateEnemy(id);
+        break;
     }
   }
 
   updateCamera();
 
+  drawHitboxes();
   drawFramesPerSecond();
 }
 

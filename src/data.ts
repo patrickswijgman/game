@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 4/27/2026, 1:26:52 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 4/29/2026, 1:18:29 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -17,38 +17,38 @@ export let state = 0
 export let stateNext = 0
 
 /** Set the value of the active field within the game group. */
-export function setActive(value: Array<number>) {
-  active = value
+export function setActive(v: Array<number>) {
+  active = v
 }
 
 /** Set the value of the free field within the game group. */
-export function setFree(value: Array<number>) {
-  free = value
+export function setFree(v: Array<number>) {
+  free = v
 }
 
 /** Set the value of the toAdd field within the game group. */
-export function setToAdd(value: Array<number>) {
-  toAdd = value
+export function setToAdd(v: Array<number>) {
+  toAdd = v
 }
 
 /** Set the value of the toRemove field within the game group. */
-export function setToRemove(value: Array<number>) {
-  toRemove = value
+export function setToRemove(v: Array<number>) {
+  toRemove = v
 }
 
 /** Set the value of the player field within the game group. */
-export function setPlayer(value: number) {
-  player = value
+export function setPlayer(v: number) {
+  player = v
 }
 
 /** Set the value of the state field within the game group. */
-export function setState(value: number) {
-  state = value
+export function setState(v: number) {
+  state = v
 }
 
 /** Set the value of the stateNext field within the game group. */
-export function setStateNext(value: number) {
-  stateNext = value
+export function setStateNext(v: number) {
+  stateNext = v
 }
 
 /** Zero the active field within the game group. */
@@ -105,69 +105,74 @@ export function zeroGameData() {
 
 export const MAX_ENTITY_COUNT = 10_000
 
-export const idx = new Array<number>(10_000).fill(0)
-export const type = new Array<number>(10_000).fill(0)
-export const posX = new Array<number>(10_000).fill(0)
-export const posY = new Array<number>(10_000).fill(0)
-export const velX = new Array<number>(10_000).fill(0)
-export const velY = new Array<number>(10_000).fill(0)
-export const hitboxX = new Array<number>(10_000).fill(0)
-export const hitboxY = new Array<number>(10_000).fill(0)
-export const hitboxW = new Array<number>(10_000).fill(0)
-export const hitboxH = new Array<number>(10_000).fill(0)
-export const hitboxOffsetX = new Array<number>(10_000).fill(0)
-export const hitboxOffsetY = new Array<number>(10_000).fill(0)
-export const animX = new Array<number>(10_000).fill(0)
-export const animY = new Array<number>(10_000).fill(0)
-export const animScaleX = new Array<number>(10_000).fill(0)
-export const animScaleY = new Array<number>(10_000).fill(0)
-export const animAngle = new Array<number>(10_000).fill(0)
-export const health = new Array<number>(10_000).fill(0)
-export const healthMax = new Array<number>(10_000).fill(0)
-export const damage = new Array<number>(10_000).fill(0)
-export const isDestroyed = new Array<boolean>(10_000).fill(false)
-export const isFlipped = new Array<boolean>(10_000).fill(false)
-export const isStaggered = new Array<boolean>(10_000).fill(false)
-export const staggerTime = new Array<number>(10_000).fill(0)
-export const staggerDuration = new Array<number>(10_000).fill(0)
+export const index = new Array(10_000).fill(0)
+export const type = new Array(10_000).fill(0)
+export const variant = new Array(10_000).fill(0)
+export const posX = new Array(10_000).fill(0)
+export const posY = new Array(10_000).fill(0)
+export const hitboxX = new Array(10_000).fill(0)
+export const hitboxY = new Array(10_000).fill(0)
+export const hitboxW = new Array(10_000).fill(0)
+export const hitboxH = new Array(10_000).fill(0)
+export const hitboxOffsetX = new Array(10_000).fill(0)
+export const hitboxOffsetY = new Array(10_000).fill(0)
+export const speed = new Array(10_000).fill(0)
+export const radius = new Array(10_000).fill(0)
+export const animX = new Array(10_000).fill(0)
+export const animY = new Array(10_000).fill(0)
+export const animScaleX = new Array(10_000).fill(0)
+export const animScaleY = new Array(10_000).fill(0)
+export const animAngle = new Array(10_000).fill(0)
+export const health = new Array(10_000).fill(0)
+export const healthMax = new Array(10_000).fill(0)
+export const damage = new Array(10_000).fill(0)
+export const staggerTime = new Array(10_000).fill(0)
+export const isDestroyed = new Array(10_000).fill(false)
+export const isFlipped = new Array(10_000).fill(false)
+export const isStaggered = new Array(10_000).fill(false)
 
 /** Zero an index within the entity structure of arrays. */
-export function zeroEntity(idx: number) {
-  idx[idx] = 0
-  type[idx] = 0
-  posX[idx] = 0
-  posY[idx] = 0
-  velX[idx] = 0
-  velY[idx] = 0
-  hitboxX[idx] = 0
-  hitboxY[idx] = 0
-  hitboxW[idx] = 0
-  hitboxH[idx] = 0
-  hitboxOffsetX[idx] = 0
-  hitboxOffsetY[idx] = 0
-  animX[idx] = 0
-  animY[idx] = 0
-  animScaleX[idx] = 0
-  animScaleY[idx] = 0
-  animAngle[idx] = 0
-  health[idx] = 0
-  healthMax[idx] = 0
-  damage[idx] = 0
-  isDestroyed[idx] = false
-  isFlipped[idx] = false
-  isStaggered[idx] = false
-  staggerTime[idx] = 0
-  staggerDuration[idx] = 0
+export function zeroEntity(i: number) {
+  index[i] = 0
+  type[i] = 0
+  variant[i] = 0
+  posX[i] = 0
+  posY[i] = 0
+  hitboxX[i] = 0
+  hitboxY[i] = 0
+  hitboxW[i] = 0
+  hitboxH[i] = 0
+  hitboxOffsetX[i] = 0
+  hitboxOffsetY[i] = 0
+  speed[i] = 0
+  radius[i] = 0
+  animX[i] = 0
+  animY[i] = 0
+  animScaleX[i] = 0
+  animScaleY[i] = 0
+  animAngle[i] = 0
+  health[i] = 0
+  healthMax[i] = 0
+  damage[i] = 0
+  staggerTime[i] = 0
+  isDestroyed[i] = false
+  isFlipped[i] = false
+  isStaggered[i] = false
 }
 
-/** Zero the idx field within the entity structure of arrays. */
-export function zeroIdx() {
-  idx.fill(0)
+/** Zero the index field within the entity structure of arrays. */
+export function zeroIndex() {
+  index.fill(0)
 }
 
 /** Zero the type field within the entity structure of arrays. */
 export function zeroType() {
   type.fill(0)
+}
+
+/** Zero the variant field within the entity structure of arrays. */
+export function zeroVariant() {
+  variant.fill(0)
 }
 
 /** Zero the posX field within the entity structure of arrays. */
@@ -178,16 +183,6 @@ export function zeroPosX() {
 /** Zero the posY field within the entity structure of arrays. */
 export function zeroPosY() {
   posY.fill(0)
-}
-
-/** Zero the velX field within the entity structure of arrays. */
-export function zeroVelX() {
-  velX.fill(0)
-}
-
-/** Zero the velY field within the entity structure of arrays. */
-export function zeroVelY() {
-  velY.fill(0)
 }
 
 /** Zero the hitboxX field within the entity structure of arrays. */
@@ -218,6 +213,16 @@ export function zeroHitboxOffsetX() {
 /** Zero the hitboxOffsetY field within the entity structure of arrays. */
 export function zeroHitboxOffsetY() {
   hitboxOffsetY.fill(0)
+}
+
+/** Zero the speed field within the entity structure of arrays. */
+export function zeroSpeed() {
+  speed.fill(0)
+}
+
+/** Zero the radius field within the entity structure of arrays. */
+export function zeroRadius() {
+  radius.fill(0)
 }
 
 /** Zero the animX field within the entity structure of arrays. */
@@ -260,6 +265,11 @@ export function zeroDamage() {
   damage.fill(0)
 }
 
+/** Zero the staggerTime field within the entity structure of arrays. */
+export function zeroStaggerTime() {
+  staggerTime.fill(0)
+}
+
 /** Zero the isDestroyed field within the entity structure of arrays. */
 export function zeroIsDestroyed() {
   isDestroyed.fill(false)
@@ -275,30 +285,21 @@ export function zeroIsStaggered() {
   isStaggered.fill(false)
 }
 
-/** Zero the staggerTime field within the entity structure of arrays. */
-export function zeroStaggerTime() {
-  staggerTime.fill(0)
-}
-
-/** Zero the staggerDuration field within the entity structure of arrays. */
-export function zeroStaggerDuration() {
-  staggerDuration.fill(0)
-}
-
 /** Zero all fields within the entity structure of arrays. */
 export function zeroEntityData() {
-  idx.fill(0)
+  index.fill(0)
   type.fill(0)
+  variant.fill(0)
   posX.fill(0)
   posY.fill(0)
-  velX.fill(0)
-  velY.fill(0)
   hitboxX.fill(0)
   hitboxY.fill(0)
   hitboxW.fill(0)
   hitboxH.fill(0)
   hitboxOffsetX.fill(0)
   hitboxOffsetY.fill(0)
+  speed.fill(0)
+  radius.fill(0)
   animX.fill(0)
   animY.fill(0)
   animScaleX.fill(0)
@@ -307,9 +308,8 @@ export function zeroEntityData() {
   health.fill(0)
   healthMax.fill(0)
   damage.fill(0)
+  staggerTime.fill(0)
   isDestroyed.fill(false)
   isFlipped.fill(false)
   isStaggered.fill(false)
-  staggerTime.fill(0)
-  staggerDuration.fill(0)
 }

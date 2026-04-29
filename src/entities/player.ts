@@ -1,56 +1,50 @@
-import { delta, drawSprite, ease, elapsed, getDistance, isInputDown, pointerWorldX } from "snuggy";
+import { drawSprite, isInputDown, pointerWorldX } from "snuggy";
+import { animateBreathe } from "@/anims/breathe.ts";
+import { animateWalk } from "@/anims/walk.ts";
 import { Input, Texture, Type } from "@/consts.ts";
-import { animScaleX, animScaleY, animY, isFlipped, posX, posY, setPlayer, velX, velY } from "@/data.ts";
-import { addEntityAnimationTransform, resetEntityAnimation, setEntityTransform, setupEntity } from "@/lib/entity.ts";
+import { isFlipped, posX, posY, setPlayer, speed } from "@/data.ts";
+import { addEntityAnimationTransform, setEntityTransform, setHitbox, setupEntity, updateHitbox } from "@/lib/entity.ts";
+import { seek } from "@/lib/steering.ts";
 
 export function setupPlayer(x: number, y: number) {
-  const i = setupEntity(Type.PLAYER, x, y);
-  setPlayer(i);
+  const id = setupEntity(Type.PLAYER, x, y);
+  setHitbox(id, -5, -15, 10, 15);
+  speed[id] = 1;
+  setPlayer(id);
 }
 
 export function updatePlayer(id: number) {
-  velX[id] = 0;
-  velY[id] = 0;
+  let x = posX[id];
+  let y = posY[id];
 
   if (isInputDown(Input.UP)) {
-    velY[id] -= 1;
+    y -= 1;
   }
   if (isInputDown(Input.DOWN)) {
-    velY[id] += 1;
+    y += 1;
   }
   if (isInputDown(Input.LEFT)) {
-    velX[id] -= 1;
+    x -= 1;
   }
   if (isInputDown(Input.RIGHT)) {
-    velX[id] += 1;
+    x += 1;
   }
 
-  const v = getDistance(0, 0, velX[id], velY[id]);
-  if (v) {
-    velX[id] /= v;
-    velY[id] /= v;
-  }
+  const isMoving = seek(id, x, y);
 
-  posX[id] += velX[id] * delta;
-  posY[id] += velY[id] * delta;
+  updateHitbox(id);
 
   isFlipped[id] = pointerWorldX < posX[id];
 
-  resetEntityAnimation(id);
-
-  if (v) {
-    const d = 200;
-    const t = (elapsed % d) / d;
-    animY[id] = -4 * ease(t) * delta;
+  if (isMoving) {
+    animateWalk(id);
   } else {
-    const d = 2000;
-    const t = (elapsed % d) / d;
-    animScaleX[id] = 1 + 0.1 * ease(t) * delta;
-    animScaleY[id] = 1 + 0.1 * ease(t) * delta;
+    animateBreathe(id);
   }
 
   setEntityTransform(id, true);
   drawSprite(Texture.ATLAS, -16, -3, 0, 32, 32, 16);
   addEntityAnimationTransform(id);
+  drawSprite(Texture.ATLAS, -16, -31, 0, 80, 32, 32);
   drawSprite(Texture.ATLAS, -16, -31, 0, 0, 32, 32);
 }

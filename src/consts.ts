@@ -16,4 +16,14 @@ export const enum Input {
 export const enum Type {
   UNKNOWN,
   PLAYER,
+  ENEMY,
+  PROJECTILE,
+}
+
+export const enum EnemyVariant {
+  MELEE,
+}
+
+export const enum ProjectileVariant {
+  LONGSWORD,
 }

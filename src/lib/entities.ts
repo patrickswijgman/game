@@ -1,4 +1,4 @@
-import { active, free, idx, isDestroyed, MAX_ENTITY_COUNT, posY, toAdd, toRemove, zeroEntity, zeroToAdd, zeroToRemove } from "@/data.ts";
+import { active, free, index, isDestroyed, MAX_ENTITY_COUNT, posY, toAdd, toRemove, zeroEntity, zeroToAdd, zeroToRemove } from "@/data.ts";
 
 /**
  * Pre-fills the free list with all entity ids.
@@ -42,7 +42,7 @@ export function destroyEntity(id: number) {
  */
 export function addNewEntities() {
   for (const id of toAdd) {
-    idx[id] = active.length;
+    index[id] = active.length;
     active.push(id);
   }
 
@@ -57,11 +57,11 @@ export function addNewEntities() {
  */
 export function removeDestroyedEntities() {
   for (const id of toRemove) {
-    const i = idx[id];
+    const i = index[id];
     const last = active[active.length - 1];
 
     active[i] = last;
-    idx[last] = i;
+    index[last] = i;
     active.pop();
 
     zeroEntity(id);
@@ -84,11 +84,11 @@ export function sortEntities() {
     let j = i - 1;
     while (j >= 0 && posY[active[j]] > posY[id]) {
       active[j + 1] = active[j];
-      idx[active[j]] = j + 1;
+      index[active[j]] = j + 1;
       j--;
     }
 
     active[j + 1] = id;
-    idx[id] = j + 1;
+    index[id] = j + 1;
   }
 }

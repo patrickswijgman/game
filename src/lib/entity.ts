@@ -1,6 +1,6 @@
 import { addCameraTransform, resetTransform, rotateTransform, scaleTransform, translateTransform } from "snuggy";
 import type { Type } from "@/consts.ts";
-import { animAngle, animScaleX, animScaleY, animX, animY, isFlipped, posX, posY, type } from "@/data.ts";
+import { animAngle, animScaleX, animScaleY, animX, animY, hitboxH, hitboxOffsetX, hitboxOffsetY, hitboxW, hitboxX, hitboxY, isFlipped, posX, posY, type } from "@/data.ts";
 import { nextEntity } from "@/lib/entities.ts";
 
 export function setupEntity(t: Type, x: number, y: number) {
@@ -11,6 +11,19 @@ export function setupEntity(t: Type, x: number, y: number) {
   animScaleX[i] = 1;
   animScaleY[i] = 1;
   return i;
+}
+
+export function setHitbox(id: number, x: number, y: number, w: number, h: number) {
+  hitboxOffsetX[id] = x;
+  hitboxOffsetY[id] = y;
+  hitboxW[id] = w;
+  hitboxH[id] = h;
+  updateHitbox(id);
+}
+
+export function updateHitbox(id: number) {
+  hitboxX[id] = posX[id] + hitboxOffsetX[id];
+  hitboxY[id] = posY[id] + hitboxOffsetY[id];
 }
 
 export function setEntityTransform(id: number, isInWorld: boolean) {
