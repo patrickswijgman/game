@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 4/29/2026, 2:09:55 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 4/29/2026, 2:48:03 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -130,6 +130,7 @@ export const animAngle = new Array(10_000).fill(0)
 export const health = new Array(10_000).fill(0)
 export const healthMax = new Array(10_000).fill(0)
 export const damage = new Array(10_000).fill(0)
+export const weaponId = new Array(10_000).fill(0)
 export const staggerTime = new Array(10_000).fill(0)
 export const isDestroyed = new Array(10_000).fill(false)
 export const isFlipped = new Array(10_000).fill(false)
@@ -161,6 +162,7 @@ export function zeroEntity(i: number) {
   health[i] = 0
   healthMax[i] = 0
   damage[i] = 0
+  weaponId[i] = 0
   staggerTime[i] = 0
   isDestroyed[i] = false
   isFlipped[i] = false
@@ -291,6 +293,11 @@ export function zeroDamage() {
   damage.fill(0)
 }
 
+/** Zero the weaponId field within the entity structure of arrays. */
+export function zeroWeaponId() {
+  weaponId.fill(0)
+}
+
 /** Zero the staggerTime field within the entity structure of arrays. */
 export function zeroStaggerTime() {
   staggerTime.fill(0)
@@ -333,9 +340,51 @@ export function zeroEntityData() {
   health.fill(0)
   healthMax.fill(0)
   damage.fill(0)
+  weaponId.fill(0)
   staggerTime.fill(0)
   isDestroyed.fill(false)
   isFlipped.fill(false)
+}
+
+/*
+ * --------------------------------------------------
+ * item (Structure Of Arrays)
+ * --------------------------------------------------
+ */
+
+export const MAX_ITEM_COUNT = 64
+
+export const itemName = new Array(64).fill("")
+export const itemSpriteId = new Array(64).fill(0)
+export const itemDamage = new Array(64).fill(0)
+
+/** Zero an index within the item structure of arrays. */
+export function zeroItem(i: number) {
+  itemName[i] = ""
+  itemSpriteId[i] = 0
+  itemDamage[i] = 0
+}
+
+/** Zero the itemName field within the item structure of arrays. */
+export function zeroItemName() {
+  itemName.fill("")
+}
+
+/** Zero the itemSpriteId field within the item structure of arrays. */
+export function zeroItemSpriteId() {
+  itemSpriteId.fill(0)
+}
+
+/** Zero the itemDamage field within the item structure of arrays. */
+export function zeroItemDamage() {
+  itemDamage.fill(0)
+}
+
+/** Zero all fields within the item structure of arrays. */
+export function zeroItemData() {
+  itemName.fill("")
+  itemSpriteId.fill(0)
+  itemDamage.fill(0)
 }
 
 /*

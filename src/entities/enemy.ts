@@ -9,7 +9,7 @@ export function setupEnemy(x: number, y: number, v: EnemyVariant) {
 
   variant[id] = v;
 
-  switch (v) {
+  switch (variant[id]) {
     case EnemyVariant.MELEE:
       {
         spriteId[id] = Sprite.ENEMY_MELEE;
@@ -42,5 +42,5 @@ export function updateEnemy(id: number) {
 
   isFlipped[id] = posX[playerId] < posX[id];
 
-  drawEntity(id, true);
+  drawEntity(id);
 }

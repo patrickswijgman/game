@@ -39,11 +39,19 @@
 - health number
 - healthMax number
 - damage number
+<!-- equipment -->
+- weaponId number
 <!-- (state) timers -->
 - staggerTime number
 <!-- flags -->
 - isDestroyed boolean
 - isFlipped boolean
+
+# item soa 64
+
+- itemName string
+- itemSpriteId number
+- itemDamage number
 
 # sprite soa 64
 

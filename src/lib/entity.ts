@@ -1,6 +1,6 @@
 import { addCameraTransform, delta, drawSprite, resetTransform, rotateTransform, scaleTransform, translateTransform } from "snuggy";
-import { Texture, type Type } from "@/consts.ts";
-import { animAngle, animScaleX, animScaleY, animX, animY, frameH, frameW, frameX, frameY, hitboxH, hitboxOffsetX, hitboxOffsetY, hitboxW, hitboxX, hitboxY, isFlipped, pivotX, pivotY, posX, posY, shadowId, spriteId, staggerTime, type, velX, velY } from "@/data.ts";
+import { Sprite, Texture, Item, type Type } from "@/consts.ts";
+import { animAngle, animScaleX, animScaleY, animX, animY, frameH, frameW, frameX, frameY, hitboxH, hitboxOffsetX, hitboxOffsetY, hitboxW, hitboxX, hitboxY, isFlipped, itemSpriteId, pivotX, pivotY, posX, posY, shadowId, spriteId, staggerTime, type, velX, velY, weaponId } from "@/data.ts";
 import { nextEntity } from "@/lib/entities.ts";
 
 export function setupEntity(t: Type, x: number, y: number) {
@@ -36,7 +36,11 @@ export function isMoving(id: number) {
   return velX[id] !== 0 || velY[id] !== 0;
 }
 
-export function resetEntityAnimation(id: number) {
+export function isStaggered(id: number) {
+  return staggerTime[id] > 0;
+}
+
+export function resetAnimation(id: number) {
   animX[id] = 0;
   animY[id] = 0;
   animScaleX[id] = 1;
@@ -44,13 +48,10 @@ export function resetEntityAnimation(id: number) {
   animAngle[id] = 0;
 }
 
-export function drawEntity(id: number, isInWorld: boolean) {
+export function drawEntity(id: number) {
   resetTransform();
   translateTransform(posX[id], posY[id]);
-
-  if (isInWorld) {
-    addCameraTransform();
-  }
+  addCameraTransform();
 
   if (isFlipped[id]) {
     scaleTransform(-1, 1);
@@ -62,7 +63,11 @@ export function drawEntity(id: number, isInWorld: boolean) {
   scaleTransform(animScaleX[id], animScaleY[id]);
   rotateTransform(animAngle[id]);
 
-  if (staggerTime[id]) {
+  if (weaponId[id]) {
+    drawEntitySprite(Texture.ATLAS, itemSpriteId[weaponId[id]]);
+  }
+
+  if (isStaggered(id)) {
     drawEntitySprite(Texture.ATLAS_WHITE, spriteId[id]);
   } else {
     drawEntitySprite(Texture.ATLAS, spriteId[id]);

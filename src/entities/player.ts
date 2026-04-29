@@ -1,14 +1,15 @@
 import { isInputDown, pointerWorldX } from "snuggy";
 import { animateBreathe } from "@/anims/breathe.ts";
 import { animateWalk } from "@/anims/walk.ts";
-import { Input, Sprite, Type } from "@/consts.ts";
-import { isFlipped, posX, posY, setPlayerId, speed, spriteId, velX, velY } from "@/data.ts";
+import { Input, Item, Sprite, Type } from "@/consts.ts";
+import { isFlipped, posX, posY, setPlayerId, speed, spriteId, velX, velY, weaponId } from "@/data.ts";
 import { drawEntity, isMoving, move, setHitbox, setupEntity } from "@/lib/entity.ts";
 import { seek } from "@/lib/steering.ts";
 
 export function setupPlayer(x: number, y: number) {
   const id = setupEntity(Type.PLAYER, x, y);
   spriteId[id] = Sprite.PLAYER;
+  weaponId[id] = Item.LONGSWORD;
   setHitbox(id, -5, -15, 10, 15);
   speed[id] = 1;
   setPlayerId(id);
@@ -44,5 +45,5 @@ export function updatePlayer(id: number) {
     animateBreathe(id);
   }
 
-  drawEntity(id, true);
+  drawEntity(id);
 }

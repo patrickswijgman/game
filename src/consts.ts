@@ -23,16 +23,23 @@ export const enum Sprite {
 }
 
 export const enum Type {
-  UNKNOWN,
+  NONE,
   PLAYER,
   ENEMY,
   PROJECTILE,
 }
 
 export const enum EnemyVariant {
+  NONE,
   MELEE,
 }
 
 export const enum ProjectileVariant {
+  NONE,
+  LONGSWORD,
+}
+
+export const enum Item {
+  NONE,
   LONGSWORD,
 }
