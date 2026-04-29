@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 4/29/2026, 1:18:29 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 4/29/2026, 2:09:55 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -12,7 +12,7 @@ export let active = new Array<number>()
 export let free = new Array<number>()
 export let toAdd = new Array<number>()
 export let toRemove = new Array<number>()
-export let player = 0
+export let playerId = 0
 export let state = 0
 export let stateNext = 0
 
@@ -36,9 +36,9 @@ export function setToRemove(v: Array<number>) {
   toRemove = v
 }
 
-/** Set the value of the player field within the game group. */
-export function setPlayer(v: number) {
-  player = v
+/** Set the value of the playerId field within the game group. */
+export function setPlayerId(v: number) {
+  playerId = v
 }
 
 /** Set the value of the state field within the game group. */
@@ -71,9 +71,9 @@ export function zeroToRemove() {
   toRemove.length = 0
 }
 
-/** Zero the player field within the game group. */
-export function zeroPlayer() {
-  player = 0
+/** Zero the playerId field within the game group. */
+export function zeroPlayerId() {
+  playerId = 0
 }
 
 /** Zero the state field within the game group. */
@@ -92,7 +92,7 @@ export function zeroGameData() {
   free.length = 0
   toAdd.length = 0
   toRemove.length = 0
-  player = 0
+  playerId = 0
   state = 0
   stateNext = 0
 }
@@ -108,8 +108,12 @@ export const MAX_ENTITY_COUNT = 10_000
 export const index = new Array(10_000).fill(0)
 export const type = new Array(10_000).fill(0)
 export const variant = new Array(10_000).fill(0)
+export const shadowId = new Array(10_000).fill(0)
+export const spriteId = new Array(10_000).fill(0)
 export const posX = new Array(10_000).fill(0)
 export const posY = new Array(10_000).fill(0)
+export const velX = new Array(10_000).fill(0)
+export const velY = new Array(10_000).fill(0)
 export const hitboxX = new Array(10_000).fill(0)
 export const hitboxY = new Array(10_000).fill(0)
 export const hitboxW = new Array(10_000).fill(0)
@@ -129,15 +133,18 @@ export const damage = new Array(10_000).fill(0)
 export const staggerTime = new Array(10_000).fill(0)
 export const isDestroyed = new Array(10_000).fill(false)
 export const isFlipped = new Array(10_000).fill(false)
-export const isStaggered = new Array(10_000).fill(false)
 
 /** Zero an index within the entity structure of arrays. */
 export function zeroEntity(i: number) {
   index[i] = 0
   type[i] = 0
   variant[i] = 0
+  shadowId[i] = 0
+  spriteId[i] = 0
   posX[i] = 0
   posY[i] = 0
+  velX[i] = 0
+  velY[i] = 0
   hitboxX[i] = 0
   hitboxY[i] = 0
   hitboxW[i] = 0
@@ -157,7 +164,6 @@ export function zeroEntity(i: number) {
   staggerTime[i] = 0
   isDestroyed[i] = false
   isFlipped[i] = false
-  isStaggered[i] = false
 }
 
 /** Zero the index field within the entity structure of arrays. */
@@ -175,6 +181,16 @@ export function zeroVariant() {
   variant.fill(0)
 }
 
+/** Zero the shadowId field within the entity structure of arrays. */
+export function zeroShadowId() {
+  shadowId.fill(0)
+}
+
+/** Zero the spriteId field within the entity structure of arrays. */
+export function zeroSpriteId() {
+  spriteId.fill(0)
+}
+
 /** Zero the posX field within the entity structure of arrays. */
 export function zeroPosX() {
   posX.fill(0)
@@ -183,6 +199,16 @@ export function zeroPosX() {
 /** Zero the posY field within the entity structure of arrays. */
 export function zeroPosY() {
   posY.fill(0)
+}
+
+/** Zero the velX field within the entity structure of arrays. */
+export function zeroVelX() {
+  velX.fill(0)
+}
+
+/** Zero the velY field within the entity structure of arrays. */
+export function zeroVelY() {
+  velY.fill(0)
 }
 
 /** Zero the hitboxX field within the entity structure of arrays. */
@@ -280,18 +306,17 @@ export function zeroIsFlipped() {
   isFlipped.fill(false)
 }
 
-/** Zero the isStaggered field within the entity structure of arrays. */
-export function zeroIsStaggered() {
-  isStaggered.fill(false)
-}
-
 /** Zero all fields within the entity structure of arrays. */
 export function zeroEntityData() {
   index.fill(0)
   type.fill(0)
   variant.fill(0)
+  shadowId.fill(0)
+  spriteId.fill(0)
   posX.fill(0)
   posY.fill(0)
+  velX.fill(0)
+  velY.fill(0)
   hitboxX.fill(0)
   hitboxY.fill(0)
   hitboxW.fill(0)
@@ -311,5 +336,69 @@ export function zeroEntityData() {
   staggerTime.fill(0)
   isDestroyed.fill(false)
   isFlipped.fill(false)
-  isStaggered.fill(false)
+}
+
+/*
+ * --------------------------------------------------
+ * sprite (Structure Of Arrays)
+ * --------------------------------------------------
+ */
+
+export const MAX_SPRITE_COUNT = 64
+
+export const frameX = new Array(64).fill(0)
+export const frameY = new Array(64).fill(0)
+export const frameW = new Array(64).fill(0)
+export const frameH = new Array(64).fill(0)
+export const pivotX = new Array(64).fill(0)
+export const pivotY = new Array(64).fill(0)
+
+/** Zero an index within the sprite structure of arrays. */
+export function zeroSprite(i: number) {
+  frameX[i] = 0
+  frameY[i] = 0
+  frameW[i] = 0
+  frameH[i] = 0
+  pivotX[i] = 0
+  pivotY[i] = 0
+}
+
+/** Zero the frameX field within the sprite structure of arrays. */
+export function zeroFrameX() {
+  frameX.fill(0)
+}
+
+/** Zero the frameY field within the sprite structure of arrays. */
+export function zeroFrameY() {
+  frameY.fill(0)
+}
+
+/** Zero the frameW field within the sprite structure of arrays. */
+export function zeroFrameW() {
+  frameW.fill(0)
+}
+
+/** Zero the frameH field within the sprite structure of arrays. */
+export function zeroFrameH() {
+  frameH.fill(0)
+}
+
+/** Zero the pivotX field within the sprite structure of arrays. */
+export function zeroPivotX() {
+  pivotX.fill(0)
+}
+
+/** Zero the pivotY field within the sprite structure of arrays. */
+export function zeroPivotY() {
+  pivotY.fill(0)
+}
+
+/** Zero all fields within the sprite structure of arrays. */
+export function zeroSpriteData() {
+  frameX.fill(0)
+  frameY.fill(0)
+  frameW.fill(0)
+  frameH.fill(0)
+  pivotX.fill(0)
+  pivotY.fill(0)
 }

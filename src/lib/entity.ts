@@ -1,6 +1,6 @@
-import { addCameraTransform, resetTransform, rotateTransform, scaleTransform, translateTransform } from "snuggy";
-import type { Type } from "@/consts.ts";
-import { animAngle, animScaleX, animScaleY, animX, animY, hitboxH, hitboxOffsetX, hitboxOffsetY, hitboxW, hitboxX, hitboxY, isFlipped, posX, posY, type } from "@/data.ts";
+import { addCameraTransform, delta, drawSprite, resetTransform, rotateTransform, scaleTransform, translateTransform } from "snuggy";
+import { Texture, type Type } from "@/consts.ts";
+import { animAngle, animScaleX, animScaleY, animX, animY, frameH, frameW, frameX, frameY, hitboxH, hitboxOffsetX, hitboxOffsetY, hitboxW, hitboxX, hitboxY, isFlipped, pivotX, pivotY, posX, posY, shadowId, spriteId, staggerTime, type, velX, velY } from "@/data.ts";
 import { nextEntity } from "@/lib/entities.ts";
 
 export function setupEntity(t: Type, x: number, y: number) {
@@ -26,21 +26,14 @@ export function updateHitbox(id: number) {
   hitboxY[id] = posY[id] + hitboxOffsetY[id];
 }
 
-export function setEntityTransform(id: number, isInWorld: boolean) {
-  resetTransform();
-  translateTransform(posX[id], posY[id]);
-  if (isInWorld) {
-    addCameraTransform();
-  }
-  if (isFlipped[id]) {
-    scaleTransform(-1, 1);
-  }
+export function move(id: number) {
+  posX[id] += velX[id] * delta;
+  posY[id] += velY[id] * delta;
+  updateHitbox(id);
 }
 
-export function addEntityAnimationTransform(id: number) {
-  translateTransform(animX[id], animY[id]);
-  scaleTransform(animScaleX[id], animScaleY[id]);
-  rotateTransform(animAngle[id]);
+export function isMoving(id: number) {
+  return velX[id] !== 0 || velY[id] !== 0;
 }
 
 export function resetEntityAnimation(id: number) {
@@ -49,4 +42,35 @@ export function resetEntityAnimation(id: number) {
   animScaleX[id] = 1;
   animScaleY[id] = 1;
   animAngle[id] = 0;
+}
+
+export function drawEntity(id: number, isInWorld: boolean) {
+  resetTransform();
+  translateTransform(posX[id], posY[id]);
+
+  if (isInWorld) {
+    addCameraTransform();
+  }
+
+  if (isFlipped[id]) {
+    scaleTransform(-1, 1);
+  }
+
+  drawEntitySprite(Texture.ATLAS, shadowId[id]);
+
+  translateTransform(animX[id], animY[id]);
+  scaleTransform(animScaleX[id], animScaleY[id]);
+  rotateTransform(animAngle[id]);
+
+  if (staggerTime[id]) {
+    drawEntitySprite(Texture.ATLAS_WHITE, spriteId[id]);
+  } else {
+    drawEntitySprite(Texture.ATLAS, spriteId[id]);
+  }
+}
+
+function drawEntitySprite(texture: Texture, id: number) {
+  if (id) {
+    drawSprite(texture, pivotX[id], pivotY[id], frameX[id], frameY[id], frameW[id], frameH[id]);
+  }
 }

@@ -1,11 +1,12 @@
 import { drawRect, run, setCameraPosition, setCameraSmoothing, setCameraTarget, updateCamera } from "snuggy";
 import { EnemyVariant, Type } from "@/consts.ts";
-import { active, isDestroyed, posX, posY, type } from "@/data.ts";
+import { active, isDestroyed, posX, posY, staggerTime, type } from "@/data.ts";
 import { setupEnemy, updateEnemy } from "@/entities/enemy.ts";
 import { setupPlayer, updatePlayer } from "@/entities/player.ts";
 import { drawFramesPerSecond, drawHitboxes } from "@/lib/debug.ts";
 import { addNewEntities, removeDestroyedEntities, setupEntities, sortEntities } from "@/lib/entities.ts";
 import { loadResources } from "@/lib/resources.ts";
+import { tickTimer } from "@/lib/timer.ts";
 
 async function setup() {
   await loadResources();
@@ -36,6 +37,8 @@ function update() {
     if (isDestroyed[id]) {
       continue;
     }
+
+    tickTimer(staggerTime, id);
 
     switch (type[id]) {
       case Type.PLAYER:

@@ -1,5 +1,6 @@
 export const enum Texture {
   ATLAS,
+  ATLAS_WHITE,
 }
 
 export const enum Font {
@@ -11,6 +12,14 @@ export const enum Input {
   DOWN = "KeyS",
   LEFT = "KeyA",
   RIGHT = "KeyD",
+}
+
+export const enum Sprite {
+  NONE,
+  PLAYER,
+  PLAYER_SHADOW,
+  PLAYER_LONGSWORD,
+  ENEMY_MELEE,
 }
 
 export const enum Type {

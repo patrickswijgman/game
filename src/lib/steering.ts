@@ -1,5 +1,5 @@
-import { delta, getDistance } from "snuggy";
-import { active, posX, posY, radius, speed } from "@/data.ts";
+import { getDistance } from "snuggy";
+import { active, posX, posY, radius, speed, velX, velY } from "@/data.ts";
 
 export function seek(id: number, x: number, y: number) {
   const sx = x - posX[id];
@@ -7,11 +7,9 @@ export function seek(id: number, x: number, y: number) {
   const s = getDistance(0, 0, sx, sy);
 
   if (s) {
-    posX[id] += (sx / s) * speed[id] * delta;
-    posY[id] += (sy / s) * speed[id] * delta;
+    velX[id] += (sx / s) * speed[id];
+    velY[id] += (sy / s) * speed[id];
   }
-
-  return s > 0;
 }
 
 export function separate(id: number) {
@@ -34,10 +32,6 @@ export function separate(id: number) {
   }
 
   const strength = speed[id] * 2;
-  posX[id] += sx * strength * delta;
-  posY[id] += sy * strength * delta;
-
-  const s = getDistance(0, 0, sx, sy);
-
-  return s > 0;
+  velX[id] += sx * strength;
+  velY[id] += sy * strength;
 }

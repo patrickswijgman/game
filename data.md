@@ -4,7 +4,7 @@
 - free array number
 - toAdd array number
 - toRemove array number
-- player number
+- playerId number
 - state number
 - stateNext number
 
@@ -13,9 +13,14 @@
 - index number
 - type number
 - variant number
+<!-- render -->
+- shadowId number
+- spriteId number
 <!-- physics -->
 - posX number
 - posY number
+- velX number
+- velY number
 - hitboxX number
 - hitboxY number
 - hitboxW number
@@ -34,9 +39,17 @@
 - health number
 - healthMax number
 - damage number
-<!-- timers -->
+<!-- (state) timers -->
 - staggerTime number
 <!-- flags -->
 - isDestroyed boolean
 - isFlipped boolean
-- isStaggered boolean
+
+# sprite soa 64
+
+- frameX number
+- frameY number
+- frameW number
+- frameH number
+- pivotX number
+- pivotY number
