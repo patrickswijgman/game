@@ -16,7 +16,9 @@ export function separate(id: number) {
   let sx = 0;
   let sy = 0;
 
-  for (const other of active) {
+  for (let i = 0; i < active.length; i++) {
+    const other = active[i];
+
     if (other === id) continue;
 
     const dx = posX[id] - posX[other];

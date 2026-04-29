@@ -8,10 +8,11 @@ export const enum Font {
 }
 
 export const enum Input {
-  UP = "KeyW",
-  DOWN = "KeyS",
-  LEFT = "KeyA",
-  RIGHT = "KeyD",
+  UP,
+  DOWN,
+  LEFT,
+  RIGHT,
+  DEBUG,
 }
 
 export const enum Sprite {
@@ -20,6 +21,7 @@ export const enum Sprite {
   PLAYER_SHADOW,
   PLAYER_LONGSWORD,
   ENEMY_MELEE,
+  ENEMY_MELEE_SHADOW,
 }
 
 export const enum Type {

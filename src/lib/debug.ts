@@ -9,7 +9,8 @@ export function drawFramesPerSecond() {
 }
 
 export function drawHitboxes() {
-  for (const id of active) {
+  for (let i = 0; i < active.length; i++) {
+    const id = active[i];
     resetTransform();
     addCameraTransform();
     drawRect(hitboxX[id], hitboxY[id], hitboxW[id], hitboxH[id], "yellow", false);

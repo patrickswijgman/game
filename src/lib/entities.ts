@@ -41,7 +41,8 @@ export function destroyEntity(id: number) {
  * Assigns each new entity its position in the active list.
  */
 export function addNewEntities() {
-  for (const id of toAdd) {
+  for (let i = 0; i < toAdd.length; i++) {
+    const id = toAdd[i];
     index[id] = active.length;
     active.push(id);
   }
@@ -56,12 +57,13 @@ export function addNewEntities() {
  * Freed entity ids are returned to the free list for reuse.
  */
 export function removeDestroyedEntities() {
-  for (const id of toRemove) {
-    const i = index[id];
+  for (let i = 0; i < toRemove.length; i++) {
+    const id = toRemove[i];
+    const idx = index[id];
     const last = active[active.length - 1];
 
-    active[i] = last;
-    index[last] = i;
+    active[idx] = last;
+    index[last] = idx;
     active.pop();
 
     zeroEntity(id);

@@ -46,18 +46,3 @@
 <!-- flags -->
 - isDestroyed boolean
 - isFlipped boolean
-
-# item soa 64
-
-- itemName string
-- itemSpriteId number
-- itemDamage number
-
-# sprite soa 64
-
-- frameX number
-- frameY number
-- frameW number
-- frameH number
-- pivotX number
-- pivotY number
