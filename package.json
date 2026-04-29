@@ -16,7 +16,7 @@
     "vite": "^8.0.8"
   },
   "dependencies": {
-    "game-data-gen": "file:../game-data-gen",
-    "snuggy": "file:../snuggy"
+    "game-data-gen": "^2.3.0",
+    "snuggy": "^1.2.0"
   }
 }

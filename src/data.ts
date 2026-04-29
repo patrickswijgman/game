@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 4/27/2026, 1:15:17 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 4/27/2026, 1:26:52 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -9,6 +9,7 @@
  */
 
 export let active = new Array<number>()
+export let free = new Array<number>()
 export let toAdd = new Array<number>()
 export let toRemove = new Array<number>()
 export let player = 0
@@ -18,6 +19,11 @@ export let stateNext = 0
 /** Set the value of the active field within the game group. */
 export function setActive(value: Array<number>) {
   active = value
+}
+
+/** Set the value of the free field within the game group. */
+export function setFree(value: Array<number>) {
+  free = value
 }
 
 /** Set the value of the toAdd field within the game group. */
@@ -50,6 +56,11 @@ export function zeroActive() {
   active.length = 0
 }
 
+/** Zero the free field within the game group. */
+export function zeroFree() {
+  free.length = 0
+}
+
 /** Zero the toAdd field within the game group. */
 export function zeroToAdd() {
   toAdd.length = 0
@@ -78,6 +89,7 @@ export function zeroStateNext() {
 /** Zero all fields within the game group. */
 export function zeroGameData() {
   active.length = 0
+  free.length = 0
   toAdd.length = 0
   toRemove.length = 0
   player = 0
@@ -113,7 +125,6 @@ export const animAngle = new Array<number>(10_000).fill(0)
 export const health = new Array<number>(10_000).fill(0)
 export const healthMax = new Array<number>(10_000).fill(0)
 export const damage = new Array<number>(10_000).fill(0)
-export const isAllocated = new Array<boolean>(10_000).fill(false)
 export const isDestroyed = new Array<boolean>(10_000).fill(false)
 export const isFlipped = new Array<boolean>(10_000).fill(false)
 export const isStaggered = new Array<boolean>(10_000).fill(false)
@@ -142,7 +153,6 @@ export function zeroEntity(idx: number) {
   health[idx] = 0
   healthMax[idx] = 0
   damage[idx] = 0
-  isAllocated[idx] = false
   isDestroyed[idx] = false
   isFlipped[idx] = false
   isStaggered[idx] = false
@@ -250,11 +260,6 @@ export function zeroDamage() {
   damage.fill(0)
 }
 
-/** Zero the isAllocated field within the entity structure of arrays. */
-export function zeroIsAllocated() {
-  isAllocated.fill(false)
-}
-
 /** Zero the isDestroyed field within the entity structure of arrays. */
 export function zeroIsDestroyed() {
   isDestroyed.fill(false)
@@ -302,7 +307,6 @@ export function zeroEntityData() {
   health.fill(0)
   healthMax.fill(0)
   damage.fill(0)
-  isAllocated.fill(false)
   isDestroyed.fill(false)
   isFlipped.fill(false)
   isStaggered.fill(false)

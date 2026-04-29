@@ -3,7 +3,7 @@ import { Type } from "@/consts.ts";
 import { active, isDestroyed, posX, posY, type } from "@/data.ts";
 import { setupPlayer, updatePlayer } from "@/entities/player.ts";
 import { drawFramesPerSecond } from "@/lib/debug.ts";
-import { addNewEntities, removeDestroyedEntities, sortEntities } from "@/lib/entity.ts";
+import { addNewEntities, removeDestroyedEntities, setupEntities, sortEntities } from "@/lib/entities.ts";
 import { loadResources } from "@/lib/resources.ts";
 
 async function setup() {
@@ -14,6 +14,8 @@ async function setup() {
 
   setCameraPosition(x, y);
   setCameraSmoothing(0.1);
+
+  setupEntities();
 
   setupPlayer(x, y);
 }
