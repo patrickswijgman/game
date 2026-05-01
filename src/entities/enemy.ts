@@ -42,7 +42,7 @@ export function updateEnemy(id: number) {
       break;
   }
 
-  isFlipped[id] = posX[playerId] < posX[id];
+  isFlipped[id] = posX[playerId] < posX[id] ? 1 : 0;
 
   drawEntity(id);
 }

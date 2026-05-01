@@ -1,86 +1,54 @@
-import { active, free, index, isDestroyed, MAX_ENTITY_COUNT, posY, toAdd, toRemove, zeroEntity, zeroToAdd, zeroToRemove } from "@/data.ts";
+import { active, activeCount, freeCount, index, isDestroyed, MAX_ENTITY_COUNT, popActive, popFree, posY, pushActive, pushFree, pushToAdd, pushToRemove, toAdd, toAddCount, toRemove, toRemoveCount, zeroEntityAt, zeroToAdd, zeroToRemove } from "@/data.ts";
 
-/**
- * Pre-fills the free list with all entity ids.
- * Must be called once at startup before any entities are created.
- */
 export function setupEntities() {
   for (let i = MAX_ENTITY_COUNT - 1; i >= 0; i--) {
-    free.push(i);
+    pushFree(i);
   }
 }
 
-/**
- * Pops a free entity id and queues it for addition to the active list.
- * Throws if no free entities are available.
- */
 export function nextEntity() {
-  const id = free.pop();
-  if (id === undefined) {
+  if (freeCount === 0) {
     throw new Error("No more entities :(");
   }
-
-  toAdd.push(id);
-
+  const id = popFree();
+  pushToAdd(id);
   return id;
 }
 
-/**
- * Marks an entity as destroyed and queues it for removal.
- * Safe to call multiple times on the same entity.
- */
 export function destroyEntity(id: number) {
   if (!isDestroyed[id]) {
-    isDestroyed[id] = true;
-    toRemove.push(id);
+    isDestroyed[id] = 1;
+    pushToRemove(id);
   }
 }
 
-/**
- * Flushes the toAdd queue into the active list.
- * Assigns each new entity its position in the active list.
- */
 export function addNewEntities() {
-  for (let i = 0; i < toAdd.length; i++) {
+  for (let i = 0; i < toAddCount; i++) {
     const id = toAdd[i];
-    index[id] = active.length;
-    active.push(id);
+    index[id] = activeCount;
+    pushActive(id);
   }
-
   zeroToAdd();
 }
 
-/**
- * Removes destroyed entities from the active list using swap-to-back.
- * Each destroyed entity is swapped with the last active entity,
- * then the list is shrunk by one. This avoids shifting elements.
- * Freed entity ids are returned to the free list for reuse.
- */
 export function removeDestroyedEntities() {
-  for (let i = 0; i < toRemove.length; i++) {
+  for (let i = 0; i < toRemoveCount; i++) {
     const id = toRemove[i];
     const idx = index[id];
-    const last = active[active.length - 1];
+    const last = active[activeCount - 1];
 
     active[idx] = last;
     index[last] = idx;
-    active.pop();
+    popActive();
 
-    zeroEntity(id);
-
-    free.push(id);
+    zeroEntityAt(id);
+    pushFree(id);
   }
-
   zeroToRemove();
 }
 
-/**
- * Sorts entities by depth (posY) using insertion sort.
- * Iterates left to right, sliding each entity leftward past any entity
- * with a greater depth until it reaches its correct position.
- */
 export function sortEntities() {
-  for (let i = 1; i < active.length; i++) {
+  for (let i = 1; i < activeCount; i++) {
     const id = active[i];
 
     let j = i - 1;

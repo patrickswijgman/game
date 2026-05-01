@@ -1,5 +1,5 @@
 import { addCameraTransform, drawRect, drawText, fps, resetTransform, scaleTransform, translateTransform } from "snuggy";
-import { active, hitboxH, hitboxW, hitboxX, hitboxY } from "@/data.ts";
+import { active, activeCount, hitboxH, hitboxW, hitboxX, hitboxY } from "@/data.ts";
 
 export function drawFramesPerSecond() {
   resetTransform();
@@ -9,7 +9,7 @@ export function drawFramesPerSecond() {
 }
 
 export function drawHitboxes() {
-  for (let i = 0; i < active.length; i++) {
+  for (let i = 0; i < activeCount; i++) {
     const id = active[i];
     resetTransform();
     addCameraTransform();

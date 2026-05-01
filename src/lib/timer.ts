@@ -1,6 +1,6 @@
 import { time } from "snuggy";
 
-export function setTimer(timer: Array<number>, id: number, duration: number) {
+export function setTimer(timer: Float32Array, id: number, duration: number) {
   if (timer[id] === 0) {
     timer[id] = duration;
     return true;
@@ -9,7 +9,7 @@ export function setTimer(timer: Array<number>, id: number, duration: number) {
   return false;
 }
 
-export function tickTimer(timer: Array<number>, id: number) {
+export function tickTimer(timer: Float32Array, id: number) {
   if (timer[id] === 0) {
     return false;
   }

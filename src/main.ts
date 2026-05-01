@@ -1,6 +1,6 @@
 import { drawRect, isInputPressed, run, setFont, setFontOffset, setInputMap } from "snuggy";
 import { EnemyVariant, Font, Input, Type } from "@/consts.ts";
-import { active, isDestroyed, staggerTime, type } from "@/data.ts";
+import { active, activeCount, isDestroyed, staggerTime, type } from "@/data.ts";
 import { setupEnemy, updateEnemy } from "@/entities/enemy.ts";
 import { setupPlayer, updatePlayer } from "@/entities/player.ts";
 import { drawFramesPerSecond, drawHitboxes } from "@/lib/debug.ts";
@@ -46,7 +46,7 @@ function update() {
 
   drawRect(0, 0, 2000, 2000, "slategrey", true);
 
-  for (let i = 0; i < active.length; i++) {
+  for (let i = 0; i < activeCount; i++) {
     const id = active[i];
 
     if (isDestroyed[id]) {

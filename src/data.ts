@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 4/29/2026, 3:07:33 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 5/1/2026, 6:00:24 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -8,67 +8,79 @@
  * --------------------------------------------------
  */
 
-export let active = new Array<number>()
-export let free = new Array<number>()
-export let toAdd = new Array<number>()
-export let toRemove = new Array<number>()
+export const active = new Uint16Array(10_000)
+export let activeCount = 0
+export const free = new Uint16Array(10_000)
+export let freeCount = 0
+export const toAdd = new Uint16Array(10_000)
+export let toAddCount = 0
+export const toRemove = new Uint16Array(10_000)
+export let toRemoveCount = 0
 export let playerId = 0
-export let state = 0
-export let stateNext = 0
-
-/** Set the value of the active field within the game group. */
-export function setActive(v: Array<number>) {
-  active = v
-}
-
-/** Set the value of the free field within the game group. */
-export function setFree(v: Array<number>) {
-  free = v
-}
-
-/** Set the value of the toAdd field within the game group. */
-export function setToAdd(v: Array<number>) {
-  toAdd = v
-}
-
-/** Set the value of the toRemove field within the game group. */
-export function setToRemove(v: Array<number>) {
-  toRemove = v
-}
 
 /** Set the value of the playerId field within the game group. */
 export function setPlayerId(v: number) {
   playerId = v
 }
 
-/** Set the value of the state field within the game group. */
-export function setState(v: number) {
-  state = v
+/** Push a value onto the active field within the game group. */
+export function pushActive(v: number) {
+  active[activeCount++] = v
 }
 
-/** Set the value of the stateNext field within the game group. */
-export function setStateNext(v: number) {
-  stateNext = v
+/** Push a value onto the free field within the game group. */
+export function pushFree(v: number) {
+  free[freeCount++] = v
+}
+
+/** Push a value onto the toAdd field within the game group. */
+export function pushToAdd(v: number) {
+  toAdd[toAddCount++] = v
+}
+
+/** Push a value onto the toRemove field within the game group. */
+export function pushToRemove(v: number) {
+  toRemove[toRemoveCount++] = v
+}
+
+/** Pop a value from the active field within the game group. */
+export function popActive() {
+  return active[--activeCount]
+}
+
+/** Pop a value from the free field within the game group. */
+export function popFree() {
+  return free[--freeCount]
+}
+
+/** Pop a value from the toAdd field within the game group. */
+export function popToAdd() {
+  return toAdd[--toAddCount]
+}
+
+/** Pop a value from the toRemove field within the game group. */
+export function popToRemove() {
+  return toRemove[--toRemoveCount]
 }
 
 /** Zero the active field within the game group. */
 export function zeroActive() {
-  active.length = 0
+  activeCount = 0
 }
 
 /** Zero the free field within the game group. */
 export function zeroFree() {
-  free.length = 0
+  freeCount = 0
 }
 
 /** Zero the toAdd field within the game group. */
 export function zeroToAdd() {
-  toAdd.length = 0
+  toAddCount = 0
 }
 
 /** Zero the toRemove field within the game group. */
 export function zeroToRemove() {
-  toRemove.length = 0
+  toRemoveCount = 0
 }
 
 /** Zero the playerId field within the game group. */
@@ -76,25 +88,13 @@ export function zeroPlayerId() {
   playerId = 0
 }
 
-/** Zero the state field within the game group. */
-export function zeroState() {
-  state = 0
-}
-
-/** Zero the stateNext field within the game group. */
-export function zeroStateNext() {
-  stateNext = 0
-}
-
 /** Zero all fields within the game group. */
-export function zeroGameData() {
-  active.length = 0
-  free.length = 0
-  toAdd.length = 0
-  toRemove.length = 0
+export function zeroGame() {
+  activeCount = 0
+  freeCount = 0
+  toAddCount = 0
+  toRemoveCount = 0
   playerId = 0
-  state = 0
-  stateNext = 0
 }
 
 /*
@@ -105,38 +105,38 @@ export function zeroGameData() {
 
 export const MAX_ENTITY_COUNT = 10_000
 
-export const index = new Array(10_000).fill(0)
-export const type = new Array(10_000).fill(0)
-export const variant = new Array(10_000).fill(0)
-export const shadowId = new Array(10_000).fill(0)
-export const spriteId = new Array(10_000).fill(0)
-export const posX = new Array(10_000).fill(0)
-export const posY = new Array(10_000).fill(0)
-export const velX = new Array(10_000).fill(0)
-export const velY = new Array(10_000).fill(0)
-export const hitboxX = new Array(10_000).fill(0)
-export const hitboxY = new Array(10_000).fill(0)
-export const hitboxW = new Array(10_000).fill(0)
-export const hitboxH = new Array(10_000).fill(0)
-export const hitboxOffsetX = new Array(10_000).fill(0)
-export const hitboxOffsetY = new Array(10_000).fill(0)
-export const speed = new Array(10_000).fill(0)
-export const radius = new Array(10_000).fill(0)
-export const animX = new Array(10_000).fill(0)
-export const animY = new Array(10_000).fill(0)
-export const animScaleX = new Array(10_000).fill(0)
-export const animScaleY = new Array(10_000).fill(0)
-export const animAngle = new Array(10_000).fill(0)
-export const health = new Array(10_000).fill(0)
-export const healthMax = new Array(10_000).fill(0)
-export const damage = new Array(10_000).fill(0)
-export const weaponId = new Array(10_000).fill(0)
-export const staggerTime = new Array(10_000).fill(0)
-export const isDestroyed = new Array(10_000).fill(false)
-export const isFlipped = new Array(10_000).fill(false)
+export const index = new Uint16Array(10_000)
+export const type = new Uint8Array(10_000)
+export const variant = new Uint8Array(10_000)
+export const shadowId = new Uint8Array(10_000)
+export const spriteId = new Uint8Array(10_000)
+export const posX = new Float32Array(10_000)
+export const posY = new Float32Array(10_000)
+export const velX = new Float32Array(10_000)
+export const velY = new Float32Array(10_000)
+export const hitboxX = new Float32Array(10_000)
+export const hitboxY = new Float32Array(10_000)
+export const hitboxW = new Uint16Array(10_000)
+export const hitboxH = new Uint16Array(10_000)
+export const hitboxOffsetX = new Int16Array(10_000)
+export const hitboxOffsetY = new Int16Array(10_000)
+export const speed = new Float32Array(10_000)
+export const radius = new Float32Array(10_000)
+export const animX = new Float32Array(10_000)
+export const animY = new Float32Array(10_000)
+export const animScaleX = new Float32Array(10_000)
+export const animScaleY = new Float32Array(10_000)
+export const animAngle = new Float32Array(10_000)
+export const health = new Uint16Array(10_000)
+export const healthMax = new Uint16Array(10_000)
+export const damage = new Uint16Array(10_000)
+export const weaponId = new Uint8Array(10_000)
+export const staggerTime = new Float32Array(10_000)
+export const isDestroyed = new Uint8Array(10_000)
+export const isFlipped = new Uint8Array(10_000)
 
 /** Zero an index within the entity structure of arrays. */
-export function zeroEntity(i: number) {
+export function zeroEntityAt(i: number) {
   index[i] = 0
   type[i] = 0
   variant[i] = 0
@@ -164,8 +164,8 @@ export function zeroEntity(i: number) {
   damage[i] = 0
   weaponId[i] = 0
   staggerTime[i] = 0
-  isDestroyed[i] = false
-  isFlipped[i] = false
+  isDestroyed[i] = 0
+  isFlipped[i] = 0
 }
 
 /** Zero the index field within the entity structure of arrays. */
@@ -305,16 +305,16 @@ export function zeroStaggerTime() {
 
 /** Zero the isDestroyed field within the entity structure of arrays. */
 export function zeroIsDestroyed() {
-  isDestroyed.fill(false)
+  isDestroyed.fill(0)
 }
 
 /** Zero the isFlipped field within the entity structure of arrays. */
 export function zeroIsFlipped() {
-  isFlipped.fill(false)
+  isFlipped.fill(0)
 }
 
 /** Zero all fields within the entity structure of arrays. */
-export function zeroEntityData() {
+export function zeroEntity() {
   index.fill(0)
   type.fill(0)
   variant.fill(0)
@@ -342,6 +342,6 @@ export function zeroEntityData() {
   damage.fill(0)
   weaponId.fill(0)
   staggerTime.fill(0)
-  isDestroyed.fill(false)
-  isFlipped.fill(false)
+  isDestroyed.fill(0)
+  isFlipped.fill(0)
 }

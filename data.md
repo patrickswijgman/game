@@ -1,48 +1,46 @@
 # game group
 
-- active array number
-- free array number
-- toAdd array number
-- toRemove array number
+- active array uint16 10_000
+- free array uint16 10_000
+- toAdd array uint16 10_000
+- toRemove array uint16 10_000
 - playerId number
-- state number
-- stateNext number
 
 # entity soa 10_000
 
-- index number
-- type number
-- variant number
+- index uint16
+- type uint8
+- variant uint8
 <!-- render -->
-- shadowId number
-- spriteId number
+- shadowId uint8
+- spriteId uint8
 <!-- physics -->
-- posX number
-- posY number
-- velX number
-- velY number
-- hitboxX number
-- hitboxY number
-- hitboxW number
-- hitboxH number
-- hitboxOffsetX number
-- hitboxOffsetY number
-- speed number
-- radius number
+- posX float32
+- posY float32
+- velX float32
+- velY float32
+- hitboxX float32
+- hitboxY float32
+- hitboxW uint16
+- hitboxH uint16
+- hitboxOffsetX int16
+- hitboxOffsetY int16
+- speed float32
+- radius float32
 <!-- animation -->
-- animX number
-- animY number
-- animScaleX number
-- animScaleY number
-- animAngle number
+- animX float32
+- animY float32
+- animScaleX float32
+- animScaleY float32
+- animAngle float32
 <!-- stats -->
-- health number
-- healthMax number
-- damage number
+- health uint16
+- healthMax uint16
+- damage uint16
 <!-- equipment -->
-- weaponId number
+- weaponId uint8
 <!-- (state) timers -->
-- staggerTime number
+- staggerTime float32
 <!-- flags -->
-- isDestroyed boolean
-- isFlipped boolean
+- isDestroyed uint8
+- isFlipped uint8

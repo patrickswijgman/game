@@ -1,5 +1,5 @@
 import { getDistance } from "snuggy";
-import { active, posX, posY, radius, speed, velX, velY } from "@/data.ts";
+import { active, activeCount, posX, posY, radius, speed, velX, velY } from "@/data.ts";
 
 export function seek(id: number, x: number, y: number) {
   const sx = x - posX[id];
@@ -16,7 +16,7 @@ export function separate(id: number) {
   let sx = 0;
   let sy = 0;
 
-  for (let i = 0; i < active.length; i++) {
+  for (let i = 0; i < activeCount; i++) {
     const other = active[i];
 
     if (other === id) continue;

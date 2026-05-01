@@ -38,7 +38,7 @@ export function updatePlayer(id: number) {
   seek(id, x, y);
   move(id);
 
-  isFlipped[id] = pointerWorldX < posX[id];
+  isFlipped[id] = pointerWorldX < posX[id] ? 1 : 0;
 
   if (isMoving(id)) {
     animateWalk(id);
