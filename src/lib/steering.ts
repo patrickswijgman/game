@@ -1,5 +1,5 @@
 import { getDistance, isWithinDistance } from "snuggy";
-import { enemies, enemiesCount, playerId, posX, posY, radius, range, sepX, sepY, speed, velX, velY } from "@/data.ts";
+import { enemies, enemiesCount, playerId, posX, posY, radius, range, recoveryTime, sepX, sepY, speed, velX, velY } from "@/data.ts";
 
 export function seek(id: number, x: number, y: number) {
   const sx = x - posX[id];
@@ -7,8 +7,9 @@ export function seek(id: number, x: number, y: number) {
   const s = getDistance(0, 0, sx, sy);
 
   if (s) {
-    velX[id] += (sx / s) * speed[id];
-    velY[id] += (sy / s) * speed[id];
+    const mod = recoveryTime[id] > 0 ? 0.5 : 1;
+    velX[id] += (sx / s) * speed[id] * mod;
+    velY[id] += (sy / s) * speed[id] * mod;
   }
 }
 

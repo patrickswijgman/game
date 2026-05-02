@@ -32,7 +32,7 @@ export function setupProjectile(projectileVariant: Projectile, casterId: number)
         sprite[id] = Sprite.PROJECTILE_LONGSWORD;
         setHitbox(id, -5, -5, 10, 10);
         setTimer(lifeTime, id, 100);
-        speed[id] = 0.5;
+        speed[id] = 1;
       }
       break;
   }
@@ -71,10 +71,10 @@ function hitTarget(id: number, casterId: number, targetId: number) {
 }
 
 function dealDamage(casterId: number, targetId: number) {
-  setTimer(healthDepleteTime, targetId, 250);
+  setTimer(healthDepleteTime, targetId, 200);
 
   health[targetId] -= Math.min(health[targetId], damage[casterId]);
-  setTimer(staggerTime, targetId, 150);
+  setTimer(staggerTime, targetId, 100);
 
   if (health[targetId] === 0) {
     destroyEntity(targetId);

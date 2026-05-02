@@ -1,8 +1,12 @@
 export const MAX_ENEMY_COUNT = 1000;
 
+export const ROOM_WIDTH = 640;
+export const ROOM_HEIGHT = 360;
+
 export const enum Texture {
   ATLAS,
   FLASH,
+  DANGER,
 }
 
 export const enum Font {

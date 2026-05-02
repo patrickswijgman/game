@@ -1,6 +1,6 @@
 import { addCameraTransform, delta, drawRect, drawSprite, getDistance, resetTransform, rotateTransform, scaleTransform, translateTransform } from "snuggy";
-import { Color, Sprite, Texture, type Type } from "@/consts.ts";
-import { angle, animAngle, animScaleX, animScaleY, animX, animY, cooldownTime, health, healthDeplete, healthDepleteTime, healthMax, hitboxH, hitboxOffsetX, hitboxOffsetY, hitboxW, hitboxX, hitboxY, isFlipped, posX, posY, shadow, sprite, staggerTime, type, velX, velY, weapon } from "@/data.ts";
+import { Color, Sprite, Texture, Type } from "@/consts.ts";
+import { angle, animAngle, animScaleX, animScaleY, animX, animY, caster, health, healthDeplete, healthDepleteTime, healthMax, hitboxH, hitboxOffsetX, hitboxOffsetY, hitboxW, hitboxX, hitboxY, isFlipped, posX, posY, shadow, sprite, staggerTime, type, velX, velY, weapon } from "@/data.ts";
 import { nextEntity } from "@/lib/entities.ts";
 
 export function setupEntity(t: Type, x: number, y: number) {
@@ -14,16 +14,12 @@ export function setupEntity(t: Type, x: number, y: number) {
 }
 
 export function setHitbox(id: number, x: number, y: number, w: number, h: number) {
-  hitboxOffsetX[id] = x;
-  hitboxOffsetY[id] = y;
+  hitboxX[id] = posX[id] + x;
+  hitboxY[id] = posY[id] + y;
   hitboxW[id] = w;
   hitboxH[id] = h;
-  updateHitbox(id);
-}
-
-export function updateHitbox(id: number) {
-  hitboxX[id] = posX[id] + hitboxOffsetX[id];
-  hitboxY[id] = posY[id] + hitboxOffsetY[id];
+  hitboxOffsetX[id] = x;
+  hitboxOffsetY[id] = y;
 }
 
 export function isHitboxIntersection(a: number, b: number) {
@@ -39,7 +35,8 @@ export function setHealth(id: number, hp: number) {
 export function move(id: number) {
   posX[id] += velX[id] * delta;
   posY[id] += velY[id] * delta;
-  updateHitbox(id);
+  hitboxX[id] = posX[id] + hitboxOffsetX[id];
+  hitboxY[id] = posY[id] + hitboxOffsetY[id];
 }
 
 export function orbit(id: number, anchorX: number, anchorY: number, targetX: number, targetY: number, distance: number) {
@@ -52,18 +49,6 @@ export function orbit(id: number, anchorX: number, anchorY: number, targetX: num
     posX[id] += (dx / d) * distance;
     posY[id] += (dy / d) * distance;
   }
-}
-
-export function isMoving(id: number) {
-  return velX[id] !== 0 || velY[id] !== 0;
-}
-
-export function isStaggered(id: number) {
-  return staggerTime[id] > 0;
-}
-
-export function isOnCooldown(id: number) {
-  return cooldownTime[id] > 0;
 }
 
 export function resetAnimation(id: number) {
@@ -98,7 +83,12 @@ export function drawEntity(id: number) {
   scaleTransform(animScaleX[id], animScaleY[id]);
   rotateTransform(animAngle[id]);
 
-  const texture = isStaggered(id) ? Texture.FLASH : Texture.ATLAS;
+  let texture = Texture.ATLAS;
+  if (staggerTime[id] > 0) {
+    texture = Texture.FLASH;
+  } else if (type[caster[id]] === Type.ENEMY) {
+    texture = Texture.DANGER;
+  }
 
   switch (weapon[id]) {
     case Sprite.PLAYER_LONGSWORD:

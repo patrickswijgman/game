@@ -14,11 +14,11 @@ export function setupEnemy(x: number, y: number, enemyVariant: Enemy) {
       {
         sprite[id] = Sprite.ENEMY_MELEE;
         shadow[id] = Sprite.ENEMY_MELEE_SHADOW;
-        setItem(id, Item.LONGSWORD);
         setHealth(id, 50);
         setHitbox(id, -6, -16, 12, 16);
         speed[id] = 0.5;
         radius[id] = 20;
+        setItem(id, Item.LONGSWORD);
       }
       break;
   }

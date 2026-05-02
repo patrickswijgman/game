@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 5/2/2026, 3:08:34 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 5/2/2026, 4:47:12 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -202,12 +202,14 @@ export const healthMax = new Uint16Array(2000)
 export const damage = new Uint16Array(2000)
 export const range = new Uint16Array(2000)
 export const cooldown = new Uint16Array(2000)
+export const recovery = new Uint16Array(2000)
 export const projectile = new Uint8Array(2000)
 export const caster = new Uint8Array(2000)
 export const serial = new Uint32Array(2000)
 export const lastHitBy = new Uint16Array(2000)
 export const staggerTime = new Float32Array(2000)
 export const cooldownTime = new Float32Array(2000)
+export const recoveryTime = new Float32Array(2000)
 export const healthDeplete = new Float32Array(2000)
 export const healthDepleteTime = new Float32Array(2000)
 export const lifeTime = new Float32Array(2000)
@@ -247,12 +249,14 @@ export function zeroEntityAt(i: number) {
   damage[i] = 0
   range[i] = 0
   cooldown[i] = 0
+  recovery[i] = 0
   projectile[i] = 0
   caster[i] = 0
   serial[i] = 0
   lastHitBy[i] = 0
   staggerTime[i] = 0
   cooldownTime[i] = 0
+  recoveryTime[i] = 0
   healthDeplete[i] = 0
   healthDepleteTime[i] = 0
   lifeTime[i] = 0
@@ -293,12 +297,14 @@ export function zeroEntity() {
   damage.fill(0)
   range.fill(0)
   cooldown.fill(0)
+  recovery.fill(0)
   projectile.fill(0)
   caster.fill(0)
   serial.fill(0)
   lastHitBy.fill(0)
   staggerTime.fill(0)
   cooldownTime.fill(0)
+  recoveryTime.fill(0)
   healthDeplete.fill(0)
   healthDepleteTime.fill(0)
   lifeTime.fill(0)
@@ -340,12 +346,14 @@ export function printEntityAt(i: number) {
     damage: damage[i],
     range: range[i],
     cooldown: cooldown[i],
+    recovery: recovery[i],
     projectile: projectile[i],
     caster: caster[i],
     serial: serial[i],
     lastHitBy: lastHitBy[i],
     staggerTime: staggerTime[i],
     cooldownTime: cooldownTime[i],
+    recoveryTime: recoveryTime[i],
     healthDeplete: healthDeplete[i],
     healthDepleteTime: healthDepleteTime[i],
     lifeTime: lifeTime[i],

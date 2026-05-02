@@ -18,4 +18,11 @@ export async function loadResources() {
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, 256, 256);
   });
+
+  loadRenderTexture(Texture.DANGER, 256, 256, (ctx) => {
+    ctx.drawImage(getTexture(Texture.ATLAS), 0, 0);
+    ctx.globalCompositeOperation = "source-in";
+    ctx.fillStyle = "red";
+    ctx.fillRect(0, 0, 256, 256);
+  });
 }

@@ -1,51 +1,46 @@
-import { drawRect, getRandomNumber, isInputPressed, run, setCameraBoundary, setCameraPosition, setCameraSmoothing, setCameraTarget, setFont, setFontOffset, setInputMap, updateCamera } from "snuggy";
-import { Enemy, Font, Input, MAX_ENEMY_COUNT, Type } from "@/consts.ts";
-import { active, activeCount, cooldownTime, enemiesCount, healthDepleteTime, isDestroyed, lifeTime, playerId, posX, posY, printEntityAt, staggerTime, type } from "@/data.ts";
+import { drawRect, getRandomNumber, isInputPressed, run, setCameraBoundary, setCameraPosition, setCameraSmoothing, setCameraTarget, setFont, setFontOffset, setInput, updateCamera } from "snuggy";
+import { Enemy, Font, Input, MAX_ENEMY_COUNT, ROOM_HEIGHT, ROOM_WIDTH, Type } from "@/consts.ts";
+import { active, activeCount, cooldownTime, enemiesCount, healthDepleteTime, isDestroyed, lifeTime, posX, posY, recoveryTime, staggerTime, type } from "@/data.ts";
 import { setupEnemy, updateEnemy } from "@/entities/enemy.ts";
 import { setupPlayer, updatePlayer } from "@/entities/player.ts";
 import { updateProjectile } from "@/entities/projectile.ts";
 import { drawFramesPerSecond, drawHitboxes } from "@/lib/debug.ts";
 import { addNewEntities, destroyEntity, removeDestroyedEntities, setupEntities, sortEntities } from "@/lib/entities.ts";
-import { drawEntity, drawHealthBar, isStaggered, updateHealthBar } from "@/lib/entity.ts";
+import { drawEntity, drawHealthBar, updateHealthBar } from "@/lib/entity.ts";
 import { loadResources } from "@/lib/resources.ts";
 import { separateEnemies } from "@/lib/steering.ts";
 import { tickTimer } from "@/lib/timer.ts";
-
-const width = 2000;
-const height = 2000;
 
 let isDebugging = localStorage.getItem("debug") === "true";
 
 async function setup() {
   await loadResources();
 
-  const x = width / 2;
-  const y = height / 2;
+  const x = ROOM_WIDTH / 2;
+  const y = ROOM_HEIGHT / 2;
 
   setCameraPosition(x, y);
   setCameraSmoothing(0.1);
-  setCameraBoundary(0, 0, width, height);
+  setCameraBoundary(0, 0, ROOM_WIDTH, ROOM_HEIGHT);
 
   setFont(Font.DEFAULT);
   setFontOffset(0.5, -0.5);
 
-  setInputMap({
-    KeyW: Input.UP,
-    KeyS: Input.DOWN,
-    KeyA: Input.LEFT,
-    KeyD: Input.RIGHT,
-    F2: Input.DEBUG,
-    0: Input.ATTACK,
-  });
+  setInput("KeyW", Input.UP);
+  setInput("KeyS", Input.DOWN);
+  setInput("KeyA", Input.LEFT);
+  setInput("KeyD", Input.RIGHT);
+  setInput("F2", Input.DEBUG);
+  setInput("0", Input.ATTACK);
 
   setupEntities();
 
   setupPlayer(x, y);
 
-  printEntityAt(playerId);
-
-  for (let i = 0; i < MAX_ENEMY_COUNT; i++) {
-    setupEnemy(getRandomNumber(0, width), getRandomNumber(0, height), Enemy.MELEE);
+  for (let i = 0; i < 3; i++) {
+    if (enemiesCount < MAX_ENEMY_COUNT) {
+      setupEnemy(getRandomNumber(0, ROOM_WIDTH), getRandomNumber(0, ROOM_HEIGHT), Enemy.MELEE);
+    }
   }
 }
 
@@ -54,7 +49,7 @@ function update() {
   addNewEntities();
   sortEntities();
 
-  drawRect(0, 0, width, height, "slategrey", true);
+  drawRect(0, 0, ROOM_WIDTH, ROOM_HEIGHT, "slategrey", true);
 
   separateEnemies();
 
@@ -71,9 +66,10 @@ function update() {
 
     tickTimer(staggerTime, id);
     tickTimer(cooldownTime, id);
+    tickTimer(recoveryTime, id);
     tickTimer(healthDepleteTime, id);
 
-    if (!isStaggered(id)) {
+    if (staggerTime[id] === 0) {
       switch (type[id]) {
         case Type.PLAYER:
           updatePlayer(id);
