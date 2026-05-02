@@ -1,6 +1,6 @@
 import { drawRect, getRandomNumber, isInputPressed, run, setCameraBoundary, setCameraPosition, setCameraSmoothing, setCameraTarget, setFont, setFontOffset, setInput, updateCamera } from "snuggy";
-import { Enemy, Font, Input, MAX_ENEMY_COUNT, ROOM_HEIGHT, ROOM_WIDTH, Type } from "@/consts.ts";
-import { active, activeCount, cooldownTime, enemiesCount, healthDepleteTime, isDestroyed, lifeTime, posX, posY, recoveryTime, staggerTime, type } from "@/data.ts";
+import { Anim, Enemy, Font, Input, MAX_ENEMY_COUNT, ROOM_HEIGHT, ROOM_WIDTH, Type } from "@/consts.ts";
+import { active, activeCount, anim, cooldownTime, enemiesCount, healthDepleteTime, immuneTime, isDestroyed, lifeTime, posX, posY, recoveryTime, staggerTime, type } from "@/data.ts";
 import { setupEnemy, updateEnemy } from "@/entities/enemy.ts";
 import { setupPlayer, updatePlayer } from "@/entities/player.ts";
 import { updateProjectile } from "@/entities/projectile.ts";
@@ -10,6 +10,7 @@ import { drawEntity, drawHealthBar, updateHealthBar } from "@/lib/entity.ts";
 import { loadResources } from "@/lib/resources.ts";
 import { separateEnemies } from "@/lib/steering.ts";
 import { tickTimer } from "@/lib/timer.ts";
+import { updateBreatheAnimation, updateWalkAnimation } from "@/lib/anims.ts";
 
 let isDebugging = localStorage.getItem("debug") === "true";
 
@@ -67,6 +68,7 @@ function update() {
     tickTimer(staggerTime, id);
     tickTimer(cooldownTime, id);
     tickTimer(recoveryTime, id);
+    tickTimer(immuneTime, id);
     tickTimer(healthDepleteTime, id);
 
     if (staggerTime[id] === 0) {
@@ -82,6 +84,15 @@ function update() {
           updateProjectile(id);
           break;
       }
+    }
+
+    switch (anim[id]) {
+      case Anim.BREATH:
+        updateBreatheAnimation(id);
+        break;
+      case Anim.WALK:
+        updateWalkAnimation(id);
+        break;
     }
 
     drawEntity(id);

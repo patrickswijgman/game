@@ -1,15 +1,14 @@
 import { getDistance, isWithinDistance } from "snuggy";
-import { enemies, enemiesCount, playerId, posX, posY, radius, range, recoveryTime, sepX, sepY, speed, velX, velY } from "@/data.ts";
+import { enemies, enemiesCount, posX, posY, radius, range, sepX, sepY, speed, velX, velY } from "@/data.ts";
 
-export function seek(id: number, x: number, y: number) {
+export function seek(id: number, x: number, y: number, scalar = 1) {
   const sx = x - posX[id];
   const sy = y - posY[id];
   const s = getDistance(0, 0, sx, sy);
 
   if (s) {
-    const mod = recoveryTime[id] > 0 ? 0.5 : 1;
-    velX[id] += (sx / s) * speed[id] * mod;
-    velY[id] += (sy / s) * speed[id] * mod;
+    velX[id] += (sx / s) * speed[id] * scalar;
+    velY[id] += (sy / s) * speed[id] * scalar;
   }
 }
 
@@ -35,26 +34,20 @@ export function separateEnemies() {
 
     for (let j = i + 1; j < enemiesCount; j++) {
       const b = enemies[j];
-      separatePair(a, b, r);
+      const dx = posX[a] - posX[b];
+      const dy = posY[a] - posY[b];
+
+      if (isWithinDistance(0, 0, dx, dy, r)) {
+        const d = getDistance(0, 0, dx, dy);
+        const w = 1 - d / r;
+        const fx = (dx / d) * w;
+        const fy = (dy / d) * w;
+        sepX[a] += fx;
+        sepY[a] += fy;
+        sepX[b] -= fx;
+        sepY[b] -= fy;
+      }
     }
-
-    separatePair(a, playerId, r);
-  }
-}
-
-function separatePair(a: number, b: number, r: number) {
-  const dx = posX[a] - posX[b];
-  const dy = posY[a] - posY[b];
-
-  if (isWithinDistance(0, 0, dx, dy, r)) {
-    const d = getDistance(0, 0, dx, dy);
-    const w = 1 - d / r;
-    const fx = (dx / d) * w;
-    const fy = (dy / d) * w;
-    sepX[a] += fx;
-    sepY[a] += fy;
-    sepX[b] -= fx;
-    sepY[b] -= fy;
   }
 }
 

@@ -1,6 +1,6 @@
 import { addCameraTransform, delta, drawRect, drawSprite, getDistance, resetTransform, rotateTransform, scaleTransform, translateTransform } from "snuggy";
 import { Color, Sprite, Texture, Type } from "@/consts.ts";
-import { angle, animAngle, animScaleX, animScaleY, animX, animY, caster, health, healthDeplete, healthDepleteTime, healthMax, hitboxH, hitboxOffsetX, hitboxOffsetY, hitboxW, hitboxX, hitboxY, isFlipped, posX, posY, shadow, sprite, staggerTime, type, velX, velY, weapon } from "@/data.ts";
+import { angle, anim, animAngle, animScaleX, animScaleY, animX, animY, caster, health, healthDeplete, healthDepleteTime, healthMax, hitboxH, hitboxOffsetX, hitboxOffsetY, hitboxW, hitboxX, hitboxY, isFlipped, posX, posY, shadow, sprite, staggerTime, type, velX, velY, weapon } from "@/data.ts";
 import { nextEntity } from "@/lib/entities.ts";
 
 export function setupEntity(t: Type, x: number, y: number) {
@@ -51,12 +51,15 @@ export function orbit(id: number, anchorX: number, anchorY: number, targetX: num
   }
 }
 
-export function resetAnimation(id: number) {
-  animX[id] = 0;
-  animY[id] = 0;
-  animScaleX[id] = 1;
-  animScaleY[id] = 1;
-  animAngle[id] = 0;
+export function setAnimation(id: number, a: number) {
+  if (anim[id] !== a) {
+    anim[id] = a;
+    animX[id] = 0;
+    animY[id] = 0;
+    animScaleX[id] = 1;
+    animScaleY[id] = 1;
+    animAngle[id] = 0;
+  }
 }
 
 export function drawEntity(id: number) {

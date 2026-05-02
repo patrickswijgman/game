@@ -1,12 +1,10 @@
-import { isInputDown, pointerWorldX } from "snuggy";
-import { Input, Item, Sprite, Type } from "@/consts.ts";
-import { cooldown, cooldownTime, isFlipped, posX, posY, projectile, recovery, recoveryTime, setPlayerId, shadow, speed, sprite, velX, velY } from "@/data.ts";
+import { isInputDown, pointerWorldX, pointerWorldY } from "snuggy";
+import { Anim, Input, Item, Sprite, Type } from "@/consts.ts";
+import { cooldown, cooldownTime, isFlipped, posX, posY, projectile, recovery, recoveryTime, setPlayerId, shadow, speed, sprite, targetX, targetY, velX, velY } from "@/data.ts";
 import { setupProjectile } from "@/entities/projectile.ts";
-import { animateBreathe, animateWalk } from "@/lib/anims.ts";
-import { move, setHealth, setHitbox, setupEntity } from "@/lib/entity.ts";
+import { move, setAnimation, setHealth, setHitbox, setupEntity } from "@/lib/entity.ts";
 import { setItem } from "@/lib/items.ts";
 import { seek } from "@/lib/steering.ts";
-import { setTimer } from "@/lib/timer.ts";
 
 export function setupPlayer(x: number, y: number) {
   const id = setupEntity(Type.PLAYER, x, y);
@@ -38,20 +36,22 @@ export function updatePlayer(id: number) {
     x += 1;
   }
 
-  seek(id, x, y);
+  seek(id, x, y, recoveryTime[id] > 0 ? 0.5 : 1);
   move(id);
 
   isFlipped[id] = pointerWorldX < posX[id] ? 1 : 0;
 
   if (velX[id] || velY[id]) {
-    animateWalk(id);
+    setAnimation(id, Anim.WALK);
   } else {
-    animateBreathe(id);
+    setAnimation(id, Anim.BREATH);
   }
 
   if (isInputDown(Input.ATTACK) && cooldownTime[id] === 0) {
-    setTimer(cooldownTime, id, cooldown[id]);
-    setTimer(recoveryTime, id, recovery[id]);
+    targetX[id] = pointerWorldX;
+    targetY[id] = pointerWorldY;
+    cooldownTime[id] = cooldown[id];
+    recoveryTime[id] = recovery[id];
     setupProjectile(projectile[id], id);
   }
 }

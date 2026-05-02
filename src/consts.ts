@@ -49,6 +49,12 @@ export const enum Projectile {
   LONGSWORD,
 }
 
+export const enum Anim {
+  NONE,
+  BREATH,
+  WALK,
+}
+
 export const enum Item {
   NONE,
   LONGSWORD,

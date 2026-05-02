@@ -30,6 +30,7 @@
 - speed float32
 - radius float32
 <!-- animation -->
+- anim uint8
 - animX float32
 - animY float32
 - animScaleX float32
@@ -46,16 +47,21 @@
 - healthMax uint16
 - damage uint16
 - range uint16
-- cooldown uint16
+- delay uint16
 - recovery uint16
+- cooldown uint16
 <!-- combat -->
+- targetX float32
+- targetY float32
 - projectile uint8
 - caster uint8
 - serial uint32
 - lastHitBy uint16
-- staggerTime float32
-- cooldownTime float32
+- delayTime float32
 - recoveryTime float32
+- cooldownTime float32
+- staggerTime float32
+- immuneTime float32
 <!-- health bar -->
 - healthDeplete float32
 - healthDepleteTime float32

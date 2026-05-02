@@ -1,22 +1,16 @@
-import { getAngle, pointerWorldX, pointerWorldY } from "snuggy";
+import { getAngle } from "snuggy";
 import { Projectile, Sprite, Type } from "@/consts.ts";
-import { angle, caster, damage, depth, enemies, enemiesCount, health, healthDepleteTime, hitboxW, lastHitBy, lifeTime, playerId, posX, posY, serial, serialCount, setSerialCount, speed, sprite, staggerTime, type, variant, velX, velY } from "@/data.ts";
+import { angle, caster, damage, depth, enemies, enemiesCount, health, healthDepleteTime, hitboxW, immuneTime, lastHitBy, lifeTime, playerId, posX, posY, serial, serialCount, setSerialCount, speed, sprite, staggerTime, targetX, targetY, type, variant, velX, velY } from "@/data.ts";
 import { destroyEntity } from "@/lib/entities.ts";
 import { isHitboxIntersection, move, orbit, setHitbox, setupEntity } from "@/lib/entity.ts";
 import { seek } from "@/lib/steering.ts";
-import { setTimer } from "@/lib/timer.ts";
 
 export function setupProjectile(projectileVariant: Projectile, casterId: number) {
-  const isPlayer = type[casterId] === Type.PLAYER;
   const casterOffsetX = 0;
   const casterOffsetY = -5;
-  const targetOffsetX = 0;
-  const targetOffsetY = isPlayer ? 0 : -5;
-  const centerOffset = hitboxW[casterId] + 2;
+  const centerOffset = hitboxW[casterId];
   const casterX = posX[casterId] + casterOffsetX;
   const casterY = posY[casterId] + casterOffsetY;
-  const targetX = (isPlayer ? pointerWorldX : posX[playerId]) + targetOffsetX;
-  const targetY = (isPlayer ? pointerWorldY : posY[playerId]) + targetOffsetY;
 
   setSerialCount(serialCount + 1);
 
@@ -31,14 +25,17 @@ export function setupProjectile(projectileVariant: Projectile, casterId: number)
       {
         sprite[id] = Sprite.PROJECTILE_LONGSWORD;
         setHitbox(id, -5, -5, 10, 10);
-        setTimer(lifeTime, id, 100);
+        lifeTime[id] = 100;
         speed[id] = 1;
       }
       break;
   }
 
-  seek(id, targetX, targetY);
-  orbit(id, casterX, casterY, targetX, targetY, centerOffset);
+  const x = targetX[casterId];
+  const y = targetY[casterId];
+
+  seek(id, x, y);
+  orbit(id, casterX, casterY, x, y, centerOffset);
   angle[id] = getAngle(0, 0, velX[id], velY[id]);
 
   return id;
@@ -51,32 +48,35 @@ export function updateProjectile(id: number) {
 
 function hit(id: number) {
   const casterId = caster[id];
-  const isPlayer = type[casterId] === Type.PLAYER;
-
-  if (isPlayer) {
+  if (type[casterId] === Type.PLAYER) {
     for (let i = 0; i < enemiesCount; i++) {
       const enemyId = enemies[i];
-      hitTarget(id, casterId, enemyId);
+      dealDamageToTarget(id, casterId, enemyId);
     }
   } else {
-    hitTarget(id, casterId, playerId);
+    dealDamageToTarget(id, casterId, playerId);
   }
 }
 
-function hitTarget(id: number, casterId: number, targetId: number) {
+function dealDamageToTarget(id: number, casterId: number, targetId: number) {
   if (lastHitBy[targetId] !== serial[id] && isHitboxIntersection(id, targetId)) {
     lastHitBy[targetId] = serial[id];
-    dealDamage(casterId, targetId);
-  }
-}
 
-function dealDamage(casterId: number, targetId: number) {
-  setTimer(healthDepleteTime, targetId, 200);
+    if (type[targetId] === Type.PLAYER) {
+      if (immuneTime[targetId] === 0) {
+        immuneTime[targetId] = 500;
+      } else {
+        return;
+      }
+    }
 
-  health[targetId] -= Math.min(health[targetId], damage[casterId]);
-  setTimer(staggerTime, targetId, 100);
+    health[targetId] -= Math.min(health[targetId], damage[casterId]);
 
-  if (health[targetId] === 0) {
-    destroyEntity(targetId);
+    staggerTime[targetId] = 100;
+    healthDepleteTime[targetId] = 200;
+
+    if (health[targetId] === 0) {
+      destroyEntity(targetId);
+    }
   }
 }
