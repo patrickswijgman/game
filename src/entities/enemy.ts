@@ -5,9 +5,9 @@ import { move, setHealth, setHitbox, setupEntity } from "@/lib/entity.ts";
 import { setItem } from "@/lib/items.ts";
 import { halt, seek, separate } from "@/lib/steering.ts";
 
-export function setupEnemy(x: number, y: number, v: Enemy) {
+export function setupEnemy(x: number, y: number, enemyVariant: Enemy) {
   const id = setupEntity(Type.ENEMY, x, y);
-  variant[id] = v;
+  variant[id] = enemyVariant;
 
   switch (variant[id]) {
     case Enemy.MELEE:

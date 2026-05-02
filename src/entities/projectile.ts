@@ -6,7 +6,7 @@ import { isHitboxIntersection, move, orbit, setHitbox, setupEntity } from "@/lib
 import { seek } from "@/lib/steering.ts";
 import { setTimer } from "@/lib/timer.ts";
 
-export function setupProjectile(v: Projectile, casterId: number) {
+export function setupProjectile(projectileVariant: Projectile, casterId: number) {
   const isPlayer = type[casterId] === Type.PLAYER;
   const casterOffsetX = 0;
   const casterOffsetY = -5;
@@ -21,7 +21,7 @@ export function setupProjectile(v: Projectile, casterId: number) {
   setSerialCount(serialCount + 1);
 
   const id = setupEntity(Type.PROJECTILE, casterX, casterY);
-  variant[id] = v;
+  variant[id] = projectileVariant;
   caster[id] = casterId;
   serial[id] = serialCount;
 
