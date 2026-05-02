@@ -1,6 +1,6 @@
 import { getAngle, pointerWorldX, pointerWorldY } from "snuggy";
 import { Projectile, Sprite, Type } from "@/consts.ts";
-import { angle, caster, damage, enemies, enemiesCount, health, healthDepleteTime, hitboxW, lastHitBy, lifeTime, playerId, posX, posY, serial, serialCount, setSerialCount, speed, sprite, staggerTime, type, variant, velX, velY } from "@/data.ts";
+import { angle, caster, damage, depth, enemies, enemiesCount, health, healthDepleteTime, hitboxW, lastHitBy, lifeTime, playerId, posX, posY, serial, serialCount, setSerialCount, speed, sprite, staggerTime, type, variant, velX, velY } from "@/data.ts";
 import { destroyEntity } from "@/lib/entities.ts";
 import { isHitboxIntersection, move, orbit, setHitbox, setupEntity } from "@/lib/entity.ts";
 import { seek } from "@/lib/steering.ts";
@@ -24,6 +24,7 @@ export function setupProjectile(projectileVariant: Projectile, casterId: number)
   variant[id] = projectileVariant;
   caster[id] = casterId;
   serial[id] = serialCount;
+  depth[id] = -casterOffsetY;
 
   switch (variant[id]) {
     case Projectile.LONGSWORD:

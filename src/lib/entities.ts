@@ -3,6 +3,7 @@ import {
   active,
   activeCount,
   activeIndex,
+  depth,
   enemies,
   enemiesCount,
   enemiesIndex,
@@ -94,7 +95,7 @@ export function sortEntities() {
     const id = active[i];
 
     let j = i - 1;
-    while (j >= 0 && posY[active[j]] > posY[id]) {
+    while (j >= 0 && posY[active[j]] + depth[active[j]] > posY[id] + depth[id]) {
       active[j + 1] = active[j];
       activeIndex[active[j]] = j + 1;
       j--;

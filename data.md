@@ -19,6 +19,8 @@
 - posY float32
 - velX float32
 - velY float32
+- sepX float32
+- sepY float32
 - hitboxX float32
 - hitboxY float32
 - hitboxW uint16
@@ -38,6 +40,7 @@
 - sprite uint8
 - weapon uint8
 - angle float32
+- depth uint16
 <!-- stats -->
 - health uint16
 - healthMax uint16

@@ -1,9 +1,8 @@
 import { isInputDown, pointerWorldX } from "snuggy";
-import { animateBreathe } from "@/anims/breathe.ts";
-import { animateWalk } from "@/anims/walk.ts";
 import { Input, Item, Sprite, Type } from "@/consts.ts";
 import { cooldown, cooldownTime, isFlipped, posX, posY, projectile, setPlayerId, shadow, speed, sprite, velX, velY } from "@/data.ts";
 import { setupProjectile } from "@/entities/projectile.ts";
+import { animateBreathe, animateWalk } from "@/lib/anims.ts";
 import { isMoving, isOnCooldown, move, setHealth, setHitbox, setupEntity } from "@/lib/entity.ts";
 import { setItem } from "@/lib/items.ts";
 import { seek } from "@/lib/steering.ts";

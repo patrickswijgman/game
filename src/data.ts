@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 5/2/2026, 11:11:54 AM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 5/2/2026, 12:20:43 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -177,6 +177,8 @@ export const posX = new Float32Array(10_000)
 export const posY = new Float32Array(10_000)
 export const velX = new Float32Array(10_000)
 export const velY = new Float32Array(10_000)
+export const sepX = new Float32Array(10_000)
+export const sepY = new Float32Array(10_000)
 export const hitboxX = new Float32Array(10_000)
 export const hitboxY = new Float32Array(10_000)
 export const hitboxW = new Uint16Array(10_000)
@@ -194,6 +196,7 @@ export const shadow = new Uint8Array(10_000)
 export const sprite = new Uint8Array(10_000)
 export const weapon = new Uint8Array(10_000)
 export const angle = new Float32Array(10_000)
+export const depth = new Uint16Array(10_000)
 export const health = new Uint16Array(10_000)
 export const healthMax = new Uint16Array(10_000)
 export const damage = new Uint16Array(10_000)
@@ -219,6 +222,8 @@ export function zeroEntityAt(i: number) {
   posY[i] = 0
   velX[i] = 0
   velY[i] = 0
+  sepX[i] = 0
+  sepY[i] = 0
   hitboxX[i] = 0
   hitboxY[i] = 0
   hitboxW[i] = 0
@@ -236,6 +241,7 @@ export function zeroEntityAt(i: number) {
   sprite[i] = 0
   weapon[i] = 0
   angle[i] = 0
+  depth[i] = 0
   health[i] = 0
   healthMax[i] = 0
   damage[i] = 0
@@ -282,6 +288,16 @@ export function zeroVelX() {
 /** Zero the velY field within the entity structure of arrays. */
 export function zeroVelY() {
   velY.fill(0)
+}
+
+/** Zero the sepX field within the entity structure of arrays. */
+export function zeroSepX() {
+  sepX.fill(0)
+}
+
+/** Zero the sepY field within the entity structure of arrays. */
+export function zeroSepY() {
+  sepY.fill(0)
 }
 
 /** Zero the hitboxX field within the entity structure of arrays. */
@@ -367,6 +383,11 @@ export function zeroWeapon() {
 /** Zero the angle field within the entity structure of arrays. */
 export function zeroAngle() {
   angle.fill(0)
+}
+
+/** Zero the depth field within the entity structure of arrays. */
+export function zeroDepth() {
+  depth.fill(0)
 }
 
 /** Zero the health field within the entity structure of arrays. */
@@ -457,6 +478,8 @@ export function zeroEntity() {
   posY.fill(0)
   velX.fill(0)
   velY.fill(0)
+  sepX.fill(0)
+  sepY.fill(0)
   hitboxX.fill(0)
   hitboxY.fill(0)
   hitboxW.fill(0)
@@ -474,6 +497,7 @@ export function zeroEntity() {
   sprite.fill(0)
   weapon.fill(0)
   angle.fill(0)
+  depth.fill(0)
   health.fill(0)
   healthMax.fill(0)
   damage.fill(0)

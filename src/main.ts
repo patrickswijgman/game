@@ -1,6 +1,6 @@
-import { delta, drawRect, isInputPressed, run, setCameraBoundary, setCameraPosition, setCameraSmoothing, setCameraTarget, setFont, setFontOffset, setInputMap, updateCamera } from "snuggy";
+import { drawRect, getRandomNumber, isInputPressed, run, setCameraBoundary, setCameraPosition, setCameraSmoothing, setCameraTarget, setFont, setFontOffset, setInputMap, updateCamera } from "snuggy";
 import { Enemy, Font, Input, Type } from "@/consts.ts";
-import { active, activeCount, cooldownTime, health, healthDeplete, healthDepleteTime, isDestroyed, lifeTime, posX, posY, staggerTime, type } from "@/data.ts";
+import { active, activeCount, cooldownTime, healthDepleteTime, isDestroyed, lifeTime, posX, posY, staggerTime, type } from "@/data.ts";
 import { setupEnemy, updateEnemy } from "@/entities/enemy.ts";
 import { setupPlayer, updatePlayer } from "@/entities/player.ts";
 import { updateProjectile } from "@/entities/projectile.ts";
@@ -9,6 +9,7 @@ import { addNewEntities, destroyEntity, removeDestroyedEntities, setupEntities, 
 import { drawEntity, drawHealthBar, isStaggered, updateHealthBar } from "@/lib/entity.ts";
 import { loadResources } from "@/lib/resources.ts";
 import { tickTimer } from "@/lib/timer.ts";
+import { separateEnemies } from "@/lib/steering.ts";
 
 const width = 640;
 const height = 360;
@@ -40,9 +41,10 @@ async function setup() {
   setupEntities();
 
   setupPlayer(x, y);
-  setupEnemy(300, 100, Enemy.MELEE);
-  setupEnemy(350, 100, Enemy.MELEE);
-  setupEnemy(350, 150, Enemy.MELEE);
+
+  for (let i = 0; i < 1000; i++) {
+    setupEnemy(getRandomNumber(0, width), getRandomNumber(0, height), Enemy.MELEE);
+  }
 }
 
 function update() {
@@ -51,6 +53,8 @@ function update() {
   sortEntities();
 
   drawRect(0, 0, width, height, "slategrey", true);
+
+  separateEnemies();
 
   for (let i = 0; i < activeCount; i++) {
     const id = active[i];

@@ -1,6 +1,6 @@
-import { animateWalk } from "@/anims/walk.ts";
 import { Enemy, Item, Sprite, Type } from "@/consts.ts";
 import { isFlipped, playerId, posX, posY, radius, shadow, speed, sprite, variant, velX, velY } from "@/data.ts";
+import { animateWalk } from "@/lib/anims.ts";
 import { move, setHealth, setHitbox, setupEntity } from "@/lib/entity.ts";
 import { setItem } from "@/lib/items.ts";
 import { halt, seek, separate } from "@/lib/steering.ts";
@@ -17,7 +17,7 @@ export function setupEnemy(x: number, y: number, enemyVariant: Enemy) {
         setItem(id, Item.LONGSWORD);
         setHealth(id, 100);
         setHitbox(id, -6, -16, 12, 16);
-        speed[id] = 0.8;
+        speed[id] = 0.5;
         radius[id] = 20;
       }
       break;
