@@ -52,6 +52,6 @@ export function updatePlayer(id: number) {
 
   if (isInputDown(Input.ATTACK) && !isOnCooldown(id)) {
     setTimer(cooldownTime, id, cooldown[id]);
-    setupProjectile(posX[id], posY[id], projectile[id], id);
+    setupProjectile(projectile[id], id);
   }
 }

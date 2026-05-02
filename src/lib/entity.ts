@@ -1,4 +1,4 @@
-import { addCameraTransform, delta, drawRect, drawSprite, resetTransform, rotateTransform, scaleTransform, translateTransform } from "snuggy";
+import { addCameraTransform, delta, drawRect, drawSprite, getDistance, resetTransform, rotateTransform, scaleTransform, translateTransform } from "snuggy";
 import { Color, Sprite, Texture, type Type } from "@/consts.ts";
 import { angle, animAngle, animScaleX, animScaleY, animX, animY, cooldownTime, health, healthDeplete, healthDepleteTime, healthMax, hitboxH, hitboxOffsetX, hitboxOffsetY, hitboxW, hitboxX, hitboxY, isFlipped, posX, posY, shadow, sprite, staggerTime, type, velX, velY, weapon } from "@/data.ts";
 import { nextEntity } from "@/lib/entities.ts";
@@ -40,6 +40,18 @@ export function move(id: number) {
   posX[id] += velX[id] * delta;
   posY[id] += velY[id] * delta;
   updateHitbox(id);
+}
+
+export function orbit(id: number, anchorX: number, anchorY: number, targetX: number, targetY: number, distance: number) {
+  posX[id] = anchorX;
+  posY[id] = anchorY;
+  const dx = targetX - anchorX;
+  const dy = targetY - anchorY;
+  const d = getDistance(0, 0, dx, dy);
+  if (d) {
+    posX[id] += (dx / d) * distance;
+    posY[id] += (dy / d) * distance;
+  }
 }
 
 export function isMoving(id: number) {
