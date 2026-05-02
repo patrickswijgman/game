@@ -1,6 +1,6 @@
 export const enum Texture {
   ATLAS,
-  ATLAS_WHITE,
+  FLASH,
 }
 
 export const enum Font {
@@ -12,6 +12,7 @@ export const enum Input {
   DOWN,
   LEFT,
   RIGHT,
+  ATTACK,
   DEBUG,
 }
 
@@ -22,6 +23,7 @@ export const enum Sprite {
   PLAYER_LONGSWORD,
   ENEMY_MELEE,
   ENEMY_MELEE_SHADOW,
+  PROJECTILE_LONGSWORD,
 }
 
 export const enum Type {
@@ -31,12 +33,12 @@ export const enum Type {
   PROJECTILE,
 }
 
-export const enum EnemyVariant {
+export const enum Enemy {
   NONE,
   MELEE,
 }
 
-export const enum ProjectileVariant {
+export const enum Projectile {
   NONE,
   LONGSWORD,
 }

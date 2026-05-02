@@ -1,6 +1,6 @@
 import { addCameraTransform, delta, drawSprite, resetTransform, rotateTransform, scaleTransform, translateTransform } from "snuggy";
 import { Item, Sprite, Texture, type Type } from "@/consts.ts";
-import { animAngle, animScaleX, animScaleY, animX, animY, hitboxH, hitboxOffsetX, hitboxOffsetY, hitboxW, hitboxX, hitboxY, isFlipped, posX, posY, shadowId, spriteId, staggerTime, type, velX, velY, weaponId } from "@/data.ts";
+import { angle, animAngle, animScaleX, animScaleY, animX, animY, health, healthMax, hitboxH, hitboxOffsetX, hitboxOffsetY, hitboxW, hitboxX, hitboxY, isFlipped, posX, posY, shadow, sprite, staggerTime, type, velX, velY, weapon } from "@/data.ts";
 import { nextEntity } from "@/lib/entities.ts";
 
 export function setupEntity(t: Type, x: number, y: number) {
@@ -28,6 +28,11 @@ export function updateHitbox(id: number) {
 
 export function isHitboxIntersection(a: number, b: number) {
   return hitboxX[a] < hitboxX[b] + hitboxW[b] && hitboxX[a] + hitboxW[a] > hitboxX[b] && hitboxY[a] < hitboxY[b] + hitboxH[b] && hitboxY[a] + hitboxH[a] > hitboxY[b];
+}
+
+export function setHealth(id: number, hp: number) {
+  health[id] = hp;
+  healthMax[id] = hp;
 }
 
 export function move(id: number) {
@@ -61,7 +66,7 @@ export function drawEntity(id: number) {
     scaleTransform(-1, 1);
   }
 
-  switch (shadowId[id]) {
+  switch (shadow[id]) {
     case Sprite.PLAYER_SHADOW:
       drawSprite(Texture.ATLAS, -16, -3, 0, 32, 32, 16);
       break;
@@ -70,23 +75,29 @@ export function drawEntity(id: number) {
       break;
   }
 
+  rotateTransform(angle[id]);
+
   translateTransform(animX[id], animY[id]);
   scaleTransform(animScaleX[id], animScaleY[id]);
   rotateTransform(animAngle[id]);
 
-  switch (weaponId[id]) {
-    case Item.LONGSWORD:
-      drawSprite(Texture.ATLAS, -16, -31, 0, 80, 32, 32);
+  const texture = isStaggered(id) ? Texture.FLASH : Texture.ATLAS;
+
+  switch (weapon[id]) {
+    case Sprite.PLAYER_LONGSWORD:
+      drawSprite(texture, -16, -31, 0, 80, 32, 32);
       break;
   }
 
-  const texture = isStaggered(id) ? Texture.ATLAS_WHITE : Texture.ATLAS;
-  switch (spriteId[id]) {
+  switch (sprite[id]) {
     case Sprite.PLAYER:
       drawSprite(texture, -16, -31, 0, 0, 32, 32);
       break;
     case Sprite.ENEMY_MELEE:
       drawSprite(texture, -16, -31, 32, 0, 32, 32);
+      break;
+    case Sprite.PROJECTILE_LONGSWORD:
+      drawSprite(texture, -16, -16, 0, 112, 32, 32);
       break;
   }
 }

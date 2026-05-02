@@ -1,4 +1,32 @@
-import { active, activeCount, freeCount, index, isDestroyed, MAX_ENTITY_COUNT, popActive, popFree, posY, pushActive, pushFree, pushToAdd, pushToRemove, toAdd, toAddCount, toRemove, toRemoveCount, zeroEntityAt, zeroToAdd, zeroToRemove } from "@/data.ts";
+import { Type } from "@/consts.ts";
+import {
+  active,
+  activeCount,
+  activeIndex,
+  enemies,
+  enemiesCount,
+  enemiesIndex,
+  freeCount,
+  isDestroyed,
+  MAX_ENTITY_COUNT,
+  popActive,
+  popEnemies,
+  popFree,
+  posY,
+  pushActive,
+  pushEnemies,
+  pushFree,
+  pushToAdd,
+  pushToRemove,
+  toAdd,
+  toAddCount,
+  toRemove,
+  toRemoveCount,
+  type,
+  zeroEntityAt,
+  zeroToAdd,
+  zeroToRemove,
+} from "@/data.ts";
 
 export function setupEntities() {
   for (let i = MAX_ENTITY_COUNT - 1; i >= 0; i--) {
@@ -25,8 +53,14 @@ export function destroyEntity(id: number) {
 export function addNewEntities() {
   for (let i = 0; i < toAddCount; i++) {
     const id = toAdd[i];
-    index[id] = activeCount;
+
+    activeIndex[id] = activeCount;
     pushActive(id);
+
+    if (type[id] === Type.ENEMY) {
+      enemiesIndex[id] = enemiesCount;
+      pushEnemies(id);
+    }
   }
   zeroToAdd();
 }
@@ -34,12 +68,20 @@ export function addNewEntities() {
 export function removeDestroyedEntities() {
   for (let i = 0; i < toRemoveCount; i++) {
     const id = toRemove[i];
-    const idx = index[id];
-    const last = active[activeCount - 1];
 
+    const idx = activeIndex[id];
+    const last = active[activeCount - 1];
     active[idx] = last;
-    index[last] = idx;
+    activeIndex[last] = idx;
     popActive();
+
+    if (type[id] === Type.ENEMY) {
+      const idx = enemiesIndex[id];
+      const last = enemies[enemiesCount - 1];
+      enemies[idx] = last;
+      enemiesIndex[last] = idx;
+      popEnemies();
+    }
 
     zeroEntityAt(id);
     pushFree(id);
@@ -54,11 +96,11 @@ export function sortEntities() {
     let j = i - 1;
     while (j >= 0 && posY[active[j]] > posY[id]) {
       active[j + 1] = active[j];
-      index[active[j]] = j + 1;
+      activeIndex[active[j]] = j + 1;
       j--;
     }
 
     active[j + 1] = id;
-    index[id] = j + 1;
+    activeIndex[id] = j + 1;
   }
 }

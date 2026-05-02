@@ -1,24 +1,29 @@
-import { drawRect, isInputPressed, run, setFont, setFontOffset, setInputMap } from "snuggy";
-import { EnemyVariant, Font, Input, Type } from "@/consts.ts";
-import { active, activeCount, isDestroyed, staggerTime, type } from "@/data.ts";
+import { drawRect, isInputPressed, run, setCameraBoundary, setCameraPosition, setCameraSmoothing, setCameraTarget, setFont, setFontOffset, setInputMap, updateCamera } from "snuggy";
+import { Enemy, Font, Input, Type } from "@/consts.ts";
+import { active, activeCount, isDestroyed, lifeTime, posX, posY, staggerTime, type } from "@/data.ts";
 import { setupEnemy, updateEnemy } from "@/entities/enemy.ts";
 import { setupPlayer, updatePlayer } from "@/entities/player.ts";
+import { updateProjectile } from "@/entities/projectile.ts";
 import { drawFramesPerSecond, drawHitboxes } from "@/lib/debug.ts";
-import { addNewEntities, removeDestroyedEntities, setupEntities, sortEntities } from "@/lib/entities.ts";
-import { isStaggered } from "@/lib/entity.ts";
+import { addNewEntities, destroyEntity, removeDestroyedEntities, setupEntities, sortEntities } from "@/lib/entities.ts";
+import { drawEntity, isStaggered } from "@/lib/entity.ts";
 import { loadResources } from "@/lib/resources.ts";
 import { tickTimer } from "@/lib/timer.ts";
 
-const WIDTH = 640;
-const HEIGHT = 360;
+const width = 640;
+const height = 360;
 
 let isDebugging = localStorage.getItem("debug") === "true";
 
 async function setup() {
   await loadResources();
 
-  const x = WIDTH / 2;
-  const y = HEIGHT / 2;
+  const x = width / 2;
+  const y = height / 2;
+
+  setCameraPosition(x, y);
+  setCameraSmoothing(0.1);
+  setCameraBoundary(0, 0, width, height);
 
   setFont(Font.DEFAULT);
   setFontOffset(0.5, -0.5);
@@ -29,14 +34,15 @@ async function setup() {
     KeyA: Input.LEFT,
     KeyD: Input.RIGHT,
     F2: Input.DEBUG,
+    0: Input.ATTACK,
   });
 
   setupEntities();
 
   setupPlayer(x, y);
-  setupEnemy(300, 100, EnemyVariant.MELEE);
-  setupEnemy(350, 100, EnemyVariant.MELEE);
-  setupEnemy(350, 150, EnemyVariant.MELEE);
+  setupEnemy(300, 100, Enemy.MELEE);
+  setupEnemy(350, 100, Enemy.MELEE);
+  setupEnemy(350, 150, Enemy.MELEE);
 }
 
 function update() {
@@ -44,10 +50,14 @@ function update() {
   addNewEntities();
   sortEntities();
 
-  drawRect(0, 0, 2000, 2000, "slategrey", true);
+  drawRect(0, 0, width, height, "slategrey", true);
 
   for (let i = 0; i < activeCount; i++) {
     const id = active[i];
+
+    if (tickTimer(lifeTime, id)) {
+      destroyEntity(id);
+    }
 
     if (isDestroyed[id]) {
       continue;
@@ -55,19 +65,25 @@ function update() {
 
     tickTimer(staggerTime, id);
 
-    if (isStaggered(id)) {
-      continue;
+    if (!isStaggered(id)) {
+      switch (type[id]) {
+        case Type.PLAYER:
+          updatePlayer(id);
+          setCameraTarget(posX[id], posY[id]);
+          break;
+        case Type.ENEMY:
+          updateEnemy(id);
+          break;
+        case Type.PROJECTILE:
+          updateProjectile(id);
+          break;
+      }
     }
 
-    switch (type[id]) {
-      case Type.PLAYER:
-        updatePlayer(id);
-        break;
-      case Type.ENEMY:
-        updateEnemy(id);
-        break;
-    }
+    drawEntity(id);
   }
+
+  updateCamera();
 
   if (isInputPressed(Input.DEBUG)) {
     isDebugging = !isDebugging;
@@ -76,8 +92,9 @@ function update() {
 
   if (isDebugging) {
     drawHitboxes();
-    drawFramesPerSecond();
   }
+
+  drawFramesPerSecond();
 }
 
-run(WIDTH, HEIGHT, setup, update);
+run(640, 360, setup, update);

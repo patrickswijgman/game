@@ -12,7 +12,7 @@ export async function loadResources() {
     // Sounds
   ]);
 
-  loadRenderTexture(Texture.ATLAS_WHITE, 256, 256, (ctx) => {
+  loadRenderTexture(Texture.FLASH, 256, 256, (ctx) => {
     ctx.drawImage(getTexture(Texture.ATLAS), 0, 0);
     ctx.globalCompositeOperation = "source-in";
     ctx.fillStyle = "white";

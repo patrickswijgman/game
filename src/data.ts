@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 5/1/2026, 6:00:24 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 5/2/2026, 9:45:23 AM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -10,6 +10,12 @@
 
 export const active = new Uint16Array(10_000)
 export let activeCount = 0
+export const activeIndex = new Uint16Array(10_000)
+export let activeIndexCount = 0
+export const enemies = new Uint16Array(10_000)
+export let enemiesCount = 0
+export const enemiesIndex = new Uint16Array(10_000)
+export let enemiesIndexCount = 0
 export const free = new Uint16Array(10_000)
 export let freeCount = 0
 export const toAdd = new Uint16Array(10_000)
@@ -26,6 +32,21 @@ export function setPlayerId(v: number) {
 /** Push a value onto the active field within the game group. */
 export function pushActive(v: number) {
   active[activeCount++] = v
+}
+
+/** Push a value onto the activeIndex field within the game group. */
+export function pushActiveIndex(v: number) {
+  activeIndex[activeIndexCount++] = v
+}
+
+/** Push a value onto the enemies field within the game group. */
+export function pushEnemies(v: number) {
+  enemies[enemiesCount++] = v
+}
+
+/** Push a value onto the enemiesIndex field within the game group. */
+export function pushEnemiesIndex(v: number) {
+  enemiesIndex[enemiesIndexCount++] = v
 }
 
 /** Push a value onto the free field within the game group. */
@@ -48,6 +69,21 @@ export function popActive() {
   return active[--activeCount]
 }
 
+/** Pop a value from the activeIndex field within the game group. */
+export function popActiveIndex() {
+  return activeIndex[--activeIndexCount]
+}
+
+/** Pop a value from the enemies field within the game group. */
+export function popEnemies() {
+  return enemies[--enemiesCount]
+}
+
+/** Pop a value from the enemiesIndex field within the game group. */
+export function popEnemiesIndex() {
+  return enemiesIndex[--enemiesIndexCount]
+}
+
 /** Pop a value from the free field within the game group. */
 export function popFree() {
   return free[--freeCount]
@@ -66,6 +102,21 @@ export function popToRemove() {
 /** Zero the active field within the game group. */
 export function zeroActive() {
   activeCount = 0
+}
+
+/** Zero the activeIndex field within the game group. */
+export function zeroActiveIndex() {
+  activeIndexCount = 0
+}
+
+/** Zero the enemies field within the game group. */
+export function zeroEnemies() {
+  enemiesCount = 0
+}
+
+/** Zero the enemiesIndex field within the game group. */
+export function zeroEnemiesIndex() {
+  enemiesIndexCount = 0
 }
 
 /** Zero the free field within the game group. */
@@ -91,6 +142,9 @@ export function zeroPlayerId() {
 /** Zero all fields within the game group. */
 export function zeroGame() {
   activeCount = 0
+  activeIndexCount = 0
+  enemiesCount = 0
+  enemiesIndexCount = 0
   freeCount = 0
   toAddCount = 0
   toRemoveCount = 0
@@ -105,11 +159,8 @@ export function zeroGame() {
 
 export const MAX_ENTITY_COUNT = 10_000
 
-export const index = new Uint16Array(10_000)
 export const type = new Uint8Array(10_000)
 export const variant = new Uint8Array(10_000)
-export const shadowId = new Uint8Array(10_000)
-export const spriteId = new Uint8Array(10_000)
 export const posX = new Float32Array(10_000)
 export const posY = new Float32Array(10_000)
 export const velX = new Float32Array(10_000)
@@ -127,21 +178,25 @@ export const animY = new Float32Array(10_000)
 export const animScaleX = new Float32Array(10_000)
 export const animScaleY = new Float32Array(10_000)
 export const animAngle = new Float32Array(10_000)
+export const shadow = new Uint8Array(10_000)
+export const sprite = new Uint8Array(10_000)
+export const weapon = new Uint8Array(10_000)
+export const angle = new Float32Array(10_000)
 export const health = new Uint16Array(10_000)
 export const healthMax = new Uint16Array(10_000)
 export const damage = new Uint16Array(10_000)
-export const weaponId = new Uint8Array(10_000)
+export const range = new Uint16Array(10_000)
+export const projectile = new Uint8Array(10_000)
+export const caster = new Uint8Array(10_000)
+export const lifeTime = new Float32Array(10_000)
 export const staggerTime = new Float32Array(10_000)
 export const isDestroyed = new Uint8Array(10_000)
 export const isFlipped = new Uint8Array(10_000)
 
 /** Zero an index within the entity structure of arrays. */
 export function zeroEntityAt(i: number) {
-  index[i] = 0
   type[i] = 0
   variant[i] = 0
-  shadowId[i] = 0
-  spriteId[i] = 0
   posX[i] = 0
   posY[i] = 0
   velX[i] = 0
@@ -159,18 +214,20 @@ export function zeroEntityAt(i: number) {
   animScaleX[i] = 0
   animScaleY[i] = 0
   animAngle[i] = 0
+  shadow[i] = 0
+  sprite[i] = 0
+  weapon[i] = 0
+  angle[i] = 0
   health[i] = 0
   healthMax[i] = 0
   damage[i] = 0
-  weaponId[i] = 0
+  range[i] = 0
+  projectile[i] = 0
+  caster[i] = 0
+  lifeTime[i] = 0
   staggerTime[i] = 0
   isDestroyed[i] = 0
   isFlipped[i] = 0
-}
-
-/** Zero the index field within the entity structure of arrays. */
-export function zeroIndex() {
-  index.fill(0)
 }
 
 /** Zero the type field within the entity structure of arrays. */
@@ -181,16 +238,6 @@ export function zeroType() {
 /** Zero the variant field within the entity structure of arrays. */
 export function zeroVariant() {
   variant.fill(0)
-}
-
-/** Zero the shadowId field within the entity structure of arrays. */
-export function zeroShadowId() {
-  shadowId.fill(0)
-}
-
-/** Zero the spriteId field within the entity structure of arrays. */
-export function zeroSpriteId() {
-  spriteId.fill(0)
 }
 
 /** Zero the posX field within the entity structure of arrays. */
@@ -278,6 +325,26 @@ export function zeroAnimAngle() {
   animAngle.fill(0)
 }
 
+/** Zero the shadow field within the entity structure of arrays. */
+export function zeroShadow() {
+  shadow.fill(0)
+}
+
+/** Zero the sprite field within the entity structure of arrays. */
+export function zeroSprite() {
+  sprite.fill(0)
+}
+
+/** Zero the weapon field within the entity structure of arrays. */
+export function zeroWeapon() {
+  weapon.fill(0)
+}
+
+/** Zero the angle field within the entity structure of arrays. */
+export function zeroAngle() {
+  angle.fill(0)
+}
+
 /** Zero the health field within the entity structure of arrays. */
 export function zeroHealth() {
   health.fill(0)
@@ -293,9 +360,24 @@ export function zeroDamage() {
   damage.fill(0)
 }
 
-/** Zero the weaponId field within the entity structure of arrays. */
-export function zeroWeaponId() {
-  weaponId.fill(0)
+/** Zero the range field within the entity structure of arrays. */
+export function zeroRange() {
+  range.fill(0)
+}
+
+/** Zero the projectile field within the entity structure of arrays. */
+export function zeroProjectile() {
+  projectile.fill(0)
+}
+
+/** Zero the caster field within the entity structure of arrays. */
+export function zeroCaster() {
+  caster.fill(0)
+}
+
+/** Zero the lifeTime field within the entity structure of arrays. */
+export function zeroLifeTime() {
+  lifeTime.fill(0)
 }
 
 /** Zero the staggerTime field within the entity structure of arrays. */
@@ -315,11 +397,8 @@ export function zeroIsFlipped() {
 
 /** Zero all fields within the entity structure of arrays. */
 export function zeroEntity() {
-  index.fill(0)
   type.fill(0)
   variant.fill(0)
-  shadowId.fill(0)
-  spriteId.fill(0)
   posX.fill(0)
   posY.fill(0)
   velX.fill(0)
@@ -337,10 +416,17 @@ export function zeroEntity() {
   animScaleX.fill(0)
   animScaleY.fill(0)
   animAngle.fill(0)
+  shadow.fill(0)
+  sprite.fill(0)
+  weapon.fill(0)
+  angle.fill(0)
   health.fill(0)
   healthMax.fill(0)
   damage.fill(0)
-  weaponId.fill(0)
+  range.fill(0)
+  projectile.fill(0)
+  caster.fill(0)
+  lifeTime.fill(0)
   staggerTime.fill(0)
   isDestroyed.fill(0)
   isFlipped.fill(0)

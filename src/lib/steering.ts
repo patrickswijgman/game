@@ -1,5 +1,5 @@
 import { getDistance } from "snuggy";
-import { active, activeCount, posX, posY, radius, speed, velX, velY } from "@/data.ts";
+import { enemies, enemiesCount, posX, posY, radius, range, speed, velX, velY } from "@/data.ts";
 
 export function seek(id: number, x: number, y: number) {
   const sx = x - posX[id];
@@ -12,17 +12,30 @@ export function seek(id: number, x: number, y: number) {
   }
 }
 
+export function halt(id: number, x: number, y: number) {
+  const dx = x - posX[id];
+  const dy = y - posY[id];
+  const d = getDistance(0, 0, dx, dy);
+
+  if (d < range[id]) {
+    velX[id] = 0;
+    velY[id] = 0;
+  }
+}
+
 export function separate(id: number) {
   let sx = 0;
   let sy = 0;
 
-  for (let i = 0; i < activeCount; i++) {
-    const other = active[i];
+  for (let i = 0; i < enemiesCount; i++) {
+    const otherId = enemies[i];
 
-    if (other === id) continue;
+    if (otherId === id) {
+      continue;
+    }
 
-    const dx = posX[id] - posX[other];
-    const dy = posY[id] - posY[other];
+    const dx = posX[id] - posX[otherId];
+    const dy = posY[id] - posY[otherId];
     const d = getDistance(0, 0, dx, dy);
     const r = radius[id];
 
@@ -33,7 +46,12 @@ export function separate(id: number) {
     }
   }
 
-  const strength = speed[id] * 2;
-  velX[id] += sx * strength;
-  velY[id] += sy * strength;
+  const s = getDistance(0, 0, sx, sy);
+  if (s > speed[id]) {
+    sx /= s * speed[id];
+    sy /= s * speed[id];
+  }
+
+  velX[id] += sx;
+  velY[id] += sy;
 }

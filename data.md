@@ -1,6 +1,9 @@
 # game group
 
 - active array uint16 10_000
+- activeIndex array uint16 10_000
+- enemies array uint16 10_000
+- enemiesIndex array uint16 10_000
 - free array uint16 10_000
 - toAdd array uint16 10_000
 - toRemove array uint16 10_000
@@ -8,12 +11,8 @@
 
 # entity soa 10_000
 
-- index uint16
 - type uint8
 - variant uint8
-<!-- render -->
-- shadowId uint8
-- spriteId uint8
 <!-- physics -->
 - posX float32
 - posY float32
@@ -33,13 +32,22 @@
 - animScaleX float32
 - animScaleY float32
 - animAngle float32
+<!-- render -->
+- shadow uint8
+- sprite uint8
+- weapon uint8
+- angle float32
 <!-- stats -->
 - health uint16
 - healthMax uint16
 - damage uint16
-<!-- equipment -->
-- weaponId uint8
-<!-- (state) timers -->
+- range uint16
+<!-- attack -->
+- projectile uint8
+<!-- references -->
+- caster uint8
+<!-- timers -->
+- lifeTime float32
 - staggerTime float32
 <!-- flags -->
 - isDestroyed uint8
