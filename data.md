@@ -46,13 +46,13 @@
 - healthMax uint16
 - damage uint16
 - range uint16
+- cooldown uint16
 <!-- combat -->
 - projectile uint8
 - caster uint8
 - serial uint32
 - lastHitBy uint16
 - staggerTime float32
-- cooldown uint16
 - cooldownTime float32
 <!-- health bar -->
 - healthDeplete float32

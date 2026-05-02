@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 5/2/2026, 2:58:42 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 5/2/2026, 3:08:34 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -201,12 +201,12 @@ export const health = new Uint16Array(2000)
 export const healthMax = new Uint16Array(2000)
 export const damage = new Uint16Array(2000)
 export const range = new Uint16Array(2000)
+export const cooldown = new Uint16Array(2000)
 export const projectile = new Uint8Array(2000)
 export const caster = new Uint8Array(2000)
 export const serial = new Uint32Array(2000)
 export const lastHitBy = new Uint16Array(2000)
 export const staggerTime = new Float32Array(2000)
-export const cooldown = new Uint16Array(2000)
 export const cooldownTime = new Float32Array(2000)
 export const healthDeplete = new Float32Array(2000)
 export const healthDepleteTime = new Float32Array(2000)
@@ -246,12 +246,12 @@ export function zeroEntityAt(i: number) {
   healthMax[i] = 0
   damage[i] = 0
   range[i] = 0
+  cooldown[i] = 0
   projectile[i] = 0
   caster[i] = 0
   serial[i] = 0
   lastHitBy[i] = 0
   staggerTime[i] = 0
-  cooldown[i] = 0
   cooldownTime[i] = 0
   healthDeplete[i] = 0
   healthDepleteTime[i] = 0
@@ -292,12 +292,12 @@ export function zeroEntity() {
   healthMax.fill(0)
   damage.fill(0)
   range.fill(0)
+  cooldown.fill(0)
   projectile.fill(0)
   caster.fill(0)
   serial.fill(0)
   lastHitBy.fill(0)
   staggerTime.fill(0)
-  cooldown.fill(0)
   cooldownTime.fill(0)
   healthDeplete.fill(0)
   healthDepleteTime.fill(0)
@@ -339,12 +339,12 @@ export function printEntityAt(i: number) {
     healthMax: healthMax[i],
     damage: damage[i],
     range: range[i],
+    cooldown: cooldown[i],
     projectile: projectile[i],
     caster: caster[i],
     serial: serial[i],
     lastHitBy: lastHitBy[i],
     staggerTime: staggerTime[i],
-    cooldown: cooldown[i],
     cooldownTime: cooldownTime[i],
     healthDeplete: healthDeplete[i],
     healthDepleteTime: healthDepleteTime[i],
