@@ -83,12 +83,7 @@ export function drawEntity(id: number) {
   scaleTransform(animScaleX[id], animScaleY[id]);
   rotateTransform(animAngle[id]);
 
-  let texture = Texture.ATLAS;
-  if (staggerTime[id] > 0) {
-    texture = Texture.FLASH;
-  } else if (type[caster[id]] === Type.ENEMY) {
-    texture = Texture.DANGER;
-  }
+  const texture = getTexture(id);
 
   switch (weapon[id]) {
     case Sprite.PLAYER_LONGSWORD:
@@ -107,6 +102,16 @@ export function drawEntity(id: number) {
       drawSprite(texture, -16, -16, 0, 112, 32, 32);
       break;
   }
+}
+
+function getTexture(id: number) {
+  if (staggerTime[id] > 0) {
+    return Texture.FLASH;
+  }
+  if (type[caster[id]] === Type.ENEMY) {
+    return Texture.DANGER;
+  }
+  return Texture.ATLAS;
 }
 
 export function updateHealthBar(id: number) {
