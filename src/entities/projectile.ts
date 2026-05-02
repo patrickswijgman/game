@@ -1,6 +1,6 @@
 import { getAngle } from "snuggy";
 import { Projectile, Sprite, Type } from "@/consts.ts";
-import { angle, caster, damage, depth, enemies, enemiesCount, health, healthDepleteTime, hitboxW, immuneTime, lastHitBy, lifeTime, playerId, posX, posY, serial, serialCount, setSerialCount, speed, sprite, staggerTime, targetX, targetY, type, variant, velX, velY } from "@/data.ts";
+import { angle, caster, damage, depth, enemies, enemiesCount, health, healthDepleteTime, hitboxH, hitboxW, immuneTime, lastHitBy, lifeTime, playerId, posX, posY, serial, serialCount, setSerialCount, speed, sprite, staggerTime, targetX, targetY, type, variant, velX, velY } from "@/data.ts";
 import { destroyEntity } from "@/lib/entities.ts";
 import { isHitboxIntersection, move, orbit, setHitbox, setupEntity } from "@/lib/entity.ts";
 import { seek } from "@/lib/steering.ts";
@@ -8,7 +8,6 @@ import { seek } from "@/lib/steering.ts";
 export function setupProjectile(projectileVariant: Projectile, casterId: number) {
   const casterOffsetX = 0;
   const casterOffsetY = -5;
-  const centerOffset = hitboxW[casterId];
   const casterX = posX[casterId] + casterOffsetX;
   const casterY = posY[casterId] + casterOffsetY;
 
@@ -33,9 +32,10 @@ export function setupProjectile(projectileVariant: Projectile, casterId: number)
 
   const x = targetX[casterId];
   const y = targetY[casterId];
+  const o = (hitboxW[casterId] + hitboxH[casterId]) / 2;
 
   seek(id, x, y);
-  orbit(id, casterX, casterY, x, y, centerOffset);
+  orbit(id, casterX, casterY, x, y, o);
   angle[id] = getAngle(0, 0, velX[id], velY[id]);
 
   return id;
@@ -48,6 +48,7 @@ export function updateProjectile(id: number) {
 
 function hit(id: number) {
   const casterId = caster[id];
+
   if (type[casterId] === Type.PLAYER) {
     for (let i = 0; i < enemiesCount; i++) {
       const enemyId = enemies[i];
