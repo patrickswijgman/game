@@ -9,7 +9,7 @@
   "formatter": {
     "indentStyle": "space",
     "lineWidth": 320,
-    "includes": ["**", "!**/src/data.ts"]
+    "includes": ["**", "!**/src/data.ts", "!**/.claude/**/*"]
   },
   "linter": {
     "rules": {

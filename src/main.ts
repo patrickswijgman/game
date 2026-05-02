@@ -1,12 +1,12 @@
-import { drawRect, isInputPressed, run, setCameraBoundary, setCameraPosition, setCameraSmoothing, setCameraTarget, setFont, setFontOffset, setInputMap, updateCamera } from "snuggy";
+import { delta, drawRect, isInputPressed, run, setCameraBoundary, setCameraPosition, setCameraSmoothing, setCameraTarget, setFont, setFontOffset, setInputMap, updateCamera } from "snuggy";
 import { Enemy, Font, Input, Type } from "@/consts.ts";
-import { active, activeCount, isDestroyed, lifeTime, posX, posY, staggerTime, type } from "@/data.ts";
+import { active, activeCount, cooldownTime, health, healthDeplete, healthDepleteTime, isDestroyed, lifeTime, posX, posY, staggerTime, type } from "@/data.ts";
 import { setupEnemy, updateEnemy } from "@/entities/enemy.ts";
 import { setupPlayer, updatePlayer } from "@/entities/player.ts";
 import { updateProjectile } from "@/entities/projectile.ts";
 import { drawFramesPerSecond, drawHitboxes } from "@/lib/debug.ts";
 import { addNewEntities, destroyEntity, removeDestroyedEntities, setupEntities, sortEntities } from "@/lib/entities.ts";
-import { drawEntity, isStaggered } from "@/lib/entity.ts";
+import { drawEntity, drawHealthBar, isStaggered, updateHealthBar } from "@/lib/entity.ts";
 import { loadResources } from "@/lib/resources.ts";
 import { tickTimer } from "@/lib/timer.ts";
 
@@ -64,6 +64,8 @@ function update() {
     }
 
     tickTimer(staggerTime, id);
+    tickTimer(cooldownTime, id);
+    tickTimer(healthDepleteTime, id);
 
     if (!isStaggered(id)) {
       switch (type[id]) {
@@ -81,6 +83,11 @@ function update() {
     }
 
     drawEntity(id);
+
+    if (type[id] === Type.ENEMY) {
+      updateHealthBar(id);
+      drawHealthBar(id);
+    }
   }
 
   updateCamera();

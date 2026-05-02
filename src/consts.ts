@@ -47,3 +47,9 @@ export const enum Item {
   NONE,
   LONGSWORD,
 }
+
+export const enum Color {
+  BORDER = "#1e1e1e",
+  HEALTH = "red",
+  DEPLETE = "white",
+}

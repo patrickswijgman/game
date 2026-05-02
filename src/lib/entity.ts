@@ -1,6 +1,6 @@
-import { addCameraTransform, delta, drawSprite, resetTransform, rotateTransform, scaleTransform, translateTransform } from "snuggy";
-import { Item, Sprite, Texture, type Type } from "@/consts.ts";
-import { angle, animAngle, animScaleX, animScaleY, animX, animY, health, healthMax, hitboxH, hitboxOffsetX, hitboxOffsetY, hitboxW, hitboxX, hitboxY, isFlipped, posX, posY, shadow, sprite, staggerTime, type, velX, velY, weapon } from "@/data.ts";
+import { addCameraTransform, delta, drawRect, drawSprite, resetTransform, rotateTransform, scaleTransform, translateTransform } from "snuggy";
+import { Color, Sprite, Texture, type Type } from "@/consts.ts";
+import { angle, animAngle, animScaleX, animScaleY, animX, animY, cooldownTime, health, healthDeplete, healthDepleteTime, healthMax, hitboxH, hitboxOffsetX, hitboxOffsetY, hitboxW, hitboxX, hitboxY, isFlipped, posX, posY, shadow, sprite, staggerTime, type, velX, velY, weapon } from "@/data.ts";
 import { nextEntity } from "@/lib/entities.ts";
 
 export function setupEntity(t: Type, x: number, y: number) {
@@ -33,6 +33,7 @@ export function isHitboxIntersection(a: number, b: number) {
 export function setHealth(id: number, hp: number) {
   health[id] = hp;
   healthMax[id] = hp;
+  healthDeplete[id] = hp;
 }
 
 export function move(id: number) {
@@ -47,6 +48,10 @@ export function isMoving(id: number) {
 
 export function isStaggered(id: number) {
   return staggerTime[id] > 0;
+}
+
+export function isOnCooldown(id: number) {
+  return cooldownTime[id] > 0;
 }
 
 export function resetAnimation(id: number) {
@@ -100,4 +105,31 @@ export function drawEntity(id: number) {
       drawSprite(texture, -16, -16, 0, 112, 32, 32);
       break;
   }
+}
+
+export function updateHealthBar(id: number) {
+  if (healthDepleteTime[id] === 0) {
+    healthDeplete[id] = Math.max(health[id], healthDeplete[id] - (healthDeplete[id] / health[id]) * 2 * delta);
+  }
+}
+
+export function drawHealthBar(id: number) {
+  if (health[id] === healthMax[id]) {
+    return;
+  }
+
+  const width = hitboxW[id];
+  const height = 2;
+  const hp = (health[id] / healthMax[id]) * width;
+  const hd = (healthDeplete[id] / healthMax[id]) * width;
+  const x = posX[id] + -width / 2;
+  const y = posY[id] - hitboxH[id] - 5;
+
+  resetTransform();
+  translateTransform(x, y);
+  addCameraTransform();
+
+  drawRect(-1, -1, width + 2, height + 2, Color.BORDER, true);
+  drawRect(0, 0, hd, height, Color.DEPLETE, true);
+  drawRect(0, 0, hp, height, Color.HEALTH, true);
 }

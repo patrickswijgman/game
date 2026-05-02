@@ -8,6 +8,7 @@
 - toAdd array uint16 10_000
 - toRemove array uint16 10_000
 - playerId number
+- serialCount number
 
 # entity soa 10_000
 
@@ -42,13 +43,19 @@
 - healthMax uint16
 - damage uint16
 - range uint16
-<!-- attack -->
+<!-- combat -->
 - projectile uint8
-<!-- references -->
 - caster uint8
+- serial uint32
+- lastHitBy uint16
+- staggerTime float32
+- cooldown uint16
+- cooldownTime float32
+<!-- health bar -->
+- healthDeplete float32
+- healthDepleteTime float32
 <!-- timers -->
 - lifeTime float32
-- staggerTime float32
 <!-- flags -->
 - isDestroyed uint8
 - isFlipped uint8

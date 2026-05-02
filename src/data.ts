@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 5/2/2026, 9:45:23 AM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 5/2/2026, 11:11:54 AM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -23,10 +23,16 @@ export let toAddCount = 0
 export const toRemove = new Uint16Array(10_000)
 export let toRemoveCount = 0
 export let playerId = 0
+export let serialCount = 0
 
 /** Set the value of the playerId field within the game group. */
 export function setPlayerId(v: number) {
   playerId = v
+}
+
+/** Set the value of the serialCount field within the game group. */
+export function setSerialCount(v: number) {
+  serialCount = v
 }
 
 /** Push a value onto the active field within the game group. */
@@ -139,6 +145,11 @@ export function zeroPlayerId() {
   playerId = 0
 }
 
+/** Zero the serialCount field within the game group. */
+export function zeroSerialCount() {
+  serialCount = 0
+}
+
 /** Zero all fields within the game group. */
 export function zeroGame() {
   activeCount = 0
@@ -149,6 +160,7 @@ export function zeroGame() {
   toAddCount = 0
   toRemoveCount = 0
   playerId = 0
+  serialCount = 0
 }
 
 /*
@@ -188,8 +200,14 @@ export const damage = new Uint16Array(10_000)
 export const range = new Uint16Array(10_000)
 export const projectile = new Uint8Array(10_000)
 export const caster = new Uint8Array(10_000)
-export const lifeTime = new Float32Array(10_000)
+export const serial = new Uint32Array(10_000)
+export const lastHitBy = new Uint16Array(10_000)
 export const staggerTime = new Float32Array(10_000)
+export const cooldown = new Uint16Array(10_000)
+export const cooldownTime = new Float32Array(10_000)
+export const healthDeplete = new Float32Array(10_000)
+export const healthDepleteTime = new Float32Array(10_000)
+export const lifeTime = new Float32Array(10_000)
 export const isDestroyed = new Uint8Array(10_000)
 export const isFlipped = new Uint8Array(10_000)
 
@@ -224,8 +242,14 @@ export function zeroEntityAt(i: number) {
   range[i] = 0
   projectile[i] = 0
   caster[i] = 0
-  lifeTime[i] = 0
+  serial[i] = 0
+  lastHitBy[i] = 0
   staggerTime[i] = 0
+  cooldown[i] = 0
+  cooldownTime[i] = 0
+  healthDeplete[i] = 0
+  healthDepleteTime[i] = 0
+  lifeTime[i] = 0
   isDestroyed[i] = 0
   isFlipped[i] = 0
 }
@@ -375,14 +399,44 @@ export function zeroCaster() {
   caster.fill(0)
 }
 
-/** Zero the lifeTime field within the entity structure of arrays. */
-export function zeroLifeTime() {
-  lifeTime.fill(0)
+/** Zero the serial field within the entity structure of arrays. */
+export function zeroSerial() {
+  serial.fill(0)
+}
+
+/** Zero the lastHitBy field within the entity structure of arrays. */
+export function zeroLastHitBy() {
+  lastHitBy.fill(0)
 }
 
 /** Zero the staggerTime field within the entity structure of arrays. */
 export function zeroStaggerTime() {
   staggerTime.fill(0)
+}
+
+/** Zero the cooldown field within the entity structure of arrays. */
+export function zeroCooldown() {
+  cooldown.fill(0)
+}
+
+/** Zero the cooldownTime field within the entity structure of arrays. */
+export function zeroCooldownTime() {
+  cooldownTime.fill(0)
+}
+
+/** Zero the healthDeplete field within the entity structure of arrays. */
+export function zeroHealthDeplete() {
+  healthDeplete.fill(0)
+}
+
+/** Zero the healthDepleteTime field within the entity structure of arrays. */
+export function zeroHealthDepleteTime() {
+  healthDepleteTime.fill(0)
+}
+
+/** Zero the lifeTime field within the entity structure of arrays. */
+export function zeroLifeTime() {
+  lifeTime.fill(0)
 }
 
 /** Zero the isDestroyed field within the entity structure of arrays. */
@@ -426,8 +480,14 @@ export function zeroEntity() {
   range.fill(0)
   projectile.fill(0)
   caster.fill(0)
-  lifeTime.fill(0)
+  serial.fill(0)
+  lastHitBy.fill(0)
   staggerTime.fill(0)
+  cooldown.fill(0)
+  cooldownTime.fill(0)
+  healthDeplete.fill(0)
+  healthDepleteTime.fill(0)
+  lifeTime.fill(0)
   isDestroyed.fill(0)
   isFlipped.fill(0)
 }
