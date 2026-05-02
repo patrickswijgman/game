@@ -1,16 +1,16 @@
-# game group
+# game
 
-- active array uint16 10_000
-- activeIndex array uint16 10_000
-- enemies array uint16 10_000
-- enemiesIndex array uint16 10_000
-- free array uint16 10_000
-- toAdd array uint16 10_000
-- toRemove array uint16 10_000
-- playerId number
-- serialCount number
+- active uint16 2000
+- activeIndex uint16 2000
+- enemies uint16 2000
+- enemiesIndex uint16 2000
+- free uint16 2000
+- toAdd uint16 2000
+- toRemove uint16 2000
+- playerId
+- serialCount
 
-# entity soa 10_000
+# entity 2000
 
 - type uint8
 - variant uint8

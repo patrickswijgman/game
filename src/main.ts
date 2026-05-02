@@ -1,6 +1,6 @@
 import { drawRect, getRandomNumber, isInputPressed, run, setCameraBoundary, setCameraPosition, setCameraSmoothing, setCameraTarget, setFont, setFontOffset, setInputMap, updateCamera } from "snuggy";
-import { Enemy, Font, Input, Type } from "@/consts.ts";
-import { active, activeCount, cooldownTime, healthDepleteTime, isDestroyed, lifeTime, posX, posY, staggerTime, type } from "@/data.ts";
+import { Enemy, Font, Input, MAX_ENEMY_COUNT, Type } from "@/consts.ts";
+import { active, activeCount, cooldownTime, enemiesCount, healthDepleteTime, isDestroyed, lifeTime, posX, posY, staggerTime, type } from "@/data.ts";
 import { setupEnemy, updateEnemy } from "@/entities/enemy.ts";
 import { setupPlayer, updatePlayer } from "@/entities/player.ts";
 import { updateProjectile } from "@/entities/projectile.ts";
@@ -8,11 +8,11 @@ import { drawFramesPerSecond, drawHitboxes } from "@/lib/debug.ts";
 import { addNewEntities, destroyEntity, removeDestroyedEntities, setupEntities, sortEntities } from "@/lib/entities.ts";
 import { drawEntity, drawHealthBar, isStaggered, updateHealthBar } from "@/lib/entity.ts";
 import { loadResources } from "@/lib/resources.ts";
-import { tickTimer } from "@/lib/timer.ts";
 import { separateEnemies } from "@/lib/steering.ts";
+import { tickTimer } from "@/lib/timer.ts";
 
-const width = 640;
-const height = 360;
+const width = 2000;
+const height = 2000;
 
 let isDebugging = localStorage.getItem("debug") === "true";
 
@@ -43,7 +43,9 @@ async function setup() {
   setupPlayer(x, y);
 
   for (let i = 0; i < 1000; i++) {
-    setupEnemy(getRandomNumber(0, width), getRandomNumber(0, height), Enemy.MELEE);
+    if (enemiesCount < MAX_ENEMY_COUNT) {
+      setupEnemy(getRandomNumber(0, width), getRandomNumber(0, height), Enemy.MELEE);
+    }
   }
 }
 

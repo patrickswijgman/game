@@ -1,3 +1,5 @@
+export const MAX_ENEMY_COUNT = 1000;
+
 export const enum Texture {
   ATLAS,
   FLASH,

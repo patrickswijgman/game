@@ -6,8 +6,8 @@ export function animateBreathe(id: number) {
   resetAnimation(id);
   const d = 2000;
   const t = (elapsed % d) / d;
-  animScaleX[id] = 1 + 0.1 * ease(t);
-  animScaleY[id] = 1 + 0.1 * ease(t);
+  animScaleX[id] = 1 + 0.05 * ease(t);
+  animScaleY[id] = 1 + 0.05 * ease(t);
 }
 
 export function animateWalk(id: number) {
