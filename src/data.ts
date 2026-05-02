@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 5/2/2026, 2:26:56 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 5/2/2026, 2:36:07 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -192,8 +192,8 @@ export const animY = new Float32Array(2000)
 export const animScaleX = new Float32Array(2000)
 export const animScaleY = new Float32Array(2000)
 export const animAngle = new Float32Array(2000)
-export const shadow = new Uint8Array(2000)
 export const sprite = new Uint8Array(2000)
+export const shadow = new Uint8Array(2000)
 export const weapon = new Uint8Array(2000)
 export const angle = new Float32Array(2000)
 export const depth = new Uint16Array(2000)
@@ -237,8 +237,8 @@ export function zeroEntityAt(i: number) {
   animScaleX[i] = 0
   animScaleY[i] = 0
   animAngle[i] = 0
-  shadow[i] = 0
   sprite[i] = 0
+  shadow[i] = 0
   weapon[i] = 0
   angle[i] = 0
   depth[i] = 0
@@ -283,8 +283,8 @@ export function zeroEntity() {
   animScaleX.fill(0)
   animScaleY.fill(0)
   animAngle.fill(0)
-  shadow.fill(0)
   sprite.fill(0)
+  shadow.fill(0)
   weapon.fill(0)
   angle.fill(0)
   depth.fill(0)

@@ -42,10 +42,8 @@ async function setup() {
 
   setupPlayer(x, y);
 
-  for (let i = 0; i < 1000; i++) {
-    if (enemiesCount < MAX_ENEMY_COUNT) {
-      setupEnemy(getRandomNumber(0, width), getRandomNumber(0, height), Enemy.MELEE);
-    }
+  for (let i = 0; i < MAX_ENEMY_COUNT; i++) {
+    setupEnemy(getRandomNumber(0, width), getRandomNumber(0, height), Enemy.MELEE);
   }
 }
 

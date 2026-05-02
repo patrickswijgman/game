@@ -36,8 +36,8 @@
 - animScaleY float32
 - animAngle float32
 <!-- render -->
-- shadow uint8
 - sprite uint8
+- shadow uint8
 - weapon uint8
 - angle float32
 - depth uint16
