@@ -1,6 +1,6 @@
 import { drawRect, getRandomNumber, isInputPressed, run, setCameraBoundary, setCameraPosition, setCameraSmoothing, setCameraTarget, setFont, setFontOffset, setInputMap, updateCamera } from "snuggy";
 import { Enemy, Font, Input, MAX_ENEMY_COUNT, Type } from "@/consts.ts";
-import { active, activeCount, cooldownTime, enemiesCount, healthDepleteTime, isDestroyed, lifeTime, posX, posY, staggerTime, type } from "@/data.ts";
+import { active, activeCount, cooldownTime, enemiesCount, healthDepleteTime, isDestroyed, lifeTime, playerId, posX, posY, printEntityAt, staggerTime, type } from "@/data.ts";
 import { setupEnemy, updateEnemy } from "@/entities/enemy.ts";
 import { setupPlayer, updatePlayer } from "@/entities/player.ts";
 import { updateProjectile } from "@/entities/projectile.ts";
@@ -41,6 +41,8 @@ async function setup() {
   setupEntities();
 
   setupPlayer(x, y);
+
+  printEntityAt(playerId);
 
   for (let i = 0; i < MAX_ENEMY_COUNT; i++) {
     setupEnemy(getRandomNumber(0, width), getRandomNumber(0, height), Enemy.MELEE);

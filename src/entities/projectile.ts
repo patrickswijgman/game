@@ -12,7 +12,7 @@ export function setupProjectile(projectileVariant: Projectile, casterId: number)
   const casterOffsetY = -5;
   const targetOffsetX = 0;
   const targetOffsetY = isPlayer ? 0 : -5;
-  const rangeOffset = hitboxW[casterId] + 2;
+  const centerOffset = hitboxW[casterId] + 2;
   const casterX = posX[casterId] + casterOffsetX;
   const casterY = posY[casterId] + casterOffsetY;
   const targetX = (isPlayer ? pointerWorldX : posX[playerId]) + targetOffsetX;
@@ -38,7 +38,7 @@ export function setupProjectile(projectileVariant: Projectile, casterId: number)
   }
 
   seek(id, targetX, targetY);
-  orbit(id, casterX, casterY, targetX, targetY, rangeOffset);
+  orbit(id, casterX, casterY, targetX, targetY, centerOffset);
   angle[id] = getAngle(0, 0, velX[id], velY[id]);
 
   return id;

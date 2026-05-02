@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 5/2/2026, 2:36:07 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 5/2/2026, 2:58:42 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -304,4 +304,52 @@ export function zeroEntity() {
   lifeTime.fill(0)
   isDestroyed.fill(0)
   isFlipped.fill(0)
+}
+
+/** Print an index within the entity structure of arrays to the console. */
+export function printEntityAt(i: number) {
+  console.table({
+    type: type[i],
+    variant: variant[i],
+    posX: posX[i],
+    posY: posY[i],
+    velX: velX[i],
+    velY: velY[i],
+    sepX: sepX[i],
+    sepY: sepY[i],
+    hitboxX: hitboxX[i],
+    hitboxY: hitboxY[i],
+    hitboxW: hitboxW[i],
+    hitboxH: hitboxH[i],
+    hitboxOffsetX: hitboxOffsetX[i],
+    hitboxOffsetY: hitboxOffsetY[i],
+    speed: speed[i],
+    radius: radius[i],
+    animX: animX[i],
+    animY: animY[i],
+    animScaleX: animScaleX[i],
+    animScaleY: animScaleY[i],
+    animAngle: animAngle[i],
+    sprite: sprite[i],
+    shadow: shadow[i],
+    weapon: weapon[i],
+    angle: angle[i],
+    depth: depth[i],
+    health: health[i],
+    healthMax: healthMax[i],
+    damage: damage[i],
+    range: range[i],
+    projectile: projectile[i],
+    caster: caster[i],
+    serial: serial[i],
+    lastHitBy: lastHitBy[i],
+    staggerTime: staggerTime[i],
+    cooldown: cooldown[i],
+    cooldownTime: cooldownTime[i],
+    healthDeplete: healthDeplete[i],
+    healthDepleteTime: healthDepleteTime[i],
+    lifeTime: lifeTime[i],
+    isDestroyed: isDestroyed[i],
+    isFlipped: isFlipped[i],
+  })
 }
