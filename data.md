@@ -47,7 +47,7 @@
 - healthMax uint16
 - damage uint16
 - range uint16
-- delay uint16
+- windup uint16
 - recovery uint16
 - cooldown uint16
 <!-- combat -->
@@ -57,7 +57,7 @@
 - caster uint8
 - serial uint32
 - lastHitBy uint16
-- delayTime float32
+- windupTime float32
 - recoveryTime float32
 - cooldownTime float32
 - staggerTime float32

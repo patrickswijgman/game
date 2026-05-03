@@ -1,6 +1,6 @@
 import { addCameraTransform, delta, drawRect, drawSprite, getDistance, resetTransform, rotateTransform, scaleTransform, translateTransform } from "snuggy";
 import { Color, Sprite, Texture, Type } from "@/consts.ts";
-import { angle, anim, animAngle, animScaleX, animScaleY, animX, animY, caster, delayTime, health, healthDeplete, healthDepleteTime, healthMax, hitboxH, hitboxOffsetX, hitboxOffsetY, hitboxW, hitboxX, hitboxY, isFlipped, posX, posY, shadow, sprite, staggerTime, type, velX, velY, weapon } from "@/data.ts";
+import { angle, anim, animAngle, animScaleX, animScaleY, animX, animY, caster, health, healthDeplete, healthDepleteTime, healthMax, hitboxH, hitboxOffsetX, hitboxOffsetY, hitboxW, hitboxX, hitboxY, isFlipped, posX, posY, shadow, sprite, staggerTime, type, velX, velY, weapon, windupTime } from "@/data.ts";
 import { nextEntity } from "@/lib/entities.ts";
 
 export function setupEntity(t: Type, x: number, y: number) {
@@ -113,7 +113,7 @@ function getTexture(id: number) {
   if (staggerTime[id] > 0) {
     return Texture.ATLAS_FLASH;
   }
-  if (delayTime[id] > 0) {
+  if (windupTime[id] > 0) {
     return Texture.ATLAS_OUTLINED_DANGER;
   }
   if (type[caster[id]] === Type.ENEMY) {

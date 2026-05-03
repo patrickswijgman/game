@@ -1,6 +1,8 @@
 words = [
     "cooldown",
+    "cooldowns",
     "hitbox",
+    "lifecycle",
     "snuggy",
     "soa",
 ]

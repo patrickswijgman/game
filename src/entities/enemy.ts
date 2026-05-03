@@ -1,8 +1,8 @@
 import { isWithinDistance } from "snuggy";
 import { Anim, Enemy, Projectile, Sprite, Type } from "@/consts.ts";
-import { cooldown, cooldownTime, damage, delay, delayTime, hitboxH, isFlipped, playerId, posX, posY, projectile, radius, range, recovery, recoveryTime, shadow, speed, sprite, targetX, targetY, variant, velX, velY, weapon } from "@/data.ts";
+import { cooldown, cooldownTime, damage, hitboxH, isFlipped, playerId, posX, posY, projectile, radius, range, recovery, recoveryTime, shadow, speed, sprite, targetX, targetY, variant, velX, velY, weapon, windup, windupTime } from "@/data.ts";
 import { setupProjectile } from "@/entities/projectile.ts";
-import { updatePosition, setAnimation, setHealth, setHitbox, setupEntity } from "@/lib/entity.ts";
+import { setAnimation, setHealth, setHitbox, setupEntity, updatePosition } from "@/lib/entity.ts";
 import { halt, seek, separate } from "@/lib/steering.ts";
 import { tickTimer } from "@/lib/timer.ts";
 
@@ -21,7 +21,7 @@ export function setupEnemy(x: number, y: number, enemyVariant: Enemy) {
         radius[id] = 20;
         damage[id] = 20;
         range[id] = 15;
-        delay[id] = 300;
+        windup[id] = 300;
         cooldown[id] = 300;
         recovery[id] = 300;
         weapon[id] = Sprite.PLAYER_LONGSWORD;
@@ -34,13 +34,13 @@ export function setupEnemy(x: number, y: number, enemyVariant: Enemy) {
 }
 
 export function updateEnemy(id: number) {
-  if (tickTimer(delayTime, id)) {
+  if (tickTimer(windupTime, id)) {
     cooldownTime[id] = cooldown[id];
     recoveryTime[id] = recovery[id];
     setupProjectile(projectile[id], id);
   }
 
-  if (delayTime[id] > 0) {
+  if (windupTime[id] > 0) {
     return;
   }
 
@@ -56,7 +56,7 @@ export function updateEnemy(id: number) {
     if (cooldownTime[id] === 0) {
       targetX[id] = posX[playerId];
       targetY[id] = posY[playerId] - hitboxH[playerId] / 2;
-      delayTime[id] = delay[id];
+      windupTime[id] = windup[id];
     }
   } else if (velX[id] || velY[id]) {
     setAnimation(id, Anim.WALK);

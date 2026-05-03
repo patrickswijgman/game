@@ -39,7 +39,7 @@ Entity movement is frozen while `staggerTime[id] > 0` (player is immune during `
 
 ### Timer system (`src/lib/timer.ts`)
 
-All cooldowns/durations are `Float32Array` fields (milliseconds). `tickTimer(timerArray, id)` decrements by `time` each frame and returns `true` exactly when the timer hits zero — used as a one-shot trigger. Common timers: `staggerTime`, `cooldownTime`, `recoveryTime`, `immuneTime`, `delayTime`, `lifeTime`, `healthDepleteTime`.
+All cooldowns/durations are `Float32Array` fields (milliseconds). `tickTimer(timerArray, id)` decrements by `time` each frame and returns `true` exactly when the timer hits zero — used as a one-shot trigger. Common timers: `staggerTime`, `cooldownTime`, `recoveryTime`, `immuneTime`, `windupTime`, `lifeTime`, `healthDepleteTime`.
 
 ### Combat and projectiles (`src/entities/projectile.ts`)
 
@@ -53,7 +53,7 @@ All cooldowns/durations are `Float32Array` fields (milliseconds). `tickTimer(tim
 
 ### Rendering (`src/lib/entity.ts`, `src/lib/resources.ts`)
 
-`drawEntity` applies transforms (translate → camera → flip → rotate → anim offsets) then draws shadow, weapon, and sprite. The texture used is determined per-entity: `ATLAS_FLASH` when staggered, `ATLAS_OUTLINED_DANGER` when in attack delay, `ATLAS_FLASH_DANGER` for enemy-cast projectiles, `ATLAS` otherwise.
+`drawEntity` applies transforms (translate → camera → flip → rotate → anim offsets) then draws shadow, weapon, and sprite. The texture used is determined per-entity: `ATLAS_FLASH` when staggered, `ATLAS_OUTLINED_DANGER` when in attack windup delay, `ATLAS_FLASH_DANGER` for enemy-cast projectiles, `ATLAS` otherwise.
 
 Render textures are created in `loadResources()` after `loadTexture` resolves. `ATLAS_FLASH` and `ATLAS_FLASH_DANGER` use `source-in` to tint the atlas white/red. `ATLAS_OUTLINED` and `ATLAS_OUTLINED_DANGER` draw the atlas offset ±1px in four directions, tint with `source-in`, then draw the original on top.
 

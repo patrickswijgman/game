@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 5/2/2026, 7:02:18 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 5/3/2026, 8:56:28 AM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -202,7 +202,7 @@ export const health = new Uint16Array(2000)
 export const healthMax = new Uint16Array(2000)
 export const damage = new Uint16Array(2000)
 export const range = new Uint16Array(2000)
-export const delay = new Uint16Array(2000)
+export const windup = new Uint16Array(2000)
 export const recovery = new Uint16Array(2000)
 export const cooldown = new Uint16Array(2000)
 export const targetX = new Float32Array(2000)
@@ -211,7 +211,7 @@ export const projectile = new Uint8Array(2000)
 export const caster = new Uint8Array(2000)
 export const serial = new Uint32Array(2000)
 export const lastHitBy = new Uint16Array(2000)
-export const delayTime = new Float32Array(2000)
+export const windupTime = new Float32Array(2000)
 export const recoveryTime = new Float32Array(2000)
 export const cooldownTime = new Float32Array(2000)
 export const staggerTime = new Float32Array(2000)
@@ -255,7 +255,7 @@ export function zeroEntityAt(i: number) {
   healthMax[i] = 0
   damage[i] = 0
   range[i] = 0
-  delay[i] = 0
+  windup[i] = 0
   recovery[i] = 0
   cooldown[i] = 0
   targetX[i] = 0
@@ -264,7 +264,7 @@ export function zeroEntityAt(i: number) {
   caster[i] = 0
   serial[i] = 0
   lastHitBy[i] = 0
-  delayTime[i] = 0
+  windupTime[i] = 0
   recoveryTime[i] = 0
   cooldownTime[i] = 0
   staggerTime[i] = 0
@@ -309,7 +309,7 @@ export function zeroEntity() {
   healthMax.fill(0)
   damage.fill(0)
   range.fill(0)
-  delay.fill(0)
+  windup.fill(0)
   recovery.fill(0)
   cooldown.fill(0)
   targetX.fill(0)
@@ -318,7 +318,7 @@ export function zeroEntity() {
   caster.fill(0)
   serial.fill(0)
   lastHitBy.fill(0)
-  delayTime.fill(0)
+  windupTime.fill(0)
   recoveryTime.fill(0)
   cooldownTime.fill(0)
   staggerTime.fill(0)
@@ -364,7 +364,7 @@ export function printEntityAt(i: number) {
     healthMax: healthMax[i],
     damage: damage[i],
     range: range[i],
-    delay: delay[i],
+    windup: windup[i],
     recovery: recovery[i],
     cooldown: cooldown[i],
     targetX: targetX[i],
@@ -373,7 +373,7 @@ export function printEntityAt(i: number) {
     caster: caster[i],
     serial: serial[i],
     lastHitBy: lastHitBy[i],
-    delayTime: delayTime[i],
+    windupTime: windupTime[i],
     recoveryTime: recoveryTime[i],
     cooldownTime: cooldownTime[i],
     staggerTime: staggerTime[i],
