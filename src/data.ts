@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 5/3/2026, 1:09:43 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 5/3/2026, 2:52:49 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -197,6 +197,9 @@ export const MAX_ENTITY_COUNT = 2000
 
 export const type = new Uint8Array(2000)
 export const variant = new Uint8Array(2000)
+export const isDestroyed = new Uint8Array(2000)
+export const startX = new Float32Array(2000)
+export const startY = new Float32Array(2000)
 export const posX = new Float32Array(2000)
 export const posY = new Float32Array(2000)
 export const velX = new Float32Array(2000)
@@ -222,9 +225,12 @@ export const shadow = new Uint8Array(2000)
 export const weapon = new Uint8Array(2000)
 export const angle = new Float32Array(2000)
 export const depth = new Uint16Array(2000)
+export const isFlipped = new Uint8Array(2000)
 export const health = new Uint16Array(2000)
 export const healthMax = new Uint16Array(2000)
 export const damage = new Uint16Array(2000)
+export const movementSpeed = new Float32Array(2000)
+export const projectileSpeed = new Float32Array(2000)
 export const range = new Uint16Array(2000)
 export const windup = new Uint16Array(2000)
 export const recovery = new Uint16Array(2000)
@@ -234,23 +240,23 @@ export const targetX = new Float32Array(2000)
 export const targetY = new Float32Array(2000)
 export const projectile = new Uint8Array(2000)
 export const serial = new Uint32Array(2000)
-export const caster = new Uint8Array(2000)
 export const lastHitBy = new Uint16Array(2000)
 export const windupTime = new Float32Array(2000)
 export const recoveryTime = new Float32Array(2000)
 export const cooldownTime = new Float32Array(2000)
 export const staggerTime = new Float32Array(2000)
 export const immuneTime = new Float32Array(2000)
+export const isEnemyProjectile = new Uint8Array(2000)
 export const healthDeplete = new Float32Array(2000)
 export const healthDepleteTime = new Float32Array(2000)
-export const lifeTime = new Float32Array(2000)
-export const isDestroyed = new Uint8Array(2000)
-export const isFlipped = new Uint8Array(2000)
 
 /** Zero an index within the entity structure of arrays. */
 export function zeroEntityAt(i: number) {
   type[i] = 0
   variant[i] = 0
+  isDestroyed[i] = 0
+  startX[i] = 0
+  startY[i] = 0
   posX[i] = 0
   posY[i] = 0
   velX[i] = 0
@@ -276,9 +282,12 @@ export function zeroEntityAt(i: number) {
   weapon[i] = 0
   angle[i] = 0
   depth[i] = 0
+  isFlipped[i] = 0
   health[i] = 0
   healthMax[i] = 0
   damage[i] = 0
+  movementSpeed[i] = 0
+  projectileSpeed[i] = 0
   range[i] = 0
   windup[i] = 0
   recovery[i] = 0
@@ -288,24 +297,24 @@ export function zeroEntityAt(i: number) {
   targetY[i] = 0
   projectile[i] = 0
   serial[i] = 0
-  caster[i] = 0
   lastHitBy[i] = 0
   windupTime[i] = 0
   recoveryTime[i] = 0
   cooldownTime[i] = 0
   staggerTime[i] = 0
   immuneTime[i] = 0
+  isEnemyProjectile[i] = 0
   healthDeplete[i] = 0
   healthDepleteTime[i] = 0
-  lifeTime[i] = 0
-  isDestroyed[i] = 0
-  isFlipped[i] = 0
 }
 
 /** Zero all fields within the entity structure of arrays. */
 export function zeroEntity() {
   type.fill(0)
   variant.fill(0)
+  isDestroyed.fill(0)
+  startX.fill(0)
+  startY.fill(0)
   posX.fill(0)
   posY.fill(0)
   velX.fill(0)
@@ -331,9 +340,12 @@ export function zeroEntity() {
   weapon.fill(0)
   angle.fill(0)
   depth.fill(0)
+  isFlipped.fill(0)
   health.fill(0)
   healthMax.fill(0)
   damage.fill(0)
+  movementSpeed.fill(0)
+  projectileSpeed.fill(0)
   range.fill(0)
   windup.fill(0)
   recovery.fill(0)
@@ -343,18 +355,15 @@ export function zeroEntity() {
   targetY.fill(0)
   projectile.fill(0)
   serial.fill(0)
-  caster.fill(0)
   lastHitBy.fill(0)
   windupTime.fill(0)
   recoveryTime.fill(0)
   cooldownTime.fill(0)
   staggerTime.fill(0)
   immuneTime.fill(0)
+  isEnemyProjectile.fill(0)
   healthDeplete.fill(0)
   healthDepleteTime.fill(0)
-  lifeTime.fill(0)
-  isDestroyed.fill(0)
-  isFlipped.fill(0)
 }
 
 /** Print an index within the entity structure of arrays to the console. */
@@ -362,6 +371,9 @@ export function printEntityAt(i: number) {
   console.table({
     type: type[i],
     variant: variant[i],
+    isDestroyed: isDestroyed[i],
+    startX: startX[i],
+    startY: startY[i],
     posX: posX[i],
     posY: posY[i],
     velX: velX[i],
@@ -387,9 +399,12 @@ export function printEntityAt(i: number) {
     weapon: weapon[i],
     angle: angle[i],
     depth: depth[i],
+    isFlipped: isFlipped[i],
     health: health[i],
     healthMax: healthMax[i],
     damage: damage[i],
+    movementSpeed: movementSpeed[i],
+    projectileSpeed: projectileSpeed[i],
     range: range[i],
     windup: windup[i],
     recovery: recovery[i],
@@ -399,17 +414,14 @@ export function printEntityAt(i: number) {
     targetY: targetY[i],
     projectile: projectile[i],
     serial: serial[i],
-    caster: caster[i],
     lastHitBy: lastHitBy[i],
     windupTime: windupTime[i],
     recoveryTime: recoveryTime[i],
     cooldownTime: cooldownTime[i],
     staggerTime: staggerTime[i],
     immuneTime: immuneTime[i],
+    isEnemyProjectile: isEnemyProjectile[i],
     healthDeplete: healthDeplete[i],
     healthDepleteTime: healthDepleteTime[i],
-    lifeTime: lifeTime[i],
-    isDestroyed: isDestroyed[i],
-    isFlipped: isFlipped[i],
   })
 }

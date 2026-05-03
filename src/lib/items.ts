@@ -1,5 +1,5 @@
 import { Item, Projectile, Sprite } from "@/consts.ts";
-import { cooldown, damage, projectile, recovery, weapon } from "@/data.ts";
+import { cooldown, damage, projectile, projectileSpeed, range, recovery, weapon, windup } from "@/data.ts";
 
 export function setItem(id: number, item: Item) {
   switch (item) {
@@ -7,6 +7,9 @@ export function setItem(id: number, item: Item) {
       weapon[id] = Sprite.PLAYER_LONGSWORD;
       projectile[id] = Projectile.LONGSWORD;
       damage[id] = 20;
+      range[id] = 30;
+      projectileSpeed[id] = 2;
+      windup[id] = 100;
       cooldown[id] = 300;
       recovery[id] = 300;
       break;

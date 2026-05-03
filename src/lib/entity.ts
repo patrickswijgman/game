@@ -1,16 +1,50 @@
 import { addCameraTransform, delta, drawSprite, getDistance, resetTransform, rotateTransform, scaleTransform, translateTransform } from "snuggy";
 import { Sprite, Texture, Type } from "@/consts.ts";
-import { angle, anim, animAngle, animScaleX, animScaleY, animX, animY, caster, health, healthDeplete, healthDepleteTime, healthMax, hitboxH, hitboxOffsetX, hitboxOffsetY, hitboxW, hitboxX, hitboxY, isFlipped, posX, posY, shadow, sprite, staggerTime, type, velX, velY, weapon, windupTime } from "@/data.ts";
+import {
+  angle,
+  anim,
+  animAngle,
+  animScaleX,
+  animScaleY,
+  animX,
+  animY,
+  health,
+  healthDeplete,
+  healthDepleteTime,
+  healthMax,
+  hitboxH,
+  hitboxOffsetX,
+  hitboxOffsetY,
+  hitboxW,
+  hitboxX,
+  hitboxY,
+  isEnemyProjectile,
+  isFlipped,
+  posX,
+  posY,
+  shadow,
+  sprite,
+  staggerTime,
+  startX,
+  startY,
+  type,
+  velX,
+  velY,
+  weapon,
+  windupTime,
+} from "@/data.ts";
 import { nextEntity } from "@/lib/entities.ts";
 
 export function setupEntity(t: Type, x: number, y: number) {
-  const i = nextEntity();
-  type[i] = t;
-  posX[i] = x;
-  posY[i] = y;
-  animScaleX[i] = 1;
-  animScaleY[i] = 1;
-  return i;
+  const id = nextEntity();
+  type[id] = t;
+  posX[id] = x;
+  posY[id] = y;
+  startX[id] = x;
+  startY[id] = y;
+  animScaleX[id] = 1;
+  animScaleY[id] = 1;
+  return id;
 }
 
 export function setHitbox(id: number, x: number, y: number, w: number, h: number) {
@@ -125,12 +159,16 @@ export function drawEntity(id: number) {
 
 function getTexture(id: number) {
   if (windupTime[id] > 0) {
-    return Texture.ATLAS_OUTLINED_DANGER;
+    if (type[id] === Type.PLAYER) {
+      return Texture.ATLAS_OUTLINED;
+    } else {
+      return Texture.ATLAS_OUTLINED_DANGER;
+    }
   }
   if (staggerTime[id] > 0) {
     return Texture.ATLAS_FLASH;
   }
-  if (type[caster[id]] === Type.ENEMY) {
+  if (isEnemyProjectile[id]) {
     return Texture.ATLAS_FLASH_DANGER;
   }
   return Texture.ATLAS;

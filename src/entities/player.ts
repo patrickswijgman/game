@@ -1,10 +1,11 @@
 import { drawRect, isInputDown, pointerWorldX, pointerWorldY, resetTransform, scaleTransform, translateTransform } from "snuggy";
 import { Anim, Color, Input, Item, Sprite, Type } from "@/consts.ts";
-import { cooldown, cooldownTime, health, healthDeplete, healthMax, isFlipped, posX, posY, projectile, recovery, recoveryTime, setPlayerId, shadow, speed, sprite, targetX, targetY, velX, velY } from "@/data.ts";
+import { cooldown, cooldownTime, health, healthDeplete, healthMax, isFlipped, movementSpeed, posX, posY, projectile, recovery, recoveryTime, setPlayerId, shadow, speed, sprite, targetX, targetY, velX, velY, windup, windupTime } from "@/data.ts";
 import { setupProjectile } from "@/entities/projectile.ts";
 import { setAnimation, setHealth, setHitbox, setupEntity, updatePosition } from "@/lib/entity.ts";
 import { setItem } from "@/lib/items.ts";
 import { seek } from "@/lib/steering.ts";
+import { tickTimer } from "@/lib/timer.ts";
 
 export function setupPlayer(x: number, y: number) {
   const id = setupEntity(Type.PLAYER, x, y);
@@ -12,7 +13,7 @@ export function setupPlayer(x: number, y: number) {
   shadow[id] = Sprite.PLAYER_SHADOW;
   setHealth(id, 100);
   setHitbox(id, -5, -15, 10, 15);
-  speed[id] = 1;
+  movementSpeed[id] = 1;
   setItem(id, Item.LONGSWORD);
   setPlayerId(id);
 }
@@ -36,7 +37,15 @@ export function updatePlayer(id: number) {
     x += 1;
   }
 
-  seek(id, x, y, recoveryTime[id] > 0 ? 0.5 : 1);
+  speed[id] = movementSpeed[id];
+  if (recoveryTime[id] > 0) {
+    speed[id] *= 0.5;
+  }
+  if (windupTime[id] > 0) {
+    speed[id] = 0;
+  }
+
+  seek(id, x, y);
   updatePosition(id);
 
   if (velX[id] || velY[id]) {
@@ -47,12 +56,16 @@ export function updatePlayer(id: number) {
 
   isFlipped[id] = pointerWorldX < posX[id] ? 1 : 0;
 
-  if (isInputDown(Input.ATTACK) && cooldownTime[id] === 0) {
-    targetX[id] = pointerWorldX;
-    targetY[id] = pointerWorldY;
+  if (tickTimer(windupTime, id)) {
     cooldownTime[id] = cooldown[id];
     recoveryTime[id] = recovery[id];
     setupProjectile(projectile[id], id);
+  }
+
+  if (isInputDown(Input.ATTACK) && cooldownTime[id] === 0 && windupTime[id] === 0) {
+    targetX[id] = pointerWorldX;
+    targetY[id] = pointerWorldY;
+    windupTime[id] = windup[id];
   }
 }
 

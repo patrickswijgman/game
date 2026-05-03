@@ -43,20 +43,26 @@ See trinkets table below.
 
 # Stats
 
-| Name      | Note                                                  |
-| --------- | ----------------------------------------------------- |
-| Damage    |                                                       |
-| Cooldown  | AKA attack speed (milliseconds)                       |
-| Range     | Projectile lifetime (milliseconds) x projectile speed |
-| Health    | Entity dies when reduced zero                         |
-| HealthMax | Health cannot exceed this                             |
+| Name      | Note                                                                        |
+| --------- | --------------------------------------------------------------------------- |
+| Damage    |                                                                             |
+| Windup    | Telegraph delay before attack fires (milliseconds)                          |
+| Recovery  | Post-attack window with reduced movement (milliseconds)                     |
+| Cooldown  | Time before attack becomes available again, AKA attack speed (milliseconds) |
+| Range     | Max travel distance in pixels                                               |
+| Health    | Entity dies when reduced zero                                               |
+| HealthMax | Health cannot exceed this                                                   |
 
 # Weapons table
 
-| Name      | Damage | Cooldown | Range   | Note                  |
-| --------- | ------ | -------- | ------- | --------------------- |
-| Longsword | 20     | 300      | 100 x 1 | Starter, Balanced     |
-| Dagger    | 10     | 100      | 50 x 1  | Up close and personal |
+| Name          | Damage | Windup | Recovery | Cooldown | Range | Note                             |
+| ------------- | ------ | ------ | -------- | -------- | ----- | -------------------------------- |
+| Longsword     | 20     | 100    | 300      | 300      | 30    | Starter, balanced                |
+| Dagger        | 10     | 50     | 100      | 100      | 10    | High DPS, up close and personal  |
+| Greatsword    | 60     | 400    | 700      | 900      | 120   | High burst, long commit          |
+| Bow           | 25     | 200    | 300      | 600      | 300   | Safe, low DPS                    |
+| Hand Crossbow | 8      | 50     | 150      | 150      | 150   | Fast, medium range               |
+| Staff         | 30     | 150    | 200      | 400      | 400   | Highest DPS, demands positioning |
 
 # Armor table
 

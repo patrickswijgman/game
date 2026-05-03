@@ -1,12 +1,12 @@
 import { drawRect, getRandomNumber, isInputPressed, run, setCameraBoundary, setCameraPosition, setCameraSmoothing, setCameraTarget, setFont, setFontOffset, setInput, updateCamera } from "snuggy";
 import { Anim, Color, Enemy, Font, Input, MAX_ENEMY_COUNT, ROOM_HEIGHT, ROOM_WIDTH, Type } from "@/consts.ts";
-import { active, activeCount, anim, cooldownTime, enemiesCount, healthDepleteTime, immuneTime, isDestroyed, lifeTime, playerId, posX, posY, recoveryTime, staggerTime, type } from "@/data.ts";
+import { active, activeCount, anim, cooldownTime, enemiesCount, healthDepleteTime, immuneTime, isDestroyed, playerId, posX, posY, recoveryTime, staggerTime, type } from "@/data.ts";
 import { drawEnemyHealthBar, setupEnemy, updateEnemy } from "@/entities/enemy.ts";
 import { drawPlayerHealthBar, setupPlayer, updatePlayer } from "@/entities/player.ts";
 import { updateProjectile } from "@/entities/projectile.ts";
 import { updateBreatheAnimation, updateWalkAnimation } from "@/lib/anims.ts";
 import { drawFramesPerSecond, drawHitboxes } from "@/lib/debug.ts";
-import { addNewEntities, destroyEntity, removeDestroyedEntities, setupEntities, sortEntities } from "@/lib/entities.ts";
+import { addNewEntities, removeDestroyedEntities, setupEntities, sortEntities } from "@/lib/entities.ts";
 import { drawEntity, updateHealthBar } from "@/lib/entity.ts";
 import { loadResources } from "@/lib/resources.ts";
 import { separateEnemies } from "@/lib/steering.ts";
@@ -56,10 +56,6 @@ function update() {
 
   for (let i = 0; i < activeCount; i++) {
     const id = active[i];
-
-    if (tickTimer(lifeTime, id)) {
-      destroyEntity(id);
-    }
 
     if (isDestroyed[id]) {
       continue;

@@ -1,6 +1,6 @@
 import { addCameraTransform, drawRect, isWithinDistance, resetTransform, translateTransform } from "snuggy";
 import { Anim, Color, Enemy, Projectile, Sprite, Type } from "@/consts.ts";
-import { cooldown, cooldownTime, damage, health, healthDeplete, healthMax, hitboxH, hitboxW, isFlipped, playerId, posX, posY, projectile, radius, range, recovery, recoveryTime, shadow, speed, sprite, targetX, targetY, variant, velX, velY, weapon, windup, windupTime } from "@/data.ts";
+import { cooldown, cooldownTime, damage, health, healthDeplete, healthMax, hitboxH, hitboxW, isFlipped, movementSpeed, playerId, posX, posY, projectile, projectileSpeed, radius, range, recovery, recoveryTime, shadow, speed, sprite, targetX, targetY, variant, velX, velY, weapon, windup, windupTime } from "@/data.ts";
 import { setupProjectile } from "@/entities/projectile.ts";
 import { setAnimation, setHealth, setHitbox, setupEntity, updatePosition } from "@/lib/entity.ts";
 import { halt, seek, separate } from "@/lib/steering.ts";
@@ -19,13 +19,14 @@ export function setupEnemy(x: number, y: number, enemyVariant: Enemy) {
         projectile[id] = Projectile.ENEMY_MELEE;
         setHealth(id, 50);
         setHitbox(id, -5, -15, 10, 15);
-        speed[id] = 0.5;
+        movementSpeed[id] = 0.5;
+        damage[id] = 10;
         radius[id] = 20;
-        damage[id] = 20;
-        range[id] = 15;
+        range[id] = 20;
+        projectileSpeed[id] = 1;
         windup[id] = 300;
-        cooldown[id] = 300;
-        recovery[id] = 300;
+        cooldown[id] = 500;
+        recovery[id] = 250;
       }
       break;
   }
@@ -47,7 +48,9 @@ export function updateEnemy(id: number) {
   velX[id] = 0;
   velY[id] = 0;
 
-  seek(id, posX[playerId], posY[playerId], recoveryTime[id] > 0 ? 0 : 1);
+  speed[id] = recoveryTime[id] > 0 ? 0 : movementSpeed[id];
+
+  seek(id, posX[playerId], posY[playerId]);
   separate(id);
 
   if (isWithinDistance(posX[id], posY[id], posX[playerId], posY[playerId], range[id])) {

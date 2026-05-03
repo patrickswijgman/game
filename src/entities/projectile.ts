@@ -1,6 +1,39 @@
-import { getAngle } from "snuggy";
+import { getAngle, isWithinDistance } from "snuggy";
 import { Projectile, Sprite, Type } from "@/consts.ts";
-import { angle, caster, damage, depth, enemies, enemiesCount, health, healthDepleteTime, hitboxH, hitboxW, immuneTime, lastHitBy, lifeTime, playerId, posX, posY, serial, serialCount, setSerialCount, speed, sprite, staggerTime, targetX, targetY, type, variant, velX, velY } from "@/data.ts";
+import {
+  angle,
+  damage,
+  depth,
+  enemies,
+  enemiesCount,
+  health,
+  healthDepleteTime,
+  hitboxH,
+  hitboxW,
+  immuneTime,
+  isEnemyProjectile,
+  lastHitBy,
+  playerId,
+  posX,
+  posY,
+  projectileSpeed,
+  range,
+  serial,
+  serialCount,
+  setSerialCount,
+  speed,
+  sprite,
+  staggerTime,
+  startX,
+  startY,
+  targetX,
+  targetY,
+  type,
+  variant,
+  velX,
+  velY,
+  windupTime,
+} from "@/data.ts";
 import { destroyEntity } from "@/lib/entities.ts";
 import { isHitboxIntersection, setHitbox, setOrbitPosition, setupEntity, updatePosition } from "@/lib/entity.ts";
 import { seek } from "@/lib/steering.ts";
@@ -15,17 +48,18 @@ export function setupProjectile(projectileVariant: Projectile, casterId: number)
 
   const id = setupEntity(Type.PROJECTILE, casterX, casterY);
   variant[id] = projectileVariant;
-  caster[id] = casterId;
   serial[id] = serialCount;
   depth[id] = -casterOffsetY;
+  damage[id] = damage[casterId];
+  range[id] = range[casterId];
+  speed[id] = projectileSpeed[casterId];
+  isEnemyProjectile[id] = type[casterId] === Type.ENEMY ? 1 : 0;
 
   switch (variant[id]) {
     case Projectile.LONGSWORD:
       {
         sprite[id] = Sprite.PROJECTILE_LONGSWORD;
         setHitbox(id, -5, -5, 10, 10);
-        lifeTime[id] = 100;
-        speed[id] = 1;
       }
       break;
 
@@ -33,8 +67,6 @@ export function setupProjectile(projectileVariant: Projectile, casterId: number)
       {
         sprite[id] = Sprite.PROJECTILE_ENEMY_MELEE;
         setHitbox(id, -4, -4, 8, 8);
-        lifeTime[id] = 100;
-        speed[id] = 1;
       }
       break;
   }
@@ -51,21 +83,24 @@ export function setupProjectile(projectileVariant: Projectile, casterId: number)
 }
 
 export function updateProjectile(id: number) {
-  const casterId = caster[id];
-
   updatePosition(id);
 
-  if (type[casterId] === Type.PLAYER) {
+  if (!isWithinDistance(startX[id], startY[id], posX[id], posY[id], range[id])) {
+    destroyEntity(id);
+    return;
+  }
+
+  if (isEnemyProjectile[id]) {
+    hitTarget(id, playerId);
+  } else {
     for (let i = 0; i < enemiesCount; i++) {
       const enemyId = enemies[i];
-      hitTarget(id, casterId, enemyId);
+      hitTarget(id, enemyId);
     }
-  } else {
-    hitTarget(id, casterId, playerId);
   }
 }
 
-function hitTarget(id: number, casterId: number, targetId: number) {
+function hitTarget(id: number, targetId: number) {
   if (lastHitBy[targetId] !== serial[id] && isHitboxIntersection(id, targetId)) {
     lastHitBy[targetId] = serial[id];
 
@@ -77,8 +112,9 @@ function hitTarget(id: number, casterId: number, targetId: number) {
       }
     }
 
-    health[targetId] -= Math.min(health[targetId], damage[casterId]);
+    health[targetId] -= Math.min(health[targetId], damage[id]);
 
+    windupTime[targetId] = 0;
     staggerTime[targetId] = 100;
     healthDepleteTime[targetId] = 200;
 
