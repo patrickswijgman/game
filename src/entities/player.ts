@@ -39,13 +39,13 @@ export function updatePlayer(id: number) {
   seek(id, x, y, recoveryTime[id] > 0 ? 0.5 : 1);
   updatePosition(id);
 
-  isFlipped[id] = pointerWorldX < posX[id] ? 1 : 0;
-
   if (velX[id] || velY[id]) {
     setAnimation(id, Anim.WALK);
   } else {
     setAnimation(id, Anim.BREATHE);
   }
+
+  isFlipped[id] = pointerWorldX < posX[id] ? 1 : 0;
 
   if (isInputDown(Input.ATTACK) && cooldownTime[id] === 0) {
     targetX[id] = pointerWorldX;

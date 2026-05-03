@@ -34,6 +34,8 @@ export const enum Sprite {
   ENEMY_MELEE_WEAPON,
   PROJECTILE_LONGSWORD,
   PROJECTILE_ENEMY_MELEE,
+  SOUL,
+  SOUL_SHADOW,
 }
 
 export const enum Type {
@@ -41,6 +43,7 @@ export const enum Type {
   PLAYER,
   ENEMY,
   PROJECTILE,
+  PICKUP,
 }
 
 export const enum Enemy {
@@ -52,6 +55,11 @@ export const enum Projectile {
   NONE,
   LONGSWORD,
   ENEMY_MELEE,
+}
+
+export const enum Pickup {
+  NONE,
+  SOUL,
 }
 
 export const enum Anim {
@@ -69,7 +77,7 @@ export const enum Color {
   BORDER = "#1e1e1e",
   HEALTH = "#e43c3c",
   HEALTH_DARK = "#ca1c39",
-  DANGER = "#ff7828",
   DEPLETE = "#ffffff",
   GRASS = "#63735c",
+  DANGER = "#ff0000",
 }

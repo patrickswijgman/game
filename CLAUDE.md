@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+See `README.md` for game design decisions, the game loop, and equipment/enemy tables.
 
 ## Commands
 
@@ -12,60 +12,77 @@ npm run gen        # Regenerate src/data.ts from the /data schema
 
 There are no tests.
 
-## Architecture
+## Adding new content checklist
 
-This is a TypeScript 2D game built with Vite and a local graphics library called **snuggy**. It uses Data-Oriented Design (DOD) with a Structure of Arrays (SoA) pattern for entity storage.
+When adding a new **sprite**: add to `Sprite` enum in `consts.ts`, then add a `case` in the relevant switch block(s) in `drawEntity` (`src/lib/entity.ts`) — shadow, weapon, and/or sprite. Nothing errors if a case is missing; it just silently renders nothing.
 
-### Data layer (`src/data.ts`)
+When adding a new **enemy**: add to `Enemy` enum in `consts.ts`, add a `case` in `setupEnemy`, add a `case` in `updateEnemy`.
 
-**Auto-generated — do not edit directly.** Regenerate with `npm run gen` after modifying `data.md` (the schema file in the root). Contains two sections:
+When adding a new **projectile variant**: add to `Projectile` enum in `consts.ts`, add a `case` in `setupProjectile`.
 
-- **`game` group** — pool/queue arrays (`active`, `free`, `toAdd`, `toRemove`, up to 2000 each) and secondary indexes (`enemies[]`, `enemiesCount`), plus scalar state (`playerId`, `serialCount`).
-- **`entity` SoA** — flat typed arrays for up to 2000 entities covering physics, animation, render, stats, combat, health bar, timers, and flags.
+When adding a new **item**: add to `Item` enum in `consts.ts`, add a `case` in `setItem`.
 
-### Entity lifecycle (`src/lib/entities.ts`)
+When adding a new **entity field**: add to `data.md` and run `npm run gen`.
 
-Entities are numeric IDs indexing into the SoA arrays. `nextEntity()` pulls from the free pool and queues the ID in `toAdd`. `destroyEntity()` marks `isDestroyed` and queues in `toRemove`. Each frame, `removeDestroyedEntities()` removes via **swap-to-back** (O(1)), then `addNewEntities()` flushes the add queue. `sortEntities()` depth-sorts `active[]` by Y position (plus `depth[]` offset) using insertion sort.
+## Combat state machine
 
-### Per-entity updates (`src/entities/`)
+Stats (set once in setup) vs timers (running countdowns each frame):
 
-Each entity type gets a `setup*(x, y)` that calls `setupEntity()` and `update*(id)` that runs each frame. The main loop in `src/main.ts` dispatches by `type[id]`. Three types are implemented: `PLAYER`, `ENEMY`, and `PROJECTILE`.
+| Stat       | Timer          | Meaning                                     |
+| ---------- | -------------- | ------------------------------------------- |
+| `windup`   | `windupTime`   | Duration of attack telegraph                |
+| `cooldown` | `cooldownTime` | Lockout before next attack can start        |
+| `recovery` | `recoveryTime` | Post-attack window where movement is slowed |
 
-### Main loop (`src/main.ts`)
+Attack sequence: in-range + `cooldownTime === 0` → set `targetX/Y`, start `windupTime`. When `windupTime` expires (`tickTimer` returns true) → fire projectile, start `cooldownTime` + `recoveryTime`. While `recoveryTime > 0` enemy halts, player moves at half speed.
 
-`setup()` loads assets, initializes the entity pool, and spawns entities. `update()` runs each frame: flush entity queues → sort → clear background → `separateEnemies()` → iterate `active[]` ticking timers, dispatching per-type updates, running animations, drawing entities → follow camera.
+## Code rules
 
-Entity movement is frozen while `staggerTime[id] > 0` (player is immune during `immuneTime`).
+- **Never edit `src/data.ts` directly.** It is auto-generated. Edit `data.md` and run `npm run gen`.
+- Use the `@/*` path alias for all imports from `src/`.
+- All timers are `Float32Array` fields in milliseconds. Use `tickTimer` — do not hand-roll countdown logic.
+- Entity IDs are plain numbers indexing into SoA arrays. Never store entity state in objects or classes.
+- Add new entity fields in `data.md`, not in ad-hoc variables or module-level maps.
+- `destroyEntity` only marks and queues — never splice or mutate `active[]` mid-frame.
+- Keep per-entity logic in `src/entities/`. Keep reusable mechanics in `src/lib/`.
+- No comments unless the reason is non-obvious. Never describe what the code does.
 
-### Timer system (`src/lib/timer.ts`)
+## Architecture summary
 
-All cooldowns/durations are `Float32Array` fields (milliseconds). `tickTimer(timerArray, id)` decrements by `time` each frame and returns `true` exactly when the timer hits zero — used as a one-shot trigger. Common timers: `staggerTime`, `cooldownTime`, `recoveryTime`, `immuneTime`, `windupTime`, `lifeTime`, `healthDepleteTime`.
+TypeScript 2D game using Vite + **snuggy** graphics library. Data-Oriented Design with Structure of Arrays (SoA) for all entity state.
 
-### Combat and projectiles (`src/entities/projectile.ts`)
+### Key files
 
-`setupProjectile(variant, casterId)` spawns a projectile from the caster's position, aimed at `targetX/Y[casterId]`, orbited to the edge of the caster's hitbox. Each projectile carries a unique `serial` to prevent hitting the same target twice. `dealDamageToTarget` applies damage, sets `staggerTime`, and triggers health deplete animation.
+| File                         | Role                                                           |
+| ---------------------------- | -------------------------------------------------------------- |
+| `src/data.ts`                | Auto-generated SoA arrays and game-level state                 |
+| `src/main.ts`                | Setup and main loop                                            |
+| `src/lib/entities.ts`        | Entity lifecycle (create, destroy, sort)                       |
+| `src/lib/timer.ts`           | `tickTimer` — one-shot countdown helper                        |
+| `src/lib/steering.ts`        | `seek`, `halt`, `separate`                                     |
+| `src/lib/items.ts`           | `setItem` — binds combat stats + visuals to an entity          |
+| `src/lib/entity.ts`          | `drawEntity` — rendering with transforms and texture selection |
+| `src/entities/player.ts`     | Player setup and update                                        |
+| `src/entities/enemy.ts`      | Enemy setup and update                                         |
+| `src/entities/projectile.ts` | Projectile setup, update, and damage application               |
 
-### Steering (`src/lib/steering.ts`)
+### Entity lifecycle
 
-- `seek(id, x, y, scalar)` — adds normalized velocity toward a point, scaled by `speed[id]`
-- `halt(id, x, y)` — zeroes velocity when within `range[id]`
-- `separate(id)` — applies pre-computed separation force from `separateEnemies()`, which runs an O(n²) pairwise loop over `enemies[]` before the main entity loop
+`nextEntity()` → pulled from free pool, queued in `toAdd`. `destroyEntity()` → marks `isDestroyed`, queued in `toRemove`. Each frame: remove destroyed (swap-to-back, O(1)) → add new → insertion-sort by Y + `depth[]`.
 
-### Rendering (`src/lib/entity.ts`, `src/lib/resources.ts`)
+### Main loop order
 
-`drawEntity` applies transforms (translate → camera → flip → rotate → anim offsets) then draws shadow, weapon, and sprite. The texture used is determined per-entity: `ATLAS_FLASH` when staggered, `ATLAS_OUTLINED_DANGER` when in attack windup delay, `ATLAS_FLASH_DANGER` for enemy-cast projectiles, `ATLAS` otherwise.
+Flush queues → sort → clear background → `separateEnemies()` → tick timers → dispatch per-type updates → animate → draw → follow camera.
 
-Render textures are created in `loadResources()` after `loadTexture` resolves. `ATLAS_FLASH` and `ATLAS_FLASH_DANGER` use `source-in` to tint the atlas white/red. `ATLAS_OUTLINED` and `ATLAS_OUTLINED_DANGER` draw the atlas offset ±1px in four directions, tint with `source-in`, then draw the original on top.
+### Rendering texture selection
 
-### Items (`src/lib/items.ts`)
-
-`setItem(id, item)` sets combat stats (`damage`, `cooldown`, `recovery`) and links the visual (`weapon` sprite) and logic (`projectile` variant) for that item.
-
-### Imports
-
-Path alias `@/*` maps to `src/*` (configured in both `vite.config.ts` and `tsconfig.json`).
+- Default: `ATLAS`
+- Staggered: `ATLAS_FLASH` (white tint)
+- Attack windup: `ATLAS_OUTLINED_DANGER`
+- Enemy projectile: `ATLAS_FLASH_DANGER` (red tint)
 
 ### Tooling
 
-- **Biome** handles formatting and linting (excludes `src/data.ts`)
-- **snuggy** (`^1.2.0`) and **game-data-gen** (`^2.3.0`) are published npm packages
+- **Biome** — formatting and linting (excludes `src/data.ts`)
+- **snuggy** `^1.2.0` — graphics
+- **game-data-gen** `^2.3.0` — code generation from `data.md`

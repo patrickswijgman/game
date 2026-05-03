@@ -15,8 +15,10 @@ export function setupEnemy(x: number, y: number, enemyVariant: Enemy) {
       {
         sprite[id] = Sprite.ENEMY_MELEE;
         shadow[id] = Sprite.ENEMY_MELEE_SHADOW;
+        weapon[id] = Sprite.ENEMY_MELEE_WEAPON;
+        projectile[id] = Projectile.ENEMY_MELEE;
         setHealth(id, 50);
-        setHitbox(id, -6, -16, 12, 16);
+        setHitbox(id, -5, -15, 10, 15);
         speed[id] = 0.5;
         radius[id] = 20;
         damage[id] = 20;
@@ -24,8 +26,6 @@ export function setupEnemy(x: number, y: number, enemyVariant: Enemy) {
         windup[id] = 300;
         cooldown[id] = 300;
         recovery[id] = 300;
-        weapon[id] = Sprite.ENEMY_MELEE_WEAPON;
-        projectile[id] = Projectile.ENEMY_MELEE;
       }
       break;
   }
@@ -51,13 +51,12 @@ export function updateEnemy(id: number) {
   separate(id);
 
   if (isWithinDistance(posX[id], posY[id], posX[playerId], posY[playerId], range[id])) {
-    setAnimation(id, Anim.NONE);
-
     if (cooldownTime[id] === 0) {
       targetX[id] = posX[playerId];
       targetY[id] = posY[playerId] - hitboxH[playerId] / 2;
       windupTime[id] = windup[id];
     }
+    setAnimation(id, Anim.NONE);
   } else if (velX[id] || velY[id]) {
     setAnimation(id, Anim.WALK);
   } else {
@@ -79,7 +78,7 @@ export function drawEnemyHealthBar(id: number) {
   const height = 2;
   const hp = (health[id] / healthMax[id]) * width;
   const hd = (healthDeplete[id] / healthMax[id]) * width;
-  const x = posX[id] + -width / 2;
+  const x = posX[id] - width / 2;
   const y = posY[id] - hitboxH[id] - 5;
 
   resetTransform();

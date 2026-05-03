@@ -4,11 +4,11 @@ import { cooldown, damage, projectile, recovery, weapon } from "@/data.ts";
 export function setItem(id: number, item: Item) {
   switch (item) {
     case Item.LONGSWORD:
+      weapon[id] = Sprite.PLAYER_LONGSWORD;
+      projectile[id] = Projectile.LONGSWORD;
       damage[id] = 20;
       cooldown[id] = 300;
       recovery[id] = 300;
-      weapon[id] = Sprite.PLAYER_LONGSWORD;
-      projectile[id] = Projectile.LONGSWORD;
       break;
   }
 }

@@ -85,6 +85,9 @@ export function drawEntity(id: number) {
     case Sprite.ENEMY_MELEE_SHADOW:
       drawSprite(Texture.ATLAS, -16, -3, 64, 32, 32, 16);
       break;
+    case Sprite.SOUL_SHADOW:
+      drawSprite(Texture.ATLAS, -8, -2, 0, 160, 16, 16);
+      break;
   }
 
   rotateTransform(angle[id]);
@@ -115,6 +118,8 @@ export function drawEntity(id: number) {
     case Sprite.PROJECTILE_ENEMY_MELEE:
       drawSprite(texture, -16, -16, 32, 112, 32, 32);
       break;
+    case Sprite.SOUL:
+      drawSprite(Texture.ATLAS, -8, -15, 0, 144, 16, 16);
   }
 }
 

@@ -1,14 +1,20 @@
 # game
 
+- playerId
+<!-- pool -->
+- free uint16 2000
+- toAdd uint16 2000
+- toRemove uint16 2000
+<!-- groups -->
 - active uint16 2000
 - activeIndex uint16 2000
 - enemies uint16 2000
 - enemiesIndex uint16 2000
-- free uint16 2000
-- toAdd uint16 2000
-- toRemove uint16 2000
-- playerId
+<!-- combat -->
 - serialCount
+<!-- run -->
+- totalKills
+- totalSouls
 
 # entity 2000
 
@@ -50,12 +56,13 @@
 - windup uint16
 - recovery uint16
 - cooldown uint16
+- souls uint16
 <!-- combat -->
 - targetX float32
 - targetY float32
 - projectile uint8
-- caster uint8
 - serial uint32
+- caster uint8
 - lastHitBy uint16
 - windupTime float32
 - recoveryTime float32

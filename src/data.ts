@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 5/3/2026, 8:56:28 AM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 5/3/2026, 1:09:43 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -8,6 +8,13 @@
  * --------------------------------------------------
  */
 
+export let playerId = 0
+export const free = new Uint16Array(2000)
+export let freeCount = 0
+export const toAdd = new Uint16Array(2000)
+export let toAddCount = 0
+export const toRemove = new Uint16Array(2000)
+export let toRemoveCount = 0
 export const active = new Uint16Array(2000)
 export let activeCount = 0
 export const activeIndex = new Uint16Array(2000)
@@ -16,14 +23,9 @@ export const enemies = new Uint16Array(2000)
 export let enemiesCount = 0
 export const enemiesIndex = new Uint16Array(2000)
 export let enemiesIndexCount = 0
-export const free = new Uint16Array(2000)
-export let freeCount = 0
-export const toAdd = new Uint16Array(2000)
-export let toAddCount = 0
-export const toRemove = new Uint16Array(2000)
-export let toRemoveCount = 0
-export let playerId = 0
 export let serialCount = 0
+export let totalKills = 0
+export let totalSouls = 0
 
 /** Set the value of the playerId field within the game group. */
 export function setPlayerId(v: number) {
@@ -33,6 +35,31 @@ export function setPlayerId(v: number) {
 /** Set the value of the serialCount field within the game group. */
 export function setSerialCount(v: number) {
   serialCount = v
+}
+
+/** Set the value of the totalKills field within the game group. */
+export function setTotalKills(v: number) {
+  totalKills = v
+}
+
+/** Set the value of the totalSouls field within the game group. */
+export function setTotalSouls(v: number) {
+  totalSouls = v
+}
+
+/** Push a value onto the free field within the game group. */
+export function pushFree(v: number) {
+  free[freeCount++] = v
+}
+
+/** Push a value onto the toAdd field within the game group. */
+export function pushToAdd(v: number) {
+  toAdd[toAddCount++] = v
+}
+
+/** Push a value onto the toRemove field within the game group. */
+export function pushToRemove(v: number) {
+  toRemove[toRemoveCount++] = v
 }
 
 /** Push a value onto the active field within the game group. */
@@ -55,19 +82,19 @@ export function pushEnemiesIndex(v: number) {
   enemiesIndex[enemiesIndexCount++] = v
 }
 
-/** Push a value onto the free field within the game group. */
-export function pushFree(v: number) {
-  free[freeCount++] = v
+/** Pop a value from the free field within the game group. */
+export function popFree() {
+  return free[--freeCount]
 }
 
-/** Push a value onto the toAdd field within the game group. */
-export function pushToAdd(v: number) {
-  toAdd[toAddCount++] = v
+/** Pop a value from the toAdd field within the game group. */
+export function popToAdd() {
+  return toAdd[--toAddCount]
 }
 
-/** Push a value onto the toRemove field within the game group. */
-export function pushToRemove(v: number) {
-  toRemove[toRemoveCount++] = v
+/** Pop a value from the toRemove field within the game group. */
+export function popToRemove() {
+  return toRemove[--toRemoveCount]
 }
 
 /** Pop a value from the active field within the game group. */
@@ -90,19 +117,24 @@ export function popEnemiesIndex() {
   return enemiesIndex[--enemiesIndexCount]
 }
 
-/** Pop a value from the free field within the game group. */
-export function popFree() {
-  return free[--freeCount]
+/** Zero the playerId field within the game group. */
+export function zeroPlayerId() {
+  playerId = 0
 }
 
-/** Pop a value from the toAdd field within the game group. */
-export function popToAdd() {
-  return toAdd[--toAddCount]
+/** Zero the free field within the game group. */
+export function zeroFree() {
+  freeCount = 0
 }
 
-/** Pop a value from the toRemove field within the game group. */
-export function popToRemove() {
-  return toRemove[--toRemoveCount]
+/** Zero the toAdd field within the game group. */
+export function zeroToAdd() {
+  toAddCount = 0
+}
+
+/** Zero the toRemove field within the game group. */
+export function zeroToRemove() {
+  toRemoveCount = 0
 }
 
 /** Zero the active field within the game group. */
@@ -125,42 +157,34 @@ export function zeroEnemiesIndex() {
   enemiesIndexCount = 0
 }
 
-/** Zero the free field within the game group. */
-export function zeroFree() {
-  freeCount = 0
-}
-
-/** Zero the toAdd field within the game group. */
-export function zeroToAdd() {
-  toAddCount = 0
-}
-
-/** Zero the toRemove field within the game group. */
-export function zeroToRemove() {
-  toRemoveCount = 0
-}
-
-/** Zero the playerId field within the game group. */
-export function zeroPlayerId() {
-  playerId = 0
-}
-
 /** Zero the serialCount field within the game group. */
 export function zeroSerialCount() {
   serialCount = 0
 }
 
+/** Zero the totalKills field within the game group. */
+export function zeroTotalKills() {
+  totalKills = 0
+}
+
+/** Zero the totalSouls field within the game group. */
+export function zeroTotalSouls() {
+  totalSouls = 0
+}
+
 /** Zero all fields within the game group. */
 export function zeroGame() {
+  playerId = 0
+  freeCount = 0
+  toAddCount = 0
+  toRemoveCount = 0
   activeCount = 0
   activeIndexCount = 0
   enemiesCount = 0
   enemiesIndexCount = 0
-  freeCount = 0
-  toAddCount = 0
-  toRemoveCount = 0
-  playerId = 0
   serialCount = 0
+  totalKills = 0
+  totalSouls = 0
 }
 
 /*
@@ -205,11 +229,12 @@ export const range = new Uint16Array(2000)
 export const windup = new Uint16Array(2000)
 export const recovery = new Uint16Array(2000)
 export const cooldown = new Uint16Array(2000)
+export const souls = new Uint16Array(2000)
 export const targetX = new Float32Array(2000)
 export const targetY = new Float32Array(2000)
 export const projectile = new Uint8Array(2000)
-export const caster = new Uint8Array(2000)
 export const serial = new Uint32Array(2000)
+export const caster = new Uint8Array(2000)
 export const lastHitBy = new Uint16Array(2000)
 export const windupTime = new Float32Array(2000)
 export const recoveryTime = new Float32Array(2000)
@@ -258,11 +283,12 @@ export function zeroEntityAt(i: number) {
   windup[i] = 0
   recovery[i] = 0
   cooldown[i] = 0
+  souls[i] = 0
   targetX[i] = 0
   targetY[i] = 0
   projectile[i] = 0
-  caster[i] = 0
   serial[i] = 0
+  caster[i] = 0
   lastHitBy[i] = 0
   windupTime[i] = 0
   recoveryTime[i] = 0
@@ -312,11 +338,12 @@ export function zeroEntity() {
   windup.fill(0)
   recovery.fill(0)
   cooldown.fill(0)
+  souls.fill(0)
   targetX.fill(0)
   targetY.fill(0)
   projectile.fill(0)
-  caster.fill(0)
   serial.fill(0)
+  caster.fill(0)
   lastHitBy.fill(0)
   windupTime.fill(0)
   recoveryTime.fill(0)
@@ -367,11 +394,12 @@ export function printEntityAt(i: number) {
     windup: windup[i],
     recovery: recovery[i],
     cooldown: cooldown[i],
+    souls: souls[i],
     targetX: targetX[i],
     targetY: targetY[i],
     projectile: projectile[i],
-    caster: caster[i],
     serial: serial[i],
+    caster: caster[i],
     lastHitBy: lastHitBy[i],
     windupTime: windupTime[i],
     recoveryTime: recoveryTime[i],
