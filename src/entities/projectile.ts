@@ -2,7 +2,6 @@ import { getAngle, isWithinDistance } from "snuggy";
 import { Projectile, Sprite, Type } from "@/consts.ts";
 import {
   angle,
-  damage,
   depth,
   enemies,
   enemiesCount,
@@ -16,8 +15,9 @@ import {
   playerId,
   posX,
   posY,
+  projectileDamage,
+  projectileRange,
   projectileSpeed,
-  range,
   serial,
   serialCount,
   setSerialCount,
@@ -50,9 +50,9 @@ export function setupProjectile(projectileVariant: Projectile, casterId: number)
   variant[id] = projectileVariant;
   serial[id] = serialCount;
   depth[id] = -casterOffsetY;
-  damage[id] = damage[casterId];
-  range[id] = range[casterId];
   speed[id] = projectileSpeed[casterId];
+  projectileDamage[id] = projectileDamage[casterId];
+  projectileRange[id] = projectileRange[casterId];
   isEnemyProjectile[id] = type[casterId] === Type.ENEMY ? 1 : 0;
 
   switch (variant[id]) {
@@ -85,7 +85,7 @@ export function setupProjectile(projectileVariant: Projectile, casterId: number)
 export function updateProjectile(id: number) {
   updatePosition(id);
 
-  if (!isWithinDistance(startX[id], startY[id], posX[id], posY[id], range[id])) {
+  if (!isWithinDistance(startX[id], startY[id], posX[id], posY[id], projectileRange[id])) {
     destroyEntity(id);
     return;
   }
@@ -112,7 +112,7 @@ function hitTarget(id: number, targetId: number) {
       }
     }
 
-    health[targetId] -= Math.min(health[targetId], damage[id]);
+    health[targetId] -= Math.min(health[targetId], projectileDamage[id]);
 
     windupTime[targetId] = 0;
     staggerTime[targetId] = 100;

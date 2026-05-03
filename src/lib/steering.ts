@@ -1,5 +1,5 @@
 import { getDistance, isWithinDistance } from "snuggy";
-import { enemies, enemiesCount, posX, posY, radius, range, sepX, sepY, speed, velX, velY } from "@/data.ts";
+import { enemies, enemiesCount, posX, posY, projectileRange, radius, sepX, sepY, speed, velX, velY } from "@/data.ts";
 
 export function seek(id: number, x: number, y: number) {
   const sx = x - posX[id];
@@ -16,7 +16,7 @@ export function halt(id: number, x: number, y: number) {
   const dx = x - posX[id];
   const dy = y - posY[id];
 
-  if (isWithinDistance(0, 0, dx, dy, range[id])) {
+  if (isWithinDistance(0, 0, dx, dy, projectileRange[id])) {
     velX[id] = 0;
     velY[id] = 0;
   }

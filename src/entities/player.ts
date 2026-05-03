@@ -11,8 +11,8 @@ export function setupPlayer(x: number, y: number) {
   const id = setupEntity(Type.PLAYER, x, y);
   sprite[id] = Sprite.PLAYER;
   shadow[id] = Sprite.PLAYER_SHADOW;
-  setHealth(id, 100);
   setHitbox(id, -5, -15, 10, 15);
+  setHealth(id, 100);
   movementSpeed[id] = 1;
   setItem(id, Item.LONGSWORD);
   setPlayerId(id);
@@ -38,11 +38,11 @@ export function updatePlayer(id: number) {
   }
 
   speed[id] = movementSpeed[id];
+  if (windupTime[id] > 0) {
+    speed[id] *= 0.25;
+  }
   if (recoveryTime[id] > 0) {
     speed[id] *= 0.5;
-  }
-  if (windupTime[id] > 0) {
-    speed[id] = 0;
   }
 
   seek(id, x, y);

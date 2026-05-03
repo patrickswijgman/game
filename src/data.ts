@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 5/3/2026, 2:52:49 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 5/3/2026, 4:17:08 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -228,10 +228,10 @@ export const depth = new Uint16Array(2000)
 export const isFlipped = new Uint8Array(2000)
 export const health = new Uint16Array(2000)
 export const healthMax = new Uint16Array(2000)
-export const damage = new Uint16Array(2000)
 export const movementSpeed = new Float32Array(2000)
+export const projectileDamage = new Uint16Array(2000)
 export const projectileSpeed = new Float32Array(2000)
-export const range = new Uint16Array(2000)
+export const projectileRange = new Uint16Array(2000)
 export const windup = new Uint16Array(2000)
 export const recovery = new Uint16Array(2000)
 export const cooldown = new Uint16Array(2000)
@@ -285,10 +285,10 @@ export function zeroEntityAt(i: number) {
   isFlipped[i] = 0
   health[i] = 0
   healthMax[i] = 0
-  damage[i] = 0
   movementSpeed[i] = 0
+  projectileDamage[i] = 0
   projectileSpeed[i] = 0
-  range[i] = 0
+  projectileRange[i] = 0
   windup[i] = 0
   recovery[i] = 0
   cooldown[i] = 0
@@ -343,10 +343,10 @@ export function zeroEntity() {
   isFlipped.fill(0)
   health.fill(0)
   healthMax.fill(0)
-  damage.fill(0)
   movementSpeed.fill(0)
+  projectileDamage.fill(0)
   projectileSpeed.fill(0)
-  range.fill(0)
+  projectileRange.fill(0)
   windup.fill(0)
   recovery.fill(0)
   cooldown.fill(0)
@@ -402,10 +402,10 @@ export function printEntityAt(i: number) {
     isFlipped: isFlipped[i],
     health: health[i],
     healthMax: healthMax[i],
-    damage: damage[i],
     movementSpeed: movementSpeed[i],
+    projectileDamage: projectileDamage[i],
     projectileSpeed: projectileSpeed[i],
-    range: range[i],
+    projectileRange: projectileRange[i],
     windup: windup[i],
     recovery: recovery[i],
     cooldown: cooldown[i],

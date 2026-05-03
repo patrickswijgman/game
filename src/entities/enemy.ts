@@ -1,6 +1,37 @@
 import { addCameraTransform, drawRect, isWithinDistance, resetTransform, translateTransform } from "snuggy";
 import { Anim, Color, Enemy, Projectile, Sprite, Type } from "@/consts.ts";
-import { cooldown, cooldownTime, damage, health, healthDeplete, healthMax, hitboxH, hitboxW, isFlipped, movementSpeed, playerId, posX, posY, projectile, projectileSpeed, radius, range, recovery, recoveryTime, shadow, speed, sprite, targetX, targetY, variant, velX, velY, weapon, windup, windupTime } from "@/data.ts";
+import {
+  cooldown,
+  cooldownTime,
+  health,
+  healthDeplete,
+  healthMax,
+  hitboxH,
+  hitboxW,
+  isFlipped,
+  movementSpeed,
+  playerId,
+  posX,
+  posY,
+  projectile,
+  projectileDamage,
+  projectileRange,
+  projectileSpeed,
+  radius,
+  recovery,
+  recoveryTime,
+  shadow,
+  speed,
+  sprite,
+  targetX,
+  targetY,
+  variant,
+  velX,
+  velY,
+  weapon,
+  windup,
+  windupTime,
+} from "@/data.ts";
 import { setupProjectile } from "@/entities/projectile.ts";
 import { setAnimation, setHealth, setHitbox, setupEntity, updatePosition } from "@/lib/entity.ts";
 import { halt, seek, separate } from "@/lib/steering.ts";
@@ -16,17 +47,17 @@ export function setupEnemy(x: number, y: number, enemyVariant: Enemy) {
         sprite[id] = Sprite.ENEMY_MELEE;
         shadow[id] = Sprite.ENEMY_MELEE_SHADOW;
         weapon[id] = Sprite.ENEMY_MELEE_WEAPON;
-        projectile[id] = Projectile.ENEMY_MELEE;
-        setHealth(id, 50);
         setHitbox(id, -5, -15, 10, 15);
+        setHealth(id, 50);
         movementSpeed[id] = 0.5;
-        damage[id] = 10;
         radius[id] = 20;
-        range[id] = 20;
+        projectile[id] = Projectile.ENEMY_MELEE;
+        projectileDamage[id] = 10;
+        projectileRange[id] = 20;
         projectileSpeed[id] = 1;
         windup[id] = 300;
-        cooldown[id] = 500;
         recovery[id] = 250;
+        cooldown[id] = 500;
       }
       break;
   }
@@ -53,7 +84,7 @@ export function updateEnemy(id: number) {
   seek(id, posX[playerId], posY[playerId]);
   separate(id);
 
-  if (isWithinDistance(posX[id], posY[id], posX[playerId], posY[playerId], range[id])) {
+  if (isWithinDistance(posX[id], posY[id], posX[playerId], posY[playerId], projectileRange[id])) {
     if (cooldownTime[id] === 0) {
       targetX[id] = posX[playerId];
       targetY[id] = posY[playerId] - hitboxH[playerId] / 2;

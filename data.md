@@ -55,10 +55,10 @@
 <!-- stats -->
 - health uint16
 - healthMax uint16
-- damage uint16
 - movementSpeed float32
+- projectileDamage uint16
 - projectileSpeed float32
-- range uint16
+- projectileRange uint16
 - windup uint16
 - recovery uint16
 - cooldown uint16
