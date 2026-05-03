@@ -71,22 +71,20 @@ export function drawEntity(id: number) {
     scaleTransform(-1, 1);
   }
 
+  scaleTransform(animScaleX[id], animScaleY[id]);
+
   switch (shadow[id]) {
     case Sprite.PLAYER_SHADOW:
       drawSprite(Texture.ATLAS, -16, -3, 0, 32, 32, 16);
       break;
     case Sprite.ENEMY_MELEE_SHADOW:
-      drawSprite(Texture.ATLAS, -16, -3, 32, 32, 32, 16);
+      drawSprite(Texture.ATLAS, -16, -3, 64, 32, 32, 16);
       break;
   }
 
   rotateTransform(angle[id]);
-
-  if (anim[id]) {
-    translateTransform(animX[id], animY[id]);
-    scaleTransform(animScaleX[id], animScaleY[id]);
-    rotateTransform(animAngle[id]);
-  }
+  translateTransform(animX[id], animY[id]);
+  rotateTransform(animAngle[id]);
 
   const texture = getTexture(id);
 
@@ -101,7 +99,7 @@ export function drawEntity(id: number) {
       drawSprite(texture, -16, -31, 0, 0, 32, 32);
       break;
     case Sprite.ENEMY_MELEE:
-      drawSprite(texture, -16, -31, 32, 0, 32, 32);
+      drawSprite(texture, -16, -31, 64, 0, 32, 32);
       break;
     case Sprite.PROJECTILE_LONGSWORD:
       drawSprite(texture, -16, -16, 0, 112, 32, 32);
