@@ -41,24 +41,34 @@ Trinkets may boost stats and/or provide passive effects.
 From the beginning 3 trinkets can be equipped, later on the player may unlock more trinket slots.
 See trinkets table below.
 
-# Table legend
+# Stats
 
-- H = high
-- M = medium
-- L = low
+| Name      | Note                                                  |
+| --------- | ----------------------------------------------------- |
+| Damage    |                                                       |
+| Cooldown  | AKA attack speed (milliseconds)                       |
+| Range     | Projectile lifetime (milliseconds) x projectile speed |
+| Health    | Entity dies when reduced zero                         |
+| HealthMax | Health cannot exceed this                             |
 
 # Weapons table
 
-| Name      | Damage | Speed | Range |
-| --------- | ------ | ----- | ----- |
-| Longsword | M      | M     | M     |
-| Dagger    | L      | H     | L     |
+| Name      | Damage | Cooldown | Range   | Note                  |
+| --------- | ------ | -------- | ------- | --------------------- |
+| Longsword | 20     | 300      | 100 x 1 | Starter, Balanced     |
+| Dagger    | 10     | 100      | 50 x 1  | Up close and personal |
+
+# Armor table
+
+| Name    | Health | Note    |
+| ------- | ------ | ------- |
+| Clothes | 50     | Starter |
 
 # Enemies table
 
-| Name     | Type     | Damage | Speed | Range | Note                                                       |
-| -------- | -------- | ------ | ----- | ----- | ---------------------------------------------------------- |
-| Hollow   | Melee    | M      | M     | L     |                                                            |
-| Skeleton | Ranged   | L      | L     | H     |                                                            |
-| Cultist  | Summoner | L      | L     | H     | Summoned creatures do not drop souls                       |
-| Mage     | Trapper  | L      | M     | M     | Places a trap under the player that explodes after a delay |
+| Name     | Type     | Damage | Speed | Range | Health | Note                                                       |
+| -------- | -------- | ------ | ----- | ----- | ------ | ---------------------------------------------------------- |
+| Hollow   | Melee    |        |       |       |        |                                                            |
+| Skeleton | Ranged   |        |       |       |        |                                                            |
+| Cultist  | Summoner |        |       |       |        | Summoned creatures do not drop souls                       |
+| Mage     | Trapper  |        |       |       |        | Places a trap under the player that explodes after a delay |
