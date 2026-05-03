@@ -1,13 +1,13 @@
 import { drawRect, getRandomNumber, isInputPressed, run, setCameraBoundary, setCameraPosition, setCameraSmoothing, setCameraTarget, setFont, setFontOffset, setInput, updateCamera } from "snuggy";
-import { Anim, Enemy, Font, Input, MAX_ENEMY_COUNT, ROOM_HEIGHT, ROOM_WIDTH, Type } from "@/consts.ts";
-import { active, activeCount, anim, cooldownTime, enemiesCount, healthDepleteTime, hitboxW, immuneTime, isDestroyed, lifeTime, posX, posY, recoveryTime, staggerTime, type } from "@/data.ts";
-import { setupEnemy, updateEnemy } from "@/entities/enemy.ts";
-import { setupPlayer, updatePlayer } from "@/entities/player.ts";
+import { Anim, Color, Enemy, Font, Input, MAX_ENEMY_COUNT, ROOM_HEIGHT, ROOM_WIDTH, Type } from "@/consts.ts";
+import { active, activeCount, anim, cooldownTime, enemiesCount, healthDepleteTime, immuneTime, isDestroyed, lifeTime, playerId, posX, posY, recoveryTime, staggerTime, type } from "@/data.ts";
+import { drawEnemyHealthBar, setupEnemy, updateEnemy } from "@/entities/enemy.ts";
+import { drawPlayerHealthBar, setupPlayer, updatePlayer } from "@/entities/player.ts";
 import { updateProjectile } from "@/entities/projectile.ts";
 import { updateBreatheAnimation, updateWalkAnimation } from "@/lib/anims.ts";
 import { drawFramesPerSecond, drawHitboxes } from "@/lib/debug.ts";
 import { addNewEntities, destroyEntity, removeDestroyedEntities, setupEntities, sortEntities } from "@/lib/entities.ts";
-import { drawEntity, drawHealthBar, updateHealthBar } from "@/lib/entity.ts";
+import { drawEntity, updateHealthBar } from "@/lib/entity.ts";
 import { loadResources } from "@/lib/resources.ts";
 import { separateEnemies } from "@/lib/steering.ts";
 import { tickTimer } from "@/lib/timer.ts";
@@ -50,7 +50,7 @@ function update() {
   addNewEntities();
   sortEntities();
 
-  drawRect(0, 0, ROOM_WIDTH, ROOM_HEIGHT, "slategrey", true);
+  drawRect(0, 0, ROOM_WIDTH, ROOM_HEIGHT, Color.GRASS, true);
 
   separateEnemies();
 
@@ -75,10 +75,12 @@ function update() {
       switch (type[id]) {
         case Type.PLAYER:
           updatePlayer(id);
+          updateHealthBar(id);
           setCameraTarget(posX[id], posY[id]);
           break;
         case Type.ENEMY:
           updateEnemy(id);
+          updateHealthBar(id);
           break;
         case Type.PROJECTILE:
           updateProjectile(id);
@@ -98,12 +100,13 @@ function update() {
     drawEntity(id);
 
     if (type[id] === Type.ENEMY) {
-      updateHealthBar(id);
-      drawHealthBar(id, hitboxW[id], 2);
+      drawEnemyHealthBar(id);
     }
   }
 
   updateCamera();
+
+  drawPlayerHealthBar(playerId);
 
   if (isInputPressed(Input.DEBUG)) {
     isDebugging = !isDebugging;

@@ -1,5 +1,5 @@
-import { addCameraTransform, delta, drawRect, drawSprite, getDistance, resetTransform, rotateTransform, scaleTransform, translateTransform } from "snuggy";
-import { Color, Sprite, Texture, Type } from "@/consts.ts";
+import { addCameraTransform, delta, drawSprite, getDistance, resetTransform, rotateTransform, scaleTransform, translateTransform } from "snuggy";
+import { Sprite, Texture, Type } from "@/consts.ts";
 import { angle, anim, animAngle, animScaleX, animScaleY, animX, animY, caster, health, healthDeplete, healthDepleteTime, healthMax, hitboxH, hitboxOffsetX, hitboxOffsetY, hitboxW, hitboxX, hitboxY, isFlipped, posX, posY, shadow, sprite, staggerTime, type, velX, velY, weapon, windupTime } from "@/data.ts";
 import { nextEntity } from "@/lib/entities.ts";
 
@@ -29,7 +29,6 @@ export function isHitboxIntersection(a: number, b: number) {
 export function setHealth(id: number, hp: number) {
   health[id] = hp;
   healthMax[id] = hp;
-  healthDeplete[id] = hp;
 }
 
 export function updatePosition(id: number) {
@@ -59,6 +58,12 @@ export function setAnimation(id: number, a: number) {
     animScaleX[id] = 1;
     animScaleY[id] = 1;
     animAngle[id] = 0;
+  }
+}
+
+export function updateHealthBar(id: number) {
+  if (healthDepleteTime[id] === 0) {
+    healthDeplete[id] = Math.max(health[id], healthDeplete[id] - (healthDeplete[id] / health[id]) * 2 * delta);
   }
 }
 
@@ -92,6 +97,9 @@ export function drawEntity(id: number) {
     case Sprite.PLAYER_LONGSWORD:
       drawSprite(texture, -16, -31, 0, 80, 32, 32);
       break;
+    case Sprite.ENEMY_MELEE_WEAPON:
+      drawSprite(texture, -16, -31, 32, 80, 32, 32);
+      break;
   }
 
   switch (sprite[id]) {
@@ -104,43 +112,21 @@ export function drawEntity(id: number) {
     case Sprite.PROJECTILE_LONGSWORD:
       drawSprite(texture, -16, -16, 0, 112, 32, 32);
       break;
+    case Sprite.PROJECTILE_ENEMY_MELEE:
+      drawSprite(texture, -16, -16, 32, 112, 32, 32);
+      break;
   }
 }
 
 function getTexture(id: number) {
-  if (staggerTime[id] > 0) {
-    return Texture.ATLAS_FLASH;
-  }
   if (windupTime[id] > 0) {
     return Texture.ATLAS_OUTLINED_DANGER;
+  }
+  if (staggerTime[id] > 0) {
+    return Texture.ATLAS_FLASH;
   }
   if (type[caster[id]] === Type.ENEMY) {
     return Texture.ATLAS_FLASH_DANGER;
   }
   return Texture.ATLAS;
-}
-
-export function updateHealthBar(id: number) {
-  if (healthDepleteTime[id] === 0) {
-    healthDeplete[id] = Math.max(health[id], healthDeplete[id] - (healthDeplete[id] / health[id]) * 2 * delta);
-  }
-}
-
-export function drawHealthBar(id: number, width: number, height: number) {
-  if (health[id] === healthMax[id]) {
-    return;
-  }
-
-  const hp = (health[id] / healthMax[id]) * width;
-  const hd = (healthDeplete[id] / healthMax[id]) * width;
-  const x = posX[id] + -width / 2;
-  const y = posY[id] - hitboxH[id] - 5;
-
-  resetTransform();
-  translateTransform(x, y);
-  addCameraTransform();
-
-  drawRect(-1, -1, width + 2, height + 2, Color.BORDER, true);
-  drawRect(0, 0, hd, height, Color.DEPLETE, true);
-  drawRect(0, 0, hp, height, Color.HEALTH, true);
 }

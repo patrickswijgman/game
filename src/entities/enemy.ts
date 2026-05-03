@@ -1,6 +1,6 @@
-import { isWithinDistance } from "snuggy";
-import { Anim, Enemy, Projectile, Sprite, Type } from "@/consts.ts";
-import { cooldown, cooldownTime, damage, hitboxH, isFlipped, playerId, posX, posY, projectile, radius, range, recovery, recoveryTime, shadow, speed, sprite, targetX, targetY, variant, velX, velY, weapon, windup, windupTime } from "@/data.ts";
+import { addCameraTransform, drawRect, isWithinDistance, resetTransform, translateTransform } from "snuggy";
+import { Anim, Color, Enemy, Projectile, Sprite, Type } from "@/consts.ts";
+import { cooldown, cooldownTime, damage, health, healthDeplete, healthMax, hitboxH, hitboxW, isFlipped, playerId, posX, posY, projectile, radius, range, recovery, recoveryTime, shadow, speed, sprite, targetX, targetY, variant, velX, velY, weapon, windup, windupTime } from "@/data.ts";
 import { setupProjectile } from "@/entities/projectile.ts";
 import { setAnimation, setHealth, setHitbox, setupEntity, updatePosition } from "@/lib/entity.ts";
 import { halt, seek, separate } from "@/lib/steering.ts";
@@ -24,8 +24,8 @@ export function setupEnemy(x: number, y: number, enemyVariant: Enemy) {
         windup[id] = 300;
         cooldown[id] = 300;
         recovery[id] = 300;
-        weapon[id] = Sprite.PLAYER_LONGSWORD;
-        projectile[id] = Projectile.LONGSWORD;
+        weapon[id] = Sprite.ENEMY_MELEE_WEAPON;
+        projectile[id] = Projectile.ENEMY_MELEE;
       }
       break;
   }
@@ -68,4 +68,26 @@ export function updateEnemy(id: number) {
   updatePosition(id);
 
   isFlipped[id] = posX[playerId] < posX[id] ? 1 : 0;
+}
+
+export function drawEnemyHealthBar(id: number) {
+  if (health[id] === healthMax[id]) {
+    return;
+  }
+
+  const width = hitboxW[id];
+  const height = 2;
+  const hp = (health[id] / healthMax[id]) * width;
+  const hd = (healthDeplete[id] / healthMax[id]) * width;
+  const x = posX[id] + -width / 2;
+  const y = posY[id] - hitboxH[id] - 5;
+
+  resetTransform();
+  translateTransform(x, y);
+  addCameraTransform();
+
+  drawRect(-1, -1, width + 2, height + 2, Color.BORDER, true);
+  drawRect(0, 0, hd, height, Color.DEPLETE, true);
+  drawRect(0, 0, hp, height, Color.HEALTH_DARK, true);
+  drawRect(0, 0, hp, height - 1, Color.HEALTH, true);
 }

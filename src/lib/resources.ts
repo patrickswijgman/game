@@ -1,5 +1,5 @@
 import { getTexture, loadFont, loadRenderTexture, loadTexture } from "snuggy";
-import { Font, Texture } from "@/consts.ts";
+import { Color, Font, Texture } from "@/consts.ts";
 
 export async function loadResources() {
   await Promise.all([
@@ -22,7 +22,7 @@ export async function loadResources() {
   loadRenderTexture(Texture.ATLAS_FLASH_DANGER, 256, 256, (ctx) => {
     ctx.drawImage(getTexture(Texture.ATLAS), 0, 0);
     ctx.globalCompositeOperation = "source-in";
-    ctx.fillStyle = "red";
+    ctx.fillStyle = Color.DANGER;
     ctx.fillRect(0, 0, 256, 256);
   });
 
@@ -46,7 +46,7 @@ export async function loadResources() {
     ctx.drawImage(atlas, 0, -1);
     ctx.drawImage(atlas, 0, 1);
     ctx.globalCompositeOperation = "source-in";
-    ctx.fillStyle = "red";
+    ctx.fillStyle = Color.DANGER;
     ctx.fillRect(0, 0, 256, 256);
     ctx.globalCompositeOperation = "source-over";
     ctx.drawImage(atlas, 0, 0);

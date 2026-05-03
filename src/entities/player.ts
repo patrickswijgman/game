@@ -1,6 +1,6 @@
-import { isInputDown, pointerWorldX, pointerWorldY } from "snuggy";
-import { Anim, Input, Item, Sprite, Type } from "@/consts.ts";
-import { cooldown, cooldownTime, isFlipped, posX, posY, projectile, recovery, recoveryTime, setPlayerId, shadow, speed, sprite, targetX, targetY, velX, velY } from "@/data.ts";
+import { drawRect, isInputDown, pointerWorldX, pointerWorldY, resetTransform, scaleTransform, translateTransform } from "snuggy";
+import { Anim, Color, Input, Item, Sprite, Type } from "@/consts.ts";
+import { cooldown, cooldownTime, health, healthDeplete, healthMax, isFlipped, posX, posY, projectile, recovery, recoveryTime, setPlayerId, shadow, speed, sprite, targetX, targetY, velX, velY } from "@/data.ts";
 import { setupProjectile } from "@/entities/projectile.ts";
 import { setAnimation, setHealth, setHitbox, setupEntity, updatePosition } from "@/lib/entity.ts";
 import { setItem } from "@/lib/items.ts";
@@ -54,4 +54,22 @@ export function updatePlayer(id: number) {
     recoveryTime[id] = recovery[id];
     setupProjectile(projectile[id], id);
   }
+}
+
+export function drawPlayerHealthBar(id: number) {
+  const width = 40;
+  const height = 3;
+  const hp = (health[id] / healthMax[id]) * width;
+  const hd = (healthDeplete[id] / healthMax[id]) * width;
+  const x = 20;
+  const y = 20;
+
+  resetTransform();
+  translateTransform(x, y);
+  scaleTransform(2);
+
+  drawRect(-1, -1, width + 2, height + 2, Color.BORDER, true);
+  drawRect(0, 0, hd, height, Color.DEPLETE, true);
+  drawRect(0, 0, hp, height, Color.HEALTH_DARK, true);
+  drawRect(0, 0, hp, height - 1, Color.HEALTH, true);
 }

@@ -7,7 +7,7 @@ import { seek } from "@/lib/steering.ts";
 
 export function setupProjectile(projectileVariant: Projectile, casterId: number) {
   const casterOffsetX = 0;
-  const casterOffsetY = -5;
+  const casterOffsetY = -hitboxH[casterId] / 3;
   const casterX = posX[casterId] + casterOffsetX;
   const casterY = posY[casterId] + casterOffsetY;
 
@@ -24,6 +24,15 @@ export function setupProjectile(projectileVariant: Projectile, casterId: number)
       {
         sprite[id] = Sprite.PROJECTILE_LONGSWORD;
         setHitbox(id, -5, -5, 10, 10);
+        lifeTime[id] = 100;
+        speed[id] = 1;
+      }
+      break;
+
+    case Projectile.ENEMY_MELEE:
+      {
+        sprite[id] = Sprite.PROJECTILE_ENEMY_MELEE;
+        setHitbox(id, -4, -4, 8, 8);
         lifeTime[id] = 100;
         speed[id] = 1;
       }
