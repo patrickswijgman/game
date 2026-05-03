@@ -2,7 +2,7 @@ import { isInputDown, pointerWorldX, pointerWorldY } from "snuggy";
 import { Anim, Input, Item, Sprite, Type } from "@/consts.ts";
 import { cooldown, cooldownTime, isFlipped, posX, posY, projectile, recovery, recoveryTime, setPlayerId, shadow, speed, sprite, targetX, targetY, velX, velY } from "@/data.ts";
 import { setupProjectile } from "@/entities/projectile.ts";
-import { move, setAnimation, setHealth, setHitbox, setupEntity } from "@/lib/entity.ts";
+import { setAnimation, setHealth, setHitbox, setupEntity, updatePosition } from "@/lib/entity.ts";
 import { setItem } from "@/lib/items.ts";
 import { seek } from "@/lib/steering.ts";
 
@@ -37,14 +37,14 @@ export function updatePlayer(id: number) {
   }
 
   seek(id, x, y, recoveryTime[id] > 0 ? 0.5 : 1);
-  move(id);
+  updatePosition(id);
 
   isFlipped[id] = pointerWorldX < posX[id] ? 1 : 0;
 
   if (velX[id] || velY[id]) {
     setAnimation(id, Anim.WALK);
   } else {
-    setAnimation(id, Anim.BREATH);
+    setAnimation(id, Anim.BREATHE);
   }
 
   if (isInputDown(Input.ATTACK) && cooldownTime[id] === 0) {

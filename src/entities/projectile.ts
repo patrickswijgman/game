@@ -2,7 +2,7 @@ import { getAngle } from "snuggy";
 import { Projectile, Sprite, Type } from "@/consts.ts";
 import { angle, caster, damage, depth, enemies, enemiesCount, health, healthDepleteTime, hitboxH, hitboxW, immuneTime, lastHitBy, lifeTime, playerId, posX, posY, serial, serialCount, setSerialCount, speed, sprite, staggerTime, targetX, targetY, type, variant, velX, velY } from "@/data.ts";
 import { destroyEntity } from "@/lib/entities.ts";
-import { isHitboxIntersection, move, orbit, setHitbox, setupEntity } from "@/lib/entity.ts";
+import { isHitboxIntersection, setHitbox, setOrbitPosition, setupEntity, updatePosition } from "@/lib/entity.ts";
 import { seek } from "@/lib/steering.ts";
 
 export function setupProjectile(projectileVariant: Projectile, casterId: number) {
@@ -35,31 +35,28 @@ export function setupProjectile(projectileVariant: Projectile, casterId: number)
   const o = (hitboxW[casterId] + hitboxH[casterId]) / 2;
 
   seek(id, x, y);
-  orbit(id, casterX, casterY, x, y, o);
+  setOrbitPosition(id, casterX, casterY, x, y, o);
   angle[id] = getAngle(0, 0, velX[id], velY[id]);
 
   return id;
 }
 
 export function updateProjectile(id: number) {
-  move(id);
-  hit(id);
-}
-
-function hit(id: number) {
   const casterId = caster[id];
+
+  updatePosition(id);
 
   if (type[casterId] === Type.PLAYER) {
     for (let i = 0; i < enemiesCount; i++) {
       const enemyId = enemies[i];
-      dealDamageToTarget(id, casterId, enemyId);
+      hitTarget(id, casterId, enemyId);
     }
   } else {
-    dealDamageToTarget(id, casterId, playerId);
+    hitTarget(id, casterId, playerId);
   }
 }
 
-function dealDamageToTarget(id: number, casterId: number, targetId: number) {
+function hitTarget(id: number, casterId: number, targetId: number) {
   if (lastHitBy[targetId] !== serial[id] && isHitboxIntersection(id, targetId)) {
     lastHitBy[targetId] = serial[id];
 

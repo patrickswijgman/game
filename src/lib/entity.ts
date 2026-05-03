@@ -1,6 +1,6 @@
 import { addCameraTransform, delta, drawRect, drawSprite, getDistance, resetTransform, rotateTransform, scaleTransform, translateTransform } from "snuggy";
 import { Color, Sprite, Texture, Type } from "@/consts.ts";
-import { angle, anim, animAngle, animScaleX, animScaleY, animX, animY, caster, health, healthDeplete, healthDepleteTime, healthMax, hitboxH, hitboxOffsetX, hitboxOffsetY, hitboxW, hitboxX, hitboxY, isFlipped, posX, posY, shadow, sprite, staggerTime, type, velX, velY, weapon } from "@/data.ts";
+import { angle, anim, animAngle, animScaleX, animScaleY, animX, animY, caster, delayTime, health, healthDeplete, healthDepleteTime, healthMax, hitboxH, hitboxOffsetX, hitboxOffsetY, hitboxW, hitboxX, hitboxY, isFlipped, posX, posY, shadow, sprite, staggerTime, type, velX, velY, weapon } from "@/data.ts";
 import { nextEntity } from "@/lib/entities.ts";
 
 export function setupEntity(t: Type, x: number, y: number) {
@@ -32,14 +32,14 @@ export function setHealth(id: number, hp: number) {
   healthDeplete[id] = hp;
 }
 
-export function move(id: number) {
+export function updatePosition(id: number) {
   posX[id] += velX[id] * delta;
   posY[id] += velY[id] * delta;
   hitboxX[id] = posX[id] + hitboxOffsetX[id];
   hitboxY[id] = posY[id] + hitboxOffsetY[id];
 }
 
-export function orbit(id: number, anchorX: number, anchorY: number, targetX: number, targetY: number, distance: number) {
+export function setOrbitPosition(id: number, anchorX: number, anchorY: number, targetX: number, targetY: number, distance: number) {
   posX[id] = anchorX;
   posY[id] = anchorY;
   const dx = targetX - anchorX;
@@ -82,9 +82,11 @@ export function drawEntity(id: number) {
 
   rotateTransform(angle[id]);
 
-  translateTransform(animX[id], animY[id]);
-  scaleTransform(animScaleX[id], animScaleY[id]);
-  rotateTransform(animAngle[id]);
+  if (anim[id]) {
+    translateTransform(animX[id], animY[id]);
+    scaleTransform(animScaleX[id], animScaleY[id]);
+    rotateTransform(animAngle[id]);
+  }
 
   const texture = getTexture(id);
 
@@ -109,10 +111,13 @@ export function drawEntity(id: number) {
 
 function getTexture(id: number) {
   if (staggerTime[id] > 0) {
-    return Texture.FLASH;
+    return Texture.ATLAS_FLASH;
+  }
+  if (delayTime[id] > 0) {
+    return Texture.ATLAS_OUTLINED_DANGER;
   }
   if (type[caster[id]] === Type.ENEMY) {
-    return Texture.DANGER;
+    return Texture.ATLAS_FLASH_DANGER;
   }
   return Texture.ATLAS;
 }
@@ -123,13 +128,11 @@ export function updateHealthBar(id: number) {
   }
 }
 
-export function drawHealthBar(id: number) {
+export function drawHealthBar(id: number, width: number, height: number) {
   if (health[id] === healthMax[id]) {
     return;
   }
 
-  const width = hitboxW[id];
-  const height = 2;
   const hp = (health[id] / healthMax[id]) * width;
   const hd = (healthDeplete[id] / healthMax[id]) * width;
   const x = posX[id] + -width / 2;

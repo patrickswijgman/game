@@ -5,8 +5,10 @@ export const ROOM_HEIGHT = 360;
 
 export const enum Texture {
   ATLAS,
-  FLASH,
-  DANGER,
+  ATLAS_FLASH,
+  ATLAS_FLASH_DANGER,
+  ATLAS_OUTLINED,
+  ATLAS_OUTLINED_DANGER,
 }
 
 export const enum Font {
@@ -51,7 +53,7 @@ export const enum Projectile {
 
 export const enum Anim {
   NONE,
-  BREATH,
+  BREATHE,
   WALK,
 }
 
