@@ -25,11 +25,13 @@ import {
   toRemoveCount,
   type,
   zeroEntityAt,
+  zeroFree,
   zeroToAdd,
   zeroToRemove,
 } from "@/data.ts";
 
 export function setupEntities() {
+  zeroFree();
   for (let i = MAX_ENTITY_COUNT - 1; i >= 0; i--) {
     pushFree(i);
   }
