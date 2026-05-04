@@ -1,5 +1,5 @@
 import { ease, elapsed } from "snuggy";
-import { animScaleX, animScaleY, animY, speed } from "@/data.ts";
+import { animScaleX, animScaleY, animY } from "@/data.ts";
 
 export function updateBreatheAnimation(id: number) {
   const d = 2000;
@@ -9,7 +9,7 @@ export function updateBreatheAnimation(id: number) {
 }
 
 export function updateWalkAnimation(id: number) {
-  const d = 200 / speed[id];
+  const d = 200;
   const t = (elapsed % d) / d;
   animY[id] = -2 * ease(t);
 }

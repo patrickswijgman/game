@@ -9,6 +9,8 @@ import {
   healthDepleteTime,
   hitboxH,
   hitboxW,
+  hitboxX,
+  hitboxY,
   immuneTime,
   isEnemyProjectile,
   lastHitBy,
@@ -21,7 +23,6 @@ import {
   serial,
   serialCount,
   setSerialCount,
-  speed,
   sprite,
   staggerTime,
   startX,
@@ -35,7 +36,7 @@ import {
   windupTime,
 } from "@/data.ts";
 import { destroyEntity } from "@/lib/entities.ts";
-import { isHitboxIntersection, setHitbox, setOrbitPosition, setupEntity, updatePosition } from "@/lib/entity.ts";
+import { isHitboxIntersection, setOrbitPosition, setupEntity, updatePosition } from "@/lib/entity.ts";
 import { seek } from "@/lib/steering.ts";
 
 export function setupProjectile(projectileVariant: Projectile, casterId: number) {
@@ -50,23 +51,29 @@ export function setupProjectile(projectileVariant: Projectile, casterId: number)
   variant[id] = projectileVariant;
   serial[id] = serialCount;
   depth[id] = -casterOffsetY;
-  speed[id] = projectileSpeed[casterId];
   projectileDamage[id] = projectileDamage[casterId];
   projectileRange[id] = projectileRange[casterId];
+  projectileSpeed[id] = projectileSpeed[casterId];
   isEnemyProjectile[id] = type[casterId] === Type.ENEMY ? 1 : 0;
 
   switch (variant[id]) {
     case Projectile.LONGSWORD:
       {
         sprite[id] = Sprite.PROJECTILE_LONGSWORD;
-        setHitbox(id, -5, -5, 10, 10);
+        hitboxX[id] = -5;
+        hitboxY[id] = -5;
+        hitboxW[id] = 10;
+        hitboxH[id] = 10;
       }
       break;
 
     case Projectile.ENEMY_MELEE:
       {
         sprite[id] = Sprite.PROJECTILE_ENEMY_MELEE;
-        setHitbox(id, -4, -4, 8, 8);
+        hitboxX[id] = -4;
+        hitboxY[id] = -4;
+        hitboxW[id] = 8;
+        hitboxH[id] = 8;
       }
       break;
   }
@@ -75,7 +82,7 @@ export function setupProjectile(projectileVariant: Projectile, casterId: number)
   const y = targetY[casterId];
   const o = (hitboxW[casterId] + hitboxH[casterId]) / 2;
 
-  seek(id, x, y);
+  seek(id, x, y, projectileSpeed[id]);
   setOrbitPosition(id, casterX, casterY, x, y, o);
   angle[id] = getAngle(0, 0, velX[id], velY[id]);
 

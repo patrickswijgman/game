@@ -1,5 +1,5 @@
 import { addCameraTransform, drawRect, drawText, fps, resetTransform, scaleTransform, translateTransform } from "snuggy";
-import { active, activeCount, hitboxH, hitboxW, hitboxX, hitboxY } from "@/data.ts";
+import { active, activeCount, hitboxH, hitboxW, hitboxX, hitboxY, posX, posY } from "@/data.ts";
 
 export function drawFramesPerSecond() {
   resetTransform();
@@ -12,6 +12,7 @@ export function drawHitboxes() {
   for (let i = 0; i < activeCount; i++) {
     const id = active[i];
     resetTransform();
+    translateTransform(posX[id], posY[id]);
     addCameraTransform();
     drawRect(hitboxX[id], hitboxY[id], hitboxW[id], hitboxH[id], "yellow", false);
   }

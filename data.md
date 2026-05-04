@@ -28,15 +28,10 @@
 - posY float32
 - velX float32
 - velY float32
-- sepX float32
-- sepY float32
-- hitboxX float32
-- hitboxY float32
+- hitboxX int16
+- hitboxY int16
 - hitboxW uint16
 - hitboxH uint16
-- hitboxOffsetX int16
-- hitboxOffsetY int16
-- speed float32
 - radius float32
 <!-- animation -->
 - anim uint8

@@ -8,6 +8,8 @@ import {
   healthMax,
   hitboxH,
   hitboxW,
+  hitboxX,
+  hitboxY,
   isFlipped,
   movementSpeed,
   playerId,
@@ -21,7 +23,6 @@ import {
   recovery,
   recoveryTime,
   shadow,
-  speed,
   sprite,
   targetX,
   targetY,
@@ -33,8 +34,8 @@ import {
   windupTime,
 } from "@/data.ts";
 import { setupProjectile } from "@/entities/projectile.ts";
-import { setAnimation, setHealth, setHitbox, setupEntity, updatePosition } from "@/lib/entity.ts";
-import { halt, seek, separate } from "@/lib/steering.ts";
+import { setAnimation, setupEntity, updatePosition } from "@/lib/entity.ts";
+import { halt, seek } from "@/lib/steering.ts";
 import { tickTimer } from "@/lib/timer.ts";
 
 export function setupEnemy(x: number, y: number, enemyVariant: Enemy) {
@@ -47,8 +48,12 @@ export function setupEnemy(x: number, y: number, enemyVariant: Enemy) {
         sprite[id] = Sprite.ENEMY_MELEE;
         shadow[id] = Sprite.ENEMY_MELEE_SHADOW;
         weapon[id] = Sprite.ENEMY_MELEE_WEAPON;
-        setHitbox(id, -5, -15, 10, 15);
-        setHealth(id, 50);
+        hitboxX[id] = -5;
+        hitboxY[id] = -15;
+        hitboxW[id] = 10;
+        hitboxH[id] = 15;
+        health[id] = 50;
+        healthMax[id] = 50;
         movementSpeed[id] = 0.5;
         radius[id] = 20;
         projectile[id] = Projectile.ENEMY_MELEE;
@@ -76,13 +81,12 @@ export function updateEnemy(id: number) {
     return;
   }
 
-  velX[id] = 0;
-  velY[id] = 0;
-
-  speed[id] = recoveryTime[id] > 0 ? 0 : movementSpeed[id];
-
-  seek(id, posX[playerId], posY[playerId]);
-  separate(id);
+  if (recoveryTime[id] === 0) {
+    seek(id, posX[playerId], posY[playerId], movementSpeed[id]);
+    halt(id, posX[playerId], posY[playerId], projectileRange[id]);
+    updatePosition(id);
+    isFlipped[id] = posX[playerId] < posX[id] ? 1 : 0;
+  }
 
   if (isWithinDistance(posX[id], posY[id], posX[playerId], posY[playerId], projectileRange[id])) {
     if (cooldownTime[id] === 0) {
@@ -96,11 +100,6 @@ export function updateEnemy(id: number) {
   } else {
     setAnimation(id, Anim.NONE);
   }
-
-  halt(id, posX[playerId], posY[playerId]);
-  updatePosition(id);
-
-  isFlipped[id] = posX[playerId] < posX[id] ? 1 : 0;
 }
 
 export function drawEnemyHealthBar(id: number) {

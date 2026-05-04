@@ -1,8 +1,8 @@
 import { drawRect, isInputDown, pointerWorldX, pointerWorldY, resetTransform, scaleTransform, translateTransform } from "snuggy";
 import { Anim, Color, Input, Item, Sprite, Type } from "@/consts.ts";
-import { cooldown, cooldownTime, health, healthDeplete, healthMax, isFlipped, movementSpeed, posX, posY, projectile, recovery, recoveryTime, setPlayerId, shadow, speed, sprite, targetX, targetY, velX, velY, windup, windupTime } from "@/data.ts";
+import { cooldown, cooldownTime, health, healthDeplete, healthMax, hitboxH, hitboxW, hitboxX, hitboxY, isFlipped, movementSpeed, posX, posY, projectile, recovery, recoveryTime, setPlayerId, shadow, sprite, targetX, targetY, velX, velY, windup, windupTime } from "@/data.ts";
 import { setupProjectile } from "@/entities/projectile.ts";
-import { setAnimation, setHealth, setHitbox, setupEntity, updatePosition } from "@/lib/entity.ts";
+import { setAnimation, setupEntity, updatePosition } from "@/lib/entity.ts";
 import { setItem } from "@/lib/items.ts";
 import { seek } from "@/lib/steering.ts";
 import { tickTimer } from "@/lib/timer.ts";
@@ -11,8 +11,12 @@ export function setupPlayer(x: number, y: number) {
   const id = setupEntity(Type.PLAYER, x, y);
   sprite[id] = Sprite.PLAYER;
   shadow[id] = Sprite.PLAYER_SHADOW;
-  setHitbox(id, -5, -15, 10, 15);
-  setHealth(id, 100);
+  hitboxX[id] = -5;
+  hitboxY[id] = -15;
+  hitboxW[id] = 10;
+  hitboxH[id] = 15;
+  health[id] = 100;
+  healthMax[id] = 100;
   movementSpeed[id] = 1;
   setItem(id, Item.LONGSWORD);
   setPlayerId(id);
@@ -37,15 +41,15 @@ export function updatePlayer(id: number) {
     x += 1;
   }
 
-  speed[id] = movementSpeed[id];
+  let speed = movementSpeed[id];
   if (windupTime[id] > 0) {
-    speed[id] *= 0.25;
+    speed *= 0.25;
   }
   if (recoveryTime[id] > 0) {
-    speed[id] *= 0.5;
+    speed *= 0.5;
   }
 
-  seek(id, x, y);
+  seek(id, x, y, speed);
   updatePosition(id);
 
   if (velX[id] || velY[id]) {

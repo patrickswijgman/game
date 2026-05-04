@@ -38,7 +38,7 @@ async function setup() {
 
   setupPlayer(x, y);
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 10; i++) {
     if (enemiesCount < MAX_ENEMY_COUNT) {
       setupEnemy(getRandomNumber(0, ROOM_WIDTH), getRandomNumber(0, ROOM_HEIGHT), Enemy.MELEE);
     }
@@ -71,18 +71,18 @@ function update() {
       switch (type[id]) {
         case Type.PLAYER:
           updatePlayer(id);
-          updateHealthBar(id);
           setCameraTarget(posX[id], posY[id]);
           break;
         case Type.ENEMY:
           updateEnemy(id);
-          updateHealthBar(id);
           break;
         case Type.PROJECTILE:
           updateProjectile(id);
           break;
       }
     }
+
+    updateHealthBar(id);
 
     switch (anim[id]) {
       case Anim.BREATHE:

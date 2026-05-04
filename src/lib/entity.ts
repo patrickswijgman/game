@@ -1,38 +1,6 @@
 import { addCameraTransform, delta, drawSprite, getDistance, resetTransform, rotateTransform, scaleTransform, translateTransform } from "snuggy";
 import { Sprite, Texture, Type } from "@/consts.ts";
-import {
-  angle,
-  anim,
-  animAngle,
-  animScaleX,
-  animScaleY,
-  animX,
-  animY,
-  health,
-  healthDeplete,
-  healthDepleteTime,
-  healthMax,
-  hitboxH,
-  hitboxOffsetX,
-  hitboxOffsetY,
-  hitboxW,
-  hitboxX,
-  hitboxY,
-  isEnemyProjectile,
-  isFlipped,
-  posX,
-  posY,
-  shadow,
-  sprite,
-  staggerTime,
-  startX,
-  startY,
-  type,
-  velX,
-  velY,
-  weapon,
-  windupTime,
-} from "@/data.ts";
+import { angle, anim, animAngle, animScaleX, animScaleY, animX, animY, health, healthDeplete, healthDepleteTime, hitboxH, hitboxW, hitboxX, hitboxY, isEnemyProjectile, isFlipped, posX, posY, shadow, sprite, staggerTime, startX, startY, type, velX, velY, weapon, windupTime } from "@/data.ts";
 import { nextEntity } from "@/lib/entities.ts";
 
 export function setupEntity(t: Type, x: number, y: number) {
@@ -47,29 +15,21 @@ export function setupEntity(t: Type, x: number, y: number) {
   return id;
 }
 
-export function setHitbox(id: number, x: number, y: number, w: number, h: number) {
-  hitboxX[id] = posX[id] + x;
-  hitboxY[id] = posY[id] + y;
-  hitboxW[id] = w;
-  hitboxH[id] = h;
-  hitboxOffsetX[id] = x;
-  hitboxOffsetY[id] = y;
-}
-
 export function isHitboxIntersection(a: number, b: number) {
-  return hitboxX[a] < hitboxX[b] + hitboxW[b] && hitboxX[a] + hitboxW[a] > hitboxX[b] && hitboxY[a] < hitboxY[b] + hitboxH[b] && hitboxY[a] + hitboxH[a] > hitboxY[b];
-}
-
-export function setHealth(id: number, hp: number) {
-  health[id] = hp;
-  healthMax[id] = hp;
+  const x1 = hitboxX[a] + posX[a];
+  const y1 = hitboxY[a] + posY[a];
+  const x2 = x1 + hitboxW[a];
+  const y2 = y1 + hitboxH[a];
+  const x3 = hitboxX[b] + posX[b];
+  const y3 = hitboxY[b] + posY[b];
+  const x4 = x3 + hitboxW[b];
+  const y4 = y3 + hitboxH[b];
+  return x1 < x4 && x2 > x3 && y1 < y4 && y2 > y3;
 }
 
 export function updatePosition(id: number) {
   posX[id] += velX[id] * delta;
   posY[id] += velY[id] * delta;
-  hitboxX[id] = posX[id] + hitboxOffsetX[id];
-  hitboxY[id] = posY[id] + hitboxOffsetY[id];
 }
 
 export function setOrbitPosition(id: number, anchorX: number, anchorY: number, targetX: number, targetY: number, distance: number) {

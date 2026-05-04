@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 5/3/2026, 4:17:08 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 5/4/2026, 7:11:01 PM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -204,15 +204,10 @@ export const posX = new Float32Array(2000)
 export const posY = new Float32Array(2000)
 export const velX = new Float32Array(2000)
 export const velY = new Float32Array(2000)
-export const sepX = new Float32Array(2000)
-export const sepY = new Float32Array(2000)
-export const hitboxX = new Float32Array(2000)
-export const hitboxY = new Float32Array(2000)
+export const hitboxX = new Int16Array(2000)
+export const hitboxY = new Int16Array(2000)
 export const hitboxW = new Uint16Array(2000)
 export const hitboxH = new Uint16Array(2000)
-export const hitboxOffsetX = new Int16Array(2000)
-export const hitboxOffsetY = new Int16Array(2000)
-export const speed = new Float32Array(2000)
 export const radius = new Float32Array(2000)
 export const anim = new Uint8Array(2000)
 export const animX = new Float32Array(2000)
@@ -261,15 +256,10 @@ export function zeroEntityAt(i: number) {
   posY[i] = 0
   velX[i] = 0
   velY[i] = 0
-  sepX[i] = 0
-  sepY[i] = 0
   hitboxX[i] = 0
   hitboxY[i] = 0
   hitboxW[i] = 0
   hitboxH[i] = 0
-  hitboxOffsetX[i] = 0
-  hitboxOffsetY[i] = 0
-  speed[i] = 0
   radius[i] = 0
   anim[i] = 0
   animX[i] = 0
@@ -319,15 +309,10 @@ export function zeroEntity() {
   posY.fill(0)
   velX.fill(0)
   velY.fill(0)
-  sepX.fill(0)
-  sepY.fill(0)
   hitboxX.fill(0)
   hitboxY.fill(0)
   hitboxW.fill(0)
   hitboxH.fill(0)
-  hitboxOffsetX.fill(0)
-  hitboxOffsetY.fill(0)
-  speed.fill(0)
   radius.fill(0)
   anim.fill(0)
   animX.fill(0)
@@ -378,15 +363,10 @@ export function printEntityAt(i: number) {
     posY: posY[i],
     velX: velX[i],
     velY: velY[i],
-    sepX: sepX[i],
-    sepY: sepY[i],
     hitboxX: hitboxX[i],
     hitboxY: hitboxY[i],
     hitboxW: hitboxW[i],
     hitboxH: hitboxH[i],
-    hitboxOffsetX: hitboxOffsetX[i],
-    hitboxOffsetY: hitboxOffsetY[i],
-    speed: speed[i],
     radius: radius[i],
     anim: anim[i],
     animX: animX[i],
