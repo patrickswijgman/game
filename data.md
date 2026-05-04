@@ -20,7 +20,6 @@
 
 - type uint8
 - variant uint8
-- isDestroyed uint8
 <!-- physics -->
 - startX float32
 - startY float32
@@ -46,7 +45,6 @@
 - weapon uint8
 - angle float32
 - depth uint16
-- isFlipped uint8
 <!-- stats -->
 - health uint16
 - healthMax uint16
@@ -64,12 +62,16 @@
 - projectile uint8
 - serial uint32
 - lastHitBy uint16
+<!-- health bar -->
+- healthDeplete float32
+- healthDepleteTime float32
+<!-- timers -->
 - windupTime float32
 - recoveryTime float32
 - cooldownTime float32
 - staggerTime float32
 - immuneTime float32
+<!-- flags -->
+- isDestroyed uint8
+- isFlipped uint8
 - isEnemyProjectile uint8
-<!-- health bar -->
-- healthDeplete float32
-- healthDepleteTime float32

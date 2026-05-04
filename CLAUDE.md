@@ -28,13 +28,13 @@ When adding a new **entity field**: add to `data.md` and run `npm run gen`.
 
 Stats (set once in setup) vs timers (running countdowns each frame):
 
-| Stat       | Timer          | Meaning                                     |
-| ---------- | -------------- | ------------------------------------------- |
-| `windup`   | `windupTime`   | Duration of attack telegraph                |
-| `cooldown` | `cooldownTime` | Lockout before next attack can start        |
-| `recovery` | `recoveryTime` | Post-attack window where movement is slowed |
+| Stat       | Timer          | Meaning                              |
+| ---------- | -------------- | ------------------------------------ |
+| `windup`   | `windupTime`   | Duration of attack telegraph         |
+| `cooldown` | `cooldownTime` | Lockout before next attack can start |
+| `recovery` | `recoveryTime` | Post-attack window                   |
 
-Attack sequence: in-range + `cooldownTime === 0` → set `targetX/Y`, start `windupTime`. When `windupTime` expires (`tickTimer` returns true) → fire projectile, start `cooldownTime` + `recoveryTime`. While `recoveryTime > 0` enemy halts, player moves at half speed.
+Attack sequence: in-range + `cooldownTime === 0` → set `targetX/Y`, start `windupTime`. When `windupTime` expires (`tickTimer` returns true) → fire projectile, start `cooldownTime` + `recoveryTime`. While `recoveryTime > 0` enemy halts.
 
 ## Code rules
 

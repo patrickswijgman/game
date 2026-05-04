@@ -45,9 +45,6 @@ export function updatePlayer(id: number) {
   if (windupTime[id] > 0) {
     speed *= 0.25;
   }
-  if (recoveryTime[id] > 0) {
-    speed *= 0.5;
-  }
 
   seek(id, x, y, speed);
   updatePosition(id);

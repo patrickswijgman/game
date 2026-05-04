@@ -38,7 +38,7 @@ async function setup() {
 
   setupPlayer(x, y);
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 100; i++) {
     if (enemiesCount < MAX_ENEMY_COUNT) {
       setupEnemy(getRandomNumber(0, ROOM_WIDTH), getRandomNumber(0, ROOM_HEIGHT), Enemy.MELEE);
     }
