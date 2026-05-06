@@ -24,41 +24,12 @@ export const enum Input {
   DEBUG,
 }
 
-export const enum Sprite {
-  NONE,
-  PLAYER,
-  PLAYER_SHADOW,
-  PLAYER_LONGSWORD,
-  ENEMY_MELEE,
-  ENEMY_MELEE_SHADOW,
-  ENEMY_MELEE_WEAPON,
-  PROJECTILE_LONGSWORD,
-  PROJECTILE_ENEMY_MELEE,
-  SOUL,
-  SOUL_SHADOW,
-}
-
 export const enum Type {
   NONE,
   PLAYER,
-  ENEMY,
-  PROJECTILE,
-  PICKUP,
-}
-
-export const enum Enemy {
-  NONE,
-  MELEE,
-}
-
-export const enum Projectile {
-  NONE,
-  LONGSWORD,
   ENEMY_MELEE,
-}
-
-export const enum Pickup {
-  NONE,
+  PROJECTILE_LONGSWORD,
+  PROJECTILE_ENEMY_MELEE,
   SOUL,
 }
 

@@ -1,16 +1,13 @@
 import { drawRect, getRandomNumber, isInputPressed, run, setCameraBoundary, setCameraPosition, setCameraSmoothing, setCameraTarget, setFont, setFontOffset, setInput, updateCamera } from "snuggy";
-import { Anim, Color, Enemy, Font, Input, MAX_ENEMY_COUNT, ROOM_HEIGHT, ROOM_WIDTH, Type } from "@/consts.ts";
-import { active, activeCount, anim, cooldownTime, enemiesCount, healthDepleteTime, immuneTime, isDestroyed, playerId, posX, posY, recoveryTime, staggerTime, type } from "@/data.ts";
-import { drawEnemyHealthBar, setupEnemy, updateEnemy } from "@/entities/enemy.ts";
+import { Color, Font, Input, MAX_ENEMY_COUNT, ROOM_HEIGHT, ROOM_WIDTH, Type } from "@/consts.ts";
+import { active, activeCount, enemiesCount, isDestroyed, posX, posY, type } from "@/data.ts";
+import { setupEnemy, updateEnemy } from "@/entities/enemy.ts";
 import { drawPlayerHealthBar, setupPlayer, updatePlayer } from "@/entities/player.ts";
 import { updateProjectile } from "@/entities/projectile.ts";
-import { updateBreatheAnimation, updateWalkAnimation } from "@/lib/anims.ts";
 import { drawFramesPerSecond, drawHitboxes } from "@/lib/debug.ts";
 import { addNewEntities, removeDestroyedEntities, setupEntities, sortEntities } from "@/lib/entities.ts";
-import { drawEntity, updateHealthBar } from "@/lib/entity.ts";
 import { loadResources } from "@/lib/resources.ts";
 import { separateEnemies } from "@/lib/steering.ts";
-import { tickTimer } from "@/lib/timer.ts";
 
 let isDebugging = localStorage.getItem("debug") === "true";
 
@@ -40,7 +37,9 @@ async function setup() {
 
   for (let i = 0; i < 100; i++) {
     if (enemiesCount < MAX_ENEMY_COUNT) {
-      setupEnemy(getRandomNumber(0, ROOM_WIDTH), getRandomNumber(0, ROOM_HEIGHT), Enemy.MELEE);
+      const x = getRandomNumber(0, ROOM_WIDTH);
+      const y = getRandomNumber(0, ROOM_HEIGHT);
+      setupEnemy(Type.ENEMY_MELEE, x, y);
     }
   }
 }
@@ -61,48 +60,24 @@ function update() {
       continue;
     }
 
-    tickTimer(staggerTime, id);
-    tickTimer(cooldownTime, id);
-    tickTimer(recoveryTime, id);
-    tickTimer(immuneTime, id);
-    tickTimer(healthDepleteTime, id);
-
-    if (staggerTime[id] === 0) {
-      switch (type[id]) {
-        case Type.PLAYER:
-          updatePlayer(id);
-          setCameraTarget(posX[id], posY[id]);
-          break;
-        case Type.ENEMY:
-          updateEnemy(id);
-          break;
-        case Type.PROJECTILE:
-          updateProjectile(id);
-          break;
-      }
-    }
-
-    updateHealthBar(id);
-
-    switch (anim[id]) {
-      case Anim.BREATHE:
-        updateBreatheAnimation(id);
+    switch (type[id]) {
+      case Type.PLAYER:
+        updatePlayer(id);
+        setCameraTarget(posX[id], posY[id]);
         break;
-      case Anim.WALK:
-        updateWalkAnimation(id);
+      case Type.ENEMY_MELEE:
+        updateEnemy(id);
         break;
-    }
-
-    drawEntity(id);
-
-    if (type[id] === Type.ENEMY) {
-      drawEnemyHealthBar(id);
+      case Type.PROJECTILE_LONGSWORD:
+      case Type.PROJECTILE_ENEMY_MELEE:
+        updateProjectile(id);
+        break;
     }
   }
 
   updateCamera();
 
-  drawPlayerHealthBar(playerId);
+  drawPlayerHealthBar();
 
   if (isInputPressed(Input.DEBUG)) {
     isDebugging = !isDebugging;

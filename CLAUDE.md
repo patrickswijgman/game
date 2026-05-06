@@ -12,30 +12,6 @@ npm run gen        # Regenerate src/data.ts from the /data schema
 
 There are no tests.
 
-## Adding new content checklist
-
-When adding a new **sprite**: add to `Sprite` enum in `consts.ts`, then add a `case` in the relevant switch block(s) in `drawEntity` (`src/lib/entity.ts`) — shadow, weapon, and/or sprite. Nothing errors if a case is missing; it just silently renders nothing.
-
-When adding a new **enemy**: add to `Enemy` enum in `consts.ts`, add a `case` in `setupEnemy`, add a `case` in `updateEnemy`.
-
-When adding a new **projectile variant**: add to `Projectile` enum in `consts.ts`, add a `case` in `setupProjectile`.
-
-When adding a new **item**: add to `Item` enum in `consts.ts`, add a `case` in `setItem`.
-
-When adding a new **entity field**: add to `data.md` and run `npm run gen`.
-
-## Combat state machine
-
-Stats (set once in setup) vs timers (running countdowns each frame):
-
-| Stat       | Timer          | Meaning                              |
-| ---------- | -------------- | ------------------------------------ |
-| `windup`   | `windupTime`   | Duration of attack telegraph         |
-| `cooldown` | `cooldownTime` | Lockout before next attack can start |
-| `recovery` | `recoveryTime` | Post-attack window                   |
-
-Attack sequence: in-range + `cooldownTime === 0` → set `targetX/Y`, start `windupTime`. When `windupTime` expires (`tickTimer` returns true) → fire projectile, start `cooldownTime` + `recoveryTime`. While `recoveryTime > 0` enemy halts.
-
 ## Code rules
 
 - **Never edit `src/data.ts` directly.** It is auto-generated. Edit `data.md` and run `npm run gen`.
@@ -45,7 +21,6 @@ Attack sequence: in-range + `cooldownTime === 0` → set `targetX/Y`, start `win
 - Add new entity fields in `data.md`, not in ad-hoc variables or module-level maps.
 - `destroyEntity` only marks and queues — never splice or mutate `active[]` mid-frame.
 - Keep per-entity logic in `src/entities/`. Keep reusable mechanics in `src/lib/`.
-- No comments unless the reason is non-obvious. Never describe what the code does.
 
 ## Architecture summary
 
@@ -53,18 +28,18 @@ TypeScript 2D game using Vite + **snuggy** graphics library. Data-Oriented Desig
 
 ### Key files
 
-| File                         | Role                                                           |
-| ---------------------------- | -------------------------------------------------------------- |
-| `src/data.ts`                | Auto-generated SoA arrays and game-level state                 |
-| `src/main.ts`                | Setup and main loop                                            |
-| `src/lib/entities.ts`        | Entity lifecycle (create, destroy, sort)                       |
-| `src/lib/timer.ts`           | `tickTimer` — one-shot countdown helper                        |
-| `src/lib/steering.ts`        | `seek`, `halt`, `separate`                                     |
-| `src/lib/items.ts`           | `setItem` — binds combat stats + visuals to an entity          |
-| `src/lib/entity.ts`          | `drawEntity` — rendering with transforms and texture selection |
-| `src/entities/player.ts`     | Player setup and update                                        |
-| `src/entities/enemy.ts`      | Enemy setup and update                                         |
-| `src/entities/projectile.ts` | Projectile setup, update, and damage application               |
+| File                         | Role                                             |
+| ---------------------------- | ------------------------------------------------ |
+| `src/data.ts`                | Auto-generated SoA arrays and game-level state   |
+| `src/main.ts`                | Setup and main loop                              |
+| `src/lib/entities.ts`        | Entity lifecycle (create, destroy, sort)         |
+| `src/lib/timer.ts`           | `tickTimer` — one-shot countdown helper          |
+| `src/lib/steering.ts`        | `seek`, `halt`, `separate`                       |
+| `src/lib/items.ts`           | `setItem` — binds combat stats                   |
+| `src/lib/entity.ts`          | Entity helper functions                          |
+| `src/entities/player.ts`     | Player setup and update                          |
+| `src/entities/enemy.ts`      | Enemy setup and update                           |
+| `src/entities/projectile.ts` | Projectile setup, update, and damage application |
 
 ### Entity lifecycle
 
@@ -73,13 +48,6 @@ TypeScript 2D game using Vite + **snuggy** graphics library. Data-Oriented Desig
 ### Main loop order
 
 Flush queues → sort → clear background → `separateEnemies()` → tick timers → dispatch per-type updates → animate → draw → follow camera.
-
-### Rendering texture selection
-
-- Default: `ATLAS`
-- Staggered: `ATLAS_FLASH` (white tint)
-- Attack windup: `ATLAS_OUTLINED_DANGER`
-- Enemy projectile: `ATLAS_FLASH_DANGER` (red tint)
 
 ### Tooling
 

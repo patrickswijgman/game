@@ -1,5 +1,5 @@
-import { getAngle, isWithinDistance } from "snuggy";
-import { Projectile, Sprite, Type } from "@/consts.ts";
+import { drawSprite, getAngle, isWithinDistance, resetTransform } from "snuggy";
+import { Texture, Type } from "@/consts.ts";
 import {
   angle,
   depth,
@@ -12,6 +12,7 @@ import {
   hitboxX,
   hitboxY,
   immuneTime,
+  isEnemy,
   isEnemyProjectile,
   lastHitBy,
   playerId,
@@ -23,23 +24,21 @@ import {
   serial,
   serialCount,
   setSerialCount,
-  sprite,
   staggerTime,
   startX,
   startY,
   targetX,
   targetY,
   type,
-  variant,
   velX,
   velY,
   windupTime,
 } from "@/data.ts";
 import { destroyEntity } from "@/lib/entities.ts";
-import { isHitboxIntersection, setOrbitPosition, setupEntity, updatePosition } from "@/lib/entity.ts";
+import { addEntityTransform, isHitboxIntersection, setOrbitPosition, setupEntity, updatePosition } from "@/lib/entity.ts";
 import { seek } from "@/lib/steering.ts";
 
-export function setupProjectile(projectileVariant: Projectile, casterId: number) {
+export function setupProjectile(t: Type, casterId: number) {
   const casterOffsetX = 0;
   const casterOffsetY = -hitboxH[casterId] / 3;
   const casterX = posX[casterId] + casterOffsetX;
@@ -47,34 +46,27 @@ export function setupProjectile(projectileVariant: Projectile, casterId: number)
 
   setSerialCount(serialCount + 1);
 
-  const id = setupEntity(Type.PROJECTILE, casterX, casterY);
-  variant[id] = projectileVariant;
+  const id = setupEntity(t, casterX, casterY);
   serial[id] = serialCount;
   depth[id] = -casterOffsetY;
   projectileDamage[id] = projectileDamage[casterId];
   projectileRange[id] = projectileRange[casterId];
   projectileSpeed[id] = projectileSpeed[casterId];
-  isEnemyProjectile[id] = type[casterId] === Type.ENEMY ? 1 : 0;
+  isEnemyProjectile[id] = isEnemy[casterId];
 
-  switch (variant[id]) {
-    case Projectile.LONGSWORD:
-      {
-        sprite[id] = Sprite.PROJECTILE_LONGSWORD;
-        hitboxX[id] = -5;
-        hitboxY[id] = -5;
-        hitboxW[id] = 10;
-        hitboxH[id] = 10;
-      }
+  switch (type[id]) {
+    case Type.PROJECTILE_LONGSWORD:
+      hitboxX[id] = -5;
+      hitboxY[id] = -5;
+      hitboxW[id] = 10;
+      hitboxH[id] = 10;
       break;
 
-    case Projectile.ENEMY_MELEE:
-      {
-        sprite[id] = Sprite.PROJECTILE_ENEMY_MELEE;
-        hitboxX[id] = -4;
-        hitboxY[id] = -4;
-        hitboxW[id] = 8;
-        hitboxH[id] = 8;
-      }
+    case Type.PROJECTILE_ENEMY_MELEE:
+      hitboxX[id] = -4;
+      hitboxY[id] = -4;
+      hitboxW[id] = 8;
+      hitboxH[id] = 8;
       break;
   }
 
@@ -105,6 +97,20 @@ export function updateProjectile(id: number) {
       hitTarget(id, enemyId);
     }
   }
+
+  const texture = getTexture(id);
+
+  resetTransform();
+  addEntityTransform(id, true, false);
+
+  switch (type[id]) {
+    case Type.PROJECTILE_LONGSWORD:
+      drawSprite(texture, -16, -16, 0, 112, 32, 32);
+      break;
+    case Type.PROJECTILE_ENEMY_MELEE:
+      drawSprite(texture, -16, -16, 32, 112, 32, 32);
+      break;
+  }
 }
 
 function hitTarget(id: number, targetId: number) {
@@ -129,4 +135,11 @@ function hitTarget(id: number, targetId: number) {
       destroyEntity(targetId);
     }
   }
+}
+
+function getTexture(id: number) {
+  if (isEnemyProjectile[id]) {
+    return Texture.ATLAS_FLASH_DANGER;
+  }
+  return Texture.ATLAS;
 }

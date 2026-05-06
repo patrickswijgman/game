@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 5/4/2026, 7:31:17 PM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 5/6/2026, 9:55:25 AM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -196,7 +196,6 @@ export function zeroGame() {
 export const MAX_ENTITY_COUNT = 2000
 
 export const type = new Uint8Array(2000)
-export const variant = new Uint8Array(2000)
 export const startX = new Float32Array(2000)
 export const startY = new Float32Array(2000)
 export const posX = new Float32Array(2000)
@@ -214,9 +213,6 @@ export const animY = new Float32Array(2000)
 export const animScaleX = new Float32Array(2000)
 export const animScaleY = new Float32Array(2000)
 export const animAngle = new Float32Array(2000)
-export const sprite = new Uint8Array(2000)
-export const shadow = new Uint8Array(2000)
-export const weapon = new Uint8Array(2000)
 export const angle = new Float32Array(2000)
 export const depth = new Uint16Array(2000)
 export const health = new Uint16Array(2000)
@@ -229,10 +225,11 @@ export const windup = new Uint16Array(2000)
 export const recovery = new Uint16Array(2000)
 export const cooldown = new Uint16Array(2000)
 export const souls = new Uint16Array(2000)
-export const targetX = new Float32Array(2000)
-export const targetY = new Float32Array(2000)
+export const weapon = new Uint8Array(2000)
 export const projectile = new Uint8Array(2000)
 export const serial = new Uint32Array(2000)
+export const targetX = new Float32Array(2000)
+export const targetY = new Float32Array(2000)
 export const lastHitBy = new Uint16Array(2000)
 export const healthDeplete = new Float32Array(2000)
 export const healthDepleteTime = new Float32Array(2000)
@@ -242,13 +239,12 @@ export const cooldownTime = new Float32Array(2000)
 export const staggerTime = new Float32Array(2000)
 export const immuneTime = new Float32Array(2000)
 export const isDestroyed = new Uint8Array(2000)
-export const isFlipped = new Uint8Array(2000)
+export const isEnemy = new Uint8Array(2000)
 export const isEnemyProjectile = new Uint8Array(2000)
 
 /** Zero an index within the entity structure of arrays. */
 export function zeroEntityAt(i: number) {
   type[i] = 0
-  variant[i] = 0
   startX[i] = 0
   startY[i] = 0
   posX[i] = 0
@@ -266,9 +262,6 @@ export function zeroEntityAt(i: number) {
   animScaleX[i] = 0
   animScaleY[i] = 0
   animAngle[i] = 0
-  sprite[i] = 0
-  shadow[i] = 0
-  weapon[i] = 0
   angle[i] = 0
   depth[i] = 0
   health[i] = 0
@@ -281,10 +274,11 @@ export function zeroEntityAt(i: number) {
   recovery[i] = 0
   cooldown[i] = 0
   souls[i] = 0
-  targetX[i] = 0
-  targetY[i] = 0
+  weapon[i] = 0
   projectile[i] = 0
   serial[i] = 0
+  targetX[i] = 0
+  targetY[i] = 0
   lastHitBy[i] = 0
   healthDeplete[i] = 0
   healthDepleteTime[i] = 0
@@ -294,14 +288,13 @@ export function zeroEntityAt(i: number) {
   staggerTime[i] = 0
   immuneTime[i] = 0
   isDestroyed[i] = 0
-  isFlipped[i] = 0
+  isEnemy[i] = 0
   isEnemyProjectile[i] = 0
 }
 
 /** Zero all fields within the entity structure of arrays. */
 export function zeroEntity() {
   type.fill(0)
-  variant.fill(0)
   startX.fill(0)
   startY.fill(0)
   posX.fill(0)
@@ -319,9 +312,6 @@ export function zeroEntity() {
   animScaleX.fill(0)
   animScaleY.fill(0)
   animAngle.fill(0)
-  sprite.fill(0)
-  shadow.fill(0)
-  weapon.fill(0)
   angle.fill(0)
   depth.fill(0)
   health.fill(0)
@@ -334,10 +324,11 @@ export function zeroEntity() {
   recovery.fill(0)
   cooldown.fill(0)
   souls.fill(0)
-  targetX.fill(0)
-  targetY.fill(0)
+  weapon.fill(0)
   projectile.fill(0)
   serial.fill(0)
+  targetX.fill(0)
+  targetY.fill(0)
   lastHitBy.fill(0)
   healthDeplete.fill(0)
   healthDepleteTime.fill(0)
@@ -347,7 +338,7 @@ export function zeroEntity() {
   staggerTime.fill(0)
   immuneTime.fill(0)
   isDestroyed.fill(0)
-  isFlipped.fill(0)
+  isEnemy.fill(0)
   isEnemyProjectile.fill(0)
 }
 
@@ -355,7 +346,6 @@ export function zeroEntity() {
 export function printEntityAt(i: number) {
   console.table({
     type: type[i],
-    variant: variant[i],
     startX: startX[i],
     startY: startY[i],
     posX: posX[i],
@@ -373,9 +363,6 @@ export function printEntityAt(i: number) {
     animScaleX: animScaleX[i],
     animScaleY: animScaleY[i],
     animAngle: animAngle[i],
-    sprite: sprite[i],
-    shadow: shadow[i],
-    weapon: weapon[i],
     angle: angle[i],
     depth: depth[i],
     health: health[i],
@@ -388,10 +375,11 @@ export function printEntityAt(i: number) {
     recovery: recovery[i],
     cooldown: cooldown[i],
     souls: souls[i],
-    targetX: targetX[i],
-    targetY: targetY[i],
+    weapon: weapon[i],
     projectile: projectile[i],
     serial: serial[i],
+    targetX: targetX[i],
+    targetY: targetY[i],
     lastHitBy: lastHitBy[i],
     healthDeplete: healthDeplete[i],
     healthDepleteTime: healthDepleteTime[i],
@@ -401,7 +389,7 @@ export function printEntityAt(i: number) {
     staggerTime: staggerTime[i],
     immuneTime: immuneTime[i],
     isDestroyed: isDestroyed[i],
-    isFlipped: isFlipped[i],
+    isEnemy: isEnemy[i],
     isEnemyProjectile: isEnemyProjectile[i],
   })
 }

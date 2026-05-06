@@ -36,9 +36,9 @@ export function separateEnemies() {
       const b = enemies[j];
       const dx = posX[a] - posX[b];
       const dy = posY[a] - posY[b];
+      const d = getDistance(0, 0, dx, dy);
 
-      if (isWithinDistance(0, 0, dx, dy, r)) {
-        const d = getDistance(0, 0, dx, dy);
+      if (d > 0 && d < r) {
         const w = 1 - d / r;
         const fx = (dx / d) * w;
         const fy = (dy / d) * w;

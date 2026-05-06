@@ -1,16 +1,15 @@
-import { drawRect, isInputDown, pointerWorldX, pointerWorldY, resetTransform, scaleTransform, translateTransform } from "snuggy";
-import { Anim, Color, Input, Item, Sprite, Type } from "@/consts.ts";
-import { cooldown, cooldownTime, health, healthDeplete, healthMax, hitboxH, hitboxW, hitboxX, hitboxY, isFlipped, movementSpeed, posX, posY, projectile, recovery, recoveryTime, setPlayerId, shadow, sprite, targetX, targetY, velX, velY, windup, windupTime } from "@/data.ts";
+import { drawRect, drawSprite, isInputDown, pointerWorldX, pointerWorldY, resetTransform, scaleTransform, translateTransform } from "snuggy";
+import { Anim, Color, Input, Item, Texture, Type } from "@/consts.ts";
+import { cooldown, cooldownTime, health, healthDeplete, healthMax, hitboxH, hitboxW, hitboxX, hitboxY, movementSpeed, playerId, posX, posY, projectile, recovery, recoveryTime, setPlayerId, staggerTime, targetX, targetY, velX, velY, weapon, windup, windupTime } from "@/data.ts";
 import { setupProjectile } from "@/entities/projectile.ts";
-import { setAnimation, setupEntity, updatePosition } from "@/lib/entity.ts";
+import { updateAnimation } from "@/lib/anims.ts";
+import { addAnimationTransform, addEntityTransform, setAnimation, setupEntity, updateHealthBar, updatePosition, updateTimers } from "@/lib/entity.ts";
 import { setItem } from "@/lib/items.ts";
 import { seek } from "@/lib/steering.ts";
 import { tickTimer } from "@/lib/timer.ts";
 
 export function setupPlayer(x: number, y: number) {
   const id = setupEntity(Type.PLAYER, x, y);
-  sprite[id] = Sprite.PLAYER;
-  shadow[id] = Sprite.PLAYER_SHADOW;
   hitboxX[id] = -5;
   hitboxY[id] = -15;
   hitboxW[id] = 10;
@@ -23,63 +22,93 @@ export function setupPlayer(x: number, y: number) {
 }
 
 export function updatePlayer(id: number) {
-  velX[id] = 0;
-  velY[id] = 0;
+  updateTimers(id);
+  updateAnimation(id);
+  updateHealthBar(id);
 
-  let x = posX[id];
-  let y = posY[id];
-  if (isInputDown(Input.UP)) {
-    y -= 1;
-  }
-  if (isInputDown(Input.DOWN)) {
-    y += 1;
-  }
-  if (isInputDown(Input.LEFT)) {
-    x -= 1;
-  }
-  if (isInputDown(Input.RIGHT)) {
-    x += 1;
+  if (staggerTime[id] === 0) {
+    velX[id] = 0;
+    velY[id] = 0;
+
+    let x = posX[id];
+    let y = posY[id];
+    if (isInputDown(Input.UP)) {
+      y -= 1;
+    }
+    if (isInputDown(Input.DOWN)) {
+      y += 1;
+    }
+    if (isInputDown(Input.LEFT)) {
+      x -= 1;
+    }
+    if (isInputDown(Input.RIGHT)) {
+      x += 1;
+    }
+
+    let speed = movementSpeed[id];
+    if (windupTime[id] > 0) {
+      speed *= 0.25;
+    }
+
+    seek(id, x, y, speed);
+    updatePosition(id);
+
+    if (velX[id] || velY[id]) {
+      setAnimation(id, Anim.WALK);
+    } else {
+      setAnimation(id, Anim.BREATHE);
+    }
+
+    if (tickTimer(windupTime, id)) {
+      cooldownTime[id] = cooldown[id];
+      recoveryTime[id] = recovery[id];
+      targetX[id] = pointerWorldX;
+      targetY[id] = pointerWorldY;
+      setupProjectile(projectile[id], id);
+    }
+
+    if (isInputDown(Input.ATTACK) && cooldownTime[id] === 0 && windupTime[id] === 0) {
+      windupTime[id] = windup[id];
+    }
   }
 
-  let speed = movementSpeed[id];
-  if (windupTime[id] > 0) {
-    speed *= 0.25;
-  }
+  const texture = getTexture(id);
+  const isFlipped = pointerWorldX < posX[id];
 
-  seek(id, x, y, speed);
-  updatePosition(id);
+  resetTransform();
+  addEntityTransform(id, true, isFlipped);
+  drawSprite(Texture.ATLAS, -16, -3, 0, 32, 32, 16);
+  addAnimationTransform(id);
+  drawWeapon(texture, id);
+  drawSprite(texture, -16, -31, 0, 0, 32, 32);
+}
 
-  if (velX[id] || velY[id]) {
-    setAnimation(id, Anim.WALK);
-  } else {
-    setAnimation(id, Anim.BREATHE);
-  }
-
-  isFlipped[id] = pointerWorldX < posX[id] ? 1 : 0;
-
-  if (tickTimer(windupTime, id)) {
-    cooldownTime[id] = cooldown[id];
-    recoveryTime[id] = recovery[id];
-    setupProjectile(projectile[id], id);
-  }
-
-  if (isInputDown(Input.ATTACK) && cooldownTime[id] === 0 && windupTime[id] === 0) {
-    targetX[id] = pointerWorldX;
-    targetY[id] = pointerWorldY;
-    windupTime[id] = windup[id];
+function drawWeapon(texture: Texture, id: number) {
+  switch (weapon[id]) {
+    case Item.LONGSWORD:
+      drawSprite(texture, -16, -31, 0, 80, 32, 32);
+      break;
   }
 }
 
-export function drawPlayerHealthBar(id: number) {
+function getTexture(id: number) {
+  if (windupTime[id] > 0) {
+    return Texture.ATLAS_OUTLINED;
+  }
+  if (staggerTime[id] > 0) {
+    return Texture.ATLAS_FLASH;
+  }
+  return Texture.ATLAS;
+}
+
+export function drawPlayerHealthBar() {
   const width = 40;
   const height = 3;
-  const hp = (health[id] / healthMax[id]) * width;
-  const hd = (healthDeplete[id] / healthMax[id]) * width;
-  const x = 20;
-  const y = 20;
+  const hp = (health[playerId] / healthMax[playerId]) * width;
+  const hd = (healthDeplete[playerId] / healthMax[playerId]) * width;
 
   resetTransform();
-  translateTransform(x, y);
+  translateTransform(20, 20);
   scaleTransform(2);
 
   drawRect(-1, -1, width + 2, height + 2, Color.BORDER, true);

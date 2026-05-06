@@ -1,4 +1,3 @@
-import { Type } from "@/consts.ts";
 import {
   active,
   activeCount,
@@ -9,6 +8,7 @@ import {
   enemiesIndex,
   freeCount,
   isDestroyed,
+  isEnemy,
   MAX_ENTITY_COUNT,
   popActive,
   popEnemies,
@@ -23,7 +23,6 @@ import {
   toAddCount,
   toRemove,
   toRemoveCount,
-  type,
   zeroEntityAt,
   zeroFree,
   zeroToAdd,
@@ -60,7 +59,7 @@ export function addNewEntities() {
     activeIndex[id] = activeCount;
     pushActive(id);
 
-    if (type[id] === Type.ENEMY) {
+    if (isEnemy[id]) {
       enemiesIndex[id] = enemiesCount;
       pushEnemies(id);
     }
@@ -78,7 +77,7 @@ export function removeDestroyedEntities() {
     activeIndex[last] = idx;
     popActive();
 
-    if (type[id] === Type.ENEMY) {
+    if (isEnemy[id]) {
       const idx = enemiesIndex[id];
       const last = enemies[enemiesCount - 1];
       enemies[idx] = last;

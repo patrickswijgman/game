@@ -19,7 +19,6 @@
 # entity 2000
 
 - type uint8
-- variant uint8
 <!-- physics -->
 - startX float32
 - startY float32
@@ -40,9 +39,6 @@
 - animScaleY float32
 - animAngle float32
 <!-- render -->
-- sprite uint8
-- shadow uint8
-- weapon uint8
 - angle float32
 - depth uint16
 <!-- stats -->
@@ -56,11 +52,13 @@
 - recovery uint16
 - cooldown uint16
 - souls uint16
+<!-- equipment -->
+- weapon uint8
 <!-- attack -->
-- targetX float32
-- targetY float32
 - projectile uint8
 - serial uint32
+- targetX float32
+- targetY float32
 - lastHitBy uint16
 <!-- health bar -->
 - healthDeplete float32
@@ -73,5 +71,5 @@
 - immuneTime float32
 <!-- flags -->
 - isDestroyed uint8
-- isFlipped uint8
+- isEnemy uint8
 - isEnemyProjectile uint8
