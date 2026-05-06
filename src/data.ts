@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 5/6/2026, 9:55:25 AM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 5/6/2026, 10:10:11 AM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -230,7 +230,7 @@ export const projectile = new Uint8Array(2000)
 export const serial = new Uint32Array(2000)
 export const targetX = new Float32Array(2000)
 export const targetY = new Float32Array(2000)
-export const lastHitBy = new Uint16Array(2000)
+export const lastHitBy = new Uint32Array(2000)
 export const healthDeplete = new Float32Array(2000)
 export const healthDepleteTime = new Float32Array(2000)
 export const windupTime = new Float32Array(2000)

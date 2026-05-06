@@ -59,7 +59,7 @@
 - serial uint32
 - targetX float32
 - targetY float32
-- lastHitBy uint16
+- lastHitBy uint32
 <!-- health bar -->
 - healthDeplete float32
 - healthDepleteTime float32

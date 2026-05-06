@@ -47,10 +47,10 @@ export function setupEnemy(t: Type, x: number, y: number) {
       hitboxY[id] = -15;
       hitboxW[id] = 10;
       hitboxH[id] = 15;
+      radius[id] = 20;
       health[id] = 50;
       healthMax[id] = 50;
       movementSpeed[id] = 0.5;
-      radius[id] = 20;
       projectile[id] = Type.PROJECTILE_ENEMY_MELEE;
       projectileDamage[id] = 10;
       projectileRange[id] = 20;
@@ -117,11 +117,11 @@ export function updateEnemy(id: number) {
 }
 
 function getTexture(id: number) {
-  if (windupTime[id] > 0) {
-    return Texture.ATLAS_OUTLINED_DANGER;
-  }
   if (staggerTime[id] > 0) {
     return Texture.ATLAS_FLASH;
+  }
+  if (windupTime[id] > 0) {
+    return Texture.ATLAS_OUTLINED_DANGER;
   }
   return Texture.ATLAS;
 }
