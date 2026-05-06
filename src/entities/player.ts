@@ -1,6 +1,6 @@
 import { drawRect, drawSprite, isInputDown, pointerWorldX, pointerWorldY, resetTransform, scaleTransform, translateTransform } from "snuggy";
 import { Anim, Color, Input, Item, Texture, Type } from "@/consts.ts";
-import { cooldown, cooldownTime, health, healthDeplete, healthMax, hitboxH, hitboxW, hitboxX, hitboxY, movementSpeed, playerId, posX, posY, projectile, recovery, recoveryTime, setPlayerId, staggerTime, targetX, targetY, type, velX, velY, weapon, windup, windupTime } from "@/data.ts";
+import { cooldown, cooldownTime, health, healthDeplete, healthMax, hitboxH, hitboxW, hitboxX, hitboxY, movementSpeed, playerId, posX, posY, projectile, recovery, recoveryTime, setPlayerId, staggerTime, targetX, targetY, velX, velY, weapon, windup, windupTime } from "@/data.ts";
 import { setupProjectile } from "@/entities/projectile.ts";
 import { updateAnimation } from "@/lib/anims.ts";
 import { addAnimationTransform, addEntityTransform, setAnimation, setupEntity, updateHealthBar, updatePosition, updateTimers } from "@/lib/entity.ts";

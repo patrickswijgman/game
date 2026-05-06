@@ -15,8 +15,6 @@ function updateWalkAnimation(id: number) {
   animY[id] = -2 * ease(t);
 }
 
-function updateStaggerAnimation(id: number) {}
-
 export function updateAnimation(id: number) {
   switch (anim[id]) {
     case Anim.BREATHE:

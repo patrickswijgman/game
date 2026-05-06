@@ -1,6 +1,6 @@
 import { addCameraTransform, delta, getDistance, rotateTransform, scaleTransform, translateTransform } from "snuggy";
 import type { Type } from "@/consts.ts";
-import { angle, anim, animAngle, animScaleX, animScaleY, animX, animY, cooldownTime, health, healthDeplete, healthDepleteTime, hitboxH, hitboxW, hitboxX, hitboxY, immuneTime, posX, posY, recoveryTime, staggerTime, startX, startY, type, velX, velY } from "@/data.ts";
+import { angle, anim, animAngle, animScaleX, animScaleY, animX, animY, cooldownTime, health, healthDeplete, healthDepleteTime, immuneTime, posX, posY, recoveryTime, staggerTime, startX, startY, type, velX, velY } from "@/data.ts";
 import { nextEntity } from "@/lib/entities.ts";
 import { tickTimer } from "@/lib/timer.ts";
 

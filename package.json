@@ -6,12 +6,14 @@
   "scripts": {
     "start": "vite",
     "build": "tsc && biome check && vite build",
-    "gen": "game-data-gen data.md src/data.ts"
+    "gen": "game-data-gen data.md src/data.ts",
+    "prepare": "husky"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@biomejs/biome": "^2.4.11",
+    "husky": "^9.1.7",
     "typescript": "^6.0.2",
     "vite": "^8.0.8"
   },
