@@ -58,18 +58,6 @@ export function setOrbitPosition(id: number, anchorX: number, anchorY: number, t
   }
 }
 
-export function isHitboxIntersection(a: number, b: number) {
-  const x1 = hitboxX[a] + posX[a];
-  const y1 = hitboxY[a] + posY[a];
-  const x2 = x1 + hitboxW[a];
-  const y2 = y1 + hitboxH[a];
-  const x3 = hitboxX[b] + posX[b];
-  const y3 = hitboxY[b] + posY[b];
-  const x4 = x3 + hitboxW[b];
-  const y4 = y3 + hitboxH[b];
-  return x1 < x4 && x2 > x3 && y1 < y4 && y2 > y3;
-}
-
 export function addEntityTransform(id: number, isInWorld: boolean, isFlipped: boolean) {
   translateTransform(posX[id], posY[id]);
   if (isInWorld) {

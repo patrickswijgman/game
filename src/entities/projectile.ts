@@ -1,4 +1,4 @@
-import { drawSprite, getAngle, isWithinDistance, resetTransform } from "snuggy";
+import { clamp, drawSprite, getAngle, isWithinDistance, resetTransform } from "snuggy";
 import { Texture, Type } from "@/consts.ts";
 import {
   angle,
@@ -21,6 +21,7 @@ import {
   projectileDamage,
   projectileRange,
   projectileSpeed,
+  radius,
   serial,
   serialCount,
   setSerialCount,
@@ -35,7 +36,7 @@ import {
   windupTime,
 } from "@/data.ts";
 import { destroyEntity } from "@/lib/entities.ts";
-import { addEntityTransform, isHitboxIntersection, setOrbitPosition, setupEntity, updatePosition } from "@/lib/entity.ts";
+import { addEntityTransform, setOrbitPosition, setupEntity, updatePosition } from "@/lib/entity.ts";
 import { seek } from "@/lib/steering.ts";
 
 export function setupProjectile(t: Type, casterId: number) {
@@ -56,17 +57,11 @@ export function setupProjectile(t: Type, casterId: number) {
 
   switch (type[id]) {
     case Type.PROJECTILE_LONGSWORD:
-      hitboxX[id] = -5;
-      hitboxY[id] = -5;
-      hitboxW[id] = 10;
-      hitboxH[id] = 10;
+      radius[id] = 10;
       break;
 
     case Type.PROJECTILE_ENEMY_MELEE:
-      hitboxX[id] = -4;
-      hitboxY[id] = -4;
-      hitboxW[id] = 8;
-      hitboxH[id] = 8;
+      radius[id] = 7.5;
       break;
   }
 
@@ -114,7 +109,7 @@ export function updateProjectile(id: number) {
 }
 
 function hitTarget(id: number, targetId: number) {
-  if (lastHitBy[targetId] !== serial[id] && isHitboxIntersection(id, targetId)) {
+  if (lastHitBy[targetId] !== serial[id] && isHit(id, targetId)) {
     lastHitBy[targetId] = serial[id];
 
     if (type[targetId] === Type.PLAYER) {
@@ -135,6 +130,22 @@ function hitTarget(id: number, targetId: number) {
       destroyEntity(targetId);
     }
   }
+}
+
+function isHit(a: number, b: number) {
+  const cx = posX[a];
+  const cy = posY[a];
+  const r = radius[a];
+
+  const bx1 = hitboxX[b] + posX[b];
+  const by1 = hitboxY[b] + posY[b];
+  const bx2 = bx1 + hitboxW[b];
+  const by2 = by1 + hitboxH[b];
+
+  const dx = cx - clamp(cx, bx1, bx2);
+  const dy = cy - clamp(cy, by1, by2);
+
+  return isWithinDistance(0, 0, dx, dy, r);
 }
 
 function getTexture(id: number) {
