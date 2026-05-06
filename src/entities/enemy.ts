@@ -69,30 +69,32 @@ export function updateEnemy(id: number) {
   updateAnimation(id);
   updateHealthBar(id);
 
-  if (tickTimer(windupTime, id)) {
-    cooldownTime[id] = cooldown[id];
-    recoveryTime[id] = recovery[id];
-    setupProjectile(projectile[id], id);
-  }
-
-  if (staggerTime[id] === 0 && windupTime[id] === 0) {
-    if (recoveryTime[id] === 0) {
-      seek(id, posX[playerId], posY[playerId], movementSpeed[id]);
-      halt(id, posX[playerId], posY[playerId], projectileRange[id]);
-      updatePosition(id);
+  if (staggerTime[id] === 0) {
+    if (tickTimer(windupTime, id)) {
+      cooldownTime[id] = cooldown[id];
+      recoveryTime[id] = recovery[id];
+      setupProjectile(projectile[id], id);
     }
 
-    if (isWithinDistance(posX[id], posY[id], posX[playerId], posY[playerId], projectileRange[id])) {
-      if (cooldownTime[id] === 0) {
-        targetX[id] = posX[playerId];
-        targetY[id] = posY[playerId] - hitboxH[playerId] / 2;
-        windupTime[id] = windup[id];
+    if (windupTime[id] === 0) {
+      if (recoveryTime[id] === 0) {
+        seek(id, posX[playerId], posY[playerId], movementSpeed[id]);
+        halt(id, posX[playerId], posY[playerId], projectileRange[id]);
+        updatePosition(id);
       }
-      setAnimation(id, Anim.NONE);
-    } else if (velX[id] || velY[id]) {
-      setAnimation(id, Anim.WALK);
-    } else {
-      setAnimation(id, Anim.NONE);
+
+      if (isWithinDistance(posX[id], posY[id], posX[playerId], posY[playerId], projectileRange[id])) {
+        if (cooldownTime[id] === 0) {
+          targetX[id] = posX[playerId];
+          targetY[id] = posY[playerId] - hitboxH[playerId] / 2;
+          windupTime[id] = windup[id];
+        }
+        setAnimation(id, Anim.NONE);
+      } else if (velX[id] || velY[id]) {
+        setAnimation(id, Anim.WALK);
+      } else {
+        setAnimation(id, Anim.NONE);
+      }
     }
   }
 
