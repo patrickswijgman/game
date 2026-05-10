@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 5/6/2026, 10:10:11 AM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 5/10/2026, 10:19:44 AM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -213,6 +213,7 @@ export const animY = new Float32Array(2000)
 export const animScaleX = new Float32Array(2000)
 export const animScaleY = new Float32Array(2000)
 export const animAngle = new Float32Array(2000)
+export const animTime = new Float32Array(2000)
 export const angle = new Float32Array(2000)
 export const depth = new Uint16Array(2000)
 export const health = new Uint16Array(2000)
@@ -262,6 +263,7 @@ export function zeroEntityAt(i: number) {
   animScaleX[i] = 0
   animScaleY[i] = 0
   animAngle[i] = 0
+  animTime[i] = 0
   angle[i] = 0
   depth[i] = 0
   health[i] = 0
@@ -312,6 +314,7 @@ export function zeroEntity() {
   animScaleX.fill(0)
   animScaleY.fill(0)
   animAngle.fill(0)
+  animTime.fill(0)
   angle.fill(0)
   depth.fill(0)
   health.fill(0)
@@ -363,6 +366,7 @@ export function printEntityAt(i: number) {
     animScaleX: animScaleX[i],
     animScaleY: animScaleY[i],
     animAngle: animAngle[i],
+    animTime: animTime[i],
     angle: angle[i],
     depth: depth[i],
     health: health[i],

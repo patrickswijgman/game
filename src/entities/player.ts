@@ -3,7 +3,7 @@ import { Anim, Color, Input, Item, Texture, Type } from "@/consts.ts";
 import { cooldown, cooldownTime, health, healthDeplete, healthMax, hitboxH, hitboxW, hitboxX, hitboxY, movementSpeed, playerId, posX, posY, projectile, recovery, recoveryTime, setPlayerId, staggerTime, targetX, targetY, velX, velY, weapon, windup, windupTime } from "@/data.ts";
 import { setupProjectile } from "@/entities/projectile.ts";
 import { updateAnimation } from "@/lib/anims.ts";
-import { addAnimationTransform, addEntityTransform, setAnimation, setupEntity, updateHealthBar, updatePosition, updateTimers } from "@/lib/entity.ts";
+import { addAnimationTransform, addEntityTransform, setAnimation, setupEntity, updateCommonTimers, updateHealthBar, updatePosition } from "@/lib/entity.ts";
 import { setItem } from "@/lib/items.ts";
 import { seek } from "@/lib/steering.ts";
 import { tickTimer } from "@/lib/timer.ts";
@@ -22,7 +22,7 @@ export function setupPlayer(x: number, y: number) {
 }
 
 export function updatePlayer(id: number) {
-  updateTimers(id);
+  updateCommonTimers(id);
   updateAnimation(id);
   updateHealthBar(id);
 
@@ -91,16 +91,6 @@ function drawWeapon(texture: Texture, id: number) {
   }
 }
 
-function getTexture(id: number) {
-  if (staggerTime[id] > 0) {
-    return Texture.ATLAS_FLASH;
-  }
-  if (windupTime[id] > 0) {
-    return Texture.ATLAS_OUTLINED;
-  }
-  return Texture.ATLAS;
-}
-
 export function drawPlayerHealthBar() {
   const width = 40;
   const height = 3;
@@ -115,4 +105,14 @@ export function drawPlayerHealthBar() {
   drawRect(0, 0, hd, height, Color.DEPLETE, true);
   drawRect(0, 0, hp, height, Color.HEALTH_DARK, true);
   drawRect(0, 0, hp, height - 1, Color.HEALTH, true);
+}
+
+function getTexture(id: number) {
+  if (staggerTime[id] > 0) {
+    return Texture.ATLAS_FLASH;
+  }
+  if (windupTime[id] > 0) {
+    return Texture.ATLAS_OUTLINED;
+  }
+  return Texture.ATLAS;
 }

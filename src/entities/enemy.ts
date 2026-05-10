@@ -33,7 +33,7 @@ import {
 } from "@/data.ts";
 import { setupProjectile } from "@/entities/projectile.ts";
 import { updateAnimation } from "@/lib/anims.ts";
-import { addAnimationTransform, addEntityTransform, setAnimation, setupEntity, updateHealthBar, updatePosition, updateTimers } from "@/lib/entity.ts";
+import { addAnimationTransform, addEntityTransform, setAnimation, setupEntity, updateCommonTimers, updateHealthBar, updatePosition } from "@/lib/entity.ts";
 import { halt, seek } from "@/lib/steering.ts";
 import { tickTimer } from "@/lib/timer.ts";
 
@@ -65,7 +65,7 @@ export function setupEnemy(t: Type, x: number, y: number) {
 }
 
 export function updateEnemy(id: number) {
-  updateTimers(id);
+  updateCommonTimers(id);
   updateAnimation(id);
   updateHealthBar(id);
 
@@ -116,16 +116,6 @@ export function updateEnemy(id: number) {
   drawHealthBar(id);
 }
 
-function getTexture(id: number) {
-  if (staggerTime[id] > 0) {
-    return Texture.ATLAS_FLASH;
-  }
-  if (windupTime[id] > 0) {
-    return Texture.ATLAS_OUTLINED_DANGER;
-  }
-  return Texture.ATLAS;
-}
-
 function drawHealthBar(id: number) {
   if (health[id] === healthMax[id]) {
     return;
@@ -146,4 +136,14 @@ function drawHealthBar(id: number) {
   drawRect(0, 0, hd, height, Color.DEPLETE, true);
   drawRect(0, 0, hp, height, Color.HEALTH_DARK, true);
   drawRect(0, 0, hp, height - 1, Color.HEALTH, true);
+}
+
+function getTexture(id: number) {
+  if (staggerTime[id] > 0) {
+    return Texture.ATLAS_FLASH;
+  }
+  if (windupTime[id] > 0) {
+    return Texture.ATLAS_OUTLINED_DANGER;
+  }
+  return Texture.ATLAS;
 }

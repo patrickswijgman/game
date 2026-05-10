@@ -45,7 +45,7 @@ See trinkets table below.
 
 | Name             | Note                                                                        |
 | ---------------- | --------------------------------------------------------------------------- |
-| Health           | Entity dies when reduced zero                                               |
+| Health           | Entity dies when reduced to zero                                            |
 | HealthMax        | Health cannot exceed this                                                   |
 | ProjectileDamage | AKA damage                                                                  |
 | ProjectileRange  | AKA range, max travel distance in pixels                                    |

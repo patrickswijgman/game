@@ -35,7 +35,7 @@ async function setup() {
 
   setupPlayer(x, y);
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 1; i++) {
     if (enemiesCount < MAX_ENEMY_COUNT) {
       const x = getRandomNumber(0, ROOM_WIDTH);
       const y = getRandomNumber(0, ROOM_HEIGHT);

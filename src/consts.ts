@@ -37,6 +37,7 @@ export const enum Anim {
   NONE,
   BREATHE,
   WALK,
+  STAGGER,
 }
 
 export const enum Item {

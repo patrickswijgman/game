@@ -1,5 +1,5 @@
 import { clamp, drawSprite, getAngle, isWithinDistance, resetTransform } from "snuggy";
-import { Texture, Type } from "@/consts.ts";
+import { Anim, Texture, Type } from "@/consts.ts";
 import {
   angle,
   depth,
@@ -36,7 +36,7 @@ import {
   windupTime,
 } from "@/data.ts";
 import { destroyEntity } from "@/lib/entities.ts";
-import { addEntityTransform, setOrbitPosition, setupEntity, updatePosition } from "@/lib/entity.ts";
+import { addEntityTransform, setAnimation, setOrbitPosition, setupEntity, updatePosition } from "@/lib/entity.ts";
 import { seek } from "@/lib/steering.ts";
 
 export function setupProjectile(t: Type, casterId: number) {
@@ -122,12 +122,13 @@ function hitTarget(id: number, targetId: number) {
 
     health[targetId] -= Math.min(health[targetId], projectileDamage[id]);
 
-    windupTime[targetId] = 0;
-    staggerTime[targetId] = 100;
-    healthDepleteTime[targetId] = 200;
-
     if (health[targetId] === 0) {
       destroyEntity(targetId);
+    } else {
+      windupTime[targetId] = 0;
+      staggerTime[targetId] = 100;
+      healthDepleteTime[targetId] = 300;
+      setAnimation(targetId, Anim.STAGGER);
     }
   }
 }

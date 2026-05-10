@@ -10,7 +10,7 @@
 - activeIndex uint16 2000
 - enemies uint16 2000
 - enemiesIndex uint16 2000
-<!-- combat -->
+<!-- attack -->
 - serialCount
 <!-- run -->
 - totalKills
@@ -38,6 +38,7 @@
 - animScaleX float32
 - animScaleY float32
 - animAngle float32
+- animTime float32
 <!-- render -->
 - angle float32
 - depth uint16
