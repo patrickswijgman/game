@@ -4,23 +4,20 @@ import { anim, animScaleX, animScaleY, animTime, animY } from "@/data.ts";
 import { tickTimer } from "@/lib/timer.ts";
 
 function updateBreatheAnimation(id: number) {
-  const d = 2000;
-  tickAnimationTimer(id, d);
-  animScaleX[id] = 1 + 0.05 * getAnimationEase(id, d);
-  animScaleY[id] = 1 + 0.05 * getAnimationEase(id, d);
+  const e = tickAnimationTimer(id, 2000);
+  animScaleX[id] = 1 + 0.05 * e;
+  animScaleY[id] = 1 + 0.05 * e;
 }
 
 function updateWalkAnimation(id: number) {
-  const d = 200;
-  tickAnimationTimer(id, d);
-  animY[id] = -2 * getAnimationEase(id, d);
+  const e = tickAnimationTimer(id, 200);
+  animY[id] = -2 * e;
 }
 
 function updateStaggerAnimation(id: number) {
-  const d = 100;
-  tickAnimationTimer(id, d);
-  animScaleX[id] = 1 + 0.25 * getAnimationEase(id, d);
-  animScaleY[id] = 1 - 0.25 * getAnimationEase(id, d);
+  const e = tickAnimationTimer(id, 100);
+  animScaleX[id] = 1 + 0.25 * e;
+  animScaleY[id] = 1 - 0.25 * e;
 }
 
 export function updateAnimation(id: number) {
@@ -37,13 +34,12 @@ export function updateAnimation(id: number) {
   }
 }
 
-function tickAnimationTimer(id: number, d: number) {
+function tickAnimationTimer(id: number, duration: number) {
   if (animTime[id] === 0) {
-    animTime[id] = d;
+    animTime[id] = duration;
   }
-  tickTimer(animTime, id);
-}
 
-function getAnimationEase(id: number, d: number) {
-  return ease((animTime[id] % d) / d);
+  tickTimer(animTime, id);
+
+  return ease((animTime[id] % duration) / duration);
 }
