@@ -1,5 +1,5 @@
 import { Item, Type } from "@/consts.ts";
-import { cooldown, projectile, projectileDamage, projectileRange, projectileSpeed, recovery, weapon, windup } from "@/data.ts";
+import { cooldown, projectile, projectileDamage, projectileRadius, projectileRange, projectileSpeed, recovery, weapon, windup } from "@/data.ts";
 
 export function setItem(id: number, item: Item) {
   switch (item) {
@@ -9,6 +9,7 @@ export function setItem(id: number, item: Item) {
       projectileDamage[id] = 20;
       projectileRange[id] = 30;
       projectileSpeed[id] = 2;
+      projectileRadius[id] = 10;
       windup[id] = 100;
       recovery[id] = 300;
       cooldown[id] = 300;

@@ -2,12 +2,20 @@
 
 A simple survivor rogue-lite game inspired by games such as Dark Souls and 20 Minutes Till Dawn.
 
+# Aesthetic
+
+Dark fantasy, saturated colors.
+
 # Design decisions
 
 - A single room that is constrained to the camera that prevents kiting mobs forever
 - The room does not contain obstacles to make AI coding easier (steering behaviors instead of path finding)
 - No mid-run upgrades, progression comes from short runs where you select equipment beforehand
 - Each enemy type has one unique mechanic to make it interesting but simple to code
+
+# Ideas (not yet decisions)
+
+- dodge roll
 
 # Game loop
 
@@ -73,9 +81,9 @@ See trinkets table below.
 
 # Enemies table
 
-| Name     | Type     | Damage | Speed | Range | Health | Note                                                       |
-| -------- | -------- | ------ | ----- | ----- | ------ | ---------------------------------------------------------- |
-| Hollow   | Melee    | 10     | 1     | 20    | 50     |                                                            |
-| Skeleton | Ranged   |        |       |       |        |                                                            |
-| Cultist  | Summoner |        |       |       |        | Summoned creatures do not drop souls                       |
-| Mage     | Trapper  |        |       |       |        | Places a trap under the player that explodes after a delay |
+| Name    | Type     | Health | Damage | Windup | Recovery | Cooldown | Speed | Range | Note                                                       |
+| ------- | -------- | ------ | ------ | ------ | -------- | -------- | ----- | ----- | ---------------------------------------------------------- |
+| Hollow  | Melee    | 50     | 10     | 300    | 350      | 500      | 0.5   | 20    |                                                            |
+| Goblin  | Ranged   | 30     | 8      | 500    | 150      | 1500     | 0.35  | 150   |                                                            |
+| Cultist | Summoner |        |        |        |          |          |       |       | Summoned creatures do not drop souls                       |
+| Mage    | Trapper  |        |        |        |          |          |       |       | Places a trap under the player that explodes after a delay |

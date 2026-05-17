@@ -39,7 +39,7 @@ async function setup() {
     if (enemiesCount < MAX_ENEMY_COUNT) {
       const x = getRandomNumber(0, ROOM_WIDTH);
       const y = getRandomNumber(0, ROOM_HEIGHT);
-      setupEnemy(Type.ENEMY_MELEE, x, y);
+      setupEnemy(Type.ENEMY_RANGED, x, y);
     }
   }
 }
@@ -66,10 +66,12 @@ function update() {
         setCameraTarget(posX[id], posY[id]);
         break;
       case Type.ENEMY_MELEE:
+      case Type.ENEMY_RANGED:
         updateEnemy(id);
         break;
       case Type.PROJECTILE_LONGSWORD:
       case Type.PROJECTILE_ENEMY_MELEE:
+      case Type.PROJECTILE_ENEMY_RANGED:
         updateProjectile(id);
         break;
     }

@@ -49,6 +49,7 @@
 - projectileDamage uint16
 - projectileSpeed float32
 - projectileRange uint16
+- projectileRadius float32
 - windup uint16
 - recovery uint16
 - cooldown uint16

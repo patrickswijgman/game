@@ -1,5 +1,5 @@
 import { addCameraTransform, drawCircle, drawRect, drawText, fps, resetTransform, scaleTransform, translateTransform } from "snuggy";
-import { active, activeCount, hitboxH, hitboxW, hitboxX, hitboxY, posX, posY, radius } from "@/data.ts";
+import { active, activeCount, hitboxH, hitboxW, hitboxX, hitboxY, posX, posY, projectileRadius, radius } from "@/data.ts";
 
 export function drawFramesPerSecond() {
   resetTransform();
@@ -16,5 +16,6 @@ export function drawHitboxes() {
     addCameraTransform();
     drawRect(hitboxX[id], hitboxY[id], hitboxW[id], hitboxH[id], "yellow", false);
     drawCircle(0, 0, radius[id], "yellow", false);
+    drawCircle(0, 0, projectileRadius[id], "red", false);
   }
 }

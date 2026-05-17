@@ -46,6 +46,9 @@ export function updatePlayer(id: number) {
     }
 
     let speed = movementSpeed[id];
+    if (recoveryTime[id] > 0) {
+      speed *= 0.5;
+    }
     if (windupTime[id] > 0) {
       speed *= 0.25;
     }

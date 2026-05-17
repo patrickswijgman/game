@@ -17,6 +17,7 @@ import {
   posY,
   projectile,
   projectileDamage,
+  projectileRadius,
   projectileRange,
   projectileSpeed,
   radius,
@@ -55,9 +56,29 @@ export function setupEnemy(t: Type, x: number, y: number) {
       projectileDamage[id] = 10;
       projectileRange[id] = 20;
       projectileSpeed[id] = 1;
+      projectileRadius[id] = 7.5;
       windup[id] = 300;
       recovery[id] = 250;
       cooldown[id] = 500;
+      break;
+
+    case Type.ENEMY_RANGED:
+      hitboxX[id] = -4;
+      hitboxY[id] = -12;
+      hitboxW[id] = 8;
+      hitboxH[id] = 12;
+      radius[id] = 15;
+      health[id] = 30;
+      healthMax[id] = 30;
+      movementSpeed[id] = 0.35;
+      projectile[id] = Type.PROJECTILE_ENEMY_RANGED;
+      projectileDamage[id] = 8;
+      projectileRange[id] = 150;
+      projectileSpeed[id] = 3;
+      projectileRadius[id] = 4;
+      windup[id] = 500;
+      recovery[id] = 150;
+      cooldown[id] = 1500;
       break;
   }
 
@@ -110,6 +131,13 @@ export function updateEnemy(id: number) {
       addAnimationTransform(id);
       drawSprite(texture, -16, -31, 32, 80, 32, 32);
       drawSprite(texture, -16, -31, 64, 0, 32, 32);
+      break;
+
+    case Type.ENEMY_RANGED:
+      drawSprite(Texture.ATLAS, -16, -3, 96, 32, 32, 16);
+      addAnimationTransform(id);
+      drawSprite(texture, -16, -31, 64, 80, 32, 32);
+      drawSprite(texture, -16, -31, 96, 0, 32, 32);
       break;
   }
 

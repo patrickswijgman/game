@@ -19,9 +19,9 @@ import {
   posX,
   posY,
   projectileDamage,
+  projectileRadius,
   projectileRange,
   projectileSpeed,
-  radius,
   serial,
   serialCount,
   setSerialCount,
@@ -53,17 +53,8 @@ export function setupProjectile(t: Type, casterId: number) {
   projectileDamage[id] = projectileDamage[casterId];
   projectileRange[id] = projectileRange[casterId];
   projectileSpeed[id] = projectileSpeed[casterId];
+  projectileRadius[id] = projectileRadius[casterId];
   isEnemyProjectile[id] = isEnemy[casterId];
-
-  switch (type[id]) {
-    case Type.PROJECTILE_LONGSWORD:
-      radius[id] = 10;
-      break;
-
-    case Type.PROJECTILE_ENEMY_MELEE:
-      radius[id] = 7.5;
-      break;
-  }
 
   const x = targetX[casterId];
   const y = targetY[casterId];
@@ -102,8 +93,13 @@ export function updateProjectile(id: number) {
     case Type.PROJECTILE_LONGSWORD:
       drawSprite(texture, -16, -16, 0, 112, 32, 32);
       break;
+
     case Type.PROJECTILE_ENEMY_MELEE:
       drawSprite(texture, -16, -16, 32, 112, 32, 32);
+      break;
+
+    case Type.PROJECTILE_ENEMY_RANGED:
+      drawSprite(texture, -16, -15.5, 64, 112, 32, 32);
       break;
   }
 }
@@ -136,7 +132,7 @@ function hitTarget(id: number, targetId: number) {
 function isHit(a: number, b: number) {
   const cx = posX[a];
   const cy = posY[a];
-  const r = radius[a];
+  const r = projectileRadius[a];
 
   const bx1 = hitboxX[b] + posX[b];
   const by1 = hitboxY[b] + posY[b];

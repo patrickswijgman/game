@@ -1,5 +1,5 @@
 /*
- * Generated with game-data-gen on 5/10/2026, 10:19:44 AM. DO NOT MODIFY THIS FILE!
+ * Generated with game-data-gen on 5/17/2026, 10:22:42 AM. DO NOT MODIFY THIS FILE!
  */
 
 /*
@@ -222,6 +222,7 @@ export const movementSpeed = new Float32Array(2000)
 export const projectileDamage = new Uint16Array(2000)
 export const projectileSpeed = new Float32Array(2000)
 export const projectileRange = new Uint16Array(2000)
+export const projectileRadius = new Float32Array(2000)
 export const windup = new Uint16Array(2000)
 export const recovery = new Uint16Array(2000)
 export const cooldown = new Uint16Array(2000)
@@ -272,6 +273,7 @@ export function zeroEntityAt(i: number) {
   projectileDamage[i] = 0
   projectileSpeed[i] = 0
   projectileRange[i] = 0
+  projectileRadius[i] = 0
   windup[i] = 0
   recovery[i] = 0
   cooldown[i] = 0
@@ -323,6 +325,7 @@ export function zeroEntity() {
   projectileDamage.fill(0)
   projectileSpeed.fill(0)
   projectileRange.fill(0)
+  projectileRadius.fill(0)
   windup.fill(0)
   recovery.fill(0)
   cooldown.fill(0)
@@ -375,6 +378,7 @@ export function printEntityAt(i: number) {
     projectileDamage: projectileDamage[i],
     projectileSpeed: projectileSpeed[i],
     projectileRange: projectileRange[i],
+    projectileRadius: projectileRadius[i],
     windup: windup[i],
     recovery: recovery[i],
     cooldown: cooldown[i],
