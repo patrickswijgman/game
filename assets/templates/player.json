@@ -1,0 +1,14 @@
+{ "object":
+    {
+     "height":0,
+     "id":15,
+     "name":"player_spawn",
+     "opacity":1,
+     "point":true,
+     "rotation":0,
+     "type":"",
+     "visible":true,
+     "width":0
+    },
+ "type":"template"
+}

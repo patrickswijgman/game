@@ -1,0 +1,24 @@
+{
+  "name": "game",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "prepare": "husky",
+    "start": "vite",
+    "build": "npm run gen && vite build",
+    "test": "vitest",
+    "gen": "tsx scripts/gen-data.ts & tsx scripts/gen-sprites.ts & tsx scripts/gen-objects.ts & tsx scripts/gen-floor.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.15",
+    "@types/node": "^24.13.2",
+    "husky": "^9.1.7",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.2",
+    "vite": "^8.0.8",
+    "vitest": "^4.1.7"
+  }
+}
