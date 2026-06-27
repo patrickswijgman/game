@@ -27,13 +27,13 @@ const tilemap = JSON.parse(fs.readFileSync("assets/tilemaps/map1.json", "utf-8")
 
 const templateFiles = fs.readdirSync("assets/templates");
 const templateRegistry: Record<string, Template> = {};
-const templates: Array<string> = [];
+const templateObjects: Array<string> = [];
 
 for (const file of templateFiles) {
   const key = path.basename(file);
   const template = JSON.parse(fs.readFileSync(`assets/templates/${file}`, "utf-8"));
   templateRegistry[key] = template;
-  templates.push(template.object.name);
+  templateObjects.push(template.object.name);
 }
 
 const types: Array<number> = [];
@@ -49,7 +49,7 @@ for (const layer of tilemap.layers) {
     if (object.template) {
       const key = path.basename(object.template);
       const template = templateRegistry[key];
-      const type = templates.indexOf(template.object.name);
+      const type = templateObjects.indexOf(template.object.name);
       types.push(type);
       x.push(object.x);
       y.push(object.y);
@@ -58,7 +58,7 @@ for (const layer of tilemap.layers) {
 }
 
 output.push("export const enum TilemapObject {");
-for (const template of templates) {
+for (const template of templateObjects) {
   output.push(`  ${template.toUpperCase()},`);
 }
 output.push("}");
