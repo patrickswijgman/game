@@ -73,9 +73,9 @@ output.push(`export const floorWidth = ${tilemap.width * tilemap.tilewidth}`);
 output.push(`export const floorHeight = ${tilemap.height * tilemap.tileheight}`);
 output.push(`export const tileWidth = ${tilemap.tilewidth}`);
 output.push(`export const tileHeight = ${tilemap.tileheight}`);
-output.push(`export const tileSrcX = new Int32Array([${srcX.join(", ")}])`);
-output.push(`export const tileSrcY = new Int32Array([${srcY.join(", ")}])`);
-output.push(`export const tileDstX = new Int32Array([${dstX.join(", ")}])`);
-output.push(`export const tileDstY = new Int32Array([${dstY.join(", ")}])`);
+output.push(`export const tileSrcX = new Uint16Array([${srcX.join(", ")}])`);
+output.push(`export const tileSrcY = new Uint16Array([${srcY.join(", ")}])`);
+output.push(`export const tileDstX = new Uint16Array([${dstX.join(", ")}])`);
+output.push(`export const tileDstY = new Uint16Array([${dstY.join(", ")}])`);
 
 fs.writeFileSync("src/data/floor.ts", output.join("\n"));

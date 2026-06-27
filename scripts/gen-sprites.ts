@@ -53,11 +53,11 @@ for (const slice of spritesheet.meta.slices) {
 }
 output.push("}");
 output.push("");
-output.push(`export const spriteX = new Int32Array([${x.join(", ")}])`);
-output.push(`export const spriteY = new Int32Array([${y.join(", ")}])`);
-output.push(`export const spriteW = new Int32Array([${w.join(", ")}])`);
-output.push(`export const spriteH = new Int32Array([${h.join(", ")}])`);
-output.push(`export const spritePivotX = new Int32Array([${pivotX.join(", ")}])`);
-output.push(`export const spritePivotY = new Int32Array([${pivotY.join(", ")}])`);
+output.push(`export const spriteX = new Uint16Array([${x.join(", ")}])`);
+output.push(`export const spriteY = new Uint16Array([${y.join(", ")}])`);
+output.push(`export const spriteW = new Uint16Array([${w.join(", ")}])`);
+output.push(`export const spriteH = new Uint16Array([${h.join(", ")}])`);
+output.push(`export const spritePivotX = new Uint16Array([${pivotX.join(", ")}])`);
+output.push(`export const spritePivotY = new Uint16Array([${pivotY.join(", ")}])`);
 
 fs.writeFileSync("src/data/sprites.ts", output.join("\n"));

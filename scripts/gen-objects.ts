@@ -63,7 +63,7 @@ for (const template of templates) {
 }
 output.push("}");
 output.push("");
-output.push(`export const objectType = new Int32Array([${types.join(", ")}])`);
+output.push(`export const objectType = new Uint8Array([${types.join(", ")}])`);
 output.push(`export const objectX = new Float64Array([${x.join(", ")}])`);
 output.push(`export const objectY = new Float64Array([${y.join(", ")}])`);
 
