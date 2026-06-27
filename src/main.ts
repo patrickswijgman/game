@@ -114,7 +114,7 @@ function update() {
 
     if (isPlayer[id]) {
       updatePlayer(id);
-      setCameraTarget(posX[i], posY[i]);
+      setCameraTarget(posX[id], posY[id]);
     }
 
     posX[id] += velX[id] * delta;
