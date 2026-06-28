@@ -2,17 +2,17 @@
 
 <!-- entity pool -->
 
-- free uint32 2048
-- add uint32 2048
-- remove uint32 2048
-- active uint32 2048
-- activeIndex uint32 2048
+- free uint32 65536
+- add uint32 65536
+- remove uint32 65536
+- active uint32 65536
+- activeIndex uint32 65536
 
 <!-- references -->
 
 - playerId
 
-# entity 2048
+# entity 65536
 
 <!-- physics -->
 
@@ -20,6 +20,10 @@
 - posY float64
 - velX float64
 - velY float64
+- bodyX int16
+- bodyY int16
+- bodyW uint16
+- bodyH uint16
 
 <!-- render -->
 
@@ -40,6 +44,13 @@
 - animScaleY float64
 - animAngle float64
 - animTime float64
+
+<!-- combat -->
+
+- hitboxX int16
+- hitboxY int16
+- hitboxW uint16
+- hitboxH uint16
 
 <!-- flags -->
 

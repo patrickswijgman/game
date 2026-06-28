@@ -55,11 +55,11 @@ for (const tilesetRef of tilemap.tilesets) {
 
     for (let i = 0; i < layer.data.length; i++) {
       const gid = layer.data[i];
-      const frame = gid - tilesetRef.firstgid;
-
       if (gid === 0) {
         continue;
       }
+
+      const frame = gid - tilesetRef.firstgid;
 
       srcX.push(tileset.margin + (frame % tileset.columns) * (tileset.tilewidth + tileset.spacing));
       srcY.push(tileset.margin + Math.floor(frame / tileset.columns) * (tileset.tileheight + tileset.spacing));

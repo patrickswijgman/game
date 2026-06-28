@@ -90,10 +90,14 @@ async function setup() {
   setCameraSmoothing(0.15);
 
   for (let i = 0; i < objectType.length; i++) {
-    switch (objectType[i]) {
+    const t = objectType[i];
+    const x = objectX[i];
+    const y = objectY[i];
+
+    switch (t) {
       case TilemapObject.PLAYER_SPAWN:
-        setupPlayer(objectX[i], objectY[i]);
-        setCameraPosition(objectX[i], objectY[i]);
+        setupPlayer(x, y);
+        setCameraPosition(x, y);
         break;
       case TilemapObject.ENEMY_SPAWN:
         break;

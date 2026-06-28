@@ -22,15 +22,15 @@
    { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
   ],
   "slices": [
-   { "name": "hair1", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 0, "y": 100, "w": 20, "h": 20 }, "pivot": {"x": 10, "y": 18 } }] },
-   { "name": "pants1", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 0, "y": 140, "w": 20, "h": 20 }, "pivot": {"x": 10, "y": 18 } }] },
-   { "name": "shirt1", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 0, "y": 120, "w": 20, "h": 20 }, "pivot": {"x": 10, "y": 18 } }] },
-   { "name": "skin1", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 0, "y": 40, "w": 20, "h": 20 }, "pivot": {"x": 10, "y": 18 } }] },
-   { "name": "shadow", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 0, "y": 60, "w": 20, "h": 20 }, "pivot": {"x": 10, "y": 4 } }] },
-   { "name": "longsword", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 0, "y": 80, "w": 20, "h": 20 }, "pivot": {"x": 10, "y": 18 } }] },
-   { "name": "pants2", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 20, "y": 140, "w": 20, "h": 20 }, "pivot": {"x": 10, "y": 18 } }] },
+   { "name": "hair2", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 20, "y": 100, "w": 20, "h": 20 }, "pivot": {"x": 10, "y": 18 } }] },
    { "name": "shirt2", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 20, "y": 120, "w": 20, "h": 20 }, "pivot": {"x": 10, "y": 18 } }] },
-   { "name": "hair2", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 20, "y": 100, "w": 20, "h": 20 }, "pivot": {"x": 10, "y": 18 } }] }
+   { "name": "pants2", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 20, "y": 140, "w": 20, "h": 20 }, "pivot": {"x": 10, "y": 18 } }] },
+   { "name": "longsword", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 0, "y": 80, "w": 20, "h": 20 }, "pivot": {"x": 10, "y": 18 } }] },
+   { "name": "shadow", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 0, "y": 60, "w": 20, "h": 20 }, "pivot": {"x": 10, "y": 4 } }] },
+   { "name": "skin1", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 0, "y": 40, "w": 20, "h": 20 }, "pivot": {"x": 10, "y": 18 } }] },
+   { "name": "shirt1", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 0, "y": 120, "w": 20, "h": 20 }, "pivot": {"x": 10, "y": 18 } }] },
+   { "name": "pants1", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 0, "y": 140, "w": 20, "h": 20 }, "pivot": {"x": 10, "y": 18 } }] },
+   { "name": "hair1", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 0, "y": 100, "w": 20, "h": 20 }, "pivot": {"x": 10, "y": 18 } }] }
   ]
  }
 }

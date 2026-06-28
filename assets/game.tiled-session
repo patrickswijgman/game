@@ -1,13 +1,27 @@
 {
-    "activeFile": "",
+    "activeFile": "tilemaps/map1.json",
     "expandedProjectPaths": [
+        "tilemaps",
         "."
     ],
     "fileStates": {
+        "tilemaps/map1.json": {
+            "scale": 0.4453125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 318.8771929824561,
+                "y": 185.26315789473688
+            }
+        },
+        "tilesets/tileset.json": {
+            "scaleInDock": 1
+        }
     },
     "openFiles": [
+        "tilemaps/map1.json"
     ],
     "project": "game.tiled-project",
     "recentFiles": [
+        "tilemaps/map1.json"
     ]
 }
