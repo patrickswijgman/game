@@ -5,7 +5,7 @@ import { active, activeCount, animAngle, animId, animScaleX, animScaleY, animX, 
 import { floorHeight, floorWidth, objectType, objectX, objectY, TilemapObject, tileDstX, tileDstY, tileHeight, tileId, tileSrcX, tileSrcY, tileWidth } from "@/data/world.ts";
 import { addCameraTransform, setCameraBoundary, setCameraPosition, setCameraSmoothing, setCameraTarget, updateCamera } from "@/engine/camera.ts";
 import { drawSprite, drawText, drawTexture, resetTransform, rotateTransform, scaleTransform, setFont, translateTransform } from "@/engine/canvas.ts";
-import { flushEntities, setupEntityPool, sortEntities } from "@/engine/entities.ts";
+import { clearEntities, flushEntities, sortEntities } from "@/engine/entities.ts";
 import { loadFont } from "@/engine/fonts.ts";
 import { run } from "@/engine/index.ts";
 import { isInputDown, setInput } from "@/engine/input.ts";
@@ -73,8 +73,8 @@ function setupInputs() {
   setInput("F2", Input.DEBUG);
 }
 
-async function loadMap() {
-  setupEntityPool();
+async function loadScene() {
+  clearEntities();
 
   await loadRenderTexture(Texture.FLOOR, 2048, 2048, (ctx) => {
     for (let i = 0; i < tileId.length; i++) {
@@ -105,7 +105,7 @@ async function setup() {
   await setupTextures();
   await setupFonts();
   setupInputs();
-  loadMap();
+  loadScene();
 }
 
 function update() {

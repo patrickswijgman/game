@@ -1,15 +1,10 @@
-# game
-
-<!-- entity pool -->
+# scene
 
 - free uint16 2048
 - add uint16 2048
 - remove uint16 2048
 - active uint16 2048
 - activeIndex uint16 2048
-
-<!-- references -->
-
 - playerId
 
 # entity 2048

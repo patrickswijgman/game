@@ -84,7 +84,7 @@ export function zeroPlayerId() {
   playerId = 0
 }
 
-export function zeroGameData() {
+export function zeroSceneData() {
   free.fill(0)
   freeCount = 0
   add.fill(0)

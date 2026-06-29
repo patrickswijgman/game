@@ -1,8 +1,10 @@
-import { active, activeCount, activeIndex, add, addCount, animScaleX, animScaleY, isActive, MAX_ENTITY_COUNT, popActive, popFree, posX, posY, pushActive, pushAdd, pushFree, pushRemove, remove, removeCount, zeroAdd, zeroEntity, zeroFree, zeroRemove } from "@/data/data.ts";
+import { active, activeCount, activeIndex, add, addCount, animScaleX, animScaleY, isActive, MAX_ENTITY_COUNT, popActive, popFree, posX, posY, pushActive, pushAdd, pushFree, pushRemove, remove, removeCount, zeroAdd, zeroEntity, zeroEntityData, zeroRemove, zeroSceneData } from "@/data/data.ts";
 import { assert } from "@/engine/utils.ts";
 
-export function setupEntityPool() {
-  zeroFree();
+export function clearEntities() {
+  zeroSceneData();
+  zeroEntityData();
+
   for (let id = MAX_ENTITY_COUNT - 1; id >= 0; id--) {
     pushFree(id);
   }
