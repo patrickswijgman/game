@@ -7,12 +7,13 @@ import { toRadians } from "./utils.js";
 const CIRCLE_ANGLE = 2 * Math.PI;
 
 export let canvas: HTMLCanvasElement;
-export let canvasWidth: number;
-export let canvasHeight: number;
-export let canvasScaleX = 1;
-export let canvasScaleY = 1;
 export let canvasOffsetX = 0;
 export let canvasOffsetY = 0;
+
+export let width: number;
+export let height: number;
+export let scaleX = 1;
+export let scaleY = 1;
 
 let font: string;
 let fontX = 0;
@@ -23,15 +24,15 @@ let ctx: CanvasRenderingContext2D;
 export function setupCanvas(w: number, h: number) {
   canvas = document.createElement("canvas");
   ctx = canvas.getContext("2d")!;
-  canvasWidth = w;
-  canvasHeight = h;
+  width = w;
+  height = h;
   resize();
   window.addEventListener("resize", resize);
   document.body.appendChild(canvas);
 }
 
 export function resetTransform() {
-  ctx.setTransform(canvasScaleX, 0, 0, canvasScaleY, 0, 0);
+  ctx.setTransform(scaleX, 0, 0, scaleY, 0, 0);
 }
 
 export function translateTransform(x: number, y: number) {
@@ -47,8 +48,8 @@ export function rotateTransform(degrees: number) {
 }
 
 export function clearBackground() {
-  ctx.setTransform(canvasScaleX, 0, 0, canvasScaleY, 0, 0);
-  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+  ctx.setTransform(scaleX, 0, 0, scaleY, 0, 0);
+  ctx.clearRect(0, 0, width, height);
 }
 
 export function drawTexture(id: number, x: number, y: number) {
@@ -135,7 +136,7 @@ export function setAlpha(value: number) {
 }
 
 function resize() {
-  const r = canvasWidth / canvasHeight;
+  const r = width / height;
 
   let w = window.innerWidth;
   let h = w / r;
@@ -144,8 +145,8 @@ function resize() {
     w = h * r;
   }
 
-  canvasScaleX = w / canvasWidth;
-  canvasScaleY = h / canvasHeight;
+  scaleX = w / width;
+  scaleY = h / height;
 
   canvas.width = w;
   canvas.height = h;

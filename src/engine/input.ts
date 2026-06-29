@@ -1,5 +1,5 @@
 import { cameraX, cameraY } from "./camera.js";
-import { canvas, canvasOffsetX, canvasOffsetY, canvasScaleX, canvasScaleY } from "./canvas.js";
+import { canvas, canvasOffsetX, canvasOffsetY, scaleX, scaleY } from "./canvas.js";
 
 const map: Record<string, number> = Object.create(null);
 
@@ -46,8 +46,8 @@ export function setupInputs() {
 }
 
 function updatePointerPosition(x: number, y: number) {
-  pointerX = x / canvasScaleX;
-  pointerY = y / canvasScaleY;
+  pointerX = x / scaleX;
+  pointerY = y / scaleY;
   updateWorldPointerPosition();
 }
 

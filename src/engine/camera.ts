@@ -1,4 +1,4 @@
-import { canvasHeight, canvasWidth, translateTransform } from "./canvas.js";
+import { height, translateTransform, width } from "./canvas.js";
 import { delta } from "./loop.js";
 import { clamp } from "./utils.js";
 
@@ -13,15 +13,15 @@ export let cameraBoundaryH = 0;
 export let cameraSmoothing = 1;
 
 export function updateCamera() {
-  const targetX = cameraTargetX - canvasWidth / 2;
-  const targetY = cameraTargetY - canvasHeight / 2;
+  const targetX = cameraTargetX - width / 2;
+  const targetY = cameraTargetY - height / 2;
 
   cameraX += (targetX - cameraX) * cameraSmoothing * delta;
   cameraY += (targetY - cameraY) * cameraSmoothing * delta;
 
   if (cameraBoundaryW && cameraBoundaryH) {
-    cameraX = clamp(cameraX, cameraBoundaryX, cameraBoundaryW - canvasWidth);
-    cameraY = clamp(cameraY, cameraBoundaryY, cameraBoundaryH - canvasHeight);
+    cameraX = clamp(cameraX, cameraBoundaryX, cameraBoundaryW - width);
+    cameraY = clamp(cameraY, cameraBoundaryY, cameraBoundaryH - height);
   }
 }
 
@@ -30,8 +30,8 @@ export function addCameraTransform() {
 }
 
 export function setCameraPosition(x: number, y: number) {
-  cameraX = x - canvasWidth / 2;
-  cameraY = y - canvasHeight / 2;
+  cameraX = x - width / 2;
+  cameraY = y - height / 2;
 }
 
 export function setCameraTarget(x: number, y: number) {

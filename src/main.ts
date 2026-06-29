@@ -2,7 +2,7 @@ import fontUrl from "@assets/fonts/pixelmix.ttf";
 import textureUrl from "@assets/textures/atlas.png";
 import { Animation, Color, Font, Input, TextSize, Texture } from "@/consts.ts";
 import { active, activeCount, animAngle, animId, animScaleX, animScaleY, animX, animY, hairId, isFlipped, isPlayer, isStaggered, pantsId, posX, posY, shadowId, shirtId, spriteId, velX, velY, weaponId } from "@/data/data.ts";
-import { floorHeight, floorWidth, objectType, objectX, objectY, TilemapObject, tileDstX, tileDstY, tileHeight, tileSrcX, tileSrcY, tileWidth } from "@/data/world.ts";
+import { floorHeight, floorWidth, objectType, objectX, objectY, TilemapObject, tileDstX, tileDstY, tileHeight, tileId, tileSrcX, tileSrcY, tileWidth } from "@/data/world.ts";
 import { addCameraTransform, setCameraBoundary, setCameraPosition, setCameraSmoothing, setCameraTarget, updateCamera } from "@/engine/camera.ts";
 import { drawSprite, drawText, drawTexture, resetTransform, rotateTransform, scaleTransform, setFont, translateTransform } from "@/engine/canvas.ts";
 import { flushEntities, setupEntityPool, sortEntities } from "@/engine/entities.ts";
@@ -52,12 +52,6 @@ async function setupTextures() {
     ctx.globalCompositeOperation = "source-over";
     ctx.drawImage(texture, 0, 0);
   });
-
-  await loadRenderTexture(Texture.FLOOR, 2048, 2048, (ctx) => {
-    for (let i = 0; i < tileSrcX.length; i++) {
-      ctx.drawImage(texture, tileSrcX[i], tileSrcY[i], tileWidth, tileHeight, tileDstX[i], tileDstY[i], tileWidth, tileHeight);
-    }
-  });
 }
 
 async function setupFonts() {
@@ -79,14 +73,14 @@ function setupInputs() {
   setInput("F2", Input.DEBUG);
 }
 
-async function setup() {
-  await setupTextures();
-  await setupFonts();
+async function loadMap() {
   setupEntityPool();
-  setupInputs();
 
-  setCameraBoundary(0, 0, floorWidth, floorHeight);
-  setCameraSmoothing(0.15);
+  await loadRenderTexture(Texture.FLOOR, 2048, 2048, (ctx) => {
+    for (let i = 0; i < tileId.length; i++) {
+      ctx.drawImage(textures[Texture.DEFAULT], tileSrcX[i], tileSrcY[i], tileWidth, tileHeight, tileDstX[i], tileDstY[i], tileWidth, tileHeight);
+    }
+  });
 
   for (let i = 0; i < objectType.length; i++) {
     const t = objectType[i];
@@ -102,6 +96,16 @@ async function setup() {
         break;
     }
   }
+
+  setCameraBoundary(0, 0, floorWidth, floorHeight);
+  setCameraSmoothing(0.15);
+}
+
+async function setup() {
+  await setupTextures();
+  await setupFonts();
+  setupInputs();
+  loadMap();
 }
 
 function update() {
