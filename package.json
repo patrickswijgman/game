@@ -8,7 +8,7 @@
     "start": "vite",
     "build": "npm run gen && vite build",
     "test": "vitest",
-    "gen": "tsx scripts/gen-data.ts & tsx scripts/gen-sprites.ts & tsx scripts/gen-objects.ts & tsx scripts/gen-floor.ts"
+    "gen": "tsx scripts/gen-data.ts & tsx scripts/gen-sprites.ts & tsx scripts/gen-world.ts"
   },
   "author": "",
   "license": "ISC",

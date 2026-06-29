@@ -14,16 +14,24 @@ type LayerObject = {
   y: number;
 };
 
+type Chunk = {
+  x: number;
+  y: number;
+};
+
 type Layer = {
   objects?: Array<LayerObject>;
+  chunks?: Array<Chunk>;
 };
 
 type Tilemap = {
+  tilewidth: number;
+  tileheight: number;
   layers: Array<Layer>;
 };
 
 const output: Array<string> = [];
-const tilemap = JSON.parse(fs.readFileSync("assets/tilemaps/map1.json", "utf-8")) as Tilemap;
+const tilemap = JSON.parse(fs.readFileSync("assets/tilemaps/tilemap.json", "utf-8")) as Tilemap;
 
 const templateFiles = fs.readdirSync("assets/templates");
 const templateRegistry: Record<string, Template> = {};
@@ -36,23 +44,34 @@ for (const file of templateFiles) {
   templateObjects.push(template.object.name);
 }
 
+// Floor tiles are shifted so the most-negative chunk sits at (0,0); objects must
+// use the same offset to stay aligned with the floor (see gen-floor.ts).
+let minTileX = Infinity;
+let minTileY = Infinity;
+
+for (const layer of tilemap.layers) {
+  for (const chunk of layer.chunks ?? []) {
+    minTileX = Math.min(minTileX, chunk.x);
+    minTileY = Math.min(minTileY, chunk.y);
+  }
+}
+
+const offsetX = minTileX * tilemap.tilewidth;
+const offsetY = minTileY * tilemap.tileheight;
+
 const types: Array<number> = [];
 const x: Array<number> = [];
 const y: Array<number> = [];
 
 for (const layer of tilemap.layers) {
-  if (!layer.objects) {
-    continue;
-  }
-
-  for (const object of layer.objects) {
+  for (const object of layer.objects ?? []) {
     if (object.template) {
       const key = path.basename(object.template);
       const template = templateRegistry[key];
       const type = templateObjects.indexOf(template.object.name);
       types.push(type);
-      x.push(object.x);
-      y.push(object.y);
+      x.push(object.x - offsetX);
+      y.push(object.y - offsetY);
     }
   }
 }
